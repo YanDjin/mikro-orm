@@ -135,23 +135,31 @@ export class DatabaseTable {
     }
 
     if (prop.index) {
-      this.indexes.push({
-        columnNames: prop.fieldNames,
-        composite: prop.fieldNames.length > 1,
-        keyName: this.getIndexName(prop.index, prop.fieldNames, 'index'),
-        primary: false,
-        unique: false,
-      });
+      const name = this.getIndexName(prop.index, prop.fieldNames, 'index');
+      const indexExists = this.indexes.find(i => i.keyName === name);
+      if (!indexExists) {
+        this.indexes.push({
+          columnNames: prop.fieldNames,
+          composite: prop.fieldNames.length > 1,
+          keyName: name,
+          primary: false,
+          unique: false,
+        });
+      }
     }
 
     if (prop.unique && !(prop.primary && !meta.compositePK)) {
-      this.indexes.push({
-        columnNames: prop.fieldNames,
-        composite: prop.fieldNames.length > 1,
-        keyName: this.getIndexName(prop.unique, prop.fieldNames, 'unique'),
-        primary: false,
-        unique: true,
-      });
+      const name = this.getIndexName(prop.unique, prop.fieldNames, 'unique');
+      const indexExists = this.indexes.find(i => i.keyName === name);
+      if (!indexExists) {
+        this.indexes.push({
+          columnNames: prop.fieldNames,
+          composite: prop.fieldNames.length > 1,
+          keyName: name,
+          primary: false,
+          unique: true,
+        });
+      }
     }
   }
 
@@ -365,6 +373,11 @@ export class DatabaseTable {
     }
 
     const name = this.getIndexName(index.name!, properties, type);
+    const indexExists = this.indexes.find(i => i.keyName === name);
+    if (indexExists) {
+      return;
+    }
+
     this.indexes.push({
       keyName: name,
       columnNames: properties,

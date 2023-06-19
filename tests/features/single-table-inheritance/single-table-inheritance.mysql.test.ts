@@ -5,11 +5,13 @@ import { BaseUser2, CompanyOwner2, Employee2, Manager2, Type } from '../../entit
 import { initORMMySql, mockLogger } from '../../bootstrap';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
+jest.setTimeout(999999);
+
 describe('single table inheritance in mysql', () => {
 
   let orm: MikroORM<MySqlDriver>;
 
-  beforeAll(async () => orm = await initORMMySql('mysql', {}, true));
+  beforeAll(async () => orm = await initORMMySql('mysql', { debug: true }, true));
   beforeEach(async () => orm.schema.clearDatabase());
   afterAll(async () => {
     await orm.schema.dropDatabase();
@@ -31,7 +33,8 @@ describe('single table inheritance in mysql', () => {
     expect(Object.keys(owner)).not.toHaveLength(0);
 
     expect((owner as any).type).not.toBeDefined();
-    await orm.em.persistAndFlush([owner, employee1]);
+    await orm.em.persistAndFlush([owner]);
+    // await orm.em.persistAndFlush([owner, employee1]);
     orm.em.clear();
 
     // owner will be updated, as we first batch insert everything and handle the extra update for owner

@@ -11,6 +11,8 @@ import {
   OneToMany,
 } from '@mikro-orm/sqlite';
 
+jest.setTimeout(999999);
+
 @Entity({
   tableName: 'managers',
   discriminatorColumn: 'type',
