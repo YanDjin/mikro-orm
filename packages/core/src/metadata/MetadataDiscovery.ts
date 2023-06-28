@@ -81,6 +81,7 @@ export class MetadataDiscovery {
     filtered.sort((a, b) => !a.embeddable === !b.embeddable ? 0 : (a.embeddable ? 1 : -1));
     filtered.forEach(meta => this.initSingleTableInheritance(meta, filtered));
     filtered.forEach(meta => this.defineBaseEntityProperties(meta));
+    filtered.forEach(meta => this.addStiPropertiesToRoot(meta));
     filtered.forEach(meta => this.metadata.set(meta.className, EntitySchema.fromMetadata(meta).init().meta));
     filtered.forEach(meta => this.initAutoincrement(meta));
     filtered.forEach(meta => Object.values(meta.properties).forEach(prop => this.initEmbeddables(meta, prop)));
@@ -947,6 +948,28 @@ export class MetadataDiscovery {
     meta.collection = meta.root.collection;
     // meta.root.indexes = Utils.unique([...meta.root.indexes, ...meta.indexes]);
     // meta.root.uniques = Utils.unique([...meta.root.uniques, ...meta.uniques]);
+  }
+
+  private addStiPropertiesToRoot(meta: EntityMetadata) {
+    if (meta.root === meta) {
+      return;
+    }
+    if (!meta.root.discriminatorColumn || !!meta.root.discriminatorValue) {
+      return;
+    }
+    Object.values(meta.properties).forEach(prop => {
+      const exists = meta.root.properties[prop.name];
+      prop = Utils.copy(prop, false);
+      prop.nullable = true;
+
+      if (!exists) {
+        prop.inherited = true;
+      }
+
+      meta.root.addProperty(prop);
+    });
+    meta.root.indexes = Utils.unique([...meta.root.indexes, ...meta.indexes]);
+    meta.root.uniques = Utils.unique([...meta.root.uniques, ...meta.uniques]);
   }
 
   private createDiscriminatorProperty(meta: EntityMetadata): void {
