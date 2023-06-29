@@ -58,7 +58,7 @@ export class CommitOrderCalculator {
     this.nodes[from].dependencies[to] = { from, to, weight };
   }
 
-  discoverProperty(prop: EntityProperty, entityName: string): void {
+  discoverProperty(prop: EntityProperty, entityName: string, root = false): void {
     const toOneOwner = (prop.kind === ReferenceKind.ONE_TO_ONE && prop.owner) || prop.kind === ReferenceKind.MANY_TO_ONE;
     const toManyOwner = prop.kind === ReferenceKind.MANY_TO_MANY && prop.owner && !prop.pivotEntity;
 
@@ -66,7 +66,7 @@ export class CommitOrderCalculator {
       return;
     }
 
-    const propertyType = prop.targetMeta?.root.className;
+    const propertyType = root ? prop.targetMeta?.root.className : prop.targetMeta?.className;
 
     if (!propertyType || !this.hasNode(propertyType)) {
       return;

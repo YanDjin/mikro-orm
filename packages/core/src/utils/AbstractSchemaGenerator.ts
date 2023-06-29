@@ -104,7 +104,7 @@ export abstract class AbstractSchemaGenerator<D extends IDatabaseDriver> impleme
 
     while (meta) {
       for (const prop of meta.props) {
-        calc.discoverProperty(prop, meta.root.className);
+        calc.discoverProperty(prop, meta.root.className, true);
       }
 
       meta = metadata.pop();
