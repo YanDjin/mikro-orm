@@ -83,6 +83,8 @@ export class DatabaseTable {
         prop.length ??= this.platform.getDefaultDateTimeLength();
       }
 
+      const nullable = !(prop.name in meta.root.properties) ? true : !!prop.nullable;
+
       const primary = !meta.compositePK && !!prop.primary && prop.kind === ReferenceKind.SCALAR && this.platform.isNumericColumn(mappedType);
       this.columns[field] = {
         name: prop.fieldNames[idx],
@@ -92,7 +94,7 @@ export class DatabaseTable {
         autoincrement: prop.autoincrement ?? primary,
         primary,
         nativeEnumName: prop.nativeEnumName,
-        nullable: !!prop.nullable,
+        nullable,
         length: prop.length,
         precision: prop.precision,
         scale: prop.scale,
