@@ -65,14 +65,14 @@ describe('GH issue 2364', () => {
     const asc = await orm.em.fork({ clear:true }).find(BaseEntity, {}, { orderBy: { id: QueryOrder.ASC } });
 
     expect(asc).toHaveLength(2);
-    expect(asc[0]).toBeInstanceOf(Type1Entity);
-    expect(asc[1]).toBeInstanceOf(Type2Entity);
+    expect(asc[0]).toBeInstanceOf(Type2Entity);
+    expect(asc[1]).toBeInstanceOf(Type1Entity);
 
     const desc = await orm.em.fork({ clear:true }).find(BaseEntity, {}, { orderBy: { id: QueryOrder.DESC } });
 
     expect(desc).toHaveLength(2);
-    expect(desc[0]).toBeInstanceOf(Type2Entity);
-    expect(desc[1]).toBeInstanceOf(Type1Entity);
+    expect(desc[0]).toBeInstanceOf(Type1Entity);
+    expect(desc[1]).toBeInstanceOf(Type2Entity);
   });
 
 });
