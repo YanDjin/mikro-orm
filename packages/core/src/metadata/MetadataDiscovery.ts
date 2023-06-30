@@ -81,7 +81,7 @@ export class MetadataDiscovery {
     filtered.sort((a, b) => !a.embeddable === !b.embeddable ? 0 : (a.embeddable ? 1 : -1));
     filtered.forEach(meta => this.initSingleTableInheritance(meta, filtered));
     filtered.forEach(meta => this.defineBaseEntityProperties(meta));
-    filtered.forEach(meta => this.addStiPropertiesToAbstractRoot(meta));
+    // filtered.forEach(meta => this.addStiPropertiesToAbstractRoot(meta));
     filtered.forEach(meta => this.metadata.set(meta.className, EntitySchema.fromMetadata(meta).init().meta));
     filtered.forEach(meta => this.initAutoincrement(meta));
     filtered.forEach(meta => Object.values(meta.properties).forEach(prop => this.initEmbeddables(meta, prop)));
