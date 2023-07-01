@@ -1694,8 +1694,13 @@ export class EntityManager<D extends IDatabaseDriver = IDatabaseDriver> {
     }
 
     const ret: PopulateOptions<Entity>[] = this.entityLoader.normalizePopulate<Entity>(entityName, options.populate as true, options.strategy as LoadStrategy);
-    const extending = this.getSTIExtending(meta);
-    const invalid = ret.find(({ field }) => extending.every(meta => !this.canPopulate(meta.className, field)));
+    let invalid: PopulateOptions<Entity> | undefined;
+    if (meta) {
+      const extending = this.getSTIExtending(meta);
+      invalid = ret.find(({ field }) => extending.every(meta => !this.canPopulate(meta.className, field)));
+    } else {
+      invalid = ret.find(({ field }) => !this.canPopulate(entityName, field));
+    }
 
     if (invalid) {
       throw ValidationError.invalidPropertyName(entityName, invalid.field);

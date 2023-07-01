@@ -1064,21 +1064,25 @@ export class UnitOfWork {
   private getCommitOrder(): string[] {
     const calc = new CommitOrderCalculator();
     const set = new Set<string>();
+    const rootToEntityMap: Record<string, Set<string>> = {};
     this.changeSets.forEach(cs => {
       set.add(cs.name);
-      // set.add(cs.rootName);
+      if (!(cs.rootName in rootToEntityMap)) {
+        rootToEntityMap[cs.rootName] = new Set();
+      }
+      rootToEntityMap[cs.rootName].add(cs.name);
     });
-    set.forEach(entityName => calc.addNode(entityName));
+    Object.keys(rootToEntityMap).forEach(entityName => calc.addNode(entityName));
 
     for (const entityName of set) {
       const meta = this.metadata.find(entityName)!;
       for (const prop of meta.props) {
-        calc.discoverProperty(prop, meta.name!);
+        calc.discoverProperty(prop, meta.root.name!);
         // calc.discoverProperty(prop, meta.root?.name ?? meta.name!);
       }
     }
 
-    return calc.sort();
+    return calc.sort().map(rootName => rootToEntityMap[rootName]).reduce((groups, curr) => [...groups, ...curr.values()], [] as string[]);
   }
 
   private resetTransaction(oldTx: Transaction): void {
