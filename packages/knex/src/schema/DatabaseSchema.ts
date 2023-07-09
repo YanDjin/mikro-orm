@@ -85,7 +85,7 @@ export class DatabaseSchema {
     schema.setNativeEnums(nativeEnums);
 
     for (const meta of metadata) {
-      const table = schema.addTable(meta.collection, this.getSchemaName(meta, config, schemaName));
+      const table = schema.getTable(meta.collection) ?? schema.addTable(meta.collection, this.getSchemaName(meta, config, schemaName));
       table.comment = meta.comment;
       meta.props
         .filter(prop => this.shouldHaveColumn(meta, prop))

@@ -1646,9 +1646,10 @@ export class EntityManager<D extends IDatabaseDriver = IDatabaseDriver> {
     Hint extends string = never,
     Fields extends string = never,
   >(entityName: string, options: Pick<FindOptions<Entity, Hint, Fields>, 'populate' | 'strategy' | 'fields'>): PopulateOptions<Entity>[] {
+    const meta = this.metadata.find(entityName)!;
+
     // infer populate hint if only `fields` are available
     if (!options.populate && options.fields) {
-      const meta = this.metadata.find(entityName)!;
       // we need to prune the `populate` hint from to-one relations, as partially loading them does not require their population, we want just the FK
       const pruneToOneRelations = (meta: EntityMetadata, fields: string[]): string[] => {
         return fields.filter(field => {
@@ -1693,7 +1694,13 @@ export class EntityManager<D extends IDatabaseDriver = IDatabaseDriver> {
     }
 
     const ret: PopulateOptions<Entity>[] = this.entityLoader.normalizePopulate<Entity>(entityName, options.populate as true, options.strategy as LoadStrategy);
-    const invalid = ret.find(({ field }) => !this.canPopulate(entityName, field));
+    let invalid: PopulateOptions<Entity> | undefined;
+    if (meta) {
+      const extending = this.getSTIExtending(meta);
+      invalid = ret.find(({ field }) => extending.every(meta => !this.canPopulate(meta.className, field)));
+    } else {
+      invalid = ret.find(({ field }) => !this.canPopulate(entityName, field));
+    }
 
     if (invalid) {
       throw ValidationError.invalidPropertyName(entityName, invalid.field);
@@ -1704,6 +1711,21 @@ export class EntityManager<D extends IDatabaseDriver = IDatabaseDriver> {
       field.strategy = options.populate === true ? LoadStrategy.SELECT_IN : (options.strategy ?? field.strategy) as LoadStrategy;
       return field;
     });
+  }
+
+  getSTIExtending<T>(meta: EntityMetadata<T>, metadata?: EntityMetadata[]): EntityMetadata[] {
+    if (!metadata) {
+      const map = meta.root.discriminatorMap;
+      if (!map) {
+        return [meta];
+      }
+      const metadata = Object.values(map).map(entityName => this.metadata.get(entityName));
+      return this.getSTIExtending(meta, metadata);
+    }
+    const extending = metadata.filter(_meta => _meta.extends === meta.className);
+    const remaining = metadata.filter(_meta => !extending.map(meta => meta.className).includes(_meta.className));
+    const extendingChildren = extending.map(meta => this.getSTIExtending(meta, remaining));
+    return [meta, ...extendingChildren.reduce((prev, curr) => [...prev, ...curr], [] as EntityMetadata[])] as EntityMetadata[];
   }
 
   /**

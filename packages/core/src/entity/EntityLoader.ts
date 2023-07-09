@@ -58,9 +58,10 @@ export class EntityLoader {
       return;
     }
 
+    const meta = this.metadata.find(entityName)!;
+
     if ((entities as AnyEntity[]).some(e => !e.__helper)) {
       const entity = entities.find(e => !Utils.isEntity(e));
-      const meta = this.metadata.find(entityName)!;
       throw ValidationError.notDiscoveredEntity(entity, meta, 'populate');
     }
 
@@ -73,7 +74,8 @@ export class EntityLoader {
     options.refresh ??= false;
     options.convertCustomTypes ??= true;
     populate = this.normalizePopulate<Entity>(entityName, populate as true, options.strategy, options.lookup);
-    const invalid = populate.find(({ field }) => !this.em.canPopulate(entityName, field));
+    const extending = this.em.getSTIExtending(meta);
+    const invalid = populate.find(({ field }) => extending.every(meta => !this.em.canPopulate(meta.className, field)));
 
     /* istanbul ignore next */
     if (options.validate && invalid) {
@@ -88,8 +90,18 @@ export class EntityLoader {
       context.fields ??= options.fields ? [...options.fields as string[]] : undefined;
     });
 
+    const entitiesByType = entities.reduce((groups, entity) => {
+      const className = helper(entity).__meta.className;
+      return {
+        ...groups,
+        [className]: [...(groups[className] ?? []), entity],
+      };
+    }, {} as Record<string, Entity[]>);
+
     for (const pop of populate) {
-      await this.populateField<Entity>(entityName, entities, pop, options as Required<EntityLoaderOptions<Entity>>);
+      for (const [entityName, entities] of Object.entries(entitiesByType)) {
+        await this.populateField<Entity>(entityName, entities, pop, options as Required<EntityLoaderOptions<Entity>>);
+      }
     }
   }
 
@@ -314,6 +326,9 @@ export class EntityLoader {
 
   private async populateField<Entity extends object>(entityName: string, entities: Entity[], populate: PopulateOptions<Entity>, options: Required<EntityLoaderOptions<Entity>>): Promise<void> {
     const prop = this.metadata.find(entityName)!.properties[populate.field] as EntityProperty<Entity>;
+    if (!prop) {
+      return;
+    }
 
     if (prop.kind === ReferenceKind.SCALAR && !prop.lazy) {
       return;

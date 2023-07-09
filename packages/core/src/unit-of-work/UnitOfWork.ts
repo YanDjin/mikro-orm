@@ -1049,11 +1049,12 @@ export class UnitOfWork {
 
     this.changeSets.forEach(cs => {
       const group = groups[cs.type];
-      const classGroup = group.get(cs.rootName) ?? [];
+      const classGroup = group.get(cs.name) ?? [];
+      // const classGroup = group.get(cs.rootName) ?? [];
       classGroup.push(cs);
 
-      if (!group.has(cs.rootName)) {
-        group.set(cs.rootName, classGroup);
+      if (!group.has(cs.name)) {
+        group.set(cs.name, classGroup);
       }
     });
 
@@ -1063,16 +1064,25 @@ export class UnitOfWork {
   private getCommitOrder(): string[] {
     const calc = new CommitOrderCalculator();
     const set = new Set<string>();
-    this.changeSets.forEach(cs => set.add(cs.rootName));
-    set.forEach(entityName => calc.addNode(entityName));
+    const rootToEntityMap: Record<string, Set<string>> = {};
+    this.changeSets.forEach(cs => {
+      set.add(cs.name);
+      if (!(cs.rootName in rootToEntityMap)) {
+        rootToEntityMap[cs.rootName] = new Set();
+      }
+      rootToEntityMap[cs.rootName].add(cs.name);
+    });
+    Object.keys(rootToEntityMap).forEach(entityName => calc.addNode(entityName));
 
     for (const entityName of set) {
-      for (const prop of this.metadata.find(entityName)!.props) {
-        calc.discoverProperty(prop, entityName);
+      const meta = this.metadata.find(entityName)!;
+      for (const prop of meta.props) {
+        calc.discoverProperty(prop, meta.root.name!);
+        // calc.discoverProperty(prop, meta.root?.name ?? meta.name!);
       }
     }
 
-    return calc.sort();
+    return calc.sort().map(rootName => rootToEntityMap[rootName]).reduce((groups, curr) => [...groups, ...curr.values()], [] as string[]);
   }
 
   private resetTransaction(oldTx: Transaction): void {
