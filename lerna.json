@@ -4,10 +4,8 @@
   ],
   "version": "5.7.10",
   "command": {
-    "version": {
-      "conventionalCommits": true,
-      "createRelease": "github",
-      "message": "chore(release): %s [skip ci]"
+    "publish": {
+      "registry": "http://localhost:4873/"
     }
   },
   "ignoreChanges": [

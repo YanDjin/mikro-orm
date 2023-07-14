@@ -45,6 +45,7 @@
     "copy": "node ../../scripts/copy.mjs"
   },
   "publishConfig": {
+    "registry": "http://localhost:4873/",
     "access": "public"
   },
   "dependencies": {
