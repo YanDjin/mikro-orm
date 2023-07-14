@@ -34,9 +34,6 @@ describe('single table inheritance in mysql', () => {
     await orm.em.persistAndFlush([owner, employee1]);
     orm.em.clear();
 
-    // owner will be updated, as we first batch insert everything and handle the extra update for owner
-    expect(owner.state).toBe('updated');
-    expect(owner.baseState).toBe('updated');
     expect((owner as any).type).not.toBeDefined();
   }
 
@@ -96,7 +93,7 @@ describe('single table inheritance in mysql', () => {
     expect((users[3] as CompanyOwner2).favouriteEmployee).toBeInstanceOf(Employee2);
     expect((users[3] as CompanyOwner2).favouriteManager).toBeInstanceOf(Manager2);
     expect(users[0]).toMatchObject({
-      id: 4,
+      id: 2,
       firstName: 'Emp',
       lastName: '1',
       employeeProp: 1,
@@ -110,14 +107,14 @@ describe('single table inheritance in mysql', () => {
       type: Type.Employee,
     });
     expect(users[2]).toMatchObject({
-      id: 2,
+      id: 3,
       firstName: 'Man',
       lastName: '3',
       managerProp: 'i am manager',
       type: Type.Manager,
     });
     expect(users[3]).toMatchObject({
-      id: 3,
+      id: 4,
       firstName: 'Bruce',
       lastName: 'Almighty',
       managerProp: 'i said i am owner',
@@ -129,11 +126,11 @@ describe('single table inheritance in mysql', () => {
     expect(Object.keys(users[0])).toEqual(['id', 'firstName', 'lastName', 'type', 'employeeProp']);
     expect(Object.keys(users[1])).toEqual(['id', 'firstName', 'lastName', 'type', 'employeeProp']);
     expect(Object.keys(users[2])).toEqual(['id', 'firstName', 'lastName', 'type', 'managerProp']);
-    expect(Object.keys(users[3])).toEqual(['id', 'firstName', 'lastName', 'type', 'ownerProp', 'favouriteEmployee', 'favouriteManager', 'managerProp']);
+    expect(Object.keys(users[3])).toEqual(['id', 'firstName', 'lastName', 'type', 'managerProp', 'ownerProp', 'favouriteEmployee', 'favouriteManager']);
 
-    expect([...orm.em.getUnitOfWork().getIdentityMap().keys()]).toEqual(['BaseUser2-4', 'BaseUser2-1', 'BaseUser2-2', 'BaseUser2-3']);
+    expect([...orm.em.getUnitOfWork().getIdentityMap().keys()]).toEqual(['BaseUser2-2', 'BaseUser2-1', 'BaseUser2-3', 'BaseUser2-4']);
 
-    const o = await orm.em.findOneOrFail(CompanyOwner2, 3);
+    const o = await orm.em.findOneOrFail(CompanyOwner2, 4);
     expect(o.state).toBeUndefined();
     expect(o.baseState).toBeUndefined();
     o.firstName = 'Changed';

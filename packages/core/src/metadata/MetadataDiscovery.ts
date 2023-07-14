@@ -912,21 +912,7 @@ export class MetadataDiscovery {
       return;
     }
 
-    Object.values(meta.properties).forEach(prop => {
-      const exists = meta.root.properties[prop.name];
-      prop = Utils.copy(prop, false);
-      prop.nullable = true;
-
-      if (!exists) {
-        prop.inherited = true;
-      }
-
-      meta.root.addProperty(prop);
-    });
-
     meta.collection = meta.root.collection;
-    meta.root.indexes = Utils.unique([...meta.root.indexes, ...meta.indexes]);
-    meta.root.uniques = Utils.unique([...meta.root.uniques, ...meta.uniques]);
   }
 
   private createDiscriminatorProperty(meta: EntityMetadata): void {

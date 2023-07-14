@@ -1,12 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SchemaGenerator (no FKs) generate schema from metadata [mysql]: mysql-create-schema-dump 1`] = `
-"create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum('employee', 'manager', 'owner') not null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null, \`manager_prop\` varchar(255) null) default character set utf8mb4 engine = InnoDB;
-alter table \`base_user2\` add index \`base_user2_type_index\`(\`type\`);
-alter table \`base_user2\` add index \`base_user2_favourite_employee_id_index\`(\`favourite_employee_id\`);
-alter table \`base_user2\` add unique \`base_user2_favourite_manager_id_unique\`(\`favourite_manager_id\`);
-
-create table \`book_tag2\` (\`id\` bigint unsigned not null auto_increment primary key, \`name\` varchar(50) not null) default character set utf8mb4 engine = InnoDB;
+"create table \`book_tag2\` (\`id\` bigint unsigned not null auto_increment primary key, \`name\` varchar(50) not null) default character set utf8mb4 engine = InnoDB;
 
 create table \`car2\` (\`name\` varchar(100) not null, \`year\` int unsigned not null, \`price\` int not null, primary key (\`name\`, \`year\`)) default character set utf8mb4 engine = InnoDB;
 alter table \`car2\` add index \`car2_name_index\`(\`name\`);
@@ -26,6 +21,11 @@ alter table \`foo_bar2\` add unique \`foo_bar2_foo_bar_id_unique\`(\`foo_bar_id\
 create table \`foo_param2\` (\`bar_id\` int unsigned not null, \`baz_id\` int unsigned not null, \`value\` varchar(255) not null, \`version\` datetime(3) not null default current_timestamp(3), primary key (\`bar_id\`, \`baz_id\`)) default character set utf8mb4 engine = InnoDB;
 alter table \`foo_param2\` add index \`foo_param2_bar_id_index\`(\`bar_id\`);
 alter table \`foo_param2\` add index \`foo_param2_baz_id_index\`(\`baz_id\`);
+
+create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum('employee', 'manager', 'owner') not null, \`manager_prop\` varchar(255) null, \`employee_prop\` int null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null) default character set utf8mb4 engine = InnoDB;
+alter table \`base_user2\` add index \`base_user2_type_index\`(\`type\`);
+alter table \`base_user2\` add index \`base_user2_favourite_employee_id_index\`(\`favourite_employee_id\`);
+alter table \`base_user2\` add unique \`base_user2_favourite_manager_id_unique\`(\`favourite_manager_id\`);
 
 create table \`publisher2\` (\`id\` int unsigned not null auto_increment primary key, \`name\` varchar(255) not null default 'asd', \`type\` enum('local', 'global') not null default 'local', \`type2\` enum('LOCAL', 'GLOBAL') not null default 'LOCAL', \`enum1\` tinyint null, \`enum2\` tinyint null, \`enum3\` tinyint null, \`enum4\` enum('a', 'b', 'c') null, \`enum5\` enum('a') null) default character set utf8mb4 engine = InnoDB;
 
@@ -122,13 +122,13 @@ alter table \`book2\` drop foreign key \`book2_author_id_foreign\`;
 alter table \`book2\` drop foreign key \`book2_publisher_id_foreign\`;
 alter table \`author2\` drop foreign key \`author2_favourite_author_id_foreign\`;
 alter table \`author2\` drop foreign key \`author2_favourite_book_uuid_pk_foreign\`;
+alter table \`base_user2\` drop foreign key \`base_user2_favourite_employee_id_foreign\`;
+alter table \`base_user2\` drop foreign key \`base_user2_favourite_manager_id_foreign\`;
 alter table \`foo_param2\` drop foreign key \`foo_param2_bar_id_foreign\`;
 alter table \`foo_param2\` drop foreign key \`foo_param2_baz_id_foreign\`;
 alter table \`foo_bar2\` drop foreign key \`foo_bar2_baz_id_foreign\`;
 alter table \`foo_bar2\` drop foreign key \`foo_bar2_foo_bar_id_foreign\`;
 alter table \`car_owner2\` drop foreign key \`car_owner2_car_name_car_year_foreign\`;
-alter table \`base_user2\` drop foreign key \`base_user2_favourite_employee_id_foreign\`;
-alter table \`base_user2\` drop foreign key \`base_user2_favourite_manager_id_foreign\`;
 drop table if exists \`user2_sandwiches\`;
 drop table if exists \`user2_cars\`;
 drop table if exists \`user2\`;
@@ -145,6 +145,7 @@ drop table if exists \`book2_tags\`;
 drop table if exists \`book2\`;
 drop table if exists \`author2\`;
 drop table if exists \`publisher2\`;
+drop table if exists \`base_user2\`;
 drop table if exists \`foo_param2\`;
 drop table if exists \`foo_bar2\`;
 drop table if exists \`foo_baz2\`;
@@ -152,7 +153,6 @@ drop table if exists \`dummy2\`;
 drop table if exists \`car_owner2\`;
 drop table if exists \`car2\`;
 drop table if exists \`book_tag2\`;
-drop table if exists \`base_user2\`;
 
 "
 `;

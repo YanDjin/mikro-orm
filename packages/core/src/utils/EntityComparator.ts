@@ -304,67 +304,82 @@ export class EntityComparator {
     };
 
     lines.push(`  const mapped = {};`);
-    meta.props.forEach(prop => {
-      if (!prop.fieldNames) {
-        return;
-      }
 
-      if (prop.targetMeta && prop.fieldNames.length > 1) {
-        lines.push(`  if (${prop.fieldNames.map(field => `typeof ${propName(field)} === 'undefined'`).join(' && ')}) {`);
-        lines.push(`  } else if (${prop.fieldNames.map(field => `${propName(field)} != null`).join(' && ')}) {`);
-        lines.push(`    ret${this.wrap(prop.name)} = ${createCompositeKeyArray(prop)};`);
-        lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`));
-        lines.push(`  } else if (${prop.fieldNames.map(field => `${propName(field)} == null`).join(' && ')}) {\n    ret${this.wrap(prop.name)} = null;`);
-        lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`), '  }');
-        return;
-      }
+    const processProps = (meta: EntityMetadata<T>) => {
+      meta.props.forEach(prop => {
+        if (!prop.fieldNames) {
+          return;
+        }
 
-      if (prop.embedded && meta.properties[prop.embedded[0]].object && prop.runtimeType !== 'Date') {
-        return;
-      }
+        if (prop.targetMeta && prop.fieldNames.length > 1) {
+          lines.push(`  if (${prop.fieldNames.map(field => `typeof ${propName(field)} === 'undefined'`).join(' && ')}) {`);
+          lines.push(`  } else if (${prop.fieldNames.map(field => `${propName(field)} != null`).join(' && ')}) {`);
+          lines.push(`    ret${this.wrap(prop.name)} = ${createCompositeKeyArray(prop)};`);
+          lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`));
+          lines.push(`  } else if (${prop.fieldNames.map(field => `${propName(field)} == null`).join(' && ')}) {\n    ret${this.wrap(prop.name)} = null;`);
+          lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`), '  }');
+          return;
+        }
 
-      if (prop.runtimeType === 'boolean') {
-        lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
-        lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : !!${propName(prop.fieldNames[0])};`);
-        lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
-        lines.push(`  }`);
-      } else if (prop.runtimeType === 'Date') {
-        if (prop.embedded && meta.properties[prop.embedded[0]].array) {
-          const parentKey = 'ret.' + meta.properties[prop.embedded[0]].fieldNames[0];
-          const idx = this.tmpIndex++;
-          lines.push(`  if (Array.isArray(${parentKey.replace(/\./g, '?.')})) {`);
-          lines.push(`    ${parentKey}.forEach((item_${idx}, idx_${idx}) => {`);
-          const childProp = this.wrap(prop.embedded[1]);
-          lines.push(`      if (typeof item_${idx}${childProp} !== 'undefined') {`);
-          parseDate(`${parentKey}[idx_${idx}]${childProp}`, `${parentKey}[idx_${idx}]${childProp}`, '    ');
-          lines.push(`      }`);
-          lines.push(`    });`);
+        if (prop.embedded && meta.properties[prop.embedded[0]].object && prop.runtimeType !== 'Date') {
+          return;
+        }
+
+        if (prop.runtimeType === 'boolean') {
+          lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
+          lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : !!${propName(prop.fieldNames[0])};`);
+          lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
           lines.push(`  }`);
-        } else if (prop.embedded && meta.properties[prop.embedded[0]].object) {
-          const entityKey = 'ret.' + prop.fieldNames[0];
-          const entityKeyOptional = 'ret.' + prop.fieldNames[0].replace(/\./g, '?.');
-          lines.push(`  if (typeof ${entityKeyOptional} !== 'undefined') {`);
-          parseDate('ret.' + prop.fieldNames[0], entityKey);
+        } else if (prop.runtimeType === 'Date') {
+          if (prop.embedded && meta.properties[prop.embedded[0]].array) {
+            const parentKey = 'ret.' + meta.properties[prop.embedded[0]].fieldNames[0];
+            const idx = this.tmpIndex++;
+            lines.push(`  if (Array.isArray(${parentKey.replace(/\./g, '?.')})) {`);
+            lines.push(`    ${parentKey}.forEach((item_${idx}, idx_${idx}) => {`);
+            const childProp = this.wrap(prop.embedded[1]);
+            lines.push(`      if (typeof item_${idx}${childProp} !== 'undefined') {`);
+            parseDate(`${parentKey}[idx_${idx}]${childProp}`, `${parentKey}[idx_${idx}]${childProp}`, '    ');
+            lines.push(`      }`);
+            lines.push(`    });`);
+            lines.push(`  }`);
+          } else if (prop.embedded && meta.properties[prop.embedded[0]].object) {
+            const entityKey = 'ret.' + prop.fieldNames[0];
+            const entityKeyOptional = 'ret.' + prop.fieldNames[0].replace(/\./g, '?.');
+            lines.push(`  if (typeof ${entityKeyOptional} !== 'undefined') {`);
+            parseDate('ret.' + prop.fieldNames[0], entityKey);
+            lines.push(`  }`);
+          } else {
+            lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
+            parseDate('ret' + this.wrap(prop.name), propName(prop.fieldNames[0]));
+            lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
+            lines.push(`  }`);
+          }
+        } else if (prop.kind === ReferenceKind.EMBEDDED && prop.object && !this.platform.convertsJsonAutomatically()) {
+          context.set('parseJsonSafe', parseJsonSafe);
+          lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
+          lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : parseJsonSafe(${propName(prop.fieldNames[0])});`);
+          lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
           lines.push(`  }`);
         } else {
           lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
-          parseDate('ret' + this.wrap(prop.name), propName(prop.fieldNames[0]));
+          lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])};`);
           lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
           lines.push(`  }`);
         }
-      } else if (prop.kind === ReferenceKind.EMBEDDED && prop.object && !this.platform.convertsJsonAutomatically()) {
-        context.set('parseJsonSafe', parseJsonSafe);
-        lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
-        lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : parseJsonSafe(${propName(prop.fieldNames[0])});`);
-        lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
-        lines.push(`  }`);
-      } else {
-        lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
-        lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])};`);
-        lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
-        lines.push(`  }`);
+      });
+    };
+
+    if (!meta.root.discriminatorColumn) {
+      processProps(meta);
+    } else {
+      for (const [value, className] of Object.entries(meta.root.discriminatorMap!)) {
+        const meta = this.metadata.get(className);
+        lines.push(`if (${propName(meta.root.discriminatorColumn!)} === '${value}') {`);
+        processProps(meta);
+        lines.push(`}`);
       }
-    });
+    }
+
     lines.push(`  for (let k in result) { if (result.hasOwnProperty(k) && !mapped[k]) ret[k] = result[k]; }`);
 
     const code = `// compiled mapper for entity ${meta.className}\n`

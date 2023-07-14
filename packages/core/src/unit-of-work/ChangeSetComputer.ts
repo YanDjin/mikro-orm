@@ -19,13 +19,13 @@ export class ChangeSetComputer {
               private readonly config: Configuration) { }
 
   computeChangeSet<T extends object>(entity: T): ChangeSet<T> | null {
-    const meta = this.metadata.get((entity as AnyEntity).constructor.name);
+    const wrapped = helper(entity);
+    const meta = this.metadata.get(wrapped.__meta.className);
 
     if (meta.readonly) {
       return null;
     }
 
-    const wrapped = helper(entity);
     const type = wrapped.__originalEntityData ? ChangeSetType.UPDATE : ChangeSetType.CREATE;
     const map = new Map<T, [EntityKey<T>, unknown][]>();
 
@@ -102,7 +102,7 @@ export class ChangeSetComputer {
 
   private computePayload<T extends object>(entity: T, ignoreUndefined = false): EntityData<T> {
     const data = this.comparator.prepareEntity(entity);
-    const entityName = helper(entity).__meta!.root.className;
+    const entityName = helper(entity).__meta!.className;
     const originalEntityData = helper(entity).__originalEntityData;
 
     if (originalEntityData) {

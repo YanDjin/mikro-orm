@@ -86,10 +86,11 @@ describe('GH issue 845', () => {
     orm.em.clear();
 
     expect(mock.mock.calls[0][0]).toMatch('begin');
-    expect(mock.mock.calls[1][0]).toMatch('insert into `parent` (`type`) values (?), (?)');
-    expect(mock.mock.calls[2][0]).toMatch('insert into `relation1` (`parent_id`) values (?), (?), (?)');
-    expect(mock.mock.calls[3][0]).toMatch('insert into `child1specific` (`child1_id`) values (?), (?), (?)');
-    expect(mock.mock.calls[4][0]).toMatch('commit');
+    expect(mock.mock.calls[1][0]).toMatch('insert into `parent` (`type`) values (?)');
+    expect(mock.mock.calls[2][0]).toMatch('insert into `parent` (`type`) values (?)');
+    expect(mock.mock.calls[3][0]).toMatch('insert into `relation1` (`parent_id`) values (?), (?), (?)');
+    expect(mock.mock.calls[4][0]).toMatch('insert into `child1specific` (`child1_id`) values (?), (?), (?)');
+    expect(mock.mock.calls[5][0]).toMatch('commit');
 
     const parents = await orm.em.find(Parent, {}, {
       populate: ['qaInfo.parent', 'rel'] as never,
