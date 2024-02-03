@@ -108,6 +108,8 @@ export class DatabaseTable {
         }
       }
 
+      const nullable = this.columns[field]?.nullable ?? (!(prop.name in meta.root.properties) ? true : !!prop.nullable);
+
       const primary = !meta.compositePK && !!prop.primary && prop.kind === ReferenceKind.SCALAR && this.platform.isNumericColumn(mappedType);
       this.columns[field] = {
         name: prop.fieldNames[idx],
@@ -117,7 +119,7 @@ export class DatabaseTable {
         unsigned: prop.unsigned && this.platform.isNumericColumn(mappedType),
         autoincrement: prop.autoincrement ?? primary,
         primary,
-        nullable: this.columns[field]?.nullable ?? !!prop.nullable,
+        nullable,
         nativeEnumName: prop.nativeEnumName,
         length: prop.length,
         precision: prop.precision,
@@ -161,25 +163,33 @@ export class DatabaseTable {
     }
 
     if (prop.index) {
-      this.indexes.push({
-        columnNames: prop.fieldNames,
-        composite: prop.fieldNames.length > 1,
-        keyName: this.getIndexName(prop.index, prop.fieldNames, 'index'),
-        constraint: false,
-        primary: false,
-        unique: false,
-      });
+      const name = this.getIndexName(prop.index, prop.fieldNames, 'index');
+      const indexExists = this.indexes.find(i => i.keyName === name);
+      if (!indexExists) {
+        this.indexes.push({
+          columnNames: prop.fieldNames,
+          composite: prop.fieldNames.length > 1,
+          keyName: name,
+          constraint: false,
+          primary: false,
+          unique: false,
+        });
+      }
     }
 
     if (prop.unique && !(prop.primary && !meta.compositePK)) {
-      this.indexes.push({
-        columnNames: prop.fieldNames,
-        composite: prop.fieldNames.length > 1,
-        keyName: this.getIndexName(prop.unique, prop.fieldNames, 'unique'),
-        constraint: !prop.fieldNames.some((d: string) => d.includes('.')),
-        primary: false,
-        unique: true,
-      });
+      const name = this.getIndexName(prop.unique, prop.fieldNames, 'unique');
+      const indexExists = this.indexes.find(i => i.keyName === name);
+      if (!indexExists) {
+        this.indexes.push({
+          columnNames: prop.fieldNames,
+          composite: prop.fieldNames.length > 1,
+          keyName: name,
+          constraint: !prop.fieldNames.some((d: string) => d.includes('.')),
+          primary: false,
+          unique: true,
+        });
+      }
     }
   }
 
@@ -791,6 +801,10 @@ export class DatabaseTable {
     }
 
     const name = this.getIndexName(index.name!, properties, type);
+    const indexExists = this.indexes.find(i => i.keyName === name);
+    if (indexExists) {
+      return;
+    }
     this.indexes.push({
       keyName: name,
       columnNames: properties,

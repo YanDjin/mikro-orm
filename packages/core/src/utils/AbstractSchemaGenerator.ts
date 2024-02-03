@@ -106,17 +106,18 @@ export abstract class AbstractSchemaGenerator<D extends IDatabaseDriver> impleme
   }
 
   protected getOrderedMetadata(schema?: string): EntityMetadata[] {
+    // const metadata = Object.values(this.metadata.getAll()).filter(meta => !meta.embeddable && !meta.virtual);
     const metadata = Object.values(this.metadata.getAll()).filter(meta => {
       const isRootEntity = meta.root.className === meta.className;
       return isRootEntity && !meta.embeddable && !meta.virtual;
     });
     const calc = new CommitOrderCalculator();
-    metadata.forEach(meta => calc.addNode(meta.root.className));
+    metadata.forEach(meta => calc.addNode(meta.combinedRoot.className));
     let meta = metadata.pop();
 
     while (meta) {
       for (const prop of meta.props) {
-        calc.discoverProperty(prop, meta.root.className);
+        calc.discoverProperty(prop, meta.combinedRoot.className);
       }
 
       meta = metadata.pop();

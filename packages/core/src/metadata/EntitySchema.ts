@@ -79,6 +79,7 @@ export class EntitySchema<Entity = any, Base = never> {
 
     Object.assign(this._meta, { className: meta.name }, meta);
     this._meta.root ??= this._meta;
+    this._meta.combinedRoot ??= Utils.copy(this._meta);
   }
 
   static fromMetadata<T = AnyEntity, U = never>(meta: EntityMetadata<T> | DeepPartial<EntityMetadata<T>>): EntitySchema<T, U> {

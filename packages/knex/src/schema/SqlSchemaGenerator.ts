@@ -76,6 +76,16 @@ export class SqlSchemaGenerator extends AbstractSchemaGenerator<AbstractSqlDrive
     const metadata = this.getOrderedMetadata(schema);
     const schemaName = schema ?? this.config.get('schema') ?? this.platform.getDefaultSchemaName();
     return DatabaseSchema.fromMetadata(metadata, this.platform, this.config, schemaName);
+
+    // const metadataRootOrdered = this.getOrderedMetadata(schema);
+    // const schemaName = schema ?? this.config.get('schema') ?? this.platform.getDefaultSchemaName();
+    // const metadata = Object.values(this.metadata.getAll());
+    // const metadataOrdered = metadataRootOrdered.reduce((prev, curr) => [
+    //   ...prev,
+    //   curr,
+    //   ...metadata.filter(m => m.root.className === curr.className && m.className !== curr.className),
+    // ], [] as EntityMetadata<any>[]);
+    // return DatabaseSchema.fromMetadata(metadataOrdered, this.platform, this.config, schemaName);
   }
 
   override async getCreateSchemaSQL(options: CreateSchemaOptions = {}): Promise<string> {

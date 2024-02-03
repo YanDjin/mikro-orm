@@ -1783,14 +1783,14 @@ export class EntityManager<D extends IDatabaseDriver = IDatabaseDriver> {
       p = p.split(':', 2)[0];
     }
 
-    const ret = p in meta.root.properties;
+    const ret = p in meta.combinedRoot.properties;
 
     if (!ret) {
       return !!this.metadata.find(property)?.pivotTable;
     }
 
     if (parts.length > 0) {
-      return this.canPopulate((meta.root.properties)[p].type, parts.join('.'));
+      return this.canPopulate((meta.combinedRoot.properties)[p].type, parts.join('.'));
     }
 
     return ret;

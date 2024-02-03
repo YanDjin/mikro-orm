@@ -362,6 +362,12 @@ export class MetadataDiscovery {
       this.logger.log('discovery', `- using cached metadata for entity ${colors.cyan(meta.className)}`);
       this.metadataProvider.loadFromCache(meta, cache);
       meta.root = root;
+      // TODO: need to add the sti properties here
+      // TODO: because this root will not have them
+      meta.combinedRoot = Utils.copy(root);
+      meta.children = [...(meta.children ?? [])];
+      const rootChildren = meta.root.children ?? [];
+      meta.root.children = meta === meta.root ? rootChildren : [...rootChildren, meta];
       this.discovered.push(meta);
 
       return;
@@ -379,8 +385,13 @@ export class MetadataDiscovery {
     }
 
     delete (meta as any).root; // to allow caching (as root can contain cycles)
+    delete (meta as any).combinedRoot;
     this.saveToCache(meta);
     meta.root = root;
+    meta.combinedRoot = Utils.copy(root);
+    meta.children = [...(meta.children ?? [])];
+    const rootChildren = meta.root.children ?? [];
+    meta.root.children = meta === meta.root ? rootChildren : [...rootChildren, meta];
     this.discovered.push(meta);
   }
 
@@ -1024,6 +1035,7 @@ export class MetadataDiscovery {
   private initSingleTableInheritance(meta: EntityMetadata, metadata: EntityMetadata[]): void {
     if (meta.root !== meta && !(meta as Dictionary).__processed) {
       meta.root = metadata.find(m => m.className === meta.root.className)!;
+      meta.combinedRoot = Utils.copy(meta.root);
       (meta.root as Dictionary).__processed = true;
     } else {
       delete (meta.root as Dictionary).__processed;
@@ -1056,7 +1068,7 @@ export class MetadataDiscovery {
     }
 
     Object.values(meta.properties).forEach(prop => {
-      const exists = meta.root.properties[prop.name];
+      const exists = meta.combinedRoot.properties[prop.name];
       prop = Utils.copy(prop, false);
       prop.nullable = true;
 
@@ -1064,12 +1076,12 @@ export class MetadataDiscovery {
         prop.inherited = true;
       }
 
-      meta.root.addProperty(prop);
+      meta.combinedRoot.addProperty(prop);
     });
 
     meta.collection = meta.root.collection;
-    meta.root.indexes = Utils.unique([...meta.root.indexes, ...meta.indexes]);
-    meta.root.uniques = Utils.unique([...meta.root.uniques, ...meta.uniques]);
+    meta.combinedRoot.indexes = Utils.unique([...meta.root.indexes, ...meta.indexes]);
+    meta.combinedRoot.uniques = Utils.unique([...meta.root.uniques, ...meta.uniques]);
   }
 
   private createDiscriminatorProperty(meta: EntityMetadata): void {

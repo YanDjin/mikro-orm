@@ -451,7 +451,9 @@ export abstract class AbstractSqlDriver<Connection extends AbstractSqlConnection
   async nativeInsertMany<T extends object>(entityName: string, data: EntityDictionary<T>[], options: NativeInsertUpdateManyOptions<T> = {}): Promise<QueryResult<T>> {
     options.processCollections ??= true;
     options.convertCustomTypes ??= true;
-    const meta = this.metadata.find<T>(entityName)?.root;
+    // const meta = this.metadata.find<T>(entityName)!;
+    const meta = this.metadata.find<T>(entityName)!.combinedRoot;
+    // const stiChildren = Utils.getEntityChildrenMetadata(meta);
     const collections = options.processCollections ? data.map(d => this.extractManyToMany(entityName, d)) : [];
     const pks = this.getPrimaryKeyFields(entityName) as EntityKey<T>[];
     const set = new Set<EntityKey<T>>();

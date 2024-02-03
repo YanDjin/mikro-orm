@@ -533,6 +533,7 @@ export class EntityMetadata<T = any> {
 
   sync(initIndexes = false) {
     this.root ??= this;
+    this.combinedRoot ??= Utils.copy(this);
     const props = Object.values<EntityProperty<T>>(this.properties).sort((a, b) => this.propertyOrder.get(a.name)! - this.propertyOrder.get(b.name)!);
     this.props = [...props.filter(p => p.primary), ...props.filter(p => !p.primary)];
     this.relations = this.props.filter(prop => prop.kind !== ReferenceKind.SCALAR && prop.kind !== ReferenceKind.EMBEDDED);
@@ -717,6 +718,8 @@ export interface EntityMetadata<T = any> {
   readonly?: boolean;
   polymorphs?: EntityMetadata[];
   root: EntityMetadata<T>;
+  combinedRoot: EntityMetadata<T>;
+  children: EntityMetadata<T>[];
   definedProperties: Dictionary;
   /** @internal can be used for computed numeric cache keys */
   readonly _id: number;

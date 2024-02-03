@@ -1294,4 +1294,8 @@ export class Utils {
     }, {} as T);
   }
 
+  static getEntityChildrenMetadata<T>(meta: EntityMetadata<T>): EntityMetadata<T>[] {
+    return meta.root.children.length > 0 ? meta.root.children : [meta.root];
+  }
+
 }
