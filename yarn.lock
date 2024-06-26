@@ -1114,9 +1114,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikro-orm/better-sqlite@workspace:packages/better-sqlite"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/knex": "npm:^6.1.4"
-    better-sqlite3: "npm:8.7.0"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/knex": "npm:6.1.4-rc-sti-bug.1"
+    better-sqlite3: "npm:11.0.0"
     fs-extra: "npm:11.2.0"
     sqlstring-sqlite: "npm:0.1.1"
   peerDependencies:
@@ -1129,11 +1129,11 @@ __metadata:
   resolution: "@mikro-orm/cli@workspace:packages/cli"
   dependencies:
     "@jercle/yargonaut": "npm:1.1.5"
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/entity-generator": "npm:^6.1.4"
-    "@mikro-orm/knex": "npm:^6.1.4"
-    "@mikro-orm/migrations": "npm:^6.1.4"
-    "@mikro-orm/seeder": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:6.1.4-rc-sti-bug.1"
+    "@mikro-orm/entity-generator": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/knex": "npm:6.1.4-rc-sti-bug.1"
+    "@mikro-orm/migrations": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/seeder": "npm:^6.1.4-rc-sti-bug.1"
     fs-extra: "npm:11.2.0"
     tsconfig-paths: "npm:4.2.0"
     yargs: "npm:17.7.2"
@@ -1143,7 +1143,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikro-orm/core@npm:^6.1.4, @mikro-orm/core@workspace:packages/core":
+"@mikro-orm/core@npm:6.1.4-rc-sti-bug.1, @mikro-orm/core@npm:^6.1.4-rc-sti-bug.1, @mikro-orm/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@mikro-orm/core@workspace:packages/core"
   dependencies:
@@ -1152,28 +1152,28 @@ __metadata:
     esprima: "npm:4.0.1"
     fs-extra: "npm:11.2.0"
     globby: "npm:11.1.0"
-    mikro-orm: "npm:^6.1.4"
-    reflect-metadata: "npm:0.2.1"
+    mikro-orm: "npm:6.1.4-rc-sti-bug.1"
+    reflect-metadata: "npm:0.2.2"
   languageName: unknown
   linkType: soft
 
-"@mikro-orm/entity-generator@npm:^6.1.4, @mikro-orm/entity-generator@workspace:packages/entity-generator":
+"@mikro-orm/entity-generator@npm:^6.1.4-rc-sti-bug.1, @mikro-orm/entity-generator@workspace:packages/entity-generator":
   version: 0.0.0-use.local
   resolution: "@mikro-orm/entity-generator@workspace:packages/entity-generator"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/knex": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/knex": "npm:6.1.4-rc-sti-bug.1"
     fs-extra: "npm:11.2.0"
   peerDependencies:
     "@mikro-orm/core": ^6.0.0
   languageName: unknown
   linkType: soft
 
-"@mikro-orm/knex@npm:^6.1.4, @mikro-orm/knex@workspace:packages/knex":
+"@mikro-orm/knex@npm:6.1.4-rc-sti-bug.1, @mikro-orm/knex@workspace:packages/knex":
   version: 0.0.0-use.local
   resolution: "@mikro-orm/knex@workspace:packages/knex"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
     fs-extra: "npm:11.2.0"
     knex: "npm:3.1.0"
     sqlstring: "npm:2.3.3"
@@ -1186,9 +1186,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikro-orm/mariadb@workspace:packages/mariadb"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/knex": "npm:^6.1.4"
-    mariadb: "npm:2.5.6"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/knex": "npm:6.1.4-rc-sti-bug.1"
+    mariadb: "npm:3.3.1"
   peerDependencies:
     "@mikro-orm/core": ^6.0.0
   languageName: unknown
@@ -1198,8 +1198,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikro-orm/migrations-mongodb@workspace:packages/migrations-mongodb"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/mongodb": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/mongodb": "npm:6.1.4-rc-sti-bug.1"
     fs-extra: "npm:11.2.0"
     mongodb: "npm:6.3.0"
     umzug: "npm:3.7.0"
@@ -1208,12 +1208,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikro-orm/migrations@npm:^6.1.4, @mikro-orm/migrations@workspace:packages/migrations":
+"@mikro-orm/migrations@npm:^6.1.4-rc-sti-bug.1, @mikro-orm/migrations@workspace:packages/migrations":
   version: 0.0.0-use.local
   resolution: "@mikro-orm/migrations@workspace:packages/migrations"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/knex": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/knex": "npm:6.1.4-rc-sti-bug.1"
     fs-extra: "npm:11.2.0"
     umzug: "npm:3.7.0"
   peerDependencies:
@@ -1230,11 +1230,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mikro-orm/mongodb@npm:^6.1.4, @mikro-orm/mongodb@workspace:packages/mongodb":
+"@mikro-orm/mongodb@npm:6.1.4-rc-sti-bug.1, @mikro-orm/mongodb@workspace:packages/mongodb":
   version: 0.0.0-use.local
   resolution: "@mikro-orm/mongodb@workspace:packages/mongodb"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
     bson: "npm:^6.1.0"
     mongodb: "npm:6.3.0"
   peerDependencies:
@@ -1246,9 +1246,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikro-orm/mysql@workspace:packages/mysql"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/knex": "npm:^6.1.4"
-    mysql2: "npm:3.9.1"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/knex": "npm:6.1.4-rc-sti-bug.1"
+    mysql2: "npm:3.10.1"
   peerDependencies:
     "@mikro-orm/core": ^6.0.0
   languageName: unknown
@@ -1258,9 +1258,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikro-orm/postgresql@workspace:packages/postgresql"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/knex": "npm:^6.1.4"
-    pg: "npm:8.11.3"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/knex": "npm:6.1.4-rc-sti-bug.1"
+    pg: "npm:8.12.0"
     postgres-array: "npm:3.0.2"
     postgres-date: "npm:2.1.0"
     postgres-interval: "npm:4.0.2"
@@ -1273,7 +1273,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikro-orm/reflection@workspace:packages/reflection"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
     globby: "npm:11.1.0"
     ts-morph: "npm:21.0.1"
   peerDependencies:
@@ -1323,11 +1323,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikro-orm/seeder@npm:^6.1.4, @mikro-orm/seeder@workspace:packages/seeder":
+"@mikro-orm/seeder@npm:^6.1.4-rc-sti-bug.1, @mikro-orm/seeder@workspace:packages/seeder":
   version: 0.0.0-use.local
   resolution: "@mikro-orm/seeder@workspace:packages/seeder"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
     fs-extra: "npm:11.2.0"
     globby: "npm:11.1.0"
   peerDependencies:
@@ -1348,8 +1348,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikro-orm/sqlite@workspace:packages/sqlite"
   dependencies:
-    "@mikro-orm/core": "npm:^6.1.4"
-    "@mikro-orm/knex": "npm:^6.1.4"
+    "@mikro-orm/core": "npm:^6.1.4-rc-sti-bug.1"
+    "@mikro-orm/knex": "npm:6.1.4-rc-sti-bug.1"
     fs-extra: "npm:11.2.0"
     sqlite3: "npm:5.1.7"
     sqlstring-sqlite: "npm:0.1.1"
@@ -2076,10 +2076,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/geojson@npm:^7946.0.8":
-  version: 7946.0.10
-  resolution: "@types/geojson@npm:7946.0.10"
-  checksum: 10/12c407c2dc93ecb26c08af533ee732f1506a9b29456616ba7ba1d525df96206c28ddf44a528f6a5415d7d22893e9d967420940a9c095ee5e539c1eba5fefc1f4
+"@types/geojson@npm:^7946.0.14":
+  version: 7946.0.14
+  resolution: "@types/geojson@npm:7946.0.14"
+  checksum: 10/ae511bee6488ae3bd5a3a3347aedb0371e997b14225b8983679284e22fa4ebd88627c6e3ff8b08bf4cc35068cb29310c89427311ffc9322c255615821a922e71
   languageName: node
   linkType: hard
 
@@ -2182,10 +2182,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^17.0.10":
-  version: 17.0.45
-  resolution: "@types/node@npm:17.0.45"
-  checksum: 10/b45fff7270b5e81be19ef91a66b764a8b21473a97a8d211218a52e3426b79ad48f371819ab9153370756b33ba284e5c875463de4d2cf48a472e9098d7f09e8a2
+"@types/node@npm:^20.11.17":
+  version: 20.14.9
+  resolution: "@types/node@npm:20.14.9"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10/f313b06c79be92f5d3541159ef813b9fc606941f951ecf826e940658c6d4952755ca2f06277b746326cef0697ed79a04676ecde053d32e1121b3352c8168d2e9
   languageName: node
   linkType: hard
 
@@ -2948,14 +2950,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"better-sqlite3@npm:8.7.0":
-  version: 8.7.0
-  resolution: "better-sqlite3@npm:8.7.0"
+"better-sqlite3@npm:11.0.0":
+  version: 11.0.0
+  resolution: "better-sqlite3@npm:11.0.0"
   dependencies:
     bindings: "npm:^1.5.0"
     node-gyp: "npm:latest"
     prebuild-install: "npm:^7.1.1"
-  checksum: 10/ce7b37eac0abddf275d95b195a36879ed843503ca477c80b2193eec4d2c133216b88d53a6c9c25c70ac38477da3adb785d3b573e8dfe13dc55ded0b62f53e2ca
+  checksum: 10/2fe3743ff5744cac0b76a7d4eb0b1318f576bdaf643ab994f4ae257082063c5649a878e3748e55ca2ae1b457afb327ca123d5961d0f6e4b53a165a91c024d1b3
   languageName: node
   linkType: hard
 
@@ -3064,13 +3066,6 @@ __metadata:
   version: 1.1.2
   resolution: "buffer-from@npm:1.1.2"
   checksum: 10/0448524a562b37d4d7ed9efd91685a5b77a50672c556ea254ac9a6d30e3403a517d8981f10e565db24e8339413b43c97ca2951f10e399c6125a0d8911f5679bb
-  languageName: node
-  linkType: hard
-
-"buffer-writer@npm:2.0.0":
-  version: 2.0.0
-  resolution: "buffer-writer@npm:2.0.0"
-  checksum: 10/fdca8e28c55704de7af2f41c8f875293de69ad22005d5041d54aa916d125cead00afa969bc09e4702ae6b66e098409958c06bebfc97fcf8fa4ea5afcae088cd9
   languageName: node
   linkType: hard
 
@@ -3948,7 +3943,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"denque@npm:^2.0.1, denque@npm:^2.1.0":
+"denque@npm:^2.1.0":
   version: 2.1.0
   resolution: "denque@npm:2.1.0"
   checksum: 10/8ea05321576624b90acfc1ee9208b8d1d04b425cf7573b9b4fa40a2c3ed4d4b0af5190567858f532f677ed2003d4d2b73c8130b34e3c7b8d5e88cdcfbfaa1fe7
@@ -7158,7 +7153,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"long@npm:^5.2.0, long@npm:^5.2.1":
+"long@npm:^5.2.1":
   version: 5.2.3
   resolution: "long@npm:5.2.3"
   checksum: 10/9167ec6947a825b827c30da169a7384eec6c0c9ec2f0b9c74da2e93d81159bbe39fb09c3f13dae9721d4b807ccfa09797a7dd1012f5d478e3e33ca3c78b608e6
@@ -7169,6 +7164,13 @@ __metadata:
   version: 10.1.0
   resolution: "lru-cache@npm:10.1.0"
   checksum: 10/207278d6fa711fb1f94a0835d4d4737441d2475302482a14785b10515e4c906a57ebf9f35bf060740c9560e91c7c1ad5a04fd7ed030972a9ba18bce2a228e95b
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:^10.2.0":
+  version: 10.2.2
+  resolution: "lru-cache@npm:10.2.2"
+  checksum: 10/ff1a496d30b5eaec2c9079080965bb0cede203cf878371f7033a007f1e54cd4aa13cc8abf7ccec4c994a83a22ed5476e83a55bb57cc07e6c1547a42937e42c37
   languageName: node
   linkType: hard
 
@@ -7343,18 +7345,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mariadb@npm:2.5.6":
-  version: 2.5.6
-  resolution: "mariadb@npm:2.5.6"
+"mariadb@npm:3.3.1":
+  version: 3.3.1
+  resolution: "mariadb@npm:3.3.1"
   dependencies:
-    "@types/geojson": "npm:^7946.0.8"
-    "@types/node": "npm:^17.0.10"
-    denque: "npm:^2.0.1"
+    "@types/geojson": "npm:^7946.0.14"
+    "@types/node": "npm:^20.11.17"
+    denque: "npm:^2.1.0"
     iconv-lite: "npm:^0.6.3"
-    long: "npm:^5.2.0"
-    moment-timezone: "npm:^0.5.34"
-    please-upgrade-node: "npm:^3.2.0"
-  checksum: 10/e650d66dae6a746c8870944680dd55500ab8a9620605dbd572ebc7a2edd14b6c7981e125fd527fd9cb779c44a2c9778b474cdbf99564921a1f777f65bba81efa
+    lru-cache: "npm:^10.2.0"
+  checksum: 10/3335133b122c797c2f8fc3a08b147890a3ca49d976b41394b642308015c8a9afadd6dbb4ff97b5588d9cec0ddec5c3e025270019990fbffecd237741a87dc710
   languageName: node
   linkType: hard
 
@@ -7415,7 +7415,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mikro-orm@npm:^6.1.4, mikro-orm@workspace:packages/mikro-orm":
+"mikro-orm@npm:6.1.4-rc-sti-bug.1, mikro-orm@workspace:packages/mikro-orm":
   version: 0.0.0-use.local
   resolution: "mikro-orm@workspace:packages/mikro-orm"
   languageName: unknown
@@ -7700,22 +7700,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment-timezone@npm:^0.5.34":
-  version: 0.5.38
-  resolution: "moment-timezone@npm:0.5.38"
-  dependencies:
-    moment: "npm:>= 2.9.0"
-  checksum: 10/4c7694c06e3ac60311a207d3bb57a5701a36c887846273c3c474ea77e1538019a659daa89eb416fb2585e8c02f00251d596fb8f9c73491001c67bdc7564bdf67
-  languageName: node
-  linkType: hard
-
-"moment@npm:>= 2.9.0":
-  version: 2.29.4
-  resolution: "moment@npm:2.29.4"
-  checksum: 10/157c5af5a0ba8196e577bc67feb583303191d21ba1f7f2af30b3b40d4c63a64d505ba402be2a1454832082fac6be69db1e0d186c3279dae191e6634b0c33705c
-  languageName: node
-  linkType: hard
-
 "mongodb-connection-string-url@npm:^2.6.0":
   version: 2.6.0
   resolution: "mongodb-connection-string-url@npm:2.6.0"
@@ -7873,9 +7857,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mysql2@npm:3.9.1":
-  version: 3.9.1
-  resolution: "mysql2@npm:3.9.1"
+"mysql2@npm:3.10.1":
+  version: 3.10.1
+  resolution: "mysql2@npm:3.10.1"
   dependencies:
     denque: "npm:^2.1.0"
     generate-function: "npm:^2.3.1"
@@ -7885,7 +7869,7 @@ __metadata:
     named-placeholders: "npm:^1.1.3"
     seq-queue: "npm:^0.0.5"
     sqlstring: "npm:^2.3.2"
-  checksum: 10/552a85f097ac13dc5ed8213bd401643e8127a8f5216ebae6a4f30ca5cd999af226f8a99f1ee3238735992feee46911fbcd317788f91b7f42d498b1614df55283
+  checksum: 10/a22463070d3789c2704bc180c368ae49f62fd32f873e8e26bf6fb56b1ccd40f19e572967c92d7a3eef30c472d0984c37fd86f46627f3ec0ff8166ff2928a908d
   languageName: node
   linkType: hard
 
@@ -8711,13 +8695,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"packet-reader@npm:1.0.0":
-  version: 1.0.0
-  resolution: "packet-reader@npm:1.0.0"
-  checksum: 10/8504cc8c32672380867e933516a029b1d4dd784c139213c85c9042ffc1162de48ec914f8c71260a9311518694cf5d0be11c67357f4b536129d2ea42aa7257ec0
-  languageName: node
-  linkType: hard
-
 "pacote@npm:^17.0.5":
   version: 17.0.5
   resolution: "pacote@npm:17.0.5"
@@ -8891,10 +8868,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:2.6.2, pg-connection-string@npm:^2.6.2":
+"pg-connection-string@npm:2.6.2":
   version: 2.6.2
   resolution: "pg-connection-string@npm:2.6.2"
   checksum: 10/22265882c3b6f2320785378d0760b051294a684989163d5a1cde4009e64e84448d7bf67d9a7b9e7f69440c3ee9e2212f9aa10dd17ad6773f6143c6020cebbcb5
+  languageName: node
+  linkType: hard
+
+"pg-connection-string@npm:^2.6.4":
+  version: 2.6.4
+  resolution: "pg-connection-string@npm:2.6.4"
+  checksum: 10/2c1d2ac1add1f93076f1594d217a0980f79add05dc48de6363e1c550827c78a6ee3e3b5420da9c54858f6b678cdb348aed49732ee68158b6cdb70f1d1c748cf9
   languageName: node
   linkType: hard
 
@@ -8912,19 +8896,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.6.1":
-  version: 3.6.1
-  resolution: "pg-pool@npm:3.6.1"
+"pg-pool@npm:^3.6.2":
+  version: 3.6.2
+  resolution: "pg-pool@npm:3.6.2"
   peerDependencies:
     pg: ">=8.0"
-  checksum: 10/5d1b02b959e6c849004d8f3d2222c48d3b3b67b7b1eb5f2e5819ed9412129ea6b0f0376bc74ddf197973c99575d325cbb3f64a8017ab520535c011329b12fffb
+  checksum: 10/d5ccefb9a4913c737e07106ada841c7d8f2b110b02ef6b4cee198e1e7e758bac43cb3b6df7646e25858b9fe300db00f2f349868296fbd4b3b4c99c15906d1596
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:*, pg-protocol@npm:^1.6.0":
+"pg-protocol@npm:*":
   version: 1.6.0
   resolution: "pg-protocol@npm:1.6.0"
   checksum: 10/995864cc2a8517368b84697c753caff769a4db292eda66f96d9eec46e3aa84737cd0b0fe171aca9d7d4b4a4c46bb25bd399713cb1027a5bf8f38adea0b4284f4
+  languageName: node
+  linkType: hard
+
+"pg-protocol@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "pg-protocol@npm:1.6.1"
+  checksum: 10/9af672208adae8214f55f5b4597c4699ab9946205a99863d3e2bb8d024fdab16711457b539bc366cc29040218aa87508cf61294b76d288f48881b973d9117bd6
   languageName: node
   linkType: hard
 
@@ -8956,16 +8947,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.11.3":
-  version: 8.11.3
-  resolution: "pg@npm:8.11.3"
+"pg@npm:8.12.0":
+  version: 8.12.0
+  resolution: "pg@npm:8.12.0"
   dependencies:
-    buffer-writer: "npm:2.0.0"
-    packet-reader: "npm:1.0.0"
     pg-cloudflare: "npm:^1.1.1"
-    pg-connection-string: "npm:^2.6.2"
-    pg-pool: "npm:^3.6.1"
-    pg-protocol: "npm:^1.6.0"
+    pg-connection-string: "npm:^2.6.4"
+    pg-pool: "npm:^3.6.2"
+    pg-protocol: "npm:^1.6.1"
     pg-types: "npm:^2.1.0"
     pgpass: "npm:1.x"
   peerDependencies:
@@ -8976,7 +8965,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10/f15f29c8e17723ee1da72abdf400cbed2c04602c58c93687f3f0068e71df2a6fb62b9a3543e13da21b10a0494f4c5b4cfc8d6cd8396617b76c4cbfd6ddab17e7
+  checksum: 10/ce39af0e85d42bf5fc8dcc02c57b38d4cb203fea937688509a77c0b005a54d4821e5e5963a5663934d76994eab42381698f08a44e21544b4545fd9d142dcfd12
   languageName: node
   linkType: hard
 
@@ -9053,15 +9042,6 @@ __metadata:
   dependencies:
     find-up: "npm:^4.0.0"
   checksum: 10/9863e3f35132bf99ae1636d31ff1e1e3501251d480336edb1c211133c8d58906bed80f154a1d723652df1fda91e01c7442c2eeaf9dc83157c7ae89087e43c8d6
-  languageName: node
-  linkType: hard
-
-"please-upgrade-node@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "please-upgrade-node@npm:3.2.0"
-  dependencies:
-    semver-compare: "npm:^1.0.0"
-  checksum: 10/d87c41581a2a022fbe25965a97006238cd9b8cbbf49b39f78d262548149a9d30bd2bdf35fec3d810e0001e630cd46ef13c7e19c389dea8de7e64db271a2381bb
   languageName: node
   linkType: hard
 
@@ -9462,10 +9442,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:0.2.1":
-  version: 0.2.1
-  resolution: "reflect-metadata@npm:0.2.1"
-  checksum: 10/394b293bd4a538b644ed0e8730c5aeb1e08e78972c915b3d2cf3b302241952cfee8f8bd8a0fdf7d8c7fa78d31d0585489061624692e2577d767abd120cad968c
+"reflect-metadata@npm:0.2.2":
+  version: 0.2.2
+  resolution: "reflect-metadata@npm:0.2.2"
+  checksum: 10/1c93f9ac790fea1c852fde80c91b2760420069f4862f28e6fae0c00c6937a56508716b0ed2419ab02869dd488d123c4ab92d062ae84e8739ea7417fae10c4745
   languageName: node
   linkType: hard
 
@@ -9699,13 +9679,6 @@ __metadata:
   version: 2.1.2
   resolution: "safer-buffer@npm:2.1.2"
   checksum: 10/7eaf7a0cf37cc27b42fb3ef6a9b1df6e93a1c6d98c6c6702b02fe262d5fcbd89db63320793b99b21cb5348097d0a53de81bd5f4e8b86e20cc9412e3f1cfb4e83
-  languageName: node
-  linkType: hard
-
-"semver-compare@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "semver-compare@npm:1.0.0"
-  checksum: 10/75f9c7a7786d1756f64b1429017746721e07bd7691bdad6368f7643885d3a98a27586777e9699456564f4844b407e9f186cc1d588a3f9c0be71310e517e942c3
   languageName: node
   linkType: hard
 

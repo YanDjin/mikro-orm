@@ -283,9 +283,7 @@ exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-sc
 exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-schema-drop-1:1 1`] = `""`;
 
 exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-schema-drop-column 1`] = `
-"alter table "author2" drop constraint "author2_favourite_book_uuid_pk_foreign";
-
-alter table "new_table" drop constraint "new_table_pkey";
+"alter table "new_table" drop constraint "new_table_pkey";
 alter table "new_table" drop column "id";
 alter table "new_table" drop column "updated_at";
 

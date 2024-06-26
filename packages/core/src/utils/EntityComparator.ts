@@ -356,6 +356,7 @@ export class EntityComparator {
           lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
           lines.push(`  }`);
         }
+      })
     }
 
     if (meta.root.discriminatorColumn && !meta.root.embeddable) {

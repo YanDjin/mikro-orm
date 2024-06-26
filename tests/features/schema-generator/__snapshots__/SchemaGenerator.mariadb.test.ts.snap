@@ -189,11 +189,123 @@ set foreign_key_checks = 0;
 
 alter table \`test2\` drop foreign key \`test2_foo___bar_foreign\`;
 
+alter table \`base_user2\` drop index \`base_user2_employee_prop_unique\`;
+alter table \`base_user2\` drop index \`base_user2_favourite_manager_id_unique\`;
+alter table \`base_user2\` drop primary key;
+
+alter table \`base_user2\` add unique \`base_user2_employee_prop_unique\`(\`employee_prop\`);
+alter table \`base_user2\` add unique \`base_user2_favourite_manager_id_unique\`(\`favourite_manager_id\`);
+alter table \`base_user2\` add primary key \`base_user2_pkey\`(\`id\`);
+
+alter table \`book_tag2\` drop primary key;
+
+alter table \`book_tag2\` add primary key \`book_tag2_pkey\`(\`id\`);
+
+alter table \`car2\` drop primary key;
+
+alter table \`car2\` add primary key \`car2_pkey\`(\`name\`, \`year\`);
+
+alter table \`car_owner2\` drop primary key;
+
+alter table \`car_owner2\` add primary key \`car_owner2_pkey\`(\`id\`);
+
+alter table \`dummy2\` drop primary key;
+
+alter table \`dummy2\` add primary key \`dummy2_pkey\`(\`id\`);
+
+alter table \`foo_baz2\` drop primary key;
+
+alter table \`foo_baz2\` add primary key \`foo_baz2_pkey\`(\`id\`);
+
+alter table \`foo_bar2\` drop index \`foo_bar2_baz_id_unique\`;
+alter table \`foo_bar2\` drop index \`foo_bar2_foo_bar_id_unique\`;
+alter table \`foo_bar2\` drop primary key;
+
+alter table \`foo_bar2\` modify \`version\` datetime not null default current_timestamp;
+alter table \`foo_bar2\` add unique \`foo_bar2_baz_id_unique\`(\`baz_id\`);
+alter table \`foo_bar2\` add unique \`foo_bar2_foo_bar_id_unique\`(\`foo_bar_id\`);
+alter table \`foo_bar2\` add primary key \`foo_bar2_pkey\`(\`id\`);
+
+alter table \`foo_param2\` drop primary key;
+
+alter table \`foo_param2\` add primary key \`foo_param2_pkey\`(\`bar_id\`, \`baz_id\`);
+
+alter table \`publisher2\` drop primary key;
+
+alter table \`publisher2\` add primary key \`publisher2_pkey\`(\`id\`);
+
+alter table \`author2\` drop index \`author2_name_email_unique\`;
+alter table \`author2\` drop index \`custom_email_unique_name\`;
+alter table \`author2\` drop primary key;
+
+alter table \`author2\` modify \`born_time\` time;
+alter table \`author2\` add unique \`author2_name_email_unique\`(\`name\`, \`email\`);
+alter table \`author2\` add unique \`custom_email_unique_name\`(\`email\`);
+alter table \`author2\` add primary key \`author2_pkey\`(\`id\`);
+
+alter table \`book2\` drop primary key;
 alter table \`book2\` drop column \`foo\`;
 
+alter table \`book2\` add primary key \`book2_pkey\`(\`uuid_pk\`);
+
+alter table \`book2_tags\` drop primary key;
+
+alter table \`book2_tags\` add primary key \`book2_tags_pkey\`(\`order\`);
+
+alter table \`book_to_tag_unordered\` drop primary key;
+
+alter table \`book_to_tag_unordered\` add primary key \`book_to_tag_unordered_pkey\`(\`book2_uuid_pk\`, \`book_tag2_id\`);
+
+alter table \`author2_following\` drop primary key;
+
+alter table \`author2_following\` add primary key \`author2_following_pkey\`(\`author2_1_id\`, \`author2_2_id\`);
+
+alter table \`author_to_friend\` drop primary key;
+
+alter table \`author_to_friend\` add primary key \`author_to_friend_pkey\`(\`author2_1_id\`, \`author2_2_id\`);
+
+alter table \`address2\` drop primary key;
+
+alter table \`address2\` add primary key \`address2_pkey\`(\`author_id\`);
+
+alter table \`sandwich\` drop primary key;
+
+alter table \`sandwich\` add primary key \`sandwich_pkey\`(\`id\`);
+
 alter table \`test2\` drop index \`test2_foo___bar_unique\`;
+alter table \`test2\` drop primary key;
+alter table \`test2\` drop index \`test2_book_uuid_pk_unique\`;
 alter table \`test2\` drop column \`foo___bar\`;
 alter table \`test2\` drop column \`foo___baz\`;
+
+alter table \`test2\` add primary key \`test2_pkey\`(\`id\`);
+alter table \`test2\` add unique \`test2_book_uuid_pk_unique\`(\`book_uuid_pk\`);
+
+alter table \`publisher2_tests\` drop primary key;
+
+alter table \`publisher2_tests\` add primary key \`publisher2_tests_pkey\`(\`id\`);
+
+alter table \`configuration2\` drop primary key;
+
+alter table \`configuration2\` add primary key \`configuration2_pkey\`(\`property\`, \`test_id\`);
+
+alter table \`test2_bars\` drop primary key;
+
+alter table \`test2_bars\` add primary key \`test2_bars_pkey\`(\`test2_id\`, \`foo_bar2_id\`);
+
+alter table \`user2\` drop primary key;
+alter table \`user2\` drop index \`user2_favourite_car_name_favourite_car_year_unique\`;
+
+alter table \`user2\` add primary key \`user2_pkey\`(\`first_name\`, \`last_name\`);
+alter table \`user2\` add unique \`user2_favourite_car_name_favourite_car_year_unique\`(\`favourite_car_name\`, \`favourite_car_year\`);
+
+alter table \`user2_cars\` drop primary key;
+
+alter table \`user2_cars\` add primary key \`user2_cars_pkey\`(\`user2_first_name\`, \`user2_last_name\`, \`car2_name\`, \`car2_year\`);
+
+alter table \`user2_sandwiches\` drop primary key;
+
+alter table \`user2_sandwiches\` add primary key \`user2_sandwiches_pkey\`(\`user2_first_name\`, \`user2_last_name\`, \`sandwich_id\`);
 
 set foreign_key_checks = 1;
 "
