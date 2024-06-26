@@ -2,12 +2,10 @@
   "packages": [
     "packages/*"
   ],
-  "version": "6.1.4",
+  "version": "6.2.10-rc-sti-bug.2",
   "command": {
     "version": {
-      "conventionalCommits": true,
-      "createRelease": "github",
-      "message": "chore(release): %s [skip ci]"
+      "registry": "http://localhost:4873/"
     },
     "publish": {
       "assets": []
