@@ -2,7 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "6.2.10-rc-sti-bug.2",
+  "version": "6.2.10-rc-sti-bug.6",
   "command": {
     "version": {
       "registry": "http://localhost:4873/"
