@@ -493,7 +493,41 @@ export class EntityMetadata<T = any> {
     this.checks = [];
     this.referencingProperties = [];
     this.concurrencyCheckKeys = new Set();
+    this.stiChildren = [];
     Object.assign(this, meta);
+  }
+
+  getStiRoot() {
+    // if (this.root.stiRoot) {
+    //   return this.root.stiRoot;
+    // }
+    // const children = this.root.stiChildren as EntityMetadata<any>[];
+    // if (children.length === 0) {
+    //   return Utils.copy(this.root, false);
+    // }
+    // const newRoot: EntityMetadata<any> = Utils.copy(this.root, false);
+
+    // for (const meta of children) {
+    //   Object.values(meta.properties).forEach((prop) => {
+    //     const exists = newRoot.properties[prop.name];
+    //     prop = Utils.copy(prop, false);
+    //     prop.nullable = true;
+
+    //     if (!exists) {
+    //       prop.inherited = true;
+    //     }
+
+    //     newRoot.addProperty(prop);
+    //   });
+
+    //   newRoot.indexes = Utils.unique([...newRoot.indexes, ...meta.indexes]);
+    //   newRoot.uniques = Utils.unique([...newRoot.uniques, ...meta.uniques]);
+    // }
+
+    // this.root.stiRoot = newRoot;
+
+    // return newRoot;
+    return this.root.stiRoot ?? this.root;
   }
 
   addProperty(prop: Partial<EntityProperty<T>>, sync = true) {
@@ -718,7 +752,11 @@ export interface EntityMetadata<T = any> {
   readonly?: boolean;
   polymorphs?: EntityMetadata[];
   root: EntityMetadata<T>;
+  stiRoot?: EntityMetadata<T>;
   definedProperties: Dictionary;
+
+  stiCombined: EntityMetadata<T>;
+  stiChildren: EntityMetadata<T>[];
   /** @internal can be used for computed numeric cache keys */
   readonly _id: number;
 }

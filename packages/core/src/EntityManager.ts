@@ -2096,7 +2096,14 @@ export class EntityManager<Driver extends IDatabaseDriver = IDatabaseDriver> {
     }
 
     const populate: PopulateOptions<Entity>[] = this.entityLoader.normalizePopulate<Entity>(entityName, options.populate as true, options.strategy as LoadStrategy);
-    const invalid = populate.find(({ field }) => !this.canPopulate(entityName, field));
+    let invalid: PopulateOptions<Entity> | undefined;
+    if (meta) {
+      // analyse all the extending entities because it is possible to populate a field only available in one of the STI children
+      const extending = this.getSTIExtendingMetadata(meta);
+      invalid = populate.find(({ field }) => extending.every(meta => !this.canPopulate(meta.className, field)));
+    } else {
+      invalid = populate.find(({ field }) => !this.canPopulate(entityName, field));
+    }
 
     if (validate && invalid) {
       throw ValidationError.invalidPropertyName(entityName, invalid.field);
@@ -2111,6 +2118,23 @@ export class EntityManager<Driver extends IDatabaseDriver = IDatabaseDriver> {
 
       return field;
     });
+  }
+  
+  /**
+   * returns all the EntityMetadata that extends the passed EntityMetadata in the context of single table inheritance
+   */
+  getSTIExtendingMetadata<T>(meta: EntityMetadata<T>, metadata?: EntityMetadata[]): EntityMetadata[] {
+    if (!metadata) {
+      const map = meta.root.discriminatorMap;
+      if (!map) {
+        return [meta];
+      }
+      const metadata = Object.values(map).map(entityName => this.metadata.get(entityName));
+      return this.getSTIExtendingMetadata(meta, metadata);
+    }
+    const extending = metadata.filter(_meta => _meta.extends === meta.className);
+    const childrenExtending = extending.map(meta => this.getSTIExtendingMetadata(meta, metadata));
+    return [meta, ...childrenExtending.reduce((prev, curr) => [...prev, ...curr], [] as EntityMetadata[])] as EntityMetadata[];
   }
 
   /**

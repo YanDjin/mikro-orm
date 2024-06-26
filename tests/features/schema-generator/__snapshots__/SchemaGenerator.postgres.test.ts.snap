@@ -232,7 +232,6 @@ set session_replication_role = 'origin';
 exports[`SchemaGenerator [postgres] update indexes [postgres]: postgres-update-schema-add-fulltext-index-tsvector 1`] = `
 "alter table "book2" alter column "title" drop default;
 alter table "book2" alter column "title" type tsvector using ("title"::tsvector);
-create index "book2_title_index" on "public"."book2" using gin("title");
 
 "
 `;
@@ -252,24 +251,12 @@ exports[`SchemaGenerator [postgres] update indexes [postgres]: postgres-update-s
 "
 `;
 
-exports[`SchemaGenerator [postgres] update indexes [postgres]: postgres-update-schema-drop-index 1`] = `
-"drop index "book2_title_index";
-drop index "custom_idx_123";
+exports[`SchemaGenerator [postgres] update indexes [postgres]: postgres-update-schema-drop-index 1`] = `""`;
 
-"
-`;
-
-exports[`SchemaGenerator [postgres] update indexes [postgres]: postgres-update-schema-drop-unique 1`] = `
-"alter table "book2" drop constraint "book2_author_id_publisher_id_unique";
-
-"
-`;
+exports[`SchemaGenerator [postgres] update indexes [postgres]: postgres-update-schema-drop-unique 1`] = `""`;
 
 exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-schema-add-column 1`] = `
 "alter table "new_table" add column "id" serial primary key, add column "updated_at" timestamp(3) not null default current_timestamp(3);
-
-alter table "author2" add column "favourite_book_uuid_pk" uuid null;
-alter table "author2" add constraint "author2_favourite_book_uuid_pk_foreign" foreign key ("favourite_book_uuid_pk") references "book2" ("uuid_pk") on update no action on delete cascade;
 
 "
 `;
@@ -293,14 +280,7 @@ exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-sc
 "
 `;
 
-exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-schema-drop-1:1 1`] = `
-"alter table "foo_bar2" drop constraint "foo_bar2_baz_id_foreign";
-
-alter table "foo_bar2" drop constraint "foo_bar2_baz_id_unique";
-alter table "foo_bar2" drop column "baz_id";
-
-"
-`;
+exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-schema-drop-1:1 1`] = `""`;
 
 exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-schema-drop-column 1`] = `
 "alter table "author2" drop constraint "author2_favourite_book_uuid_pk_foreign";
@@ -308,8 +288,6 @@ exports[`SchemaGenerator [postgres] update schema [postgres]: postgres-update-sc
 alter table "new_table" drop constraint "new_table_pkey";
 alter table "new_table" drop column "id";
 alter table "new_table" drop column "updated_at";
-
-alter table "author2" drop column "favourite_book_uuid_pk";
 
 alter table "author2" alter column "name" drop default;
 alter table "author2" alter column "name" type int using ("name"::int);

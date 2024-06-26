@@ -304,59 +304,72 @@ export class EntityComparator {
     };
 
     lines.push(`  const mapped = {};`);
-    meta.props.forEach(prop => {
-      if (!prop.fieldNames) {
-        return;
+    const processProps = (meta: EntityMetadata<T>) => {
+      meta.props.forEach(prop => {
+        if (!prop.fieldNames) {
+          return;
+        }
+
+        if (prop.targetMeta && prop.fieldNames.length > 1) {
+          lines.push(`  if (${prop.fieldNames.map(field => `typeof ${propName(field)} === 'undefined'`).join(' && ')}) {`);
+          lines.push(`  } else if (${prop.fieldNames.map(field => `${propName(field)} != null`).join(' && ')}) {`);
+          lines.push(`    ret${this.wrap(prop.name)} = ${createCompositeKeyArray(prop)};`);
+          lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`));
+          lines.push(`  } else if (${prop.fieldNames.map(field => `${propName(field)} == null`).join(' && ')}) {\n    ret${this.wrap(prop.name)} = null;`);
+          lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`), '  }');
+          return;
+        }
+  
+        if (prop.embedded && (meta.embeddable || meta.properties[prop.embedded[0]].object)) {
+          return;
+        }
+  
+        if (prop.runtimeType === 'boolean') {
+          lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
+          lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : !!${propName(prop.fieldNames[0])};`);
+          lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
+          lines.push(`  }`);
+        } else if (prop.runtimeType === 'Date') {
+          lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
+          context.set('parseDate', (value: string | number) => this.platform.parseDate(value as string));
+          parseDate('ret' + this.wrap(prop.name), propName(prop.fieldNames[0]));
+          lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
+          lines.push(`  }`);
+        } else if (prop.kind === ReferenceKind.EMBEDDED && (prop.object || meta.embeddable)) {
+          const idx = this.tmpIndex++;
+          context.set(`mapEmbeddedResult_${idx}`, (data: Dictionary) => {
+            const item = parseJsonSafe(data);
+  
+            if (Array.isArray(item)) {
+              return item.map(row => row == null ? row : this.getResultMapper(prop.type)(row));
+            }
+  
+            return item == null ? item : this.getResultMapper(prop.type)(item);
+          });
+          lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
+          lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : mapEmbeddedResult_${idx}(${propName(prop.fieldNames[0])});`);
+          lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
+          lines.push(`  }`);
+        } else if (prop.kind !== ReferenceKind.EMBEDDED) {
+          lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
+          lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])};`);
+          lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
+          lines.push(`  }`);
+        }
+    }
+
+    if (meta.root.discriminatorColumn && !meta.root.embeddable) {
+      for (const [value, className] of Object.entries(meta.root.discriminatorMap!)) {
+        const meta = this.metadata.get(className);
+        lines.push(`if (${propName(meta.root.discriminatorColumn!)} === '${value}') {`);
+        processProps(meta);
+        lines.push(`}`);
       }
+    } else {
+      processProps(meta);
+    }
 
-      if (prop.targetMeta && prop.fieldNames.length > 1) {
-        lines.push(`  if (${prop.fieldNames.map(field => `typeof ${propName(field)} === 'undefined'`).join(' && ')}) {`);
-        lines.push(`  } else if (${prop.fieldNames.map(field => `${propName(field)} != null`).join(' && ')}) {`);
-        lines.push(`    ret${this.wrap(prop.name)} = ${createCompositeKeyArray(prop)};`);
-        lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`));
-        lines.push(`  } else if (${prop.fieldNames.map(field => `${propName(field)} == null`).join(' && ')}) {\n    ret${this.wrap(prop.name)} = null;`);
-        lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`), '  }');
-        return;
-      }
-
-      if (prop.embedded && (meta.embeddable || meta.properties[prop.embedded[0]].object)) {
-        return;
-      }
-
-      if (prop.runtimeType === 'boolean') {
-        lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
-        lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : !!${propName(prop.fieldNames[0])};`);
-        lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
-        lines.push(`  }`);
-      } else if (prop.runtimeType === 'Date') {
-        lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
-        context.set('parseDate', (value: string | number) => this.platform.parseDate(value as string));
-        parseDate('ret' + this.wrap(prop.name), propName(prop.fieldNames[0]));
-        lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
-        lines.push(`  }`);
-      } else if (prop.kind === ReferenceKind.EMBEDDED && (prop.object || meta.embeddable)) {
-        const idx = this.tmpIndex++;
-        context.set(`mapEmbeddedResult_${idx}`, (data: Dictionary) => {
-          const item = parseJsonSafe(data);
-
-          if (Array.isArray(item)) {
-            return item.map(row => row == null ? row : this.getResultMapper(prop.type)(row));
-          }
-
-          return item == null ? item : this.getResultMapper(prop.type)(item);
-        });
-        lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
-        lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : mapEmbeddedResult_${idx}(${propName(prop.fieldNames[0])});`);
-        lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
-        lines.push(`  }`);
-      } else if (prop.kind !== ReferenceKind.EMBEDDED) {
-        lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
-        lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])};`);
-        lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
-        lines.push(`  }`);
-      }
-    });
-    lines.push(`  for (let k in result) { if (result.hasOwnProperty(k) && !mapped[k]) ret[k] = result[k]; }`);
+    lines.push(`  for (let k in result) { if (Object.hasOwn(result, k) && !mapped[k]) ret[k] = result[k]; }`);
 
     const code = `// compiled mapper for entity ${meta.className}\n`
       + `return function(result) {\n  const ret = {};\n${lines.join('\n')}\n  return ret;\n}`;

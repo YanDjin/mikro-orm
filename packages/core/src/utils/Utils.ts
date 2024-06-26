@@ -306,6 +306,21 @@ export class Utils {
     return [...new Set(items)];
   }
 
+  
+  /**
+   * Gets array without duplicates, comparing using the provided key
+   */
+  static uniqueBy<T extends Dictionary<any>>(items: T[], key: keyof T): T[] {
+    const set = new Set();
+    return items.reduce((prev: T[], curr) => {
+      if (set.has(curr[key])) {
+        return prev;
+      }
+      set.add(curr[key]);
+      return [...prev, curr];
+    }, []);
+  }
+
   /**
    * Merges all sources into the target recursively.
    */

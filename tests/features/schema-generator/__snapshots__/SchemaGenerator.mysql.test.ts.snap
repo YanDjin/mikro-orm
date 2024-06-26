@@ -4,7 +4,7 @@ exports[`SchemaGenerator generate schema from metadata [mysql]: mysql-create-sch
 "set names utf8mb4;
 set foreign_key_checks = 0;
 
-create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum('employee', 'manager', 'owner') not null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null, \`manager_prop\` varchar(255) null) default character set utf8mb4 engine = InnoDB;
+create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum('employee', 'manager', 'owner') not null, \`manager_prop\` varchar(255) null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null) default character set utf8mb4 engine = InnoDB;
 alter table \`base_user2\` add index \`base_user2_type_index\`(\`type\`);
 alter table \`base_user2\` add index \`base_user2_favourite_employee_id_index\`(\`favourite_employee_id\`);
 alter table \`base_user2\` add unique \`base_user2_favourite_manager_id_unique\`(\`favourite_manager_id\`);
@@ -225,10 +225,6 @@ alter table \`test2\` drop column \`foo___baz\`;
 exports[`SchemaGenerator update schema [mysql]: mysql-update-schema-add-column 1`] = `
 "alter table \`new_table\` add \`id\` int unsigned not null auto_increment primary key, add \`updated_at\` datetime(3) not null default current_timestamp(3);
 
-alter table \`author2\` add \`favourite_book_uuid_pk\` varchar(36) null;
-alter table \`author2\` add constraint \`author2_favourite_book_uuid_pk_foreign\` foreign key (\`favourite_book_uuid_pk\`) references \`book2\` (\`uuid_pk\`) on update no action on delete cascade;
-alter table \`author2\` add index \`author2_favourite_book_uuid_pk_index\`(\`favourite_book_uuid_pk\`);
-
 "
 `;
 
@@ -269,26 +265,14 @@ alter table \`test2\` drop column \`foo___baz\`;
 "
 `;
 
-exports[`SchemaGenerator update schema [mysql]: mysql-update-schema-drop-1:1 1`] = `
-"alter table \`foo_bar2\` drop foreign key \`foo_bar2_baz_id_foreign\`;
-
-alter table \`foo_bar2\` drop index \`foo_bar2_baz_id_unique\`;
-alter table \`foo_bar2\` drop column \`baz_id\`;
-
-"
-`;
+exports[`SchemaGenerator update schema [mysql]: mysql-update-schema-drop-1:1 1`] = `""`;
 
 exports[`SchemaGenerator update schema [mysql]: mysql-update-schema-drop-column 1`] = `
 "alter table \`new_table\` modify \`id\` int unsigned not null;
 
-alter table \`author2\` drop foreign key \`author2_favourite_book_uuid_pk_foreign\`;
-
 alter table \`new_table\` drop primary key;
 alter table \`new_table\` drop column \`id\`;
 alter table \`new_table\` drop column \`updated_at\`;
-
-alter table \`author2\` drop index \`author2_favourite_book_uuid_pk_index\`;
-alter table \`author2\` drop column \`favourite_book_uuid_pk\`;
 
 "
 `;

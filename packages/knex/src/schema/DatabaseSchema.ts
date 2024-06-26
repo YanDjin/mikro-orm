@@ -1,4 +1,4 @@
-import { ReferenceKind, type Configuration, type Dictionary, type EntityMetadata, type EntityProperty } from '@mikro-orm/core';
+import { ReferenceKind, Utils, type Configuration, type Dictionary, type EntityMetadata, type EntityProperty } from '@mikro-orm/core';
 import { DatabaseTable } from './DatabaseTable';
 import type { AbstractSqlConnection } from '../AbstractSqlConnection';
 import type { Table } from '../typings';
@@ -83,7 +83,10 @@ export class DatabaseSchema {
 
     schema.setNativeEnums(nativeEnums);
 
-    for (const meta of metadata) {
+    const rootMetadata = Utils.uniqueBy(metadata.map(e => e.getStiRoot()), 'name')
+
+    for (const meta of rootMetadata) {
+      // const table = schema.getTable(meta.collection) ?? schema.addTable(meta.collection, this.getSchemaName(meta, config, schemaName));
       const table = schema.addTable(meta.collection, this.getSchemaName(meta, config, schemaName));
       table.comment = meta.comment;
       meta.props

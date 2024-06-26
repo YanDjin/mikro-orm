@@ -35,7 +35,7 @@ exports[`Migrator do not log a migration if the schema does not exist yet: initi
 export class Migration20191013214813 extends Migration {
 
   async up(): Promise<void> {
-    this.addSql('create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum(\\'employee\\', \\'manager\\', \\'owner\\') not null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null, \`manager_prop\` varchar(255) null) default character set utf8mb4 engine = InnoDB;');
+    this.addSql('create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum(\\'employee\\', \\'manager\\', \\'owner\\') not null, \`manager_prop\` varchar(255) null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null) default character set utf8mb4 engine = InnoDB;');
     this.addSql('alter table \`base_user2\` add index \`base_user2_type_index\`(\`type\`);');
     this.addSql('alter table \`base_user2\` add index \`base_user2_favourite_employee_id_index\`(\`favourite_employee_id\`);');
     this.addSql('alter table \`base_user2\` add unique \`base_user2_favourite_manager_id_unique\`(\`favourite_manager_id\`);');
@@ -183,7 +183,7 @@ export class Migration20191013214813 extends Migration {
   "diff": {
     "down": [],
     "up": [
-      "create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum('employee', 'manager', 'owner') not null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null, \`manager_prop\` varchar(255) null) default character set utf8mb4 engine = InnoDB;",
+      "create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum('employee', 'manager', 'owner') not null, \`manager_prop\` varchar(255) null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null) default character set utf8mb4 engine = InnoDB;",
       "alter table \`base_user2\` add index \`base_user2_type_index\`(\`type\`);",
       "alter table \`base_user2\` add index \`base_user2_favourite_employee_id_index\`(\`favourite_employee_id\`);",
       "alter table \`base_user2\` add unique \`base_user2_favourite_manager_id_unique\`(\`favourite_manager_id\`);",
@@ -535,7 +535,7 @@ exports[`Migrator log a migration when the schema already exists: initial-migrat
 export class Migration20191013214813 extends Migration {
 
   async up(): Promise<void> {
-    this.addSql('create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum(\\'employee\\', \\'manager\\', \\'owner\\') not null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null, \`manager_prop\` varchar(255) null) default character set utf8mb4 engine = InnoDB;');
+    this.addSql('create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum(\\'employee\\', \\'manager\\', \\'owner\\') not null, \`manager_prop\` varchar(255) null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null) default character set utf8mb4 engine = InnoDB;');
     this.addSql('alter table \`base_user2\` add index \`base_user2_type_index\`(\`type\`);');
     this.addSql('alter table \`base_user2\` add index \`base_user2_favourite_employee_id_index\`(\`favourite_employee_id\`);');
     this.addSql('alter table \`base_user2\` add unique \`base_user2_favourite_manager_id_unique\`(\`favourite_manager_id\`);');
@@ -683,7 +683,7 @@ export class Migration20191013214813 extends Migration {
   "diff": {
     "down": [],
     "up": [
-      "create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum('employee', 'manager', 'owner') not null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null, \`manager_prop\` varchar(255) null) default character set utf8mb4 engine = InnoDB;",
+      "create table \`base_user2\` (\`id\` int unsigned not null auto_increment primary key, \`first_name\` varchar(100) not null, \`last_name\` varchar(100) not null, \`type\` enum('employee', 'manager', 'owner') not null, \`manager_prop\` varchar(255) null, \`owner_prop\` varchar(255) null, \`favourite_employee_id\` int unsigned null, \`favourite_manager_id\` int unsigned null, \`employee_prop\` int null) default character set utf8mb4 engine = InnoDB;",
       "alter table \`base_user2\` add index \`base_user2_type_index\`(\`type\`);",
       "alter table \`base_user2\` add index \`base_user2_favourite_employee_id_index\`(\`favourite_employee_id\`);",
       "alter table \`base_user2\` add unique \`base_user2_favourite_manager_id_unique\`(\`favourite_manager_id\`);",

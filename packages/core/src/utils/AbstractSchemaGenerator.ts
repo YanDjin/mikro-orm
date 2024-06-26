@@ -109,7 +109,7 @@ export abstract class AbstractSchemaGenerator<D extends IDatabaseDriver> impleme
     const metadata = Object.values(this.metadata.getAll()).filter(meta => {
       const isRootEntity = meta.root.className === meta.className;
       return isRootEntity && !meta.embeddable && !meta.virtual;
-    });
+    }).map(meta => meta.getStiRoot());
     const calc = new CommitOrderCalculator();
     metadata.forEach(meta => calc.addNode(meta.root.className));
     let meta = metadata.pop();

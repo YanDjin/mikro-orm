@@ -147,6 +147,7 @@ export class MetadataDiscovery {
     filtered.forEach(meta => Object.values(meta.properties).forEach(prop => this.initIndexes(prop)));
     filtered.forEach(meta => this.autoWireBidirectionalProperties(meta));
     filtered.forEach(meta => this.findReferencingProperties(meta, filtered));
+    filtered.filter(meta => meta.root === meta || !meta.root).forEach(meta => this.setSTIRoot(meta));
 
     for (const meta of filtered) {
       discovered.push(...this.processEntity(meta));
@@ -159,6 +160,8 @@ export class MetadataDiscovery {
     if (combinedCachePath) {
       this.config.get('metadataCache').combined = combinedCachePath;
     }
+
+    filtered.filter(meta => meta.root === meta || !meta.root).forEach(meta => this.setSTIRoot(meta));
 
     return discovered.map(meta => this.metadata.get(meta.className));
   }
@@ -1025,6 +1028,10 @@ export class MetadataDiscovery {
     if (meta.root !== meta && !(meta as Dictionary).__processed) {
       meta.root = metadata.find(m => m.className === meta.root.className)!;
       (meta.root as Dictionary).__processed = true;
+      if (!meta.root.stiChildren) {
+        meta.root.stiChildren = [];
+      }
+      meta.root.stiChildren.push(meta);
     } else {
       delete (meta.root as Dictionary).__processed;
     }
@@ -1055,21 +1062,50 @@ export class MetadataDiscovery {
       return;
     }
 
-    Object.values(meta.properties).forEach(prop => {
-      const exists = meta.root.properties[prop.name];
-      prop = Utils.copy(prop, false);
-      prop.nullable = true;
+    // Object.values(meta.properties).forEach(prop => {
+    //   const exists = meta.root.properties[prop.name];
+    //   prop = Utils.copy(prop, false);
+    //   prop.nullable = true;
 
-      if (!exists) {
-        prop.inherited = true;
-      }
+    //   if (!exists) {
+    //     prop.inherited = true;
+    //   }
 
-      meta.root.addProperty(prop);
-    });
+    //   meta.root.addProperty(prop);
+    // });
 
     meta.collection = meta.root.collection;
-    meta.root.indexes = Utils.unique([...meta.root.indexes, ...meta.indexes]);
-    meta.root.uniques = Utils.unique([...meta.root.uniques, ...meta.uniques]);
+    // meta.root.indexes = Utils.unique([...meta.root.indexes, ...meta.indexes]);
+    // meta.root.uniques = Utils.unique([...meta.root.uniques, ...meta.uniques]);
+  }
+
+  private setSTIRoot(metadata: EntityMetadata): void {
+    // const stiRoot = metadata.root.stiRoot ?? Utils.copy(metadata.root, false);
+    const stiRoot: EntityMetadata = Object.assign(Object.create(Object.getPrototypeOf(metadata.root)), metadata.root);
+    metadata.root.stiRoot = stiRoot;
+    const children = metadata.root.stiChildren as EntityMetadata<any>[];
+    if (children.length === 0) {
+      return;
+    }
+
+    for (const child of children) {
+      child.stiRoot = stiRoot;
+      Object.values(child.properties).forEach((prop) => {
+        const exists = stiRoot!.properties[prop.name];
+        prop = Utils.copy(prop, false);
+        prop.nullable = !(prop.name in metadata.root.properties) ? true : prop.nullable ? true : metadata.root.properties[prop.name].nullable;
+        // prop.nullable = true;
+
+        if (!exists) {
+          prop.inherited = true;
+        }
+
+        stiRoot!.addProperty(prop);
+      });
+
+      stiRoot!.indexes = Utils.unique([...stiRoot!.indexes, ...child.indexes]);
+      stiRoot!.uniques = Utils.unique([...stiRoot!.uniques, ...child.uniques]);
+    }
   }
 
   private createDiscriminatorProperty(meta: EntityMetadata): void {

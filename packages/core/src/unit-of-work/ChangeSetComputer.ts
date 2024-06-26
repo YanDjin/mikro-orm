@@ -21,13 +21,13 @@ export class ChangeSetComputer {
   }
 
   computeChangeSet<T extends object>(entity: T): ChangeSet<T> | null {
-    const meta = this.metadata.get((entity as AnyEntity).constructor.name);
+    const wrapped = helper(entity);
+    const meta = this.metadata.get(wrapped.__meta.className);
 
     if (meta.readonly) {
       return null;
     }
 
-    const wrapped = helper(entity);
     const type = wrapped.__originalEntityData ? ChangeSetType.UPDATE : ChangeSetType.CREATE;
     const map = new Map<T, [EntityKey<T>, unknown][]>();
 

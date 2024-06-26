@@ -61,9 +61,10 @@ export class EntityLoader {
       return;
     }
 
+    const meta = this.metadata.find(entityName)!;
+
     if ((entities as AnyEntity[]).some(e => !e.__helper)) {
       const entity = entities.find(e => !Utils.isEntity(e));
-      const meta = this.metadata.find(entityName)!;
       throw ValidationError.notDiscoveredEntity(entity, meta, 'populate');
     }
 
@@ -77,7 +78,8 @@ export class EntityLoader {
     options.convertCustomTypes ??= true;
     populate = this.normalizePopulate<Entity>(entityName, populate as true, options.strategy, options.lookup);
     const exclude = options.exclude as string[] ?? [];
-    const invalid = populate.find(({ field }) => !this.em.canPopulate(entityName, field));
+    const extending = this.em.getSTIExtendingMetadata(meta);
+    const invalid = populate.find(({ field }) => extending.every(meta => !this.em.canPopulate(meta.className, field)));
 
     /* istanbul ignore next */
     if (options.validate && invalid) {
@@ -98,8 +100,19 @@ export class EntityLoader {
       visited.add(entity);
     }
 
+    // group entities by sub type (STI)
+    const entitiesByType = entities.reduce((groups, entity) => {
+      const className = helper(entity).__meta.className;
+      return {
+        ...groups,
+        [className]: [...(groups[className] ?? []), entity],
+      };
+    }, {} as Record<string, Entity[]>);
+
     for (const pop of populate) {
-      await this.populateField<Entity>(entityName, entities, pop, options as Required<EntityLoaderOptions<Entity>>);
+      for (const [entityClassName, entities] of Object.entries(entitiesByType)) {
+        await this.populateField<Entity>(entityClassName, entities, pop, options as Required<EntityLoaderOptions<Entity>>);
+      }
     }
   }
 
@@ -395,6 +408,9 @@ export class EntityLoader {
   private async populateField<Entity extends object>(entityName: string, entities: Entity[], populate: PopulateOptions<Entity>, options: Required<EntityLoaderOptions<Entity>>): Promise<void> {
     const field = populate.field.split(':')[0] as EntityKey<Entity>;
     const prop = this.metadata.find(entityName)!.properties[field] as EntityProperty<Entity>;
+    if (!prop) {
+      return;
+    }
 
     if (prop.kind === ReferenceKind.SCALAR && !prop.lazy) {
       return;
