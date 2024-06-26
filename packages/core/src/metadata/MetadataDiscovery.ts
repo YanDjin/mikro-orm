@@ -1092,7 +1092,7 @@ export class MetadataDiscovery {
       child.stiRoot = stiRoot;
       Object.values(child.properties).forEach((prop) => {
         const exists = stiRoot!.properties[prop.name];
-        prop = Utils.copy(prop, false);
+        prop = Object.assign(Object.create(Object.getPrototypeOf(prop)), prop);
         prop.nullable = !(prop.name in metadata.root.properties) ? true : prop.nullable ? true : metadata.root.properties[prop.name].nullable;
         // prop.nullable = true;
 
