@@ -143,9 +143,9 @@ export class ConfigurationLoader {
     const { options } = tsNode.register({
       project: tsConfigPath,
       transpileOnly: true,
-      compilerOptions: {
-        module: 'commonjs',
-      },
+      // compilerOptions: {
+      //   module: 'commonjs',
+      // },
     }).config;
 
     if (Object.entries(options?.paths ?? {}).length > 0) {
