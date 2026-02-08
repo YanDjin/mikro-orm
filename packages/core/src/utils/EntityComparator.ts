@@ -319,11 +319,11 @@ export class EntityComparator {
           lines.push(...prop.fieldNames.map(field => `    ${propName(field, 'mapped')} = true;`), '  }');
           return;
         }
-  
+
         if (prop.embedded && (meta.embeddable || meta.properties[prop.embedded[0]].object)) {
           return;
         }
-  
+
         if (prop.runtimeType === 'boolean') {
           lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
           lines.push(`    ret${this.wrap(prop.name)} = ${propName(prop.fieldNames[0])} == null ? ${propName(prop.fieldNames[0])} : !!${propName(prop.fieldNames[0])};`);
@@ -339,11 +339,11 @@ export class EntityComparator {
           const idx = this.tmpIndex++;
           context.set(`mapEmbeddedResult_${idx}`, (data: Dictionary) => {
             const item = parseJsonSafe(data);
-  
+
             if (Array.isArray(item)) {
               return item.map(row => row == null ? row : this.getResultMapper(prop.type)(row));
             }
-  
+
             return item == null ? item : this.getResultMapper(prop.type)(item);
           });
           lines.push(`  if (typeof ${propName(prop.fieldNames[0])} !== 'undefined') {`);
@@ -356,8 +356,8 @@ export class EntityComparator {
           lines.push(`    ${propName(prop.fieldNames[0], 'mapped')} = true;`);
           lines.push(`  }`);
         }
-      })
-    }
+      });
+    };
 
     if (meta.root.discriminatorColumn && !meta.root.embeddable) {
       for (const [value, className] of Object.entries(meta.root.discriminatorMap!)) {
@@ -681,10 +681,11 @@ export class EntityComparator {
   static isComparable<T>(prop: EntityProperty<T>, root: EntityMetadata) {
     const virtual = prop.persist === false;
     const inverse = prop.kind === ReferenceKind.ONE_TO_ONE && !prop.owner;
-    const discriminator = prop.name === root.discriminatorColumn;
+    // const discriminator = prop.name === root.discriminatorColumn;
     const collection = prop.kind === ReferenceKind.ONE_TO_MANY || prop.kind === ReferenceKind.MANY_TO_MANY;
 
-    return !virtual && !collection && !inverse && !discriminator && !prop.version;
+    // return !virtual && !collection && !inverse && !discriminator && !prop.version;
+    return !virtual && !collection && !inverse && !prop.version;
   }
 
 }
