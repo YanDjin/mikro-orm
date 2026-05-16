@@ -1,14 +1,23 @@
-import { Entity, ManyToOne, PrimaryKey, Property, Ref, Reference, SimpleLogger, sql, Unique } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
-import { mockLogger } from '../../helpers';
+import {
+  Entity,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+  Ref,
+  Reference,
+  SimpleLogger,
+  sql,
+  Unique,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { mockLogger } from "../../helpers";
 
 @Entity()
 class B {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne(() => D, { deleteRule: 'cascade', ref: true })
+  @ManyToOne(() => D, { deleteRule: "cascade", ref: true })
   d!: Ref<D>;
 
   @Property({ unique: true })
@@ -16,13 +25,11 @@ class B {
 
   @Property({ default: sql.now(), onUpdate: () => new Date() })
   updatedAt: Date = new Date();
-
 }
 
 @Entity()
-@Unique({ properties: ['tenantWorkflowId'] })
+@Unique({ properties: ["tenantWorkflowId"] })
 class D {
-
   @PrimaryKey()
   id!: number;
 
@@ -34,7 +41,6 @@ class D {
 
   @Property({ nullable: true })
   optional?: string;
-
 }
 
 let orm: MikroORM;
@@ -45,7 +51,7 @@ beforeAll(async () => {
     dbName: `gh-4242`,
     port: 3308,
     strict: true,
-    loggerFactory: options => new SimpleLogger(options),
+    loggerFactory: (options) => new SimpleLogger(options),
   });
 
   await orm.schema.refreshDatabase();
@@ -59,66 +65,82 @@ beforeEach(async () => {
   await orm.schema.clearDatabase();
 });
 
-test('4242 1/4', async () => {
+test("4242 1/4", async () => {
   const mock = mockLogger(orm);
 
-  const loadedDs = await orm.em.fork().upsertMany(D, [
-    { tenantWorkflowId: 1, optional: 'foo' },
+  const loadedDs = await orm.em
+    .fork()
+    .upsertMany(D, [{ tenantWorkflowId: 1, optional: "foo" }]);
+  expect(loadedDs).toEqual([
+    {
+      id: expect.any(Number),
+      optional: "foo",
+      updatedAt: expect.any(Date),
+      tenantWorkflowId: 1,
+    },
   ]);
-  expect(loadedDs).toEqual([{
-    id: expect.any(Number),
-    optional: 'foo',
-    updatedAt: expect.any(Date),
-    tenantWorkflowId: 1,
-  }]);
   expect(mock.mock.calls).toEqual([
-    ["[query] insert into `d` (`optional`, `tenant_workflow_id`) values ('foo', 1) on duplicate key update `optional` = values(`optional`)"],
-    ['[query] select `d0`.`id`, `d0`.`updated_at`, `d0`.`tenant_workflow_id` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1'],
+    [
+      "[query] insert into `d` (`optional`, `tenant_workflow_id`) values ('foo', 1) on duplicate key update `optional` = values(`optional`)",
+    ],
+    [
+      "[query] select `d0`.`id`, `d0`.`updated_at`, `d0`.`tenant_workflow_id` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1",
+    ],
   ]);
   mock.mockReset();
 
-  const loadedDs2 = await orm.em.fork().upsertMany(D, [
-    { tenantWorkflowId: 1 },
+  const loadedDs2 = await orm.em
+    .fork()
+    .upsertMany(D, [{ tenantWorkflowId: 1 }]);
+  expect(loadedDs2).toEqual([
+    {
+      id: expect.any(Number),
+      optional: "foo",
+      updatedAt: expect.any(Date),
+      tenantWorkflowId: 1,
+    },
   ]);
-  expect(loadedDs2).toEqual([{
-    id: expect.any(Number),
-    optional: 'foo',
-    updatedAt: expect.any(Date),
-    tenantWorkflowId: 1,
-  }]);
   expect(mock.mock.calls).toEqual([
-    ['[query] insert ignore into `d` (`tenant_workflow_id`) values (1)'],
-    ['[query] select `d0`.`id`, `d0`.`updated_at`, `d0`.`optional`, `d0`.`tenant_workflow_id` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1'],
+    ["[query] insert ignore into `d` (`tenant_workflow_id`) values (1)"],
+    [
+      "[query] select `d0`.`id`, `d0`.`updated_at`, `d0`.`optional`, `d0`.`tenant_workflow_id` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1",
+    ],
   ]);
   mock.mockReset();
 
-  const date = '2023-05-21 14:39:17.825';
-  const loadedDs3 = await orm.em.fork().upsertMany(D, [
-    { tenantWorkflowId: 1, updatedAt: date },
+  const date = "2023-05-21 14:39:17.825";
+  const loadedDs3 = await orm.em
+    .fork()
+    .upsertMany(D, [{ tenantWorkflowId: 1, updatedAt: date }]);
+  expect(loadedDs3).toEqual([
+    {
+      id: expect.any(Number),
+      optional: "foo",
+      updatedAt: expect.any(Date),
+      tenantWorkflowId: 1,
+    },
   ]);
-  expect(loadedDs3).toEqual([{
-    id: expect.any(Number),
-    optional: 'foo',
-    updatedAt: expect.any(Date),
-    tenantWorkflowId: 1,
-  }]);
   expect(mock.mock.calls).toEqual([
-    [`[query] insert into \`d\` (\`tenant_workflow_id\`, \`updated_at\`) values (1, '${date}') on duplicate key update \`updated_at\` = values(\`updated_at\`)`],
-    ['[query] select `d0`.`id`, `d0`.`optional`, `d0`.`tenant_workflow_id` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1'],
+    [
+      `[query] insert into \`d\` (\`tenant_workflow_id\`, \`updated_at\`) values (1, '${date}') on duplicate key update \`updated_at\` = values(\`updated_at\`)`,
+    ],
+    [
+      "[query] select `d0`.`id`, `d0`.`optional`, `d0`.`tenant_workflow_id` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1",
+    ],
   ]);
   mock.mockReset();
 });
 
-test('4242 2/4', async () => {
-  const loadedDs4 = await orm.em.upsertMany(D, [
-    { tenantWorkflowId: 1 },
+test("4242 2/4", async () => {
+  const loadedDs4 = await orm.em.upsertMany(D, [{ tenantWorkflowId: 1 }]);
+  expect(loadedDs4).toEqual([
+    {
+      id: expect.any(Number),
+      updatedAt: expect.any(Date),
+      tenantWorkflowId: 1,
+      optional: null,
+    },
   ]);
-  expect(loadedDs4).toEqual([{
-    id: expect.any(Number),
-    updatedAt: expect.any(Date),
-    tenantWorkflowId: 1,
-    optional: null,
-  }]);
   await orm.em.flush();
 
   const b = await orm.em.upsert(B, {
@@ -136,51 +158,65 @@ test('4242 2/4', async () => {
   expect(b.d.isInitialized()).toBe(true);
 });
 
-test('4242 3/4', async () => {
+test("4242 3/4", async () => {
   const mock = mockLogger(orm);
 
-  const loadedDs = await orm.em.fork().upsert(D, { tenantWorkflowId: 1, optional: 'foo' });
+  const loadedDs = await orm.em
+    .fork()
+    .upsert(D, { tenantWorkflowId: 1, optional: "foo" });
   expect(loadedDs).toEqual({
     id: expect.any(Number),
-    optional: 'foo',
+    optional: "foo",
     updatedAt: expect.any(Date),
     tenantWorkflowId: 1,
   });
   expect(mock.mock.calls).toEqual([
-    ["[query] insert into `d` (`optional`, `tenant_workflow_id`) values ('foo', 1) on duplicate key update `optional` = values(`optional`)"],
-    ['[query] select `d0`.`id`, `d0`.`updated_at` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1 limit 1'],
+    [
+      "[query] insert into `d` (`optional`, `tenant_workflow_id`) values ('foo', 1) on duplicate key update `optional` = values(`optional`)",
+    ],
+    [
+      "[query] select `d0`.`id`, `d0`.`updated_at` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1 limit 1",
+    ],
   ]);
   mock.mockReset();
 
   const loadedDs2 = await orm.em.fork().upsert(D, { tenantWorkflowId: 1 });
   expect(loadedDs2).toEqual({
     id: expect.any(Number),
-    optional: 'foo',
+    optional: "foo",
     updatedAt: expect.any(Date),
     tenantWorkflowId: 1,
   });
   expect(mock.mock.calls).toEqual([
-    ['[query] insert ignore into `d` (`tenant_workflow_id`) values (1)'],
-    ['[query] select `d0`.`id`, `d0`.`updated_at`, `d0`.`optional` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1 limit 1'],
+    ["[query] insert ignore into `d` (`tenant_workflow_id`) values (1)"],
+    [
+      "[query] select `d0`.`id`, `d0`.`updated_at`, `d0`.`optional` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1 limit 1",
+    ],
   ]);
   mock.mockReset();
 
-  const date = '2023-05-21 15:34:17.504';
-  const loadedDs3 = await orm.em.fork().upsert(D, { tenantWorkflowId: 1, updatedAt: date });
+  const date = "2023-05-21 15:34:17.504";
+  const loadedDs3 = await orm.em
+    .fork()
+    .upsert(D, { tenantWorkflowId: 1, updatedAt: date });
   expect(loadedDs3).toEqual({
     id: expect.any(Number),
-    optional: 'foo',
+    optional: "foo",
     updatedAt: expect.any(Date),
     tenantWorkflowId: 1,
   });
   expect(mock.mock.calls).toEqual([
-    [`[query] insert into \`d\` (\`tenant_workflow_id\`, \`updated_at\`) values (1, '${date}') on duplicate key update \`updated_at\` = values(\`updated_at\`)`],
-    ['[query] select `d0`.`id`, `d0`.`optional` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1 limit 1'],
+    [
+      `[query] insert into \`d\` (\`tenant_workflow_id\`, \`updated_at\`) values (1, '${date}') on duplicate key update \`updated_at\` = values(\`updated_at\`)`,
+    ],
+    [
+      "[query] select `d0`.`id`, `d0`.`optional` from `d` as `d0` where `d0`.`tenant_workflow_id` = 1 limit 1",
+    ],
   ]);
   mock.mockReset();
 });
 
-test('4242 4/4', async () => {
+test("4242 4/4", async () => {
   const loadedDs4 = await orm.em.upsert(D, { tenantWorkflowId: 1 });
   expect(loadedDs4).toEqual({
     id: expect.any(Number),

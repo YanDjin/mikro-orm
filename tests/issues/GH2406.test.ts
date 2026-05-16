@@ -1,42 +1,45 @@
-import { Collection, Entity, Ref, ManyToOne, MikroORM, OneToMany, PrimaryKey } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  Ref,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity({ forceConstructor: true })
 class Parent {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany('Child', 'parent')
+  @OneToMany("Child", "parent")
   children = new Collection<Child>(this);
-
 }
 
 @Entity({ forceConstructor: true })
 class Child {
-
   @PrimaryKey()
   id!: number;
 
   @ManyToOne({ entity: () => Parent, ref: true })
   parent!: Ref<Parent>;
-
 }
 
-describe('GH issue 2406', () => {
-
+describe("GH issue 2406", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Parent, Child],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('should fetch children when forceConstructor is turned on', async () => {
+  test("should fetch children when forceConstructor is turned on", async () => {
     const parent = orm.em.create(Parent, {});
     expect(parent.children.isInitialized()).toBe(true);
     expect(parent.children.isDirty()).toBe(false);
@@ -52,7 +55,7 @@ describe('GH issue 2406', () => {
     expect(refreshed.children).toHaveLength(1);
   });
 
-  test('create and assign collection items', async () => {
+  test("create and assign collection items", async () => {
     const parent = orm.em.create(Parent, {
       children: [{}, {}],
     });
@@ -65,5 +68,4 @@ describe('GH issue 2406', () => {
     expect(refreshed.children.isInitialized()).toBe(true);
     expect(refreshed.children).toHaveLength(2);
   });
-
 });

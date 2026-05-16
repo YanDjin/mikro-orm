@@ -9,14 +9,13 @@ import {
   PrimaryKey,
   Property,
   OptionalProps,
-} from '@mikro-orm/core';
-import { FooBaz2 } from './FooBaz2';
-import { Test2 } from './Test2';
+} from "@yandjin-mikro-orm/core";
+import { FooBaz2 } from "./FooBaz2";
+import { Test2 } from "./Test2";
 
 @Entity()
 export class FooBar2 extends BaseEntity {
-
-  [OptionalProps]?: 'version';
+  [OptionalProps]?: "version";
 
   @PrimaryKey()
   id!: number;
@@ -24,7 +23,7 @@ export class FooBar2 extends BaseEntity {
   @Property()
   name!: string;
 
-  @Property({ name: 'name with space', nullable: true })
+  @Property({ name: "name with space", nullable: true })
   nameWithSpace?: string;
 
   @OneToOne({ orphanRemoval: true, nullable: true })
@@ -42,7 +41,7 @@ export class FooBar2 extends BaseEntity {
   @Property({ nullable: true })
   blob2?: Uint8Array;
 
-  @Property({ type: 'number[]', nullable: true })
+  @Property({ type: "number[]", nullable: true })
   array?: number[];
 
   @Property({ type: JsonType, nullable: true })
@@ -54,7 +53,7 @@ export class FooBar2 extends BaseEntity {
   @Formula(`(select 456)`, { lazy: true })
   lazyRandom?: number;
 
-  @ManyToMany(() => Test2, t => t.bars)
+  @ManyToMany(() => Test2, (t) => t.bars)
   tests = new Collection<Test2>(this);
 
   static create(name: string) {
@@ -63,5 +62,4 @@ export class FooBar2 extends BaseEntity {
 
     return bar;
   }
-
 }

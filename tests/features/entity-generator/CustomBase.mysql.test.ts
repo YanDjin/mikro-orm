@@ -1,39 +1,49 @@
-import { MikroORM } from '@mikro-orm/mysql';
-import { initORMMySql } from '../../bootstrap';
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { initORMMySql } from "../../bootstrap";
 
-
-describe('CustomBase', () => {
+describe("CustomBase", () => {
   let orm: MikroORM;
   beforeEach(async () => {
-    orm = await initORMMySql('mysql', {}, true);
+    orm = await initORMMySql("mysql", {}, true);
   });
 
   afterEach(async () => {
     await orm.close(true);
   });
 
-  describe.each([true, false])('forceObject=%s', forceObject => {
+  describe.each([true, false])("forceObject=%s", (forceObject) => {
     beforeEach(() => {
-      orm.config.get('serialization').forceObject = forceObject;
+      orm.config.get("serialization").forceObject = forceObject;
     });
 
-    describe.each([true, false])('useCoreBaseEntity=%s', useCoreBaseEntity => {
-      beforeEach(() => {
-        orm.config.get('entityGenerator').useCoreBaseEntity = useCoreBaseEntity;
-      });
-
-      describe.each(['', 'CustomBase', 'BaseUser2', 'BaseEntity'])('customBaseEntityName=%s', (customBaseEntityName: string) => {
+    describe.each([true, false])(
+      "useCoreBaseEntity=%s",
+      (useCoreBaseEntity) => {
         beforeEach(() => {
-          orm.config.get('entityGenerator').customBaseEntityName = customBaseEntityName;
+          orm.config.get("entityGenerator").useCoreBaseEntity =
+            useCoreBaseEntity;
         });
 
-        test.each([true, false])('entitySchema=%s', async entitySchema => {
-          orm.config.get('entityGenerator').entitySchema = entitySchema;
+        describe.each(["", "CustomBase", "BaseUser2", "BaseEntity"])(
+          "customBaseEntityName=%s",
+          (customBaseEntityName: string) => {
+            beforeEach(() => {
+              orm.config.get("entityGenerator").customBaseEntityName =
+                customBaseEntityName;
+            });
 
-          const dump = await orm.entityGenerator.generate();
-          expect(dump).toMatchSnapshot('dump');
-        });
-      });
-    });
+            test.each([true, false])(
+              "entitySchema=%s",
+              async (entitySchema) => {
+                orm.config.get("entityGenerator").entitySchema = entitySchema;
+
+                const dump = await orm.entityGenerator.generate();
+                expect(dump).toMatchSnapshot("dump");
+              },
+            );
+          },
+        );
+      },
+    );
   });
 });

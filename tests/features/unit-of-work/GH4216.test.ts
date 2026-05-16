@@ -9,14 +9,13 @@ import {
   Property,
   Ref,
   Rel,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { v4 } from 'uuid';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { v4 } from "uuid";
 
 @Entity()
 class Shipment {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id: string = v4();
 
   @Property()
@@ -26,19 +25,17 @@ class Shipment {
   updatedAt!: Date;
 
   @OneToMany({
-    entity: 'LineItem',
-    mappedBy: 'shipment',
+    entity: "LineItem",
+    mappedBy: "shipment",
   })
   lineItems = new Collection<LineItem>(this);
 
-  @ManyToOne(() => Order, { hidden: true, deleteRule: 'cascade' })
+  @ManyToOne(() => Order, { hidden: true, deleteRule: "cascade" })
   order!: Rel<Order>;
-
 }
 
 @Entity()
 class LineItem {
-
   @PrimaryKey()
   id!: string;
 
@@ -60,12 +57,10 @@ class LineItem {
 
   @ManyToOne(() => Shipment, { hidden: true })
   shipment!: Ref<Shipment>;
-
 }
 
 @Entity()
 class Order {
-
   @PrimaryKey()
   id!: number;
 
@@ -79,21 +74,20 @@ class Order {
   updatedAt!: Date;
 
   @OneToMany({
-    entity: 'LineItem',
-    mappedBy: 'order',
+    entity: "LineItem",
+    mappedBy: "order",
   })
   lineItems = new Collection<LineItem>(this);
 
-  @OneToMany({ entity: 'Shipment', mappedBy: 'order' })
+  @OneToMany({ entity: "Shipment", mappedBy: "order" })
   shipments = new Collection<Shipment>(this);
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     loadStrategy: LoadStrategy.JOINED,
     populateWhere: PopulateHint.ALL,
     entities: [Order, Shipment, LineItem],
@@ -108,20 +102,20 @@ afterAll(async () => {
 test(`GH issue 4219`, async () => {
   orm.em.create(Order, {
     id: 1234,
-    number: '6789567833435',
+    number: "6789567833435",
     createdAt: new Date(),
     updatedAt: new Date(),
   });
 
   const shipments = [
     orm.em.create(Shipment, {
-      id: '67e24192-4454-41d5-af5f-25940b63b759',
+      id: "67e24192-4454-41d5-af5f-25940b63b759",
       order: orm.em.getReference(Order, 1234),
       createdAt: new Date(),
       updatedAt: new Date(),
     }),
     orm.em.create(Shipment, {
-      id: '8d466cb1-8abc-4423-a1a8-5081ec43d26e',
+      id: "8d466cb1-8abc-4423-a1a8-5081ec43d26e",
       order: orm.em.getReference(Order, 1234),
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -133,11 +127,11 @@ test(`GH issue 4219`, async () => {
       id: v4(),
       shipment: orm.em.getReference(
         Shipment,
-        '67e24192-4454-41d5-af5f-25940b63b759',
+        "67e24192-4454-41d5-af5f-25940b63b759",
       ),
       order: orm.em.getReference(Order, 1234),
-      sku: 'TEST_SKU',
-      name: 'Test Product',
+      sku: "TEST_SKU",
+      name: "Test Product",
       createdAt: new Date(),
       updatedAt: new Date(),
     }),
@@ -145,23 +139,23 @@ test(`GH issue 4219`, async () => {
       id: v4(),
       shipment: orm.em.getReference(
         Shipment,
-        '8d466cb1-8abc-4423-a1a8-5081ec43d26e',
+        "8d466cb1-8abc-4423-a1a8-5081ec43d26e",
       ),
       order: orm.em.getReference(Order, 1234),
-      sku: 'TEST_SKU_2',
-      name: 'Test Product 2',
+      sku: "TEST_SKU_2",
+      name: "Test Product 2",
       createdAt: new Date(),
       updatedAt: new Date(),
     }),
   ];
 
-  shipments.forEach(shipment => orm.em?.persist(shipment));
-  lineItems.forEach(lineItem => orm.em?.persist(lineItem));
+  shipments.forEach((shipment) => orm.em?.persist(shipment));
+  lineItems.forEach((lineItem) => orm.em?.persist(lineItem));
 
   await orm.em.flush();
 
   const order = await orm.em.findOne(Order, 1234, {
-    populate: ['lineItems', 'shipments', 'shipments.lineItems'],
+    populate: ["lineItems", "shipments", "shipments.lineItems"],
     refresh: true,
   });
 

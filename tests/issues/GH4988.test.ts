@@ -1,19 +1,22 @@
-import { BigIntType, Collection, EntitySchema, Ref, sql } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/postgresql';
+import {
+  BigIntType,
+  Collection,
+  EntitySchema,
+  Ref,
+  sql,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
 
 class ProductEntity {
-
   readonly id!: number;
   readonly name!: string;
 
   constructor(props: { name: string; id?: number }) {
     Object.assign(this, props);
   }
-
 }
 
 class Company {
-
   readonly id!: number;
   readonly name!: string;
   readonly products = new Collection<ProductEntity>(this);
@@ -21,22 +24,19 @@ class Company {
   constructor(props: { name: string; id?: number }) {
     Object.assign(this, props);
   }
-
 }
 
 class CompanyProduct {
-
   readonly id!: number;
   readonly product!: Ref<ProductEntity>;
   readonly company!: Ref<CompanyProduct>;
   readonly createdAt!: Date;
   readonly updatedAt!: Date;
-
 }
 
 const productSchema = new EntitySchema({
   class: ProductEntity,
-  tableName: 'product',
+  tableName: "product",
   properties: {
     id: {
       type: BigIntType,
@@ -50,7 +50,7 @@ const productSchema = new EntitySchema({
 
 const companySchema = new EntitySchema({
   class: Company,
-  tableName: 'company',
+  tableName: "company",
   properties: {
     id: {
       type: BigIntType,
@@ -60,7 +60,7 @@ const companySchema = new EntitySchema({
       type: String,
     },
     products: {
-      kind: 'm:n',
+      kind: "m:n",
       entity: () => ProductEntity,
       pivotEntity: () => CompanyProduct,
       fixedOrder: true,
@@ -71,7 +71,7 @@ const companySchema = new EntitySchema({
 const companyProductsSchema = new EntitySchema({
   class: CompanyProduct,
   uniques: [
-    { name: 'uniqueCompanyProduct', properties: ['company', 'product'] },
+    { name: "uniqueCompanyProduct", properties: ["company", "product"] },
   ],
   properties: {
     id: {
@@ -80,20 +80,20 @@ const companyProductsSchema = new EntitySchema({
       primary: true,
     },
     product: {
-      kind: 'm:1',
+      kind: "m:1",
       entity: () => ProductEntity,
     },
     company: {
-      kind: 'm:1',
+      kind: "m:1",
       entity: () => Company,
     },
     createdAt: {
-      type: 'timestamp',
+      type: "timestamp",
       onCreate: () => new Date(),
       default: sql.now(),
     },
     updatedAt: {
-      type: 'timestamp',
+      type: "timestamp",
       onUpdate: () => new Date(),
       default: sql.now(),
     },
@@ -104,8 +104,8 @@ let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    schema: 'test',
-    dbName: '4988',
+    schema: "test",
+    dbName: "4988",
     entities: [Company, ProductEntity, CompanyProduct],
   });
 
@@ -116,13 +116,13 @@ afterAll(async () => {
   await orm.close();
 });
 
-test('creates a company with products', async () => {
+test("creates a company with products", async () => {
   const company = new Company({
-    name: 'Acme',
+    name: "Acme",
   });
   await orm.em.persistAndFlush(company);
 
-  const product = new ProductEntity({ name: 'ProductA' });
+  const product = new ProductEntity({ name: "ProductA" });
   company.products.add(product);
   await orm.em.flush();
 

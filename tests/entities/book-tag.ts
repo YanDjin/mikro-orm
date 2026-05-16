@@ -1,9 +1,8 @@
-import type { ObjectId } from 'bson';
-import { Collection, EntitySchema } from '@mikro-orm/core';
-import { Book } from './Book';
+import type { ObjectId } from "bson";
+import { Collection, EntitySchema } from "@yandjin-mikro-orm/core";
+import { Book } from "./Book";
 
 export class BookTag {
-
   _id!: ObjectId;
   id!: string;
   name: string;
@@ -12,15 +11,14 @@ export class BookTag {
   constructor(name: string) {
     this.name = name;
   }
-
 }
 
 export const schema = new EntitySchema({
   class: BookTag,
   properties: {
-    _id: { type: 'ObjectId', primary: true },
-    id: { type: 'string', serializedPrimaryKey: true },
-    name: { type: 'string' },
-    books: { kind: 'm:n', entity: () => Book, mappedBy: 'tags' },
+    _id: { type: "ObjectId", primary: true },
+    id: { type: "string", serializedPrimaryKey: true },
+    name: { type: "string" },
+    books: { kind: "m:n", entity: () => Book, mappedBy: "tags" },
   },
 });

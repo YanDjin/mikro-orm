@@ -1,9 +1,15 @@
-import { Embeddable, Embedded, Entity, PrimaryKey, Property, Type } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../../helpers';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  PrimaryKey,
+  Property,
+  Type,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../../helpers";
 
 class Point {
-
   public latitude!: number;
   public longitude!: number;
 
@@ -11,11 +17,9 @@ class Point {
     this.latitude = latitude;
     this.longitude = longitude;
   }
-
 }
 
 class PointType extends Type<Point | undefined, string | undefined> {
-
   convertToDatabaseValue(value: Point | undefined): string | undefined {
     if (!value) {
       return value;
@@ -43,31 +47,26 @@ class PointType extends Type<Point | undefined, string | undefined> {
   }
 
   getColumnType(): string {
-    return 'geometry';
+    return "geometry";
   }
-
 }
 
 @Embeddable()
 class Address {
-
   @Property()
   postalCode!: string;
 
   @Property({ type: PointType, nullable: true })
   geolocation?: Point;
-
 }
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded(() => Address, { array: true })
   addresses: Address[] = [];
-
 }
 
 let orm: MikroORM;
@@ -75,7 +74,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [User],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
@@ -84,11 +83,13 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('GH #4824', async () => {
+test("GH #4824", async () => {
   const mock = mockLogger(orm);
   const user = await orm.em.findOne(User, {
     id: 1,
   });
   expect(user).toBeNull();
-  expect(mock.mock.calls[0][0]).toMatch('select `u0`.* from `user` as `u0` where `u0`.`id` = 1 limit 1');
+  expect(mock.mock.calls[0][0]).toMatch(
+    "select `u0`.* from `user` as `u0` where `u0`.`id` = 1 limit 1",
+  );
 });

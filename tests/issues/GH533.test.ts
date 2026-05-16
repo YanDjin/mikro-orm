@@ -1,30 +1,32 @@
-import { Entity, PrimaryKey, Property, MikroORM, wrap, ManyToOne } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  MikroORM,
+  wrap,
+  ManyToOne,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
   @Property({ nullable: true })
   foo?: string;
-
 }
 
 @Entity()
 class B {
-
   @PrimaryKey()
   id!: number;
 
   @Property({ nullable: true })
   foo?: string;
-
 }
 
 @Entity()
 class C {
-
   @PrimaryKey()
   id!: number;
 
@@ -38,11 +40,9 @@ class C {
     this.a = a;
     this.b = b;
   }
-
 }
 
-describe('GH issue 533', () => {
-
+describe("GH issue 533", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -65,7 +65,9 @@ describe('GH issue 533', () => {
     orm.em.clear();
 
     // we need to get around TS compiler here via `any`
-    const c1 = await orm.em.findOneOrFail(C, { a: '' + a.id } as any, { populate: ['a'] });
+    const c1 = await orm.em.findOneOrFail(C, { a: "" + a.id } as any, {
+      populate: ["a"],
+    });
     expect(wrap(c1.a).isInitialized()).toBe(true);
     expect(wrap(c1.b).isInitialized()).toBe(false);
   });

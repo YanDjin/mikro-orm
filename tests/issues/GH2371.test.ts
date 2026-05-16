@@ -1,54 +1,57 @@
-import { Collection, Entity, Ref, ManyToOne, MikroORM, OneToMany, PrimaryKey } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  Ref,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/sqlite";
 
-@Entity({ tableName: 'vehicle', discriminatorColumn: 'type', abstract: true })
+@Entity({ tableName: "vehicle", discriminatorColumn: "type", abstract: true })
 class Vehicle {
-
   @PrimaryKey()
   id!: number;
 
   @ManyToOne(() => Garage, { ref: true })
   garage!: Ref<Garage>;
-
 }
 
-@Entity({ discriminatorValue: 'car' })
+@Entity({ discriminatorValue: "car" })
 class Car extends Vehicle {}
 
-@Entity({ discriminatorValue: 'truck' })
+@Entity({ discriminatorValue: "truck" })
 class Truck extends Vehicle {}
 
-@Entity({ tableName: 'garage' })
+@Entity({ tableName: "garage" })
 class Garage {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany(() => Vehicle, v => v.garage)
+  @OneToMany(() => Vehicle, (v) => v.garage)
   vehicles = new Collection<Vehicle>(this);
 
-  @OneToMany(() => Car, v => v.garage)
+  @OneToMany(() => Car, (v) => v.garage)
   cars = new Collection<Car>(this);
 
-  @OneToMany(() => Truck, v => v.garage)
+  @OneToMany(() => Truck, (v) => v.garage)
   trucks = new Collection<Truck>(this);
-
 }
 
-describe('GH issue 2371', () => {
-
+describe("GH issue 2371", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Car, Vehicle, Truck, Garage],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('should propagate setting m:1 property to all matching collections', async () => {
+  test("should propagate setting m:1 property to all matching collections", async () => {
     const garage = orm.em.create(Garage, {});
     const car = orm.em.create(Car, { garage });
 
@@ -57,7 +60,9 @@ describe('GH issue 2371', () => {
     expect(garage.trucks.length).toBe(0);
     await orm.em.fork().persistAndFlush(garage);
 
-    const g = await orm.em.findOneOrFail(Garage, garage, { populate: ['cars', 'vehicles', 'trucks'] });
+    const g = await orm.em.findOneOrFail(Garage, garage, {
+      populate: ["cars", "vehicles", "trucks"],
+    });
     const c = await orm.em.findOneOrFail(Car, car);
     expect(g.cars.contains(c)).toBe(true);
     expect(g.vehicles.contains(c)).toBe(true);

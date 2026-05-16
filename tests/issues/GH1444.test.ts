@@ -1,9 +1,13 @@
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
-import { v4 as uuid } from 'uuid';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
+import { v4 as uuid } from "uuid";
 
 @Entity()
 class A {
-
   @PrimaryKey({ hidden: true })
   _id!: number;
 
@@ -16,11 +20,9 @@ class A {
   constructor(name: string) {
     this.name = name;
   }
-
 }
 
-describe('GH issue 1444', () => {
-
+describe("GH issue 1444", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -34,9 +36,9 @@ describe('GH issue 1444', () => {
   afterAll(() => orm.close(true));
 
   test(`GH issue 1444`, async () => {
-    await orm.em.fork().persistAndFlush(new A('a1'));
-    const found1 = await orm.em.findOneOrFail(A, { name: 'a1' });
-    expect(typeof found1._id).toBe('number');
-    expect(typeof found1.id).toBe('string');
+    await orm.em.fork().persistAndFlush(new A("a1"));
+    const found1 = await orm.em.findOneOrFail(A, { name: "a1" });
+    expect(typeof found1._id).toBe("number");
+    expect(typeof found1.id).toBe("string");
   });
 });

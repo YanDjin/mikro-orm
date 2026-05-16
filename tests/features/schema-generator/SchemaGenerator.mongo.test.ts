@@ -1,35 +1,40 @@
-import type { MikroORM } from '@mikro-orm/core';
-import type { MongoDriver } from '@mikro-orm/mongodb';
-import { MongoSchemaGenerator } from '@mikro-orm/mongodb';
-import { initORMMongo } from '../../bootstrap';
-import FooBar from '../../entities/FooBar';
-import { FooBaz } from '../../entities/FooBaz';
+import type { MikroORM } from "@yandjin-mikro-orm/core";
+import type { MongoDriver } from "@yandjin-mikro-orm/mongodb";
+import { MongoSchemaGenerator } from "@yandjin-mikro-orm/mongodb";
+import { initORMMongo } from "../../bootstrap";
+import FooBar from "../../entities/FooBar";
+import { FooBaz } from "../../entities/FooBaz";
 
-describe('SchemaGenerator', () => {
-
+describe("SchemaGenerator", () => {
   let orm: MikroORM<MongoDriver>;
 
-  beforeAll(async () => orm = await initORMMongo());
+  beforeAll(async () => (orm = await initORMMongo()));
   afterAll(async () => await orm.close(true));
   beforeEach(async () => orm.schema.clearDatabase());
 
-  test('create/drop collection', async () => {
+  test("create/drop collection", async () => {
     const driver = orm.em.getDriver();
     await driver.getConnection().dropCollection(FooBar);
     let collections = await driver.getConnection().listCollections();
-    expect(collections).not.toContain('foo-bar');
+    expect(collections).not.toContain("foo-bar");
     await orm.schema.createSchema();
     collections = await driver.getConnection().listCollections();
-    expect(collections).toContain('foo-bar');
-    expect(collections).toContain('mikro_orm_migrations');
+    expect(collections).toContain("foo-bar");
+    expect(collections).toContain("mikro_orm_migrations");
     await orm.schema.dropSchema({ dropMigrationsTable: true });
     collections = await driver.getConnection().listCollections();
     expect(collections).toHaveLength(0);
   });
 
-  test('refresh collections', async () => {
-    const createCollection = jest.spyOn(MongoSchemaGenerator.prototype, 'createSchema');
-    const dropCollections = jest.spyOn(MongoSchemaGenerator.prototype, 'dropSchema');
+  test("refresh collections", async () => {
+    const createCollection = jest.spyOn(
+      MongoSchemaGenerator.prototype,
+      "createSchema",
+    );
+    const dropCollections = jest.spyOn(
+      MongoSchemaGenerator.prototype,
+      "dropSchema",
+    );
 
     createCollection.mockResolvedValue();
     dropCollections.mockResolvedValue();
@@ -48,17 +53,23 @@ describe('SchemaGenerator', () => {
     dropCollections.mockRestore();
   });
 
-  test('updateSchema just forwards to createSchema', async () => {
-    const spy = jest.spyOn(MongoSchemaGenerator.prototype, 'createSchema');
+  test("updateSchema just forwards to createSchema", async () => {
+    const spy = jest.spyOn(MongoSchemaGenerator.prototype, "createSchema");
     spy.mockImplementation();
     await orm.schema.updateSchema();
     expect(spy).toHaveBeenCalledTimes(1);
     spy.mockRestore();
   });
 
-  test('ensureIndexes also recreates changed indexes and removes not defined ones', async () => {
-    const dropIndexesSpy = jest.spyOn(MongoSchemaGenerator.prototype, 'dropIndexes');
-    const ensureIndexesSpy = jest.spyOn(MongoSchemaGenerator.prototype, 'ensureIndexes');
+  test("ensureIndexes also recreates changed indexes and removes not defined ones", async () => {
+    const dropIndexesSpy = jest.spyOn(
+      MongoSchemaGenerator.prototype,
+      "dropIndexes",
+    );
+    const ensureIndexesSpy = jest.spyOn(
+      MongoSchemaGenerator.prototype,
+      "ensureIndexes",
+    );
     const meta = orm.getMetadata(FooBaz);
     meta.properties.name.nullable = false;
     await orm.schema.ensureIndexes();
@@ -67,13 +78,13 @@ describe('SchemaGenerator', () => {
 
     expect(dropIndexesSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-      collectionsWithFailedIndexes: ['foo-baz'],
-    }));
+        collectionsWithFailedIndexes: ["foo-baz"],
+      }),
+    );
 
     expect(ensureIndexesSpy).toHaveBeenCalledTimes(3);
 
     dropIndexesSpy.mockRestore();
     ensureIndexesSpy.mockRestore();
   });
-
 });

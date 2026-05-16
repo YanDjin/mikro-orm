@@ -1,33 +1,37 @@
-import { Embedded, Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Embedded,
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 export class Options {
-
   @Property()
   loop!: string;
-
 }
 
 @Entity()
 export class PlayerEntity {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded(() => Options)
   options = new Options();
-
 }
 
-describe('validating not discovered emebddables', () => {
-
+describe("validating not discovered emebddables", () => {
   test(`GH issue 2357`, async () => {
-    await expect(MikroORM.init({
-      entities: [PlayerEntity],
-      dbName: ':memory:',
-      driver: SqliteDriver,
-      connect: false,
-    })).rejects.toThrow(`Entity 'Options' was not discovered, please make sure to provide it in 'entities' array when initializing the ORM (used in PlayerEntity.options)`);
+    await expect(
+      MikroORM.init({
+        entities: [PlayerEntity],
+        dbName: ":memory:",
+        driver: SqliteDriver,
+        connect: false,
+      }),
+    ).rejects.toThrow(
+      `Entity 'Options' was not discovered, please make sure to provide it in 'entities' array when initializing the ORM (used in PlayerEntity.options)`,
+    );
   });
-
 });

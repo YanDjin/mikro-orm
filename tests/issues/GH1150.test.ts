@@ -1,8 +1,14 @@
-import { Entity, Enum, MikroORM, OneToOne, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  Enum,
+  MikroORM,
+  OneToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class Person {
-
   @PrimaryKey()
   id!: number;
 
@@ -15,9 +21,8 @@ export class Person {
   @Property({ unique: true })
   email!: string;
 
-  @OneToOne({ entity: 'User', mappedBy: 'person' })
+  @OneToOne({ entity: "User", mappedBy: "person" })
   user!: any;
-
 }
 
 export enum State {
@@ -28,7 +33,6 @@ export enum State {
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -38,16 +42,14 @@ export class User {
   @Property({ hidden: true })
   password!: string;
 
-  @OneToOne({ entity: () => Person, inversedBy: person => person.user })
+  @OneToOne({ entity: () => Person, inversedBy: (person) => person.user })
   person!: Person;
 
   @Enum({ items: () => State })
   state!: number;
-
 }
 
-describe('GH issue 1150', () => {
-
+describe("GH issue 1150", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -63,14 +65,14 @@ describe('GH issue 1150', () => {
     await orm.close(true);
   });
 
-  it('em.create() with nested 1:1 relation', async () => {
+  it("em.create() with nested 1:1 relation", async () => {
     const user = orm.em.create(User, {
-      login: 'some.login',
-      password: 'somepassword@#10',
+      login: "some.login",
+      password: "somepassword@#10",
       person: {
-        name: 'Carlos Eduardo',
-        lastName: 'de Oliveira Paludetto',
-        email: 'some@mail.com',
+        name: "Carlos Eduardo",
+        lastName: "de Oliveira Paludetto",
+        email: "some@mail.com",
       },
       state: State.Running,
     });
@@ -79,8 +81,9 @@ describe('GH issue 1150', () => {
     expect(user.person.id).not.toBeUndefined();
   });
 
-  it('numeric enum diffing (GH issue #1096)', async () => {
-    await expect(orm.schema.getUpdateSchemaSQL({ wrap: false })).resolves.toBe('');
+  it("numeric enum diffing (GH issue #1096)", async () => {
+    await expect(orm.schema.getUpdateSchemaSQL({ wrap: false })).resolves.toBe(
+      "",
+    );
   });
-
 });

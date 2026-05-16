@@ -1,4 +1,4 @@
-import type { EntityDTO, Dictionary } from '@mikro-orm/core';
+import type { EntityDTO, Dictionary } from "@yandjin-mikro-orm/core";
 import {
   AfterCreate,
   AfterDelete,
@@ -19,25 +19,27 @@ import {
   Unique,
   EntityRepositoryType,
   QueryOrder,
-} from '@mikro-orm/core';
+} from "@yandjin-mikro-orm/core";
 
-import { Book } from './Book';
-import { AuthorRepository } from '../repositories/AuthorRepository';
-import { BaseEntity } from './BaseEntity';
+import { Book } from "./Book";
+import { AuthorRepository } from "../repositories/AuthorRepository";
+import { BaseEntity } from "./BaseEntity";
 
 @Entity({ repository: () => AuthorRepository })
-@Index({ name: 'custom_idx_1', properties: ['name', 'email'] })
+@Index({ name: "custom_idx_1", properties: ["name", "email"] })
 @Filter({
-  name: 'withoutParams1',
+  name: "withoutParams1",
   cond(_, type) {
-    expect(['read', 'update', 'delete'].includes(type)).toBe(true);
+    expect(["read", "update", "delete"].includes(type)).toBe(true);
     return {};
   },
   args: false,
   default: true,
 })
-export class Author extends BaseEntity<Author, 'termsAccepted' | 'code2' | 'version' | 'versionAsString'> {
-
+export class Author extends BaseEntity<
+  Author,
+  "termsAccepted" | "code2" | "version" | "versionAsString"
+> {
   [EntityRepositoryType]?: AuthorRepository;
 
   static beforeDestroyCalled = 0;
@@ -51,7 +53,10 @@ export class Author extends BaseEntity<Author, 'termsAccepted' | 'code2' | 'vers
   email: string;
 
   @Property({ nullable: true })
-  @Unique({ name: 'age_uniq', options: { partialFilterExpression: { age: { $exists: true } } } })
+  @Unique({
+    name: "age_uniq",
+    options: { partialFilterExpression: { age: { $exists: true } } },
+  })
   age?: number;
 
   @Property()
@@ -60,15 +65,15 @@ export class Author extends BaseEntity<Author, 'termsAccepted' | 'code2' | 'vers
   @Property({ nullable: true })
   optional?: boolean;
 
-  @Property({ nullable: true, name: 'identitiesArray' })
+  @Property({ nullable: true, name: "identitiesArray" })
   identities?: string[];
 
   @Property({ nullable: true, type: DateType })
   @Index()
   born?: string;
 
-  @OneToMany(() => Book, book => book.author, {
-    referenceColumnName: '_id',
+  @OneToMany(() => Book, (book) => book.author, {
+    referenceColumnName: "_id",
     cascade: [Cascade.PERSIST],
     orphanRemoval: true,
     orderBy: { title: QueryOrder.ASC },
@@ -97,10 +102,10 @@ export class Author extends BaseEntity<Author, 'termsAccepted' | 'code2' | 'vers
     super();
     this.name = name;
     this.email = email;
-    this.foo = 'bar';
+    this.foo = "bar";
   }
 
-  @Property({ name: 'code' })
+  @Property({ name: "code" })
   getCode() {
     return `${this.email} - ${this.name}`;
   }
@@ -122,7 +127,7 @@ export class Author extends BaseEntity<Author, 'termsAccepted' | 'code2' | 'vers
 
   @AfterCreate()
   afterCreate() {
-    this.versionAsString = 'v' + this.version;
+    this.versionAsString = "v" + this.version;
   }
 
   @BeforeUpdate()
@@ -132,7 +137,7 @@ export class Author extends BaseEntity<Author, 'termsAccepted' | 'code2' | 'vers
 
   @AfterUpdate()
   afterUpdate() {
-    this.versionAsString = 'v' + this.version;
+    this.versionAsString = "v" + this.version;
   }
 
   @BeforeDelete()
@@ -145,15 +150,17 @@ export class Author extends BaseEntity<Author, 'termsAccepted' | 'code2' | 'vers
     Author.afterDestroyCalled += 1;
   }
 
-  toJSON(strict = true, strip: (keyof this)[] = ['id', 'email']): EntityDTO<this> {
+  toJSON(
+    strict = true,
+    strip: (keyof this)[] = ["id", "email"],
+  ): EntityDTO<this> {
     const o = this.toObject();
     (o as Dictionary).fooBar = 123;
 
     if (strict) {
-      strip.forEach(k => delete o[k as keyof typeof o]);
+      strip.forEach((k) => delete o[k as keyof typeof o]);
     }
 
     return o;
   }
-
 }

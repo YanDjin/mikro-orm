@@ -1,6 +1,11 @@
-import { Entity, JsonType, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
-import { mockLogger } from '../helpers';
+import {
+  Entity,
+  JsonType,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { mockLogger } from "../helpers";
 
 type Setup = {
   limits?: boolean;
@@ -9,7 +14,6 @@ type Setup = {
 
 @Entity()
 class Contract {
-
   @PrimaryKey()
   id!: number;
 
@@ -18,7 +22,6 @@ class Contract {
 
   @Property({ type: JsonType, nullable: true })
   setup: Setup | null = null;
-
 }
 
 let orm: MikroORM;
@@ -37,10 +40,10 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('4078', async () => {
+test("4078", async () => {
   await orm.em.insert(Contract, {
     id: 1,
-    title: 't',
+    title: "t",
     setup: {
       limits: true,
       fallbackFees: false,

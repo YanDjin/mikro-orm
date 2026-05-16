@@ -1,9 +1,19 @@
-import { Collection, Entity, Ref, LoadStrategy, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property, QueryOrder } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  Ref,
+  LoadStrategy,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  QueryOrder,
+} from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 @Entity()
 export class RadioOption {
-
   @PrimaryKey()
   id!: number;
 
@@ -13,14 +23,12 @@ export class RadioOption {
   @Property()
   order!: number;
 
-  @ManyToOne('Radio', { ref: true })
+  @ManyToOne("Radio", { ref: true })
   radio!: Ref<Radio>;
-
 }
 
 @Entity()
 export class Radio {
-
   @PrimaryKey()
   id!: number;
 
@@ -28,59 +36,50 @@ export class Radio {
   order!: number;
 
   @Property()
-  question: string = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
+  question: string = Math.random()
+    .toString(36)
+    .replace(/[^a-z]+/g, "")
+    .substr(0, 10);
 
-  @ManyToOne('Project', { ref: true })
+  @ManyToOne("Project", { ref: true })
   project!: Ref<Project>;
 
-  @OneToMany(
-    () => RadioOption,
-    option => option.radio,
-    {
-      eager: true,
-      orderBy: { order: QueryOrder.ASC, id: QueryOrder.ASC },
-    },
-  )
+  @OneToMany(() => RadioOption, (option) => option.radio, {
+    eager: true,
+    orderBy: { order: QueryOrder.ASC, id: QueryOrder.ASC },
+  })
   options = new Collection<RadioOption>(this);
 
   constructor(order: number) {
     this.order = order;
   }
-
 }
 
 @Entity()
 export class Project {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name: string;
 
-  @OneToMany(
-    () => Radio,
-    radio => radio.project,
-    {
-      eager: true,
-      orderBy: { order: QueryOrder.ASC, id: QueryOrder.ASC },
-    },
-  )
+  @OneToMany(() => Radio, (radio) => radio.project, {
+    eager: true,
+    orderBy: { order: QueryOrder.ASC, id: QueryOrder.ASC },
+  })
   radios = new Collection<Radio>(this);
 
   constructor(name: string) {
     this.name = name;
   }
-
 }
 
-describe('GH issue 1334', () => {
-
+describe("GH issue 1334", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
-      dbName: ':memory:',
+      dbName: ":memory:",
       entities: [Project, Radio, RadioOption],
       loadStrategy: LoadStrategy.JOINED,
     });
@@ -92,9 +91,9 @@ describe('GH issue 1334', () => {
   });
 
   test(`GH issue 1334`, async () => {
-    const mock = mockLogger(orm, ['query']);
+    const mock = mockLogger(orm, ["query"]);
 
-    const project = new Project('p1');
+    const project = new Project("p1");
     const radio1 = new Radio(0);
     const radio2 = new Radio(2);
     const radio3 = new Radio(1);
@@ -102,10 +101,9 @@ describe('GH issue 1334', () => {
     await orm.em.persistAndFlush(project);
     orm.em.clear();
 
-    await orm.em.findOneOrFail(Radio, radio1.id, { populate: ['project'] });
+    await orm.em.findOneOrFail(Radio, radio1.id, { populate: ["project"] });
     mock.mock.calls.length = 0;
     await orm.em.flush();
     expect(mock.mock.calls).toHaveLength(0);
   });
-
 });

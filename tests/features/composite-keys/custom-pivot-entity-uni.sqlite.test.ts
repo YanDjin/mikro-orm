@@ -9,16 +9,15 @@ import {
   Collection,
   ManyToMany,
   PrimaryKeyProp,
-} from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+} from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Order {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany(() => OrderItem, item => item.order)
+  @OneToMany(() => OrderItem, (item) => item.order)
   items = new Collection<OrderItem>(this);
 
   @ManyToMany({ entity: () => Product, pivotEntity: () => OrderItem })
@@ -32,12 +31,10 @@ export class Order {
 
   @Property()
   created: Date = new Date();
-
 }
 
 @Entity()
 export class Product {
-
   @PrimaryKey()
   id!: number;
 
@@ -51,12 +48,10 @@ export class Product {
     this.name = name;
     this.currentPrice = currentPrice;
   }
-
 }
 
 @Entity()
 export class OrderItem {
-
   @ManyToOne({ primary: true })
   order: Order;
 
@@ -69,24 +64,22 @@ export class OrderItem {
   @Property({ default: 0 })
   offeredPrice: number;
 
-  [PrimaryKeyProp]?: ['order', 'product'];
+  [PrimaryKeyProp]?: ["order", "product"];
 
   constructor(order: Order, product: Product) {
     this.order = order;
     this.product = product;
     this.offeredPrice = product.currentPrice;
   }
-
 }
 
-describe('custom pivot entity for m:n with additional properties (unidirectional)', () => {
-
+describe("custom pivot entity for m:n with additional properties (unidirectional)", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Product, OrderItem, Order],
-      dbName: ':memory:',
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -105,11 +98,11 @@ describe('custom pivot entity for m:n with additional properties (unidirectional
     const order1 = new Order();
     const order2 = new Order();
     const order3 = new Order();
-    const product1 = new Product('p1', 111);
-    const product2 = new Product('p2', 222);
-    const product3 = new Product('p3', 333);
-    const product4 = new Product('p4', 444);
-    const product5 = new Product('p5', 555);
+    const product1 = new Product("p1", 111);
+    const product2 = new Product("p2", 222);
+    const product3 = new Product("p3", 333);
+    const product4 = new Product("p4", 444);
+    const product5 = new Product("p5", 555);
     const item11 = new OrderItem(order1, product1);
     item11.offeredPrice = 123;
     const item12 = new OrderItem(order1, product2);
@@ -127,15 +120,27 @@ describe('custom pivot entity for m:n with additional properties (unidirectional
     const item33 = new OrderItem(order3, product5);
     item33.offeredPrice = 5123;
 
-    await orm.em.fork().persistAndFlush([item11, item12, item21, item22, item23, item31, item32, item33]);
+    await orm.em
+      .fork()
+      .persistAndFlush([
+        item11,
+        item12,
+        item21,
+        item22,
+        item23,
+        item31,
+        item32,
+        item33,
+      ]);
     return { order1, order2, product1, product2, product3, product4, product5 };
   }
 
   test(`should work`, async () => {
-    const { product1, product2, product3, product4, product5 } = await createEntities();
+    const { product1, product2, product3, product4, product5 } =
+      await createEntities();
     const productRepository = orm.em.getRepository(Product);
 
-    const orders = await orm.em.find(Order, {}, { populate: ['*'] });
+    const orders = await orm.em.find(Order, {}, { populate: ["*"] });
     expect(orders).toHaveLength(3);
 
     // test M:N lazy load
@@ -152,21 +157,24 @@ describe('custom pivot entity for m:n with additional properties (unidirectional
     // test collection CRUD
     // remove
     expect(order.products.count()).toBe(2);
-    order.products.remove(t => t.id === product1.id); // we need to get reference as product1 is detached from current EM
+    order.products.remove((t) => t.id === product1.id); // we need to get reference as product1 is detached from current EM
     await orm.em.persistAndFlush(order);
     orm.em.clear();
-    order = (await orm.em.findOne(Order, order.id, { populate: ['products'] as const }))!;
+    order = (await orm.em.findOne(Order, order.id, {
+      populate: ["products"] as const,
+    }))!;
     expect(order.products.count()).toBe(1);
 
     // add
     order.products.add(productRepository.getReference(product1.id)); // we need to get reference as product1 is detached from current EM
-    const product6 = new Product('fresh', 555);
+    const product6 = new Product("fresh", 555);
     order.products.add(product6);
     await orm.em.persistAndFlush(order);
     orm.em.clear();
-    order = (await orm.em.findOne(Order, order.id, { populate: ['products'] as const }))!;
+    order = (await orm.em.findOne(Order, order.id, {
+      populate: ["products"] as const,
+    }))!;
     expect(order.products.count()).toBe(3);
-
 
     // slice
     expect(order.products.slice().length).toBe(3);
@@ -174,28 +182,41 @@ describe('custom pivot entity for m:n with additional properties (unidirectional
     expect(order.products.slice(0, 1)).toEqual([order.products[0]]);
 
     // contains
-    expect(order.products.contains(productRepository.getReference(product1.id))).toBe(true);
-    expect(order.products.contains(productRepository.getReference(product2.id))).toBe(true);
-    expect(order.products.contains(productRepository.getReference(product3.id))).toBe(false);
-    expect(order.products.contains(productRepository.getReference(product4.id))).toBe(false);
-    expect(order.products.contains(productRepository.getReference(product5.id))).toBe(false);
-    expect(order.products.contains(productRepository.getReference(product6.id))).toBe(true);
+    expect(
+      order.products.contains(productRepository.getReference(product1.id)),
+    ).toBe(true);
+    expect(
+      order.products.contains(productRepository.getReference(product2.id)),
+    ).toBe(true);
+    expect(
+      order.products.contains(productRepository.getReference(product3.id)),
+    ).toBe(false);
+    expect(
+      order.products.contains(productRepository.getReference(product4.id)),
+    ).toBe(false);
+    expect(
+      order.products.contains(productRepository.getReference(product5.id)),
+    ).toBe(false);
+    expect(
+      order.products.contains(productRepository.getReference(product6.id)),
+    ).toBe(true);
 
     // removeAll
     order.products.removeAll();
     await orm.em.persistAndFlush(order);
     orm.em.clear();
-    order = (await orm.em.findOne(Order, order.id, { populate: ['products'] as const }))!;
+    order = (await orm.em.findOne(Order, order.id, {
+      populate: ["products"] as const,
+    }))!;
     expect(order.products.count()).toBe(0);
     expect(order.products.isEmpty()).toBe(true);
   });
 
   test(`search by m:n property and loadCount() works`, async () => {
     await createEntities();
-    const res = await orm.em.find(Order, { products: { name: 'p1' } });
+    const res = await orm.em.find(Order, { products: { name: "p1" } });
     expect(res).toHaveLength(2);
     const count = await res[0].products.loadCount();
     expect(count).toBe(2);
   });
-
 });

@@ -1,11 +1,18 @@
-import { MikroORM } from '@mikro-orm/mysql';
-import { Collection, LoadStrategy, Entity, ManyToMany, PrimaryKey, Property, Type } from '@mikro-orm/core';
-import { parse, stringify, v1 } from 'uuid';
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import {
+  Collection,
+  LoadStrategy,
+  Entity,
+  ManyToMany,
+  PrimaryKey,
+  Property,
+  Type,
+} from "@yandjin-mikro-orm/core";
+import { parse, stringify, v1 } from "uuid";
 
 let orm: MikroORM;
 
 class UuidBinaryType extends Type<string, Buffer> {
-
   override convertToDatabaseValue(uuid: string) {
     return Buffer.from(parse(uuid));
   }
@@ -15,14 +22,12 @@ class UuidBinaryType extends Type<string, Buffer> {
   }
 
   override getColumnType() {
-    return 'binary(16)';
+    return "binary(16)";
   }
-
 }
 
 @Entity()
 export class Customer {
-
   @PrimaryKey({ type: UuidBinaryType })
   uuid: string = v1();
 
@@ -31,26 +36,23 @@ export class Customer {
 
   @ManyToMany(() => Role)
   roles = new Collection<Role>(this);
-
 }
 
 @Entity()
 export class Role {
-
   @PrimaryKey({ type: UuidBinaryType })
   uuid: string = v1();
 
   @Property()
   name!: string;
 
-  @ManyToMany(() => Customer, 'roles')
+  @ManyToMany(() => Customer, "roles")
   customers = new Collection<Customer>(this);
-
 }
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: 'gh-4219',
+    dbName: "gh-4219",
     entities: [Customer, Role],
     port: 3308,
   });
@@ -63,8 +65,8 @@ afterAll(async () => {
 
 test(`GH issue 4219`, async () => {
   const roles = [
-    orm.em.create(Role, { name: 'customer' }),
-    orm.em.create(Role, { name: 'reseller' }),
+    orm.em.create(Role, { name: "customer" }),
+    orm.em.create(Role, { name: "reseller" }),
   ];
   const customers = Array(1000)
     .fill(0)
@@ -80,11 +82,11 @@ test(`GH issue 4219`, async () => {
   const newEm = orm.em.fork();
   const customersByJoined = await newEm
     .getRepository(Customer)
-    .findAll({ strategy: LoadStrategy.JOINED, populate: ['roles.name'] });
+    .findAll({ strategy: LoadStrategy.JOINED, populate: ["roles.name"] });
 
   const customersBySelectIn = await newEm
     .getRepository(Customer)
-    .findAll({ populate: ['roles.name'] });
+    .findAll({ populate: ["roles.name"] });
 
   expect(customersByJoined.length).toBe(customersBySelectIn.length);
 });

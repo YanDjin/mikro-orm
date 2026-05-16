@@ -1,15 +1,16 @@
-import { Entity, PrimaryKey, Property, Type } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import { Entity, PrimaryKey, Property, Type } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 class RailsArrayType extends Type<string[], string> {
-
   override convertToDatabaseValue(values: string[]): string {
     if (!values) {
       return null!;
     }
 
     // Convert to Set and back to Array to remove duplicates
-    return ['---', ...[...new Set(values)].map(value => `- ${value}`)].join('\n');
+    return ["---", ...[...new Set(values)].map((value) => `- ${value}`)].join(
+      "\n",
+    );
   }
 
   override convertToJSValue(value: string): string[] {
@@ -17,18 +18,16 @@ class RailsArrayType extends Type<string[], string> {
       return [];
     }
 
-    return [...value.matchAll(/\n- (.*)/g)].map(matches => matches[1]);
+    return [...value.matchAll(/\n- (.*)/g)].map((matches) => matches[1]);
   }
 
   override getColumnType(): string {
-    return 'text';
+    return "text";
   }
-
 }
 
 @Entity()
 class LegacyUser {
-
   @PrimaryKey()
   id!: number;
 
@@ -40,7 +39,6 @@ class LegacyUser {
     nullable: true,
   })
   teams?: string[];
-
 }
 
 let orm: MikroORM;
@@ -57,19 +55,19 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-it('GH #4133', async () => {
+it("GH #4133", async () => {
   const u1 = new LegacyUser();
-  u1.username = 'test';
-  u1.teams = ['engineering', 'product'];
+  u1.username = "test";
+  u1.teams = ["engineering", "product"];
 
   const u2 = new LegacyUser();
-  u2.username = 'test';
-  u2.teams = ['engineering', 'product'];
+  u2.username = "test";
+  u2.teams = ["engineering", "product"];
 
   await orm.em.persistAndFlush([u1, u2]);
   orm.em.clear();
 
   const [user1, user2] = await orm.em.find(LegacyUser, {});
-  expect(user1.username).toEqual('test');
-  expect(user2.username).toEqual('test');
+  expect(user1.username).toEqual("test");
+  expect(user2.username).toEqual("test");
 });

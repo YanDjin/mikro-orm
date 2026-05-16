@@ -1,19 +1,22 @@
-import { Entity, ManyToOne, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity({ abstract: true })
 abstract class BaseEntity {
-
   @PrimaryKey()
   id!: bigint;
 
   @Property({ onUpdate: () => new Date() })
   modifiedAt: Date = new Date();
-
 }
 
 @Entity()
 class User extends BaseEntity {
-
   constructor(name: string) {
     super();
     this.name = name;
@@ -21,12 +24,10 @@ class User extends BaseEntity {
 
   @Property()
   name: string;
-
 }
 
 @Entity()
 class Position extends BaseEntity {
-
   constructor(name: string) {
     super();
     this.name = name;
@@ -34,12 +35,10 @@ class Position extends BaseEntity {
 
   @Property()
   name: string;
-
 }
 
 @Entity()
 class PositionBookmark extends BaseEntity {
-
   constructor(user: User, position: Position) {
     super();
     this.user = user;
@@ -51,11 +50,9 @@ class PositionBookmark extends BaseEntity {
 
   @ManyToOne(() => Position)
   position: Position;
-
 }
 
-describe('GH issue 1038', () => {
-
+describe("GH issue 1038", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -68,9 +65,9 @@ describe('GH issue 1038', () => {
 
   afterAll(async () => await orm.close(true));
 
-  test('If the PrimaryKey is BigIntType, user and Position will be updated unnecessarily', async () => {
-    const user1 = new User('user1');
-    const position1 = new Position('position1');
+  test("If the PrimaryKey is BigIntType, user and Position will be updated unnecessarily", async () => {
+    const user1 = new User("user1");
+    const position1 = new Position("position1");
     await orm.em.persistAndFlush([user1, position1]);
     const originUserModifiedAt = user1.modifiedAt;
 
@@ -80,5 +77,4 @@ describe('GH issue 1038', () => {
     const user = await orm.em.findOneOrFail(User, { name: user1.name });
     expect(user.modifiedAt).toBe(originUserModifiedAt);
   });
-
 });

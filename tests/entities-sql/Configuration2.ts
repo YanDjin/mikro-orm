@@ -1,9 +1,13 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { Test2 } from './Test2';
+import {
+  Entity,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { Test2 } from "./Test2";
 
 @Entity()
 export class Configuration2 {
-
   @PrimaryKey()
   property: string;
 
@@ -18,5 +22,4 @@ export class Configuration2 {
     this.property = property;
     this.value = value;
   }
-
 }

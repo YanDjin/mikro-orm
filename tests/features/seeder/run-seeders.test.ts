@@ -1,26 +1,25 @@
-import { MikroORM } from '@mikro-orm/core';
-import { House } from './entities/house.entity';
-import { Project } from './entities/project.entity';
-import { User } from './entities/user.entity';
-import { DatabaseSeeder } from '../../database/seeder/database.seeder';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import { MikroORM } from "@yandjin-mikro-orm/core";
+import { House } from "./entities/house.entity";
+import { Project } from "./entities/project.entity";
+import { User } from "./entities/user.entity";
+import { DatabaseSeeder } from "../../database/seeder/database.seeder";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
-describe('Run seeders', () => {
-
+describe("Run seeders", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Project, User, House],
       driver: SqliteDriver,
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('that by calling DatabaseSeeder both ProjectSeeder and UserSeeder have been called', async () => {
+  test("that by calling DatabaseSeeder both ProjectSeeder and UserSeeder have been called", async () => {
     const seeder = new DatabaseSeeder();
     await seeder.run(orm.em);
 
@@ -30,5 +29,4 @@ describe('Run seeders', () => {
     const users = await orm.em.findAndCount(User, {});
     expect(users[1]).toBe(1);
   });
-
 });

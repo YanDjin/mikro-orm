@@ -3,7 +3,8 @@ import type {
   EventSubscriber,
   EventArgs,
   TransactionEventArgs,
-  Transaction } from '@mikro-orm/core';
+  Transaction,
+} from "@yandjin-mikro-orm/core";
 import {
   Entity,
   MikroORM,
@@ -11,14 +12,13 @@ import {
   Property,
   UnitOfWork,
   Unique,
-} from '@mikro-orm/core';
-import { MongoDriver, ObjectId } from '@mikro-orm/mongodb';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { v4 as uuid } from 'uuid';
-import { closeReplSets, initMongoReplSet } from '../bootstrap';
+} from "@yandjin-mikro-orm/core";
+import { MongoDriver, ObjectId } from "@yandjin-mikro-orm/mongodb";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
+import { v4 as uuid } from "uuid";
+import { closeReplSets, initMongoReplSet } from "../bootstrap";
 
 class UserSubscriber implements EventSubscriber {
-
   pendingActions = new Map<Transaction, (() => void | Promise<void>)[]>();
 
   async beforeTransactionStart(args: TransactionEventArgs) {
@@ -56,18 +56,29 @@ class UserSubscriber implements EventSubscriber {
   async afterCommitCreate(args: EventArgs<any>) {
     //
   }
-
 }
 
-describe('GH issue 1175', () => {
+describe("GH issue 1175", () => {
   let em: EntityManager;
   const testSubscriber = new UserSubscriber();
-  const afterCreate = jest.spyOn(testSubscriber, 'afterCreate');
-  const beforeTransactionStart = jest.spyOn(testSubscriber, 'beforeTransactionStart');
-  const afterTransactionStart = jest.spyOn(testSubscriber, 'afterTransactionStart');
-  const afterTransactionCommit = jest.spyOn(testSubscriber, 'afterTransactionCommit');
-  const afterTransactionRollback = jest.spyOn(testSubscriber, 'afterTransactionRollback');
-  const afterCommitCreate = jest.spyOn(testSubscriber, 'afterCommitCreate');
+  const afterCreate = jest.spyOn(testSubscriber, "afterCreate");
+  const beforeTransactionStart = jest.spyOn(
+    testSubscriber,
+    "beforeTransactionStart",
+  );
+  const afterTransactionStart = jest.spyOn(
+    testSubscriber,
+    "afterTransactionStart",
+  );
+  const afterTransactionCommit = jest.spyOn(
+    testSubscriber,
+    "afterTransactionCommit",
+  );
+  const afterTransactionRollback = jest.spyOn(
+    testSubscriber,
+    "afterTransactionRollback",
+  );
+  const afterCommitCreate = jest.spyOn(testSubscriber, "afterCommitCreate");
 
   afterEach(() => {
     beforeTransactionStart.mockClear();
@@ -78,10 +89,9 @@ describe('GH issue 1175', () => {
     afterTransactionRollback.mockClear();
   });
 
-  describe('sql', () => {
-    @Entity({ tableName: 'users' })
+  describe("sql", () => {
+    @Entity({ tableName: "users" })
     class User {
-
       @PrimaryKey()
       id!: number;
 
@@ -91,13 +101,14 @@ describe('GH issue 1175', () => {
       constructor(username: string) {
         this.username = username;
       }
-
     }
 
-    async function getOrmInstance(subscriber?: EventSubscriber): Promise<MikroORM<PostgreSqlDriver>> {
+    async function getOrmInstance(
+      subscriber?: EventSubscriber,
+    ): Promise<MikroORM<PostgreSqlDriver>> {
       const orm = await MikroORM.init({
         entities: [User],
-        dbName: 'mikro_orm_test_gh_1175',
+        dbName: "mikro_orm_test_gh_1175",
         driver: PostgreSqlDriver,
         subscribers: subscriber ? [subscriber] : [],
       });
@@ -109,8 +120,8 @@ describe('GH issue 1175', () => {
 
     beforeAll(async () => {
       orm = await getOrmInstance(testSubscriber);
-      await orm.schema.dropDatabase('mikro_orm_test_gh_1175');
-      await orm.schema.createDatabase('mikro_orm_test_gh_1175');
+      await orm.schema.dropDatabase("mikro_orm_test_gh_1175");
+      await orm.schema.createDatabase("mikro_orm_test_gh_1175");
     });
 
     afterAll(async () => {
@@ -121,7 +132,7 @@ describe('GH issue 1175', () => {
       em = orm.em.fork();
     });
 
-    describe('immediate constraints (failures on insert)', () => {
+    describe("immediate constraints (failures on insert)", () => {
       beforeAll(async () => {
         const orm = await getOrmInstance();
         await orm.em.getConnection().execute(
@@ -135,9 +146,9 @@ describe('GH issue 1175', () => {
         );
         await orm.close();
       });
-      describe('implicit transactions', () => {
+      describe("implicit transactions", () => {
         let username: string;
-        it('afterCommitCreate called when transaction succeeds', async () => {
+        it("afterCommitCreate called when transaction succeeds", async () => {
           username = uuid();
           const user = new User(username);
           em.persist(user);
@@ -145,12 +156,18 @@ describe('GH issue 1175', () => {
           await expect(em.flush()).resolves.toBeUndefined();
           expect(afterCreate).toHaveBeenCalledTimes(1);
           expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
-          expect(afterTransactionCommit).toHaveBeenCalledWith(expect.objectContaining({ em, uow: expect.any(UnitOfWork) }));
+          expect(afterTransactionCommit).toHaveBeenCalledWith(
+            expect.objectContaining({ em, uow: expect.any(UnitOfWork) }),
+          );
           expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-          expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+          expect(afterCommitCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+              entity: expect.objectContaining({ username }),
+            }),
+          );
           expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
         });
-        it('afterCommitCreate not called when transaction fails', async () => {
+        it("afterCommitCreate not called when transaction fails", async () => {
           const user = new User(username);
           em.persist(user);
 
@@ -166,8 +183,8 @@ describe('GH issue 1175', () => {
 
       describe('explicit transactions with "transactional()"', () => {
         let username: string;
-        it('afterCommitCreate called when transaction succeeds', async () => {
-          const work = em.transactional(async em => {
+        it("afterCommitCreate called when transaction succeeds", async () => {
+          const work = em.transactional(async (em) => {
             username = uuid();
             const user = new User(username);
             em.persist(user);
@@ -177,11 +194,15 @@ describe('GH issue 1175', () => {
           expect(afterCreate).toHaveBeenCalledTimes(1);
           expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
           expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-          expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+          expect(afterCommitCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+              entity: expect.objectContaining({ username }),
+            }),
+          );
           expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
         });
-        it('afterCommitCreate not called when transaction fails', async () => {
-          const work = em.transactional(async em => {
+        it("afterCommitCreate not called when transaction fails", async () => {
+          const work = em.transactional(async (em) => {
             const user = new User(username);
             em.persist(user);
           });
@@ -192,19 +213,19 @@ describe('GH issue 1175', () => {
           expect(afterCommitCreate).toHaveBeenCalledTimes(0);
           expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
         });
-        describe('nested transactions', () => {
-          it('inner and outer afterCommitCreate called', async () => {
+        describe("nested transactions", () => {
+          it("inner and outer afterCommitCreate called", async () => {
             let em1: EntityManager;
             let trx1: Transaction;
             const work = async () => {
-              await em.transactional(async em => {
+              await em.transactional(async (em) => {
                 em1 = em;
                 trx1 = em.getTransactionContext();
-                username = 'nested1';
+                username = "nested1";
                 const user = new User(username);
                 em.persist(user);
-                await em.transactional(async em => {
-                  username = 'nested2';
+                await em.transactional(async (em) => {
+                  username = "nested2";
                   const user = new User(username);
                   em.persist(user);
                 });
@@ -212,82 +233,120 @@ describe('GH issue 1175', () => {
             };
             await expect(work()).resolves.toBeUndefined();
             expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
-            expect(beforeTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: undefined }));
+            expect(beforeTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: undefined }),
+            );
             expect(afterTransactionStart).toHaveBeenCalledTimes(1);
-            expect(afterTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCreate).toHaveBeenCalledTimes(2);
-            expect(afterCreate).toHaveBeenNthCalledWith(1, expect.objectContaining({ entity: expect.objectContaining({ username: 'nested2' }) }));
-            expect(afterCreate).toHaveBeenNthCalledWith(2, expect.objectContaining({ entity: expect.objectContaining({ username: 'nested1' }) }));
+            expect(afterCreate).toHaveBeenNthCalledWith(
+              1,
+              expect.objectContaining({
+                entity: expect.objectContaining({ username: "nested2" }),
+              }),
+            );
+            expect(afterCreate).toHaveBeenNthCalledWith(
+              2,
+              expect.objectContaining({
+                entity: expect.objectContaining({ username: "nested1" }),
+              }),
+            );
             expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
-            expect(afterTransactionCommit).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionCommit).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             // expect(afterCommitCreate).toHaveBeenCalledTimes(2); // called only for the root EM, so fires only one event
-            expect(afterCommitCreate).toHaveBeenNthCalledWith(1, expect.objectContaining({ em: em1!, entity: expect.objectContaining({ username: 'nested1' }) }));
+            expect(afterCommitCreate).toHaveBeenNthCalledWith(
+              1,
+              expect.objectContaining({
+                em: em1!,
+                entity: expect.objectContaining({ username: "nested1" }),
+              }),
+            );
             // expect(afterCommitCreate).toHaveBeenNthCalledWith(2, expect.objectContaining({ em: em1!, entity: expect.objectContaining({ username: 'nested2' }) }));
             expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
           });
-          it('no afterCommitCreate called if inner transaction fails', async () => {
+          it("no afterCommitCreate called if inner transaction fails", async () => {
             const username = uuid();
             let em1: EntityManager;
             let trx1: Transaction;
             const work = async () => {
-              await em.transactional(async em => {
+              await em.transactional(async (em) => {
                 em1 = em;
                 trx1 = em.getTransactionContext();
                 const user = new User(username);
                 em.persist(user);
-                await em.transactional(async em => {
+                await em.transactional(async (em) => {
                   const user = new User(username);
                   em.persist(user);
                 });
               });
             };
-            await expect(work()).rejects.toThrow(/^insert.+duplicate key value/);
+            await expect(work()).rejects.toThrow(
+              /^insert.+duplicate key value/,
+            );
             expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
-            expect(beforeTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: undefined }));
+            expect(beforeTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: undefined }),
+            );
             expect(afterTransactionStart).toHaveBeenCalledTimes(1);
-            expect(afterTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCreate).toHaveBeenCalledTimes(1);
             expect(afterTransactionCommit).toHaveBeenCalledTimes(0);
             expect(afterCommitCreate).toHaveBeenCalledTimes(0);
             expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
-            expect(afterTransactionRollback).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionRollback).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
           });
-          it('no afterCommitCreate called if outer transaction fails before running inner transaction', async () => {
+          it("no afterCommitCreate called if outer transaction fails before running inner transaction", async () => {
             let em1: EntityManager;
             let trx1: Transaction;
             const work = async () => {
-              await em.transactional(async em => {
+              await em.transactional(async (em) => {
                 em1 = em;
                 trx1 = em.getTransactionContext();
                 const user = new User(username);
                 em.persist(user);
                 await em.flush();
-                await em.transactional(async em => {
+                await em.transactional(async (em) => {
                   const user = new User(username);
                   em.persist(user);
                 });
               });
             };
-            await expect(work()).rejects.toThrow(/^insert.+duplicate key value/);
+            await expect(work()).rejects.toThrow(
+              /^insert.+duplicate key value/,
+            );
             expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
-            expect(beforeTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: undefined }));
+            expect(beforeTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: undefined }),
+            );
             expect(afterTransactionStart).toHaveBeenCalledTimes(1);
-            expect(afterTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCreate).toHaveBeenCalledTimes(0);
             expect(afterTransactionCommit).toHaveBeenCalledTimes(0);
             expect(afterCommitCreate).toHaveBeenCalledTimes(0);
             expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
-            expect(afterTransactionRollback).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionRollback).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
           });
-          it('no afterCommitCreate called if outer transaction fails after running inner transaction', async () => {
+          it("no afterCommitCreate called if outer transaction fails after running inner transaction", async () => {
             const username = uuid();
             let em1: EntityManager;
             let trx1: Transaction;
             const work = async () => {
-              await em.transactional(async em => {
+              await em.transactional(async (em) => {
                 em1 = em;
                 trx1 = em.getTransactionContext();
-                await em.transactional(async em => {
+                await em.transactional(async (em) => {
                   const user = new User(username);
                   em.persist(user);
                 });
@@ -295,23 +354,31 @@ describe('GH issue 1175', () => {
                 em.persist(user);
               });
             };
-            await expect(work()).rejects.toThrow(/^insert.+duplicate key value/);
+            await expect(work()).rejects.toThrow(
+              /^insert.+duplicate key value/,
+            );
             expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
-            expect(beforeTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: undefined }));
+            expect(beforeTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: undefined }),
+            );
             expect(afterTransactionStart).toHaveBeenCalledTimes(1);
-            expect(afterTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCreate).toHaveBeenCalledTimes(1);
             expect(afterTransactionCommit).toHaveBeenCalledTimes(0);
             expect(afterCommitCreate).toHaveBeenCalledTimes(0);
             expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
-            expect(afterTransactionRollback).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionRollback).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
           });
         });
       });
 
-      describe('explicit transactions with explicit begin/commit method calls', () => {
+      describe("explicit transactions with explicit begin/commit method calls", () => {
         let username: string;
-        it('creating a new user succeeds', async () => {
+        it("creating a new user succeeds", async () => {
           await em.begin();
           username = uuid();
           const user = new User(username);
@@ -321,10 +388,14 @@ describe('GH issue 1175', () => {
           expect(afterCreate).toHaveBeenCalledTimes(1);
           expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
           expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-          expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+          expect(afterCommitCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+              entity: expect.objectContaining({ username }),
+            }),
+          );
           expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
         });
-        it('afterCreate hook is called when commit() fails', async () => {
+        it("afterCreate hook is called when commit() fails", async () => {
           await em.begin();
           const work = async () => {
             try {
@@ -346,7 +417,7 @@ describe('GH issue 1175', () => {
       });
     });
 
-    describe('deferred constraints (failures on commit)', () => {
+    describe("deferred constraints (failures on commit)", () => {
       beforeAll(async () => {
         const orm = await getOrmInstance();
         await orm.em.getConnection().execute(
@@ -361,9 +432,9 @@ describe('GH issue 1175', () => {
         await orm.close();
       });
 
-      describe('implicit transactions', () => {
+      describe("implicit transactions", () => {
         let username: string;
-        it('creating a new user succeeds', async () => {
+        it("creating a new user succeeds", async () => {
           username = uuid();
           const user = new User(username);
           em.persist(user);
@@ -371,12 +442,18 @@ describe('GH issue 1175', () => {
           await expect(em.flush()).resolves.toBeUndefined();
           expect(afterCreate).toHaveBeenCalledTimes(1);
           expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
-          expect(afterTransactionCommit).toHaveBeenCalledWith(expect.objectContaining({ em, uow: expect.any(UnitOfWork) }));
+          expect(afterTransactionCommit).toHaveBeenCalledWith(
+            expect.objectContaining({ em, uow: expect.any(UnitOfWork) }),
+          );
           expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-          expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+          expect(afterCommitCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+              entity: expect.objectContaining({ username }),
+            }),
+          );
           expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
         });
-        it('afterCreate hook is called when flush fails', async () => {
+        it("afterCreate hook is called when flush fails", async () => {
           const user = new User(username);
           em.persist(user);
 
@@ -392,8 +469,8 @@ describe('GH issue 1175', () => {
 
       describe('explicit transactions with "transactional()"', () => {
         let username: string;
-        it('creating a new user succeeds', async () => {
-          const work = em.transactional(async em => {
+        it("creating a new user succeeds", async () => {
+          const work = em.transactional(async (em) => {
             username = uuid();
             const user = new User(username);
             em.persist(user);
@@ -403,12 +480,16 @@ describe('GH issue 1175', () => {
           expect(afterCreate).toHaveBeenCalledTimes(1);
           expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
           expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-          expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+          expect(afterCommitCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+              entity: expect.objectContaining({ username }),
+            }),
+          );
           expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
         });
-        it('afterCreate hook is called when transactional() fails', async () => {
+        it("afterCreate hook is called when transactional() fails", async () => {
           const work = async () => {
-            await em.transactional(async em => {
+            await em.transactional(async (em) => {
               const user = new User(username);
               em.persist(user);
             });
@@ -420,19 +501,19 @@ describe('GH issue 1175', () => {
           expect(afterCommitCreate).toHaveBeenCalledTimes(0);
           expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
         });
-        describe('nested transactions', () => {
-          it('inner and outer afterCommitCreate called', async () => {
+        describe("nested transactions", () => {
+          it("inner and outer afterCommitCreate called", async () => {
             let em1: EntityManager;
             let trx1: Transaction;
             const work = async () => {
-              await em.transactional(async em => {
+              await em.transactional(async (em) => {
                 em1 = em;
                 trx1 = em.getTransactionContext();
-                username = 'dnested1';
+                username = "dnested1";
                 const user = new User(username);
                 em.persist(user);
-                await em.transactional(async em => {
-                  username = 'dnested2';
+                await em.transactional(async (em) => {
+                  username = "dnested2";
                   const user = new User(username);
                   em.persist(user);
                 });
@@ -440,82 +521,119 @@ describe('GH issue 1175', () => {
             };
             await expect(work()).resolves.toBeUndefined();
             expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
-            expect(beforeTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: undefined }));
+            expect(beforeTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: undefined }),
+            );
             expect(afterTransactionStart).toHaveBeenCalledTimes(1);
-            expect(afterTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCreate).toHaveBeenCalledTimes(2);
-            expect(afterCreate).toHaveBeenNthCalledWith(1, expect.objectContaining({ entity: expect.objectContaining({ username: 'dnested2' }) }));
-            expect(afterCreate).toHaveBeenNthCalledWith(2, expect.objectContaining({ entity: expect.objectContaining({ username: 'dnested1' }) }));
+            expect(afterCreate).toHaveBeenNthCalledWith(
+              1,
+              expect.objectContaining({
+                entity: expect.objectContaining({ username: "dnested2" }),
+              }),
+            );
+            expect(afterCreate).toHaveBeenNthCalledWith(
+              2,
+              expect.objectContaining({
+                entity: expect.objectContaining({ username: "dnested1" }),
+              }),
+            );
             expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
-            expect(afterTransactionCommit).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionCommit).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-            expect(afterCommitCreate).toHaveBeenNthCalledWith(1, expect.objectContaining({ entity: expect.objectContaining({ username: 'dnested1' }) }));
+            expect(afterCommitCreate).toHaveBeenNthCalledWith(
+              1,
+              expect.objectContaining({
+                entity: expect.objectContaining({ username: "dnested1" }),
+              }),
+            );
             // expect(afterCommitCreate).toHaveBeenNthCalledWith(2, expect.objectContaining({ entity: expect.objectContaining({ username: 'dnested2' }) }));
             expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
           });
-          it('no afterCommitCreate called if inner transaction fails', async () => {
+          it("no afterCommitCreate called if inner transaction fails", async () => {
             const username = uuid();
             let em1: EntityManager;
             let trx1: Transaction;
             const work = async () => {
-              await em.transactional(async em => {
+              await em.transactional(async (em) => {
                 em1 = em;
                 trx1 = em.getTransactionContext();
                 const user = new User(username);
                 em.persist(user);
-                await em.transactional(async em => {
+                await em.transactional(async (em) => {
                   const user = new User(username);
                   em.persist(user);
                 });
               });
             };
-            await expect(work()).rejects.toThrow(/^COMMIT.+duplicate key value/);
+            await expect(work()).rejects.toThrow(
+              /^COMMIT.+duplicate key value/,
+            );
             expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
-            expect(beforeTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: undefined }));
+            expect(beforeTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: undefined }),
+            );
             expect(afterTransactionStart).toHaveBeenCalledTimes(1);
-            expect(afterTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCreate).toHaveBeenCalledTimes(2);
             expect(afterTransactionCommit).toHaveBeenCalledTimes(0);
             expect(afterCommitCreate).toHaveBeenCalledTimes(0);
             expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
-            expect(afterTransactionRollback).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionRollback).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
           });
-          it('no afterCommitCreate called if outer transaction fails before running inner transaction', async () => {
+          it("no afterCommitCreate called if outer transaction fails before running inner transaction", async () => {
             let em1: EntityManager;
             let trx1: Transaction;
             const work = async () => {
-              await em.transactional(async em => {
+              await em.transactional(async (em) => {
                 em1 = em;
                 trx1 = em.getTransactionContext();
                 const user = new User(username);
                 em.persist(user);
                 await em.flush();
-                await em.transactional(async em => {
+                await em.transactional(async (em) => {
                   const user = new User(username);
                   em.persist(user);
                 });
               });
             };
-            await expect(work()).rejects.toThrow(/^COMMIT.+duplicate key value/);
+            await expect(work()).rejects.toThrow(
+              /^COMMIT.+duplicate key value/,
+            );
             expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
-            expect(beforeTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: undefined }));
+            expect(beforeTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: undefined }),
+            );
             expect(afterTransactionStart).toHaveBeenCalledTimes(1);
-            expect(afterTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCreate).toHaveBeenCalledTimes(2);
             expect(afterTransactionCommit).toHaveBeenCalledTimes(0);
             expect(afterCommitCreate).toHaveBeenCalledTimes(0);
             expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
-            expect(afterTransactionRollback).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionRollback).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
           });
-          it('no afterCommitCreate called if outer transaction fails after running inner transaction', async () => {
+          it("no afterCommitCreate called if outer transaction fails after running inner transaction", async () => {
             const username = uuid();
             let em1: EntityManager;
             let trx1: Transaction;
             const work = async () => {
-              await em.transactional(async em => {
+              await em.transactional(async (em) => {
                 em1 = em;
                 trx1 = em.getTransactionContext();
-                await em.transactional(async em => {
+                await em.transactional(async (em) => {
                   const user = new User(username);
                   em.persist(user);
                 });
@@ -523,23 +641,31 @@ describe('GH issue 1175', () => {
                 em.persist(user);
               });
             };
-            await expect(work()).rejects.toThrow(/^COMMIT.+duplicate key value/);
+            await expect(work()).rejects.toThrow(
+              /^COMMIT.+duplicate key value/,
+            );
             expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
-            expect(beforeTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: undefined }));
+            expect(beforeTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: undefined }),
+            );
             expect(afterTransactionStart).toHaveBeenCalledTimes(1);
-            expect(afterTransactionStart).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionStart).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
             expect(afterCreate).toHaveBeenCalledTimes(2);
             expect(afterTransactionCommit).toHaveBeenCalledTimes(0);
             expect(afterCommitCreate).toHaveBeenCalledTimes(0);
             expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
-            expect(afterTransactionRollback).toHaveBeenCalledWith(expect.objectContaining({ em: em1!, transaction: trx1 }));
+            expect(afterTransactionRollback).toHaveBeenCalledWith(
+              expect.objectContaining({ em: em1!, transaction: trx1 }),
+            );
           });
         });
       });
 
-      describe('explicit transactions with explicit begin/commit/rollback method calls', () => {
+      describe("explicit transactions with explicit begin/commit/rollback method calls", () => {
         let username: string;
-        it('creating a new user succeeds', async () => {
+        it("creating a new user succeeds", async () => {
           await em.begin();
           username = uuid();
           const user = new User(username);
@@ -549,10 +675,14 @@ describe('GH issue 1175', () => {
           expect(afterCreate).toHaveBeenCalledTimes(1);
           expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
           expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-          expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+          expect(afterCommitCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+              entity: expect.objectContaining({ username }),
+            }),
+          );
           expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
         });
-        it('afterCreate hook is called when commit() fails', async () => {
+        it("afterCreate hook is called when commit() fails", async () => {
           await em.begin();
           const work = async () => {
             try {
@@ -575,10 +705,9 @@ describe('GH issue 1175', () => {
     });
   });
 
-  describe('mongo', () => {
+  describe("mongo", () => {
     @Entity()
     class Entity1175 {
-
       @PrimaryKey()
       _id!: ObjectId;
 
@@ -589,7 +718,6 @@ describe('GH issue 1175', () => {
       constructor(username: string) {
         this.username = username;
       }
-
     }
 
     let orm: MikroORM<MongoDriver>;
@@ -597,13 +725,13 @@ describe('GH issue 1175', () => {
     beforeAll(async () => {
       orm = await MikroORM.init({
         entities: [Entity1175],
-        clientUrl: await initMongoReplSet('mikro-orm-1175'),
+        clientUrl: await initMongoReplSet("mikro-orm-1175"),
         driver: MongoDriver,
         implicitTransactions: true,
         subscribers: [testSubscriber],
       });
       await orm.em.nativeDelete(Entity1175, {});
-      await orm.em.insert(Entity1175, { username: 'test1' });
+      await orm.em.insert(Entity1175, { username: "test1" });
       await orm.schema.ensureIndexes();
     });
 
@@ -616,9 +744,9 @@ describe('GH issue 1175', () => {
       em = orm.em.fork();
     });
 
-    describe('implicit transactions', () => {
+    describe("implicit transactions", () => {
       let username: string;
-      it('afterCommitCreate called when transaction succeeds', async () => {
+      it("afterCommitCreate called when transaction succeeds", async () => {
         username = uuid();
         const user = new Entity1175(username);
         em.persist(user);
@@ -626,18 +754,22 @@ describe('GH issue 1175', () => {
         await expect(em.flush()).resolves.toBeUndefined();
         expect(afterCreate).toHaveBeenCalledTimes(1);
         expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
-        expect(afterTransactionCommit).toHaveBeenCalledWith(expect.objectContaining({ em, uow: expect.any(UnitOfWork) }));
+        expect(afterTransactionCommit).toHaveBeenCalledWith(
+          expect.objectContaining({ em, uow: expect.any(UnitOfWork) }),
+        );
         expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-        expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+        expect(afterCommitCreate).toHaveBeenCalledWith(
+          expect.objectContaining({
+            entity: expect.objectContaining({ username }),
+          }),
+        );
         expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
       });
-      it('afterCommitCreate not called when transaction fails', async () => {
+      it("afterCommitCreate not called when transaction fails", async () => {
         const user = new Entity1175(username);
         em.persist(user);
 
-        await expect(em.flush()).rejects.toThrow(
-          /^E11000 duplicate key error/,
-        );
+        await expect(em.flush()).rejects.toThrow(/^E11000 duplicate key error/);
         expect(afterCreate).toHaveBeenCalledTimes(0);
         expect(afterTransactionCommit).toHaveBeenCalledTimes(0);
         expect(afterCommitCreate).toHaveBeenCalledTimes(0);
@@ -647,8 +779,8 @@ describe('GH issue 1175', () => {
 
     describe('explicit transactions with "transactional()"', () => {
       let username: string;
-      it('afterCommitCreate called when transaction succeeds', async () => {
-        const work = em.transactional(async em => {
+      it("afterCommitCreate called when transaction succeeds", async () => {
+        const work = em.transactional(async (em) => {
           username = uuid();
           const user = new Entity1175(username);
           em.persist(user);
@@ -658,11 +790,15 @@ describe('GH issue 1175', () => {
         expect(afterCreate).toHaveBeenCalledTimes(1);
         expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
         expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-        expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+        expect(afterCommitCreate).toHaveBeenCalledWith(
+          expect.objectContaining({
+            entity: expect.objectContaining({ username }),
+          }),
+        );
         expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
       });
-      it('afterCommitCreate not called when transaction fails', async () => {
-        const work = em.transactional(async em => {
+      it("afterCommitCreate not called when transaction fails", async () => {
+        const work = em.transactional(async (em) => {
           const user = new Entity1175(username);
           em.persist(user);
         });
@@ -673,21 +809,23 @@ describe('GH issue 1175', () => {
         expect(afterCommitCreate).toHaveBeenCalledTimes(0);
         expect(afterTransactionRollback).toHaveBeenCalledTimes(1);
       });
-      describe('nested transactions', () => {
-        it('not allowed', async () => {
+      describe("nested transactions", () => {
+        it("not allowed", async () => {
           const work = async () => {
-            await em.transactional(async em => {
-              username = 'nested1';
+            await em.transactional(async (em) => {
+              username = "nested1";
               const user = new Entity1175(username);
               em.persist(user);
-              await em.transactional(async em => {
-                username = 'nested2';
+              await em.transactional(async (em) => {
+                username = "nested2";
                 const user = new Entity1175(username);
                 em.persist(user);
               });
             });
           };
-          await expect(work()).rejects.toThrow(/Transaction already in progress/);
+          await expect(work()).rejects.toThrow(
+            /Transaction already in progress/,
+          );
           expect(beforeTransactionStart).toHaveBeenCalledTimes(1);
           expect(afterCreate).toHaveBeenCalledTimes(0);
           expect(afterTransactionCommit).toHaveBeenCalledTimes(0);
@@ -697,9 +835,9 @@ describe('GH issue 1175', () => {
       });
     });
 
-    describe('explicit transactions with explicit begin/commit method calls', () => {
+    describe("explicit transactions with explicit begin/commit method calls", () => {
       let username: string;
-      it('creating a new user succeeds', async () => {
+      it("creating a new user succeeds", async () => {
         await em.begin();
         username = uuid();
         const user = new Entity1175(username);
@@ -709,10 +847,14 @@ describe('GH issue 1175', () => {
         expect(afterCreate).toHaveBeenCalledTimes(1);
         expect(afterTransactionCommit).toHaveBeenCalledTimes(1);
         expect(afterCommitCreate).toHaveBeenCalledTimes(1);
-        expect(afterCommitCreate).toHaveBeenCalledWith(expect.objectContaining({ entity: expect.objectContaining({ username }) }));
+        expect(afterCommitCreate).toHaveBeenCalledWith(
+          expect.objectContaining({
+            entity: expect.objectContaining({ username }),
+          }),
+        );
         expect(afterTransactionRollback).toHaveBeenCalledTimes(0);
       });
-      it('afterCreate hook is called when commit() fails', async () => {
+      it("afterCreate hook is called when commit() fails", async () => {
         await em.begin();
         const work = async () => {
           try {

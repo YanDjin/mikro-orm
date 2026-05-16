@@ -1,33 +1,35 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Sea {
-
   @PrimaryKey()
   id!: number;
 
   @OneToMany(() => Fish, ({ sea }) => sea)
   fishes = new Collection<Fish>(this);
-
 }
 
 @Entity()
 class Fish {
-
   @PrimaryKey()
   id!: number;
 
   @ManyToOne(() => Sea)
   sea!: Sea;
-
 }
 
 let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Sea, Fish],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.getSchemaGenerator().createSchema();
 });
@@ -35,7 +37,7 @@ beforeAll(async () => {
 beforeEach(() => orm.schema.clearDatabase());
 afterAll(() => orm.close(true));
 
-test('when persisting the whole model, it is slow', async () => {
+test("when persisting the whole model, it is slow", async () => {
   const mediterranean = new Sea();
   const groupers = Array.from({ length: 10_000 }).map(() => new Fish());
   mediterranean.fishes.add(groupers);
@@ -43,7 +45,7 @@ test('when persisting the whole model, it is slow', async () => {
   await orm.em.flush();
 });
 
-test('when flushing the container before the contained data, it is fast', async () => {
+test("when flushing the container before the contained data, it is fast", async () => {
   const mediterranean = new Sea();
   await orm.em.persistAndFlush(mediterranean);
   const groupers = Array.from({ length: 10_000 }).map(() => new Fish());

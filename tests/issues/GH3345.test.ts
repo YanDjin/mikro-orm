@@ -1,23 +1,31 @@
-import type { EventSubscriber, FlushEventArgs } from '@mikro-orm/sqlite';
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import type {
+  EventSubscriber,
+  FlushEventArgs,
+} from "@yandjin-mikro-orm/sqlite";
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
-@Entity({ tableName: 'customers' })
+@Entity({ tableName: "customers" })
 class Customer {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
-  name: string = 'Foo';
+  name: string = "Foo";
 
-  @OneToMany(() => Order, order => order.customer)
+  @OneToMany(() => Order, (order) => order.customer)
   orders = new Collection<Order>(this);
-
 }
 
-@Entity({ tableName: 'orders' })
+@Entity({ tableName: "orders" })
 class Order {
-
   @PrimaryKey()
   id!: number;
 
@@ -26,11 +34,9 @@ class Order {
 
   @ManyToOne(() => Customer)
   customer!: Customer;
-
 }
 
 class OrdersSubscriber implements EventSubscriber<Order> {
-
   static emptyChangelogs: boolean[] = [];
 
   async afterFlush(args: FlushEventArgs): Promise<void> {
@@ -38,13 +44,16 @@ class OrdersSubscriber implements EventSubscriber<Order> {
 
     for (const changeSet of changeSets) {
       if (changeSet.entity instanceof Order) {
-        OrdersSubscriber.emptyChangelogs.push(args.uow.getChangeSets().length === 0);
-        await args.em.populate(changeSet.entity, ['customer']);
-        OrdersSubscriber.emptyChangelogs.push(args.uow.getChangeSets().length === 0);
+        OrdersSubscriber.emptyChangelogs.push(
+          args.uow.getChangeSets().length === 0,
+        );
+        await args.em.populate(changeSet.entity, ["customer"]);
+        OrdersSubscriber.emptyChangelogs.push(
+          args.uow.getChangeSets().length === 0,
+        );
       }
     }
   }
-
 }
 
 let orm: MikroORM;
@@ -52,7 +61,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Customer],
-    dbName: ':memory:',
+    dbName: ":memory:",
     subscribers: [OrdersSubscriber],
   });
   await orm.schema.createSchema();
@@ -63,7 +72,10 @@ afterAll(async () => {
 });
 
 test(`GH issue 3345`, async () => {
-  const parent = orm.em.create(Customer, { name: 'asd', orders: [{ value: 123 }, { value: 456 }] });
+  const parent = orm.em.create(Customer, {
+    name: "asd",
+    orders: [{ value: 123 }, { value: 456 }],
+  });
   await orm.em.persist(parent).flush();
 
   parent.orders[0].value = 666;
@@ -74,5 +86,14 @@ test(`GH issue 3345`, async () => {
   o.value = 3223232;
   await orm.em.flush();
 
-  expect(OrdersSubscriber.emptyChangelogs).toEqual([false, false, false, false, false, false, false, false]);
+  expect(OrdersSubscriber.emptyChangelogs).toEqual([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 });

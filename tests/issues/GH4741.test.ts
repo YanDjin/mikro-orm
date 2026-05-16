@@ -8,66 +8,59 @@ import {
   PrimaryKey,
   Rel,
   wrap,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Division {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne({ entity: 'Outer', deleteRule: 'cascade' })
+  @ManyToOne({ entity: "Outer", deleteRule: "cascade" })
   outer!: Rel<Outer>;
 
-  @OneToMany({ entity: 'Inner', mappedBy: 'division', orphanRemoval: true })
+  @OneToMany({ entity: "Inner", mappedBy: "division", orphanRemoval: true })
   inners = new Collection<Inner>(this);
-
 }
 
 @Entity()
 class Geometry {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Entity()
 class Inner {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne({ entity: 'Geometry' })
+  @ManyToOne({ entity: "Geometry" })
   geometry!: Geometry;
 
-  @ManyToOne({ entity: 'Division', deleteRule: 'cascade' })
+  @ManyToOne({ entity: "Division", deleteRule: "cascade" })
   division!: Division;
-
 }
 
 @Entity()
 class Outer {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany('Division', (item: Division) => item.outer, { orphanRemoval: true })
+  @OneToMany("Division", (item: Division) => item.outer, {
+    orphanRemoval: true,
+  })
   divisions = new Collection<Division>(this);
 
-  @OneToOne({ entity: 'Division', owner: true, nullable: true })
+  @OneToOne({ entity: "Division", owner: true, nullable: true })
   activeDivision?: Division;
-
 }
-
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Outer, Division, Inner, Geometry],
-    dbName: ':memory:',
+    dbName: ":memory:",
     loadStrategy: LoadStrategy.JOINED,
   });
   await orm.schema.refreshDatabase();
@@ -103,15 +96,17 @@ beforeEach(async () => {
 // Outer --> active Division --> [Inners] --> Geometry
 test(`GH4741 issue (1/3)`, async () => {
   const em = orm.em.fork();
-  const qb = em.createQueryBuilder(Outer, 'o');
+  const qb = em.createQueryBuilder(Outer, "o");
 
-  qb.select('*');
-  qb.leftJoinAndSelect('o.activeDivision', 'ad');
-  qb.leftJoinAndSelect('ad.inners', 'ai');
-  qb.leftJoinAndSelect('ai.geometry', 'g');
+  qb.select("*");
+  qb.leftJoinAndSelect("o.activeDivision", "ad");
+  qb.leftJoinAndSelect("ad.inners", "ai");
+  qb.leftJoinAndSelect("ai.geometry", "g");
 
   const q = qb.getKnexQuery().toSQL();
-  expect(q.sql).toBe('select `o`.*, `ad`.`id` as `ad__id`, `ad`.`outer_id` as `ad__outer_id`, `ai`.`id` as `ai__id`, `ai`.`geometry_id` as `ai__geometry_id`, `ai`.`division_id` as `ai__division_id`, `g`.`id` as `g__id` from `outer` as `o` left join `division` as `ad` on `o`.`active_division_id` = `ad`.`id` left join `inner` as `ai` on `ad`.`id` = `ai`.`division_id` left join `geometry` as `g` on `ai`.`geometry_id` = `g`.`id`');
+  expect(q.sql).toBe(
+    "select `o`.*, `ad`.`id` as `ad__id`, `ad`.`outer_id` as `ad__outer_id`, `ai`.`id` as `ai__id`, `ai`.`geometry_id` as `ai__geometry_id`, `ai`.`division_id` as `ai__division_id`, `g`.`id` as `g__id` from `outer` as `o` left join `division` as `ad` on `o`.`active_division_id` = `ad`.`id` left join `inner` as `ai` on `ad`.`id` = `ai`.`division_id` left join `geometry` as `g` on `ai`.`geometry_id` = `g`.`id`",
+  );
 
   const res = await qb.getResult();
   expect(res.length).toBe(1);
@@ -124,7 +119,7 @@ test(`GH4741 issue (1/3)`, async () => {
 
   if (activeDivision) {
     const inners = activeDivision.inners;
-    expect(inners.isInitialized()).toBeTruthy();	// Succeeds
+    expect(inners.isInitialized()).toBeTruthy(); // Succeeds
     expect(inners.count()).toBe(1);
 
     const inner = inners.getItems()[0];
@@ -132,25 +127,26 @@ test(`GH4741 issue (1/3)`, async () => {
 
     const geom = inner.geometry;
     expect(geom).toBeInstanceOf(Geometry);
-    expect(wrap(geom).isInitialized()).toBeTruthy();	// Succeeds
+    expect(wrap(geom).isInitialized()).toBeTruthy(); // Succeeds
   }
 });
 
 // Outer --> active Division --> [Inners] --> Geometry
 //       |-> [Divisions]
 test(`GH4741 issue (2/3)`, async () => {
-
   const em = orm.em.fork();
-  const qb = em.createQueryBuilder(Outer, 'o');
+  const qb = em.createQueryBuilder(Outer, "o");
 
-  qb.select('*');
-  qb.leftJoinAndSelect('o.divisions', 'd');	// extra join
-  qb.leftJoinAndSelect('o.activeDivision', 'ad');
-  qb.leftJoinAndSelect('ad.inners', 'ai');
-  qb.leftJoinAndSelect('ai.geometry', 'g');
+  qb.select("*");
+  qb.leftJoinAndSelect("o.divisions", "d"); // extra join
+  qb.leftJoinAndSelect("o.activeDivision", "ad");
+  qb.leftJoinAndSelect("ad.inners", "ai");
+  qb.leftJoinAndSelect("ai.geometry", "g");
 
   const q = qb.getKnexQuery().toSQL();
-  expect(q.sql).toBe('select `o`.*, `d`.`id` as `d__id`, `d`.`outer_id` as `d__outer_id`, `ad`.`id` as `ad__id`, `ad`.`outer_id` as `ad__outer_id`, `ai`.`id` as `ai__id`, `ai`.`geometry_id` as `ai__geometry_id`, `ai`.`division_id` as `ai__division_id`, `g`.`id` as `g__id` from `outer` as `o` left join `division` as `d` on `o`.`id` = `d`.`outer_id` left join `division` as `ad` on `o`.`active_division_id` = `ad`.`id` left join `inner` as `ai` on `ad`.`id` = `ai`.`division_id` left join `geometry` as `g` on `ai`.`geometry_id` = `g`.`id`');
+  expect(q.sql).toBe(
+    "select `o`.*, `d`.`id` as `d__id`, `d`.`outer_id` as `d__outer_id`, `ad`.`id` as `ad__id`, `ad`.`outer_id` as `ad__outer_id`, `ai`.`id` as `ai__id`, `ai`.`geometry_id` as `ai__geometry_id`, `ai`.`division_id` as `ai__division_id`, `g`.`id` as `g__id` from `outer` as `o` left join `division` as `d` on `o`.`id` = `d`.`outer_id` left join `division` as `ad` on `o`.`active_division_id` = `ad`.`id` left join `inner` as `ai` on `ad`.`id` = `ai`.`division_id` left join `geometry` as `g` on `ai`.`geometry_id` = `g`.`id`",
+  );
 
   const res = await qb.getResult();
   expect(res.length).toBe(1);
@@ -163,7 +159,7 @@ test(`GH4741 issue (2/3)`, async () => {
 
   if (activeDivision) {
     const inners = activeDivision.inners;
-    expect(inners.isInitialized()).toBeTruthy();	// Succeeds
+    expect(inners.isInitialized()).toBeTruthy(); // Succeeds
     expect(inners.count()).toBe(1);
 
     const inner = inners.getItems()[0];
@@ -171,7 +167,7 @@ test(`GH4741 issue (2/3)`, async () => {
 
     const geom = inner.geometry;
     expect(geom).toBeInstanceOf(Geometry);
-    expect(wrap(geom).isInitialized()).toBeTruthy();	// Succeeds
+    expect(wrap(geom).isInitialized()).toBeTruthy(); // Succeeds
   }
 });
 
@@ -179,17 +175,19 @@ test(`GH4741 issue (2/3)`, async () => {
 //       |-> [Divisions] --> [Inners]
 test(`GH4741 issue (3/3)`, async () => {
   const em = orm.em.fork();
-  const qb = em.createQueryBuilder(Outer, 'o');
+  const qb = em.createQueryBuilder(Outer, "o");
 
-  qb.select('*');
-  qb.leftJoinAndSelect('o.divisions', 'd');
-  qb.leftJoinAndSelect('d.inners', 'i');		// extra join
-  qb.leftJoinAndSelect('o.activeDivision', 'ad');
-  qb.leftJoinAndSelect('ad.inners', 'ai');
-  qb.leftJoinAndSelect('ai.geometry', 'g');
+  qb.select("*");
+  qb.leftJoinAndSelect("o.divisions", "d");
+  qb.leftJoinAndSelect("d.inners", "i"); // extra join
+  qb.leftJoinAndSelect("o.activeDivision", "ad");
+  qb.leftJoinAndSelect("ad.inners", "ai");
+  qb.leftJoinAndSelect("ai.geometry", "g");
 
   const q = qb.getKnexQuery().toSQL();
-  expect(q.sql).toBe('select `o`.*, `d`.`id` as `d__id`, `d`.`outer_id` as `d__outer_id`, `i`.`id` as `i__id`, `i`.`geometry_id` as `i__geometry_id`, `i`.`division_id` as `i__division_id`, `ad`.`id` as `ad__id`, `ad`.`outer_id` as `ad__outer_id`, `ai`.`id` as `ai__id`, `ai`.`geometry_id` as `ai__geometry_id`, `ai`.`division_id` as `ai__division_id`, `g`.`id` as `g__id` from `outer` as `o` left join `division` as `d` on `o`.`id` = `d`.`outer_id` left join `inner` as `i` on `d`.`id` = `i`.`division_id` left join `division` as `ad` on `o`.`active_division_id` = `ad`.`id` left join `inner` as `ai` on `ad`.`id` = `ai`.`division_id` left join `geometry` as `g` on `ai`.`geometry_id` = `g`.`id`');
+  expect(q.sql).toBe(
+    "select `o`.*, `d`.`id` as `d__id`, `d`.`outer_id` as `d__outer_id`, `i`.`id` as `i__id`, `i`.`geometry_id` as `i__geometry_id`, `i`.`division_id` as `i__division_id`, `ad`.`id` as `ad__id`, `ad`.`outer_id` as `ad__outer_id`, `ai`.`id` as `ai__id`, `ai`.`geometry_id` as `ai__geometry_id`, `ai`.`division_id` as `ai__division_id`, `g`.`id` as `g__id` from `outer` as `o` left join `division` as `d` on `o`.`id` = `d`.`outer_id` left join `inner` as `i` on `d`.`id` = `i`.`division_id` left join `division` as `ad` on `o`.`active_division_id` = `ad`.`id` left join `inner` as `ai` on `ad`.`id` = `ai`.`division_id` left join `geometry` as `g` on `ai`.`geometry_id` = `g`.`id`",
+  );
 
   const res = await qb.getResult();
   expect(res.length).toBe(1);
@@ -202,7 +200,7 @@ test(`GH4741 issue (3/3)`, async () => {
 
   if (activeDivision) {
     const inners = activeDivision.inners;
-    expect(inners.isInitialized()).toBeTruthy();	// Succeeds
+    expect(inners.isInitialized()).toBeTruthy(); // Succeeds
     expect(inners.count()).toBe(1);
 
     const inner = inners.getItems()[0];
@@ -210,6 +208,6 @@ test(`GH4741 issue (3/3)`, async () => {
 
     const geom = inner.geometry;
     expect(geom).toBeInstanceOf(Geometry);
-    expect(wrap(geom).isInitialized()).toBeTruthy();	// Fails
+    expect(wrap(geom).isInitialized()).toBeTruthy(); // Fails
   }
 });

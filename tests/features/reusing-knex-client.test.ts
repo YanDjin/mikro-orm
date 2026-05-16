@@ -1,15 +1,15 @@
-import { MikroORM } from '@mikro-orm/better-sqlite';
-import { Car2, CarOwner2, Sandwich, User2 } from '../entities-sql';
+import { MikroORM } from "@yandjin-mikro-orm/better-sqlite";
+import { Car2, CarOwner2, Sandwich, User2 } from "../entities-sql";
 
-test('should allow reusing knex connection', async () => {
+test("should allow reusing knex connection", async () => {
   const orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [Car2, CarOwner2, User2, Sandwich],
   });
   const knex = orm.em.getKnex();
 
   const orm2 = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [Car2, CarOwner2, User2, Sandwich],
     driverOptions: knex,
   });

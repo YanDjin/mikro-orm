@@ -10,9 +10,9 @@ import {
   Property,
   ref,
   Ref,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { TsMorphMetadataProvider } from "@yandjin-mikro-orm/reflection";
 
 enum AccountType {
   User = 1,
@@ -21,7 +21,6 @@ enum AccountType {
 
 @Entity()
 class Account {
-
   @PrimaryKey()
   id!: number;
 
@@ -31,10 +30,10 @@ class Account {
   @Property()
   balance: number = 0;
 
-  @OneToOne(() => User, 'account')
+  @OneToOne(() => User, "account")
   user?: Ref<User>;
 
-  @OneToOne(() => Organization, 'account')
+  @OneToOne(() => Organization, "account")
   organization?: Ref<Organization>;
 
   @Enum(() => AccountType)
@@ -45,12 +44,10 @@ class Account {
     this.balance = startBalance;
     this.type = type;
   }
-
 }
 
 @Entity()
 class User {
-
   @OneToOne({ primary: true })
   account!: Ref<Account>;
 
@@ -60,35 +57,32 @@ class User {
   @Property({ hidden: true })
   password!: string;
 
-  @OneToMany(() => Organization, org => org.owner)
+  @OneToMany(() => Organization, (org) => org.owner)
   organizations = new Collection<Organization>(this);
 
-  [PrimaryKeyProp]?: 'account';
+  [PrimaryKeyProp]?: "account";
 
   constructor(account: Account, username: string, password: string) {
     this.account = ref(account);
     this.username = username;
     this.password = password;
   }
-
 }
 
 @Entity()
 class Organization {
-
   @OneToOne({ primary: true })
   account!: Ref<Account>;
 
   @ManyToOne()
   owner!: Ref<User>;
 
-  [PrimaryKeyProp]?: 'account';
+  [PrimaryKeyProp]?: "account";
 
   constructor(account: Account, owner: User) {
     this.account = ref(account);
     this.owner = ref(owner);
   }
-
 }
 
 let orm: MikroORM;
@@ -96,7 +90,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Organization, Account, User],
-    dbName: ':memory:',
+    dbName: ":memory:",
     metadataProvider: TsMorphMetadataProvider,
     metadataCache: { enabled: false },
   });
@@ -107,7 +101,7 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('#5144', async () => {
+test("#5144", async () => {
   const schema = await orm.schema.getCreateSchemaSQL();
   expect(schema).toMatchSnapshot();
 });

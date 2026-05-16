@@ -1,10 +1,19 @@
-import { Collection, Entity, Ref, ManyToOne, MikroORM, OneToMany, OptionalProps, PrimaryKey, Property } from '@mikro-orm/sqlite';
-import { performance } from 'perf_hooks';
+import {
+  Collection,
+  Entity,
+  Ref,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  OptionalProps,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
+import { performance } from "perf_hooks";
 
 @Entity()
 class VendorBuyerRelationship {
-
-  [OptionalProps]?: 'created';
+  [OptionalProps]?: "created";
 
   @PrimaryKey()
   id!: bigint;
@@ -18,15 +27,13 @@ class VendorBuyerRelationship {
   @ManyToOne(() => Member, { ref: true })
   vendor!: Ref<Member>;
 
-  @OneToMany(() => Order, o => o.buyerRel)
+  @OneToMany(() => Order, (o) => o.buyerRel)
   orders = new Collection<Order>(this);
-
 }
 
 @Entity()
 class Member {
-
-  [OptionalProps]?: 'created';
+  [OptionalProps]?: "created";
 
   @PrimaryKey()
   id!: bigint;
@@ -34,24 +41,22 @@ class Member {
   @Property({ onCreate: () => new Date() })
   created!: Date;
 
-  @OneToMany(() => Member, member => member.parent)
+  @OneToMany(() => Member, (member) => member.parent)
   children = new Collection<Member>(this);
 
-  @OneToMany(() => VendorBuyerRelationship, rel => rel.vendor)
+  @OneToMany(() => VendorBuyerRelationship, (rel) => rel.vendor)
   buyers = new Collection<VendorBuyerRelationship>(this);
 
-  @OneToMany(() => Order, order => order.vendor)
+  @OneToMany(() => Order, (order) => order.vendor)
   orders = new Collection<Order>(this);
 
   @ManyToOne(() => Member, { ref: true, nullable: true })
   parent?: Ref<Member>;
-
 }
 
 @Entity()
 class Job {
-
-  [OptionalProps]?: 'rejected';
+  [OptionalProps]?: "rejected";
 
   @PrimaryKey()
   id!: bigint;
@@ -62,7 +67,7 @@ class Job {
   @ManyToOne(() => Order, { ref: true, nullable: true })
   order?: Ref<Order>;
 
-  @OneToMany(() => Job, job => job.parent)
+  @OneToMany(() => Job, (job) => job.parent)
   children = new Collection<Job>(this);
 
   @ManyToOne(() => Job, { ref: true, nullable: true })
@@ -79,13 +84,11 @@ class Job {
 
   @ManyToOne(() => Member, { ref: true, nullable: true })
   assignee?: Ref<Member>;
-
 }
 
 @Entity()
 export class Order {
-
-  [OptionalProps]?: 'created';
+  [OptionalProps]?: "created";
 
   @PrimaryKey()
   id!: bigint;
@@ -96,28 +99,27 @@ export class Order {
   @ManyToOne(() => VendorBuyerRelationship, { ref: true, nullable: true })
   buyerRel?: Ref<VendorBuyerRelationship>;
 
-  @OneToMany(() => Job, job => job.order)
+  @OneToMany(() => Job, (job) => job.order)
   jobs = new Collection<Job>(this);
 
   @ManyToOne(() => Member, { ref: true, nullable: true })
   vendor?: Ref<Member>;
-
 }
 
-describe('GH issue 2379', () => {
+describe("GH issue 2379", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Order, Job, VendorBuyerRelationship, Member],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('test cpu issues', async () => {
+  test("test cpu issues", async () => {
     const start = performance.now();
     const rels = [];
     const vendor = new Member();
@@ -152,7 +154,7 @@ describe('GH issue 2379', () => {
     await orm.em.flush();
     orm.em.clear();
 
-    const jobs = await orm.em.find(Job, { }, { populate: ['order'] });
+    const jobs = await orm.em.find(Job, {}, { populate: ["order"] });
     await orm.em.flush();
     const took = performance.now() - start;
 
@@ -160,5 +162,4 @@ describe('GH issue 2379', () => {
       process.stdout.write(`flush test took ${took}\n`);
     }
   });
-
 });

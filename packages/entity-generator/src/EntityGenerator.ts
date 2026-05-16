@@ -6,7 +6,7 @@ import {
   type NamingStrategy,
   ReferenceKind,
   Utils,
-} from '@mikro-orm/core';
+} from "@yandjin-mikro-orm/core";
 import {
   type AbstractSqlConnection,
   type AbstractSqlDriver,
@@ -15,13 +15,12 @@ import {
   DatabaseSchema,
   type EntityManager,
   type SchemaHelper,
-} from '@mikro-orm/knex';
-import { ensureDir, writeFile } from 'fs-extra';
-import { EntitySchemaSourceFile } from './EntitySchemaSourceFile';
-import { SourceFile } from './SourceFile';
+} from "@yandjin-mikro-orm/knex";
+import { ensureDir, writeFile } from "fs-extra";
+import { EntitySchemaSourceFile } from "./EntitySchemaSourceFile";
+import { SourceFile } from "./SourceFile";
 
 export class EntityGenerator {
-
   private readonly config: Configuration;
   private readonly driver: AbstractSqlDriver;
   private readonly platform: AbstractSqlPlatform;
@@ -41,65 +40,109 @@ export class EntityGenerator {
   }
 
   static register(orm: MikroORM): void {
-    orm.config.registerExtension('@mikro-orm/entity-generator', () => new EntityGenerator(orm.em as EntityManager));
+    orm.config.registerExtension(
+      "@mikro-orm/entity-generator",
+      () => new EntityGenerator(orm.em as EntityManager),
+    );
   }
 
   async generate(options: GenerateOptions = {}): Promise<string[]> {
-    options = Utils.mergeConfig({}, this.config.get('entityGenerator'), options);
-    const schema = await DatabaseSchema.create(this.connection, this.platform, this.config);
+    options = Utils.mergeConfig(
+      {},
+      this.config.get("entityGenerator"),
+      options,
+    );
+    const schema = await DatabaseSchema.create(
+      this.connection,
+      this.platform,
+      this.config,
+    );
     const metadata = await this.getEntityMetadata(schema, options);
-    const defaultPath = `${this.config.get('baseDir')}/generated-entities`;
+    const defaultPath = `${this.config.get("baseDir")}/generated-entities`;
     const baseDir = Utils.normalizePath(options.path ?? defaultPath);
 
     for (const meta of metadata) {
       if (!meta.pivotTable || this.referencedEntities.has(meta)) {
         if (options.entitySchema) {
-          this.sources.push(new EntitySchemaSourceFile(meta, this.namingStrategy, this.platform, { ...options, scalarTypeInDecorator: true }));
+          this.sources.push(
+            new EntitySchemaSourceFile(
+              meta,
+              this.namingStrategy,
+              this.platform,
+              { ...options, scalarTypeInDecorator: true },
+            ),
+          );
         } else {
-          this.sources.push(new SourceFile(meta, this.namingStrategy, this.platform, options));
+          this.sources.push(
+            new SourceFile(meta, this.namingStrategy, this.platform, options),
+          );
         }
       }
     }
 
     if (options.save) {
       await ensureDir(baseDir);
-      await Promise.all(this.sources.map(file => writeFile(baseDir + '/' + file.getBaseName(), file.generate(), { flush: true })));
+      await Promise.all(
+        this.sources.map((file) =>
+          writeFile(baseDir + "/" + file.getBaseName(), file.generate(), {
+            flush: true,
+          }),
+        ),
+      );
     }
 
-    return this.sources.map(file => file.generate());
+    return this.sources.map((file) => file.generate());
   }
 
-  private async getEntityMetadata(schema: DatabaseSchema, options: GenerateOptions) {
-    let metadata = schema.getTables()
-      .filter(table => !options.schema || table.schema === options.schema)
+  private async getEntityMetadata(
+    schema: DatabaseSchema,
+    options: GenerateOptions,
+  ) {
+    let metadata = schema
+      .getTables()
+      .filter((table) => !options.schema || table.schema === options.schema)
       .sort((a, b) => a.name!.localeCompare(b.name!))
-      .map(table => {
+      .map((table) => {
         const skipColumns = options.skipColumns?.[table.getShortestName()];
         if (skipColumns) {
-          table.getColumns().forEach(col => {
+          table.getColumns().forEach((col) => {
             if (skipColumns.includes(col.name)) {
               table.removeColumn(col.name);
             }
           });
         }
-        return table.getEntityDeclaration(this.namingStrategy, this.helper, options.scalarPropertiesForRelations!);
+        return table.getEntityDeclaration(
+          this.namingStrategy,
+          this.helper,
+          options.scalarPropertiesForRelations!,
+        );
       });
 
     for (const meta of metadata) {
       for (const prop of meta.relations) {
         if (options.skipTables?.includes(prop.referencedTableName)) {
           prop.kind = ReferenceKind.SCALAR;
-          const meta2 = metadata.find(m => m.className === prop.type)!;
-          prop.type = meta2.getPrimaryProps().map(pk => pk.type).join(' | ');
+          const meta2 = metadata.find((m) => m.className === prop.type)!;
+          prop.type = meta2
+            .getPrimaryProps()
+            .map((pk) => pk.type)
+            .join(" | ");
         }
       }
     }
 
-    metadata = metadata.filter(table => !options.skipTables || !options.skipTables.includes(table.tableName));
+    metadata = metadata.filter(
+      (table) =>
+        !options.skipTables || !options.skipTables.includes(table.tableName),
+    );
 
     await options.onInitialMetadata?.(metadata, this.platform);
 
-    this.detectManyToManyRelations(metadata, options.onlyPurePivotTables!, options.readOnlyPivotTables!);
+    this.detectManyToManyRelations(
+      metadata,
+      options.onlyPurePivotTables!,
+      options.readOnlyPivotTables!,
+    );
 
     if (options.bidirectionalRelations) {
       this.generateBidirectionalRelations(metadata);
@@ -110,20 +153,31 @@ export class EntityGenerator {
     }
 
     if (options.customBaseEntityName) {
-      this.generateAndAttachCustomBaseEntity(metadata, options.customBaseEntityName);
+      this.generateAndAttachCustomBaseEntity(
+        metadata,
+        options.customBaseEntityName,
+      );
     }
 
     // enforce schema usage in class names only on duplicates
-    const duplicates = Utils.findDuplicates(metadata.map(meta => meta.className));
+    const duplicates = Utils.findDuplicates(
+      metadata.map((meta) => meta.className),
+    );
 
     for (const duplicate of duplicates) {
-      for (const meta of metadata.filter(meta => meta.className === duplicate)) {
-        meta.className = this.namingStrategy.getEntityName(`${meta.schema}_${meta.className}`);
-        metadata.forEach(meta => meta.relations.forEach(prop => {
-          if (prop.type === duplicate) {
-            prop.type = meta.className;
-          }
-        }));
+      for (const meta of metadata.filter(
+        (meta) => meta.className === duplicate,
+      )) {
+        meta.className = this.namingStrategy.getEntityName(
+          `${meta.schema}_${meta.className}`,
+        );
+        metadata.forEach((meta) =>
+          meta.relations.forEach((prop) => {
+            if (prop.type === duplicate) {
+              prop.type = meta.className;
+            }
+          }),
+        );
       }
     }
 
@@ -132,12 +186,24 @@ export class EntityGenerator {
     return metadata;
   }
 
-  private detectManyToManyRelations(metadata: EntityMetadata[], onlyPurePivotTables: boolean, readOnlyPivotTables: boolean): void {
+  private detectManyToManyRelations(
+    metadata: EntityMetadata[],
+    onlyPurePivotTables: boolean,
+    readOnlyPivotTables: boolean,
+  ): void {
     for (const meta of metadata) {
-      const isReferenced = metadata.some(m => {
-        return m.tableName !== meta.tableName && m.relations.some(r => {
-          return r.referencedTableName === meta.tableName && [ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(r.kind);
-        });
+      const isReferenced = metadata.some((m) => {
+        return (
+          m.tableName !== meta.tableName &&
+          m.relations.some((r) => {
+            return (
+              r.referencedTableName === meta.tableName &&
+              [ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(
+                r.kind,
+              )
+            );
+          })
+        );
       });
 
       if (isReferenced) {
@@ -150,16 +216,20 @@ export class EntityGenerator {
       }
 
       // Entities where there are not exactly 2 PK relations that are both ManyToOne are never pivot tables. Skip.
-      const pkRelations = meta.relations.filter(rel => rel.primary);
+      const pkRelations = meta.relations.filter((rel) => rel.primary);
       if (
-          pkRelations.length !== 2 ||
-          pkRelations.some(rel => rel.kind !== ReferenceKind.MANY_TO_ONE)
+        pkRelations.length !== 2 ||
+        pkRelations.some((rel) => rel.kind !== ReferenceKind.MANY_TO_ONE)
       ) {
         continue;
       }
 
-      const pkRelationFields = new Set<string>(pkRelations.flatMap(rel => rel.fieldNames));
-      const nonPkFields = Array.from(new Set<string>(meta.props.flatMap(prop => prop.fieldNames))).filter(fieldName => !pkRelationFields.has(fieldName));
+      const pkRelationFields = new Set<string>(
+        pkRelations.flatMap((rel) => rel.fieldNames),
+      );
+      const nonPkFields = Array.from(
+        new Set<string>(meta.props.flatMap((prop) => prop.fieldNames)),
+      ).filter((fieldName) => !pkRelationFields.has(fieldName));
 
       let fixedOrderColumn: string | undefined;
       let isReadOnly = false;
@@ -173,21 +243,26 @@ export class EntityGenerator {
           continue;
         }
 
-        const pkRelationNames = pkRelations.map(rel => rel.name);
-        let otherProps = meta.props
-          .filter(prop => !pkRelationNames.includes(prop.name) &&
+        const pkRelationNames = pkRelations.map((rel) => rel.name);
+        let otherProps = meta.props.filter(
+          (prop) =>
+            !pkRelationNames.includes(prop.name) &&
             prop.persist !== false && // Skip checking non-persist props
-            prop.fieldNames.some(fieldName => nonPkFields.includes(fieldName)),
-          );
+            prop.fieldNames.some((fieldName) =>
+              nonPkFields.includes(fieldName),
+            ),
+        );
 
         // Deal with the auto increment column first. That is the column used for fixed ordering, if present.
-        const autoIncrementProp = meta.props.find(prop => prop.autoincrement && prop.fieldNames.length === 1);
+        const autoIncrementProp = meta.props.find(
+          (prop) => prop.autoincrement && prop.fieldNames.length === 1,
+        );
         if (autoIncrementProp) {
-          otherProps = otherProps.filter(prop => prop !== autoIncrementProp);
+          otherProps = otherProps.filter((prop) => prop !== autoIncrementProp);
           fixedOrderColumn = autoIncrementProp.fieldNames[0];
         }
 
-        isReadOnly = otherProps.some(prop => {
+        isReadOnly = otherProps.some((prop) => {
           // If the prop is non-nullable and unique, it will trivially end up causing issues.
           // Mark as read only.
           if (!prop.nullable && prop.unique) {
@@ -213,9 +288,13 @@ export class EntityGenerator {
       }
 
       meta.pivotTable = true;
-      const owner = metadata.find(m => m.className === meta.relations[0].type)!;
+      const owner = metadata.find(
+        (m) => m.className === meta.relations[0].type,
+      )!;
 
-      const name = this.namingStrategy.columnNameToProperty(meta.tableName.replace(new RegExp('^' + owner.tableName + '_'), ''));
+      const name = this.namingStrategy.columnNameToProperty(
+        meta.tableName.replace(new RegExp("^" + owner.tableName + "_"), ""),
+      );
       const ownerProp = {
         name,
         kind: ReferenceKind.MANY_TO_MANY,
@@ -241,15 +320,19 @@ export class EntityGenerator {
   }
 
   private generateBidirectionalRelations(metadata: EntityMetadata[]): void {
-    for (const meta of metadata.filter(m => !m.pivotTable || this.referencedEntities.has(m))) {
+    for (const meta of metadata.filter(
+      (m) => !m.pivotTable || this.referencedEntities.has(m),
+    )) {
       for (const prop of meta.relations) {
-        const targetMeta = metadata.find(m => m.className === prop.type)!;
+        const targetMeta = metadata.find((m) => m.className === prop.type)!;
         const newProp = {
-          name: prop.name + 'Inverse',
+          name: prop.name + "Inverse",
           type: meta.className,
           joinColumns: prop.fieldNames,
           referencedTableName: meta.tableName,
-          referencedColumnNames: Utils.flatten(targetMeta.getPrimaryProps().map(pk => pk.fieldNames)),
+          referencedColumnNames: Utils.flatten(
+            targetMeta.getPrimaryProps().map((pk) => pk.fieldNames),
+          ),
           mappedBy: prop.name,
           persist: prop.persist,
         } as EntityProperty;
@@ -271,16 +354,26 @@ export class EntityGenerator {
   }
 
   private generateIdentifiedReferences(metadata: EntityMetadata[]): void {
-    for (const meta of metadata.filter(m => !m.pivotTable || this.referencedEntities.has(m))) {
+    for (const meta of metadata.filter(
+      (m) => !m.pivotTable || this.referencedEntities.has(m),
+    )) {
       for (const prop of Object.values(meta.properties)) {
-        if ([ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(prop.kind) || prop.lazy) {
+        if (
+          [ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(
+            prop.kind,
+          ) ||
+          prop.lazy
+        ) {
           prop.ref = true;
         }
       }
     }
   }
 
-  private generateAndAttachCustomBaseEntity(metadata: EntityMetadata[], customBaseEntityName: string) {
+  private generateAndAttachCustomBaseEntity(
+    metadata: EntityMetadata[],
+    customBaseEntityName: string,
+  ) {
     let baseClassExists = false;
     for (const meta of metadata) {
       if (meta.className === customBaseEntityName) {
@@ -290,12 +383,13 @@ export class EntityGenerator {
       meta.extends ??= customBaseEntityName;
     }
     if (!baseClassExists) {
-      metadata.push(new EntityMetadata({
-        className: customBaseEntityName,
-        abstract: true,
-        relations: [],
-      }));
+      metadata.push(
+        new EntityMetadata({
+          className: customBaseEntityName,
+          abstract: true,
+          relations: [],
+        }),
+      );
     }
   }
-
 }

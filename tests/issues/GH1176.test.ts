@@ -1,10 +1,14 @@
-import type { EntityManager } from '@mikro-orm/postgresql';
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/postgresql';
-import { v4 as uuid } from 'uuid';
+import type { EntityManager } from "@yandjin-mikro-orm/postgresql";
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
+import { v4 as uuid } from "uuid";
 
-@Entity({ tableName: 'users' })
+@Entity({ tableName: "users" })
 class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -14,26 +18,25 @@ class User {
   constructor(username: string) {
     this.username = username;
   }
-
 }
 
 async function getOrmInstance(): Promise<MikroORM> {
   const orm = await MikroORM.init({
     entities: [User],
-    dbName: 'mikro_orm_test_gh_1176',
+    dbName: "mikro_orm_test_gh_1176",
   });
 
   return orm as MikroORM;
 }
 
-describe('GH issue 1176', () => {
+describe("GH issue 1176", () => {
   let orm: MikroORM;
   let em: EntityManager;
 
   beforeAll(async () => {
     orm = await getOrmInstance();
-    await orm.schema.dropDatabase('mikro_orm_test_gh_1176');
-    await orm.schema.createDatabase('mikro_orm_test_gh_1176');
+    await orm.schema.dropDatabase("mikro_orm_test_gh_1176");
+    await orm.schema.createDatabase("mikro_orm_test_gh_1176");
   });
 
   afterAll(async () => {
@@ -44,7 +47,7 @@ describe('GH issue 1176', () => {
     em = orm.em.fork();
   });
 
-  describe('immediate constraints (failures on insert)', () => {
+  describe("immediate constraints (failures on insert)", () => {
     beforeAll(async () => {
       const orm = await getOrmInstance();
       await orm.em.getConnection().execute(
@@ -58,16 +61,16 @@ describe('GH issue 1176', () => {
       );
       await orm.close();
     });
-    describe('implicit transactions', () => {
+    describe("implicit transactions", () => {
       let username: string;
-      it('creating a new user succeeds', async () => {
+      it("creating a new user succeeds", async () => {
         username = uuid();
         const user = new User(username);
         em.persist(user);
 
         await expect(em.flush()).resolves.toBeUndefined();
       });
-      it('flush fails when a database constraint fails', async () => {
+      it("flush fails when a database constraint fails", async () => {
         const user = new User(username);
         em.persist(user);
 
@@ -79,8 +82,8 @@ describe('GH issue 1176', () => {
 
     describe('explicit transactions with "transactional()"', () => {
       let username: string;
-      it('creating a new user succeeds', async () => {
-        const work = em.transactional(async em => {
+      it("creating a new user succeeds", async () => {
+        const work = em.transactional(async (em) => {
           username = uuid();
           const user = new User(username);
           em.persist(user);
@@ -88,8 +91,8 @@ describe('GH issue 1176', () => {
 
         await expect(work).resolves.toBeUndefined();
       });
-      it('transactional throws when a database constraint fails', async () => {
-        const work = em.transactional(async em => {
+      it("transactional throws when a database constraint fails", async () => {
+        const work = em.transactional(async (em) => {
           const user = new User(username);
           em.persist(user);
         });
@@ -98,9 +101,9 @@ describe('GH issue 1176', () => {
       });
     });
 
-    describe('explicit transactions with explicit begin/commit method calls', () => {
+    describe("explicit transactions with explicit begin/commit method calls", () => {
       let username: string;
-      it('creating a new user succeeds', async () => {
+      it("creating a new user succeeds", async () => {
         await em.begin();
         username = uuid();
         const user = new User(username);
@@ -108,7 +111,7 @@ describe('GH issue 1176', () => {
 
         await expect(em.commit()).resolves.toBeUndefined();
       });
-      it('commit throws when a database constraint fails', async () => {
+      it("commit throws when a database constraint fails", async () => {
         await em.begin();
         const work = async () => {
           try {
@@ -126,7 +129,7 @@ describe('GH issue 1176', () => {
     });
   });
 
-  describe('deferred constraints (failures on commit)', () => {
+  describe("deferred constraints (failures on commit)", () => {
     beforeAll(async () => {
       const orm = await getOrmInstance();
       await orm.em.getConnection().execute(
@@ -141,16 +144,16 @@ describe('GH issue 1176', () => {
       await orm.close();
     });
 
-    describe('implicit transactions', () => {
+    describe("implicit transactions", () => {
       let username: string;
-      it('creating a new user succeeds', async () => {
+      it("creating a new user succeeds", async () => {
         username = uuid();
         const user = new User(username);
         em.persist(user);
 
         await expect(em.flush()).resolves.toBeUndefined();
       });
-      it('flush throws when a database constraint fails', async () => {
+      it("flush throws when a database constraint fails", async () => {
         const user = new User(username);
         em.persist(user);
 
@@ -162,8 +165,8 @@ describe('GH issue 1176', () => {
 
     describe('explicit transactions with "transactional()"', () => {
       let username: string;
-      it('creating a new user succeeds', async () => {
-        const work = em.transactional(async em => {
+      it("creating a new user succeeds", async () => {
+        const work = em.transactional(async (em) => {
           username = uuid();
           const user = new User(username);
           em.persist(user);
@@ -171,9 +174,9 @@ describe('GH issue 1176', () => {
 
         await expect(work).resolves.toBeUndefined();
       });
-      it('transactional throws when a database constraint fails', async () => {
+      it("transactional throws when a database constraint fails", async () => {
         const work = async () => {
-          await em.transactional(async em => {
+          await em.transactional(async (em) => {
             const user = new User(username);
             em.persist(user);
           });
@@ -183,9 +186,9 @@ describe('GH issue 1176', () => {
       });
     });
 
-    describe('explicit transactions with explicit begin/commit/rollback method calls', () => {
+    describe("explicit transactions with explicit begin/commit/rollback method calls", () => {
       let username: string;
-      it('creating a new user succeeds', async () => {
+      it("creating a new user succeeds", async () => {
         await em.begin();
         username = uuid();
         const user = new User(username);
@@ -193,7 +196,7 @@ describe('GH issue 1176', () => {
 
         await expect(em.commit()).resolves.toBeUndefined();
       });
-      it('commit throws when a database constraint fails', async () => {
+      it("commit throws when a database constraint fails", async () => {
         await em.begin();
         const work = async () => {
           try {

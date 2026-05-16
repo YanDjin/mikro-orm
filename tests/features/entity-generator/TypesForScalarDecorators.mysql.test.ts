@@ -1,8 +1,8 @@
-import { EntityGenerator } from '@mikro-orm/entity-generator';
-import { MikroORM } from '@mikro-orm/mysql';
+import { EntityGenerator } from "@yandjin-mikro-orm/entity-generator";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
 
 let orm: MikroORM;
-const schemaName = 'types_for_scalar_decorators';
+const schemaName = "types_for_scalar_decorators";
 
 beforeAll(async () => {
   orm = await MikroORM.init({
@@ -17,7 +17,7 @@ beforeAll(async () => {
 
 afterAll(() => orm.close());
 
-test('TypesForScalarDecorators', async () => {
+test("TypesForScalarDecorators", async () => {
   if (await orm.schema.ensureDatabase({ create: true })) {
     await orm.schema.execute(`
 CREATE TABLE IF NOT EXISTS \`users\`
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS \`users\`
 )
 `);
   }
-  orm.config.get('entityGenerator').scalarTypeInDecorator = true;
+  orm.config.get("entityGenerator").scalarTypeInDecorator = true;
   const dump = await orm.entityGenerator.generate();
-  expect(dump).toMatchSnapshot('dump');
+  expect(dump).toMatchSnapshot("dump");
 });

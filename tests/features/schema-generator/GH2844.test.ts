@@ -1,50 +1,50 @@
-import { Entity, Index, ManyToOne, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mariadb';
+import {
+  Entity,
+  Index,
+  ManyToOne,
+  OneToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mariadb";
 
 @Entity()
 export class UserAction {
-
   @PrimaryKey()
   idUserAction!: string;
 
   @Property()
   name!: string;
-
 }
 
 @Entity()
-@Index({ properties: ['id', 'userAction'] })
+@Index({ properties: ["id", "userAction"] })
 export class Step {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne({ primary: true, deleteRule: 'cascade' })
+  @ManyToOne({ primary: true, deleteRule: "cascade" })
   userAction!: UserAction;
-
 }
 
 @Entity()
 export class Component {
-
   @PrimaryKey()
   idComponent!: string;
 
-  @ManyToOne({ deleteRule: 'cascade' })
+  @ManyToOne({ deleteRule: "cascade" })
   step!: Step;
 
   @OneToOne({
     nullable: true,
-    fieldName: 'resultComponentId',
+    fieldName: "resultComponentId",
     unique: false,
     entity: () => Component,
   })
   resultComponent?: Component;
-
 }
 
-describe('complex FKs in mariadb (GH 2844)', () => {
-
+describe("complex FKs in mariadb (GH 2844)", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -59,10 +59,9 @@ describe('complex FKs in mariadb (GH 2844)', () => {
 
   afterAll(() => orm.close(true));
 
-  test('schema generator adds the m:1 columns and FK properly', async () => {
+  test("schema generator adds the m:1 columns and FK properly", async () => {
     const sql = await orm.schema.getCreateSchemaSQL();
     expect(sql).toMatchSnapshot();
     await orm.schema.execute(sql);
   });
-
 });

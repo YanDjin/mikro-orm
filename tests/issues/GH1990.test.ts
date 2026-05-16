@@ -1,35 +1,37 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey } from '@mikro-orm/postgresql';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 class A {
-
-  @PrimaryKey({ fieldName: 'prc_id' })
+  @PrimaryKey({ fieldName: "prc_id" })
   id!: number;
 
-  @OneToMany(() => B, b => b.a)
+  @OneToMany(() => B, (b) => b.a)
   b = new Collection<B>(this);
-
 }
 
 @Entity()
 class B {
-
-  @PrimaryKey({ fieldName: 'dec_id' })
+  @PrimaryKey({ fieldName: "dec_id" })
   id!: number;
 
-  @ManyToOne({ entity: () => A, fieldName: 'prc_id' })
+  @ManyToOne({ entity: () => A, fieldName: "prc_id" })
   a!: A;
-
 }
 
-describe('GH issue 1990', () => {
-
+describe("GH issue 1990", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [A, B],
-      dbName: 'mikro_orm_test_1990',
+      dbName: "mikro_orm_test_1990",
     });
     await orm.schema.refreshDatabase();
   });
@@ -45,8 +47,7 @@ describe('GH issue 1990', () => {
     await orm.em.persistAndFlush(a);
     orm.em.clear();
 
-    const a1 = await orm.em.findOneOrFail(A, a, { populate: ['b'] });
+    const a1 = await orm.em.findOneOrFail(A, a, { populate: ["b"] });
     expect(a1.b).toHaveLength(1);
   });
-
 });

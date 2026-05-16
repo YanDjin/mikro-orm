@@ -1,6 +1,6 @@
-import { MikroORM, TextType, Type } from '@mikro-orm/core';
-import { Author2, FooBaz2 } from '../../entities-sql';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { MikroORM, TextType, Type } from "@yandjin-mikro-orm/core";
+import { Author2, FooBaz2 } from "../../entities-sql";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 let orm: MikroORM;
 
@@ -11,7 +11,7 @@ beforeAll(async () => {
     driver: PostgreSqlDriver,
     discovery: {
       getMappedType(type: string) {
-        if (type === 'string') {
+        if (type === "string") {
           return Type.getType(TextType);
         }
 
@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('changing default type mapping (GH 3066)', async () => {
+test("changing default type mapping (GH 3066)", async () => {
   await orm.schema.ensureDatabase();
   const diff0 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
   expect(diff0).toMatchSnapshot();

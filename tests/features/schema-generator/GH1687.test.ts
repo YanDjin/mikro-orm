@@ -1,9 +1,17 @@
-import { Cascade, Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import {
+  Cascade,
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class Country {
-
   @PrimaryKey()
   id!: number;
 
@@ -16,14 +24,12 @@ export class Country {
   @Property()
   currencySymbol!: string;
 
-  @OneToMany('State', 'country', { cascade: [Cascade.ALL], nullable: true })
+  @OneToMany("State", "country", { cascade: [Cascade.ALL], nullable: true })
   states = new Collection<State>(this);
-
 }
 
 @Entity()
 export class State {
-
   @ManyToOne(() => Country, { primary: true })
   country!: Country;
 
@@ -33,14 +39,12 @@ export class State {
   @Property()
   name!: string;
 
-  @OneToMany('City', 'state', { cascade: [Cascade.ALL], nullable: true })
+  @OneToMany("City", "state", { cascade: [Cascade.ALL], nullable: true })
   cities = new Collection<City>(this);
-
 }
 
 @Entity()
 export class City {
-
   @ManyToOne(() => State, { primary: true })
   state!: State;
 
@@ -49,12 +53,10 @@ export class City {
 
   @Property()
   name!: string;
-
 }
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id!: string;
 
@@ -67,22 +69,23 @@ export class User {
   @Property({ nullable: true })
   last_name?: string;
 
-  @Property({ columnType: 'date', nullable: true })
+  @Property({ columnType: "date", nullable: true })
   date_of_birth?: Date;
 
-  @Property({ columnType: 'timestamptz', nullable: false })
+  @Property({ columnType: "timestamptz", nullable: false })
   created = new Date();
 
-  @Property({ columnType: 'timestamptz', onUpdate: () => new Date().toISOString() })
+  @Property({
+    columnType: "timestamptz",
+    onUpdate: () => new Date().toISOString(),
+  })
   modified = new Date();
 
   @ManyToOne()
   city!: City;
-
 }
 
-describe('adding m:1 with composite PK (FK as PK + scalar PK) (GH 1687, 1695)', () => {
-
+describe("adding m:1 with composite PK (FK as PK + scalar PK) (GH 1687, 1695)", () => {
   let orm: MikroORM<PostgreSqlDriver>;
 
   beforeAll(async () => {
@@ -111,31 +114,30 @@ describe('adding m:1 with composite PK (FK as PK + scalar PK) (GH 1687, 1695)', 
 
   afterAll(() => orm.close(true));
 
-  test('schema generator adds the m:1 columns and FK properly', async () => {
+  test("schema generator adds the m:1 columns and FK properly", async () => {
     const city = new City();
     city.id = 1;
-    city.name = 'n';
+    city.name = "n";
     city.state = new State();
     city.state.id = 2;
-    city.state.name = 's';
+    city.state.name = "s";
     city.state.country = new Country();
     city.state.country.id = 3;
-    city.state.country.name = 'c';
-    city.state.country.currency = 'c1';
-    city.state.country.currencySymbol = 'cs';
+    city.state.country.name = "c";
+    city.state.country.currency = "c1";
+    city.state.country.currencySymbol = "cs";
     await orm.em.fork().persistAndFlush(city);
 
     const c = await orm.em.findOneOrFail(City, { id: 1 });
     const u = new User();
-    u.id = '1';
+    u.id = "1";
     u.city = c;
-    u.email = 'e';
+    u.email = "e";
     await orm.em.persistAndFlush(u);
     orm.em.clear();
 
     const c2 = await orm.em.findOneOrFail(City, { id: 1 });
     const u2 = await orm.em.findOneOrFail(User, { city: c2 });
-    expect(u2.id).toBe('1');
+    expect(u2.id).toBe("1");
   });
-
 });

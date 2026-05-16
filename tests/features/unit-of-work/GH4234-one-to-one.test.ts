@@ -1,15 +1,21 @@
-import { Entity, OneToOne, PrimaryKey, ref, Ref, RequiredEntityData } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  OneToOne,
+  PrimaryKey,
+  ref,
+  Ref,
+  RequiredEntityData,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Group {
-
   @PrimaryKey()
   id!: number;
 
   @OneToOne({
     entity: () => GroupMember,
-    mappedBy: member => member.group,
+    mappedBy: (member) => member.group,
     ref: true,
     eager: true,
     orphanRemoval: true,
@@ -19,12 +25,10 @@ class Group {
   constructor(params: RequiredEntityData<Group>) {
     Object.assign(this, params);
   }
-
 }
 
 @Entity()
 class GroupMember {
-
   @OneToOne({
     entity: () => Member,
     primary: true,
@@ -42,18 +46,16 @@ class GroupMember {
   constructor(params: RequiredEntityData<GroupMember>) {
     Object.assign(this, params);
   }
-
 }
 
 @Entity()
 class Member {
-
   @PrimaryKey()
   id!: number;
 
   @OneToOne({
     entity: () => GroupMember,
-    mappedBy: group => group.member,
+    mappedBy: (group) => group.member,
     eager: true,
     ref: true,
     orphanRemoval: true,
@@ -63,7 +65,6 @@ class Member {
   constructor(params: RequiredEntityData<Member>) {
     Object.assign(this, params);
   }
-
 }
 
 let orm: MikroORM;
@@ -71,7 +72,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Group, Member, GroupMember],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.refreshDatabase();
 });

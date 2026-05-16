@@ -1,9 +1,13 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { Project } from './project.entity';
+import {
+  Entity,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { Project } from "./project.entity";
 
 @Entity()
 export class House {
-
   @PrimaryKey()
   id!: number;
 
@@ -18,5 +22,4 @@ export class House {
 
   @Property()
   createdAt: Date = new Date();
-
 }

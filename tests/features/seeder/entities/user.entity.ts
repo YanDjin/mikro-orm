@@ -1,9 +1,13 @@
-import { Entity, OptionalProps, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Entity,
+  OptionalProps,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
 
 @Entity()
 export class User {
-
-  [OptionalProps]?: 'createdAt';
+  [OptionalProps]?: "createdAt";
 
   @PrimaryKey()
   id!: number;
@@ -19,5 +23,4 @@ export class User {
 
   @Property()
   createdAt: Date = new Date();
-
 }

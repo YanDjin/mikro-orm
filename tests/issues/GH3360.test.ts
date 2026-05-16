@@ -1,9 +1,16 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/better-sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/better-sqlite";
+import { mockLogger } from "../helpers";
 
 @Entity()
 export class Author {
-
   @PrimaryKey()
   id!: number;
 
@@ -11,18 +18,16 @@ export class Author {
   name!: string;
 
   @OneToMany({
-    entity: 'Book',
-    mappedBy: 'author',
+    entity: "Book",
+    mappedBy: "author",
     eager: true,
     orphanRemoval: true,
   })
   books = new Collection<Book>(this);
-
 }
 
 @Entity()
 export class Book {
-
   @PrimaryKey()
   id!: number;
 
@@ -35,14 +40,13 @@ export class Book {
   constructor(title: string) {
     this.title = title;
   }
-
 }
 
 async function createEntities(orm: MikroORM) {
   const author = new Author();
-  author.name = 'John';
+  author.name = "John";
 
-  const book = new Book('b1');
+  const book = new Book("b1");
   author.books.set([book]);
 
   await orm.em.persistAndFlush(author);
@@ -53,7 +57,7 @@ let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [Book],
   });
   await orm.schema.createSchema();
@@ -70,14 +74,14 @@ test(`GH 3360`, async () => {
   const author = await orm.em.findOneOrFail(Author, 1);
   author.books.removeAll();
 
-  const mock = mockLogger(orm, ['query']);
+  const mock = mockLogger(orm, ["query"]);
   await orm.em.transactional(async () => {
     // will create a fork with the same context and flush it
   });
 
-  expect(mock.mock.calls[0][0]).toMatch('begin');
-  expect(mock.mock.calls[1][0]).toMatch('delete from `book` where `id` in (?)');
-  expect(mock.mock.calls[2][0]).toMatch('commit');
+  expect(mock.mock.calls[0][0]).toMatch("begin");
+  expect(mock.mock.calls[1][0]).toMatch("delete from `book` where `id` in (?)");
+  expect(mock.mock.calls[2][0]).toMatch("commit");
 
   const author2 = await orm.em.fork().findOneOrFail(Author, 1);
   expect(author2.books.getItems()).toHaveLength(0);

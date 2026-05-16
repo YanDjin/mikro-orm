@@ -1,14 +1,19 @@
 // @ts-ignore
-import { escape } from 'sqlstring-sqlite';
-import { JsonProperty, Utils, type EntityProperty } from '@mikro-orm/core';
-import { AbstractSqlPlatform } from '@mikro-orm/knex';
-import { BetterSqliteSchemaHelper } from './BetterSqliteSchemaHelper';
-import { BetterSqliteExceptionConverter } from './BetterSqliteExceptionConverter';
+import { escape } from "sqlstring-sqlite";
+import {
+  JsonProperty,
+  Utils,
+  type EntityProperty,
+} from "@yandjin-mikro-orm/core";
+import { AbstractSqlPlatform } from "@yandjin-mikro-orm/knex";
+import { BetterSqliteSchemaHelper } from "./BetterSqliteSchemaHelper";
+import { BetterSqliteExceptionConverter } from "./BetterSqliteExceptionConverter";
 
 export class BetterSqlitePlatform extends AbstractSqlPlatform {
-
-  protected override readonly schemaHelper: BetterSqliteSchemaHelper = new BetterSqliteSchemaHelper(this);
-  protected override readonly exceptionConverter = new BetterSqliteExceptionConverter();
+  protected override readonly schemaHelper: BetterSqliteSchemaHelper =
+    new BetterSqliteSchemaHelper(this);
+  protected override readonly exceptionConverter =
+    new BetterSqliteExceptionConverter();
 
   override usesDefaultKeyword(): boolean {
     return false;
@@ -23,39 +28,57 @@ export class BetterSqlitePlatform extends AbstractSqlPlatform {
   }
 
   override getDateTimeTypeDeclarationSQL(column: { length: number }): string {
-    return 'datetime';
+    return "datetime";
   }
 
-  override getEnumTypeDeclarationSQL(column: { items?: unknown[]; fieldNames: string[]; length?: number; unsigned?: boolean; autoincrement?: boolean }): string {
-    if (column.items?.every(item => Utils.isString(item))) {
-      return 'text';
+  override getEnumTypeDeclarationSQL(column: {
+    items?: unknown[];
+    fieldNames: string[];
+    length?: number;
+    unsigned?: boolean;
+    autoincrement?: boolean;
+  }): string {
+    if (column.items?.every((item) => Utils.isString(item))) {
+      return "text";
     }
 
     return this.getTinyIntTypeDeclarationSQL(column);
   }
 
-  override getTinyIntTypeDeclarationSQL(column: { length?: number; unsigned?: boolean; autoincrement?: boolean }): string {
+  override getTinyIntTypeDeclarationSQL(column: {
+    length?: number;
+    unsigned?: boolean;
+    autoincrement?: boolean;
+  }): string {
     return this.getIntegerTypeDeclarationSQL(column);
   }
 
-  override getSmallIntTypeDeclarationSQL(column: { length?: number; unsigned?: boolean; autoincrement?: boolean }): string {
+  override getSmallIntTypeDeclarationSQL(column: {
+    length?: number;
+    unsigned?: boolean;
+    autoincrement?: boolean;
+  }): string {
     return this.getIntegerTypeDeclarationSQL(column);
   }
 
-  override getIntegerTypeDeclarationSQL(column: { length?: number; unsigned?: boolean; autoincrement?: boolean }): string {
-    return 'integer';
+  override getIntegerTypeDeclarationSQL(column: {
+    length?: number;
+    unsigned?: boolean;
+    autoincrement?: boolean;
+  }): string {
+    return "integer";
   }
 
   override getFloatDeclarationSQL(): string {
-    return 'real';
+    return "real";
   }
 
   override getBooleanTypeDeclarationSQL(): string {
-    return 'integer';
+    return "integer";
   }
 
   override getVarcharTypeDeclarationSQL(column: { length?: number }): string {
-    return 'text';
+    return "text";
   }
 
   override convertsJsonAutomatically(): boolean {
@@ -80,9 +103,12 @@ export class BetterSqlitePlatform extends AbstractSqlPlatform {
     return value as number;
   }
 
-  override quoteVersionValue(value: Date | number, prop: EntityProperty): Date | string | number {
-    if (prop.runtimeType === 'Date') {
-      return escape(value, true, this.timezone).replace(/^'|\.\d{3}'$/g, '');
+  override quoteVersionValue(
+    value: Date | number,
+    prop: EntityProperty,
+  ): Date | string | number {
+    if (prop.runtimeType === "Date") {
+      return escape(value, true, this.timezone).replace(/^'|\.\d{3}'$/g, "");
     }
 
     return value;
@@ -95,14 +121,18 @@ export class BetterSqlitePlatform extends AbstractSqlPlatform {
     }
 
     if (value instanceof Date) {
-      return '' + +value;
+      return "" + +value;
     }
 
     return escape(value, true, this.timezone);
   }
 
-  override getIndexName(tableName: string, columns: string[], type: 'index' | 'unique' | 'foreign' | 'primary' | 'sequence'): string {
-    if (type === 'primary') {
+  override getIndexName(
+    tableName: string,
+    columns: string[],
+    type: "index" | "unique" | "foreign" | "primary" | "sequence",
+  ): string {
+    if (type === "primary") {
       return this.getDefaultPrimaryName(tableName, columns);
     }
 
@@ -110,11 +140,10 @@ export class BetterSqlitePlatform extends AbstractSqlPlatform {
   }
 
   override getDefaultPrimaryName(tableName: string, columns: string[]): string {
-    return 'primary';
+    return "primary";
   }
 
   override supportsDownMigrations(): boolean {
     return false;
   }
-
 }

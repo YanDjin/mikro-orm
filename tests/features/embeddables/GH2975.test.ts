@@ -1,9 +1,17 @@
-import { Embeddable, Embedded, Entity, ManyToOne, MikroORM, PrimaryKey, Property, t } from '@mikro-orm/core';
-import { BetterSqliteDriver } from '@mikro-orm/better-sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Property,
+  t,
+} from "@yandjin-mikro-orm/core";
+import { BetterSqliteDriver } from "@yandjin-mikro-orm/better-sqlite";
 
 @Entity()
 class Country {
-
   @PrimaryKey({ type: t.bigint })
   id!: string;
 
@@ -13,12 +21,10 @@ class Country {
   constructor(countryName: string) {
     this.countryName = countryName;
   }
-
 }
 
 @Embeddable()
 class Address {
-
   @Property()
   streetName!: string;
 
@@ -29,12 +35,10 @@ class Address {
     this.streetName = streetName;
     this.country = country;
   }
-
 }
 
 @Entity()
 class Provider {
-
   @PrimaryKey({ type: t.bigint })
   id!: string;
 
@@ -48,7 +52,6 @@ class Provider {
     this.name = name;
     this.address = address;
   }
-
 }
 
 let orm: MikroORM;
@@ -56,7 +59,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Provider],
-    dbName: ':memory:',
+    dbName: ":memory:",
     driver: BetterSqliteDriver,
   });
   await orm.schema.createSchema();
@@ -68,14 +71,13 @@ afterAll(async () => {
 
 test(`GH issue 2975`, async () => {
   const provider = new Provider(
-    'Coffee provider',
-    new Address(
-      'Sesame St.',
-      new Country('Atlantida'),
-    ),
+    "Coffee provider",
+    new Address("Sesame St.", new Country("Atlantida")),
   );
   await orm.em.fork().persist(provider).flush();
 
-  const loadedProvider = await orm.em.findOneOrFail(Provider, { name: 'Coffee provider' });
-  expect(loadedProvider.address.country.countryName).toBe('Atlantida');
+  const loadedProvider = await orm.em.findOneOrFail(Provider, {
+    name: "Coffee provider",
+  });
+  expect(loadedProvider.address.country.countryName).toBe("Atlantida");
 });

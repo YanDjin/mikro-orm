@@ -9,13 +9,12 @@ import {
   Property,
   Ref,
   ref,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { v4 } from 'uuid';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { v4 } from "uuid";
 
 @Entity()
 class Author {
-
   @PrimaryKey()
   id = v4();
 
@@ -24,14 +23,14 @@ class Author {
 
   @OneToMany({
     entity: () => Book,
-    mappedBy: 'author',
+    mappedBy: "author",
   })
   books = new Collection<Book>(this);
 
   @OneToOne({
     entity: () => Book,
     ref: true,
-    formula: alias =>
+    formula: (alias) =>
       `(select "b"."id"
       from (
         select "b"."author_id", min("b"."release_date") "release_date"
@@ -47,16 +46,14 @@ class Author {
 
   constructor(name: string) {
     this.name = name;
-    const myFirstBook = new Book(new Date(), 'My first book', this);
+    const myFirstBook = new Book(new Date(), "My first book", this);
     this.books.add(myFirstBook);
     this.firstBook = ref(myFirstBook);
   }
-
 }
 
 @Entity()
 class Book {
-
   @PrimaryKey()
   id = v4();
 
@@ -69,7 +66,7 @@ class Book {
   @ManyToOne({
     entity: () => Author,
     ref: true,
-    inversedBy: 'books',
+    inversedBy: "books",
   })
   author!: Ref<Author>;
 
@@ -78,7 +75,6 @@ class Book {
     this.name = name;
     this.author = ref(author);
   }
-
 }
 
 let orm: MikroORM;
@@ -86,7 +82,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Author, Book],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
@@ -94,6 +90,6 @@ beforeAll(async () => {
 afterAll(() => orm.close(true));
 
 test(`GH issue 1079`, async () => {
-  const author = new Author('John');
+  const author = new Author("John");
   await orm.em.persistAndFlush(author);
 });

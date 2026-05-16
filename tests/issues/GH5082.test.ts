@@ -9,11 +9,10 @@ import {
   ref,
   Ref,
   wrap,
-} from '@mikro-orm/sqlite';
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Item {
-
   @PrimaryKey()
   id!: number;
 
@@ -23,12 +22,10 @@ class Item {
   constructor(name: string) {
     this.name = name;
   }
-
 }
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -48,26 +45,25 @@ class User {
     this.name = name;
     this.email = email;
   }
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [User, Item],
   });
   await orm.schema.createSchema();
-  await orm.em.insert(Item, { id: 1, name: 'item' });
+  await orm.em.insert(Item, { id: 1, name: "item" });
 });
 
 afterAll(async () => {
   await orm.close(true);
 });
 
-test('load on not managed entity (GH #5082)', async () => {
-  const u = new User('foo', 'foo@x.com');
+test("load on not managed entity (GH #5082)", async () => {
+  const u = new User("foo", "foo@x.com");
   u.id = 123;
   u.item = ref(Item, 1);
   orm.em.persist(u);

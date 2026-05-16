@@ -1,22 +1,27 @@
-import { mockLogger } from '../../helpers';
+import { mockLogger } from "../../helpers";
 
 (global as any).process.env.FORCE_COLOR = 0;
 
-import type { Knex } from 'knex';
-import { knex } from 'knex';
-import { Entity, MikroORM, PrimaryKey, Property, Type } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import type { Knex } from "knex";
+import { knex } from "knex";
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+  Type,
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 type Point = { x: number; y: number };
 
 class PointType extends Type<Point, Knex.Raw> {
-
   override convertToDatabaseValue(value: Point): Knex.Raw {
-    return knex({ client: 'pg' }).raw(`point(?,?)`, [value.x, value.y]);
+    return knex({ client: "pg" }).raw(`point(?,?)`, [value.x, value.y]);
   }
 
   override convertToJSValue(value: any): Point {
-    if (typeof value === 'object') {
+    if (typeof value === "object") {
       return value; // pg connector is automatically converting point to { x, y }
     }
 
@@ -25,20 +30,17 @@ class PointType extends Type<Point, Knex.Raw> {
   }
 
   override getColumnType() {
-    return 'point';
+    return "point";
   }
-
 }
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
   @Property({ type: PointType })
   prop!: Point;
-
 }
 
 let orm: MikroORM<PostgreSqlDriver>;
@@ -61,7 +63,7 @@ afterAll(async () => {
 });
 
 test(`custom types with knex.raw()`, async () => {
-  const mock = mockLogger(orm, ['query']);
+  const mock = mockLogger(orm, ["query"]);
 
   const a1 = new A();
   a1.prop = { x: 5, y: 9 };
@@ -79,18 +81,26 @@ test(`custom types with knex.raw()`, async () => {
   const a3 = await orm.em.findOneOrFail(A, a1.id);
   expect(a3.prop).toEqual({ x: 6, y: 10 });
 
-  expect(mock.mock.calls[0][0]).toMatch('begin');
-  expect(mock.mock.calls[1][0]).toMatch('insert into "a" ("prop") values ($1) returning "id"');
-  expect(mock.mock.calls[2][0]).toMatch('commit');
-  expect(mock.mock.calls[3][0]).toMatch('select "a0".* from "a" as "a0" where "a0"."id" = $1 limit $2');
-  expect(mock.mock.calls[4][0]).toMatch('begin');
-  expect(mock.mock.calls[5][0]).toMatch('update "a" set "prop" = point($1,$2) where "id" = $3');
-  expect(mock.mock.calls[6][0]).toMatch('commit');
-  expect(mock.mock.calls[7][0]).toMatch('select "a0".* from "a" as "a0" where "a0"."id" = $1 limit $2');
+  expect(mock.mock.calls[0][0]).toMatch("begin");
+  expect(mock.mock.calls[1][0]).toMatch(
+    'insert into "a" ("prop") values ($1) returning "id"',
+  );
+  expect(mock.mock.calls[2][0]).toMatch("commit");
+  expect(mock.mock.calls[3][0]).toMatch(
+    'select "a0".* from "a" as "a0" where "a0"."id" = $1 limit $2',
+  );
+  expect(mock.mock.calls[4][0]).toMatch("begin");
+  expect(mock.mock.calls[5][0]).toMatch(
+    'update "a" set "prop" = point($1,$2) where "id" = $3',
+  );
+  expect(mock.mock.calls[6][0]).toMatch("commit");
+  expect(mock.mock.calls[7][0]).toMatch(
+    'select "a0".* from "a" as "a0" where "a0"."id" = $1 limit $2',
+  );
 });
 
 test(`multi insert with custom types and knex.raw() (GH #1841)`, async () => {
-  const mock = mockLogger(orm, ['query']);
+  const mock = mockLogger(orm, ["query"]);
 
   orm.em.create(A, { prop: { x: 5, y: 9 } }, { persist: true });
   orm.em.create(A, { prop: { x: 6, y: 10 } }, { persist: true });
@@ -116,12 +126,16 @@ test(`multi insert with custom types and knex.raw() (GH #1841)`, async () => {
   expect(a2[0].prop).toEqual({ x: 65, y: 100 });
   expect(a2[1].prop).toEqual({ x: 77, y: 111 });
 
-  expect(mock.mock.calls[0][0]).toMatch('begin');
-  expect(mock.mock.calls[1][0]).toMatch('insert into "a" ("prop") values ($1), ($2), ($3) returning "id"');
-  expect(mock.mock.calls[2][0]).toMatch('commit');
+  expect(mock.mock.calls[0][0]).toMatch("begin");
+  expect(mock.mock.calls[1][0]).toMatch(
+    'insert into "a" ("prop") values ($1), ($2), ($3) returning "id"',
+  );
+  expect(mock.mock.calls[2][0]).toMatch("commit");
   expect(mock.mock.calls[3][0]).toMatch('select "a0".* from "a" as "a0"');
-  expect(mock.mock.calls[4][0]).toMatch('begin');
-  expect(mock.mock.calls[5][0]).toMatch('update "a" set "prop" = case when ("id" = $1) then $2 when ("id" = $3) then $4 when ("id" = $5) then $6 else "prop" end where "id" in ($7, $8, $9)');
-  expect(mock.mock.calls[6][0]).toMatch('commit');
+  expect(mock.mock.calls[4][0]).toMatch("begin");
+  expect(mock.mock.calls[5][0]).toMatch(
+    'update "a" set "prop" = case when ("id" = $1) then $2 when ("id" = $3) then $4 when ("id" = $5) then $6 else "prop" end where "id" in ($7, $8, $9)',
+  );
+  expect(mock.mock.calls[6][0]).toMatch("commit");
   expect(mock.mock.calls[7][0]).toMatch('select "a0".* from "a" as "a0"');
 });

@@ -4,21 +4,19 @@ import {
   PrimaryKey,
   Property,
   SimpleLogger,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/postgresql';
-import { mockLogger } from '../helpers';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class User {
-
-  [OptionalProps]?: 'options';
+  [OptionalProps]?: "options";
 
   @PrimaryKey()
   id!: number;
 
-  @Property({ type: 'string[]', default: ['foo'] })
-  options = ['foo'];
-
+  @Property({ type: "string[]", default: ["foo"] })
+  options = ["foo"];
 }
 
 let orm: MikroORM;
@@ -26,8 +24,8 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [User],
-    dbName: 'mikro_orm_test_gh_4796',
-    loggerFactory: options => new SimpleLogger(options),
+    dbName: "mikro_orm_test_gh_4796",
+    loggerFactory: (options) => new SimpleLogger(options),
   });
   await orm.schema.refreshDatabase();
 });
@@ -36,20 +34,20 @@ afterAll(async () => {
   await orm.close();
 });
 
-test('4796', async () => {
-  const mock = mockLogger(orm, ['query', 'query-params']);
-  const u1 = orm.em.create(User, { options: ['\\'] });
+test("4796", async () => {
+  const mock = mockLogger(orm, ["query", "query-params"]);
+  const u1 = orm.em.create(User, { options: ["\\"] });
   await orm.em.flush();
 
   expect(mock.mock.calls).toEqual([
-    ['[query] begin'],
+    ["[query] begin"],
     [
       '[query] insert into "user" ("options") values ( E\'{"\\\\\\\\"}\') returning "id"',
     ],
-    ['[query] commit'],
+    ["[query] commit"],
   ]);
 
   const ud = await orm.em.fork().findOne(User, { id: u1.id });
 
-  expect(ud).toEqual({ id: 1, options: ['\\'] });
+  expect(ud).toEqual({ id: 1, options: ["\\"] });
 });

@@ -1,9 +1,17 @@
-import { Entity, Ref, ManyToOne, PrimaryKey, Property, EventSubscriber, ChangeSet, FlushEventArgs } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  Ref,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+  EventSubscriber,
+  ChangeSet,
+  FlushEventArgs,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Node {
-
   @PrimaryKey()
   id!: number;
 
@@ -12,17 +20,14 @@ class Node {
 
   @ManyToOne(() => Node, { nullable: true, ref: true })
   parent?: Ref<Node>;
-
 }
 
 class AfterFlushSubscriber implements EventSubscriber {
-
   static readonly changeSets: ChangeSet<any>[] = [];
 
   afterFlush(args: FlushEventArgs) {
     AfterFlushSubscriber.changeSets.push(...args.uow.getChangeSets());
   }
-
 }
 
 let orm: MikroORM;
@@ -30,7 +35,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Node],
-    dbName: ':memory:',
+    dbName: ":memory:",
     subscribers: [AfterFlushSubscriber],
   });
   await orm.schema.refreshDatabase();
@@ -40,21 +45,21 @@ afterAll(async () => {
   await orm.close();
 });
 
-test('4245', async () => {
+test("4245", async () => {
   const firstNode = orm.em.create(Node, {
-    value: 'First node',
+    value: "First node",
   });
 
   const secondNode = orm.em.create(Node, {
-    value: 'Second node',
+    value: "Second node",
     parent: firstNode,
   });
 
   await orm.em.flush();
 
   const nestedNodeChangeSet = AfterFlushSubscriber.changeSets.filter(
-    changeSet =>
-      changeSet.name === 'Node' && changeSet.payload.value === secondNode.value,
+    (changeSet) =>
+      changeSet.name === "Node" && changeSet.payload.value === secondNode.value,
   )[0];
 
   // Check entity values
@@ -64,8 +69,12 @@ test('4245', async () => {
   expect(nestedNodeChangeSet.entity.parent.id).toBeDefined();
 
   // Check changeset payload
-  expect(nestedNodeChangeSet.payload.value).toBe(nestedNodeChangeSet.entity.value);
+  expect(nestedNodeChangeSet.payload.value).toBe(
+    nestedNodeChangeSet.entity.value,
+  );
   expect(nestedNodeChangeSet.payload.id).toBe(nestedNodeChangeSet.entity.id);
   expect(nestedNodeChangeSet.payload.parent).toBeDefined();
-  expect(nestedNodeChangeSet.payload.parent).toBe(nestedNodeChangeSet.entity.parent.id);
+  expect(nestedNodeChangeSet.payload.parent).toBe(
+    nestedNodeChangeSet.entity.parent.id,
+  );
 });

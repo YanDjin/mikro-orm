@@ -1,24 +1,29 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import { MySqlDriver } from '@mikro-orm/mysql';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MySqlDriver } from "@yandjin-mikro-orm/mysql";
 
 @Entity()
 export class Author {
-
-  @PrimaryKey({ columnType: 'mediumint' })
+  @PrimaryKey({ columnType: "mediumint" })
   id!: number;
 
   @Property()
   name!: string;
 
-  @OneToMany(() => Book, book => book.author)
+  @OneToMany(() => Book, (book) => book.author)
   books = new Collection<Book>(this);
-
 }
 
 @Entity()
 export class Book {
-
-  @PrimaryKey({ columnType: 'mediumint' })
+  @PrimaryKey({ columnType: "mediumint" })
   bookId!: number;
 
   @Property()
@@ -26,7 +31,6 @@ export class Book {
 
   @ManyToOne(() => Author)
   author!: Author;
-
 }
 
 let orm: MikroORM;
@@ -44,10 +48,10 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('mediumint column type in mysql as FK', async () => {
+test("mediumint column type in mysql as FK", async () => {
   const sql = await orm.schema.getCreateSchemaSQL();
   expect(sql).toMatchSnapshot();
   await orm.schema.execute(sql);
   const diff = await orm.schema.getUpdateSchemaSQL();
-  expect(diff).toBe('');
+  expect(diff).toBe("");
 });

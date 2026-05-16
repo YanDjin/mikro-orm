@@ -1,35 +1,38 @@
-import { Collection, Entity, PrimaryKey, ManyToOne, OneToMany, MikroORM, Ref } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  PrimaryKey,
+  ManyToOne,
+  OneToMany,
+  MikroORM,
+  Ref,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: string;
 
-  @ManyToOne({ entity: 'B', ref: true, nullable: true })
+  @ManyToOne({ entity: "B", ref: true, nullable: true })
   b?: Ref<B>;
-
 }
 
 @Entity()
 class B {
-
   @PrimaryKey()
   id!: string;
 
-  @OneToMany(() => A, a => a.b)
+  @OneToMany(() => A, (a) => a.b)
   as = new Collection<A>(this);
-
 }
 
-describe('GH issue 467', () => {
-
+describe("GH issue 467", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [A, B],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
@@ -38,53 +41,52 @@ describe('GH issue 467', () => {
 
   test(`wrap().assign to collections is persisted`, async () => {
     const a = new A();
-    a.id = 'a1';
+    a.id = "a1";
     await orm.em.persistAndFlush(a);
 
     const b = new B();
     orm.em.assign(b, {
-      id: 'b1',
-      as: ['a1'],
+      id: "b1",
+      as: ["a1"],
     });
     await orm.em.persistAndFlush(b);
     orm.em.clear();
 
-    const b1 = await orm.em.findOneOrFail(B, 'b1', { populate: ['as'] });
-    expect(b1.as.getIdentifiers()).toEqual(['a1']);
+    const b1 = await orm.em.findOneOrFail(B, "b1", { populate: ["as"] });
+    expect(b1.as.getIdentifiers()).toEqual(["a1"]);
   });
 
   test(`assigning to new collection from inverse side is persisted`, async () => {
     const a = new A();
-    a.id = 'a2';
+    a.id = "a2";
     await orm.em.persistAndFlush(a);
 
     const b = new B();
-    b.id = 'b2';
-    b.as.set([orm.em.getReference(A, 'a2')]);
+    b.id = "b2";
+    b.as.set([orm.em.getReference(A, "a2")]);
     await orm.em.persistAndFlush(b);
     orm.em.clear();
 
-    const b1 = await orm.em.findOneOrFail(B, 'b2', { populate: ['as'] });
-    expect(b1.as.getIdentifiers()).toEqual(['a2']);
+    const b1 = await orm.em.findOneOrFail(B, "b2", { populate: ["as"] });
+    expect(b1.as.getIdentifiers()).toEqual(["a2"]);
   });
 
   test(`assigning to loaded collection from inverse side is persisted`, async () => {
     const a = new A();
-    a.id = 'a3';
+    a.id = "a3";
     await orm.em.persistAndFlush(a);
 
     const b = new B();
-    b.id = 'b3';
+    b.id = "b3";
     await orm.em.persistAndFlush(b);
     orm.em.clear();
 
-    const b1 = await orm.em.findOneOrFail(B, 'b3', { populate: ['as'] });
-    b1.as.set([orm.em.getReference(A, 'a3')]);
+    const b1 = await orm.em.findOneOrFail(B, "b3", { populate: ["as"] });
+    b1.as.set([orm.em.getReference(A, "a3")]);
     await orm.em.flush();
     orm.em.clear();
 
-    const b2 = await orm.em.findOneOrFail(B, 'b3', { populate: ['as'] });
-    expect(b2.as.getIdentifiers()).toEqual(['a3']);
+    const b2 = await orm.em.findOneOrFail(B, "b3", { populate: ["as"] });
+    expect(b2.as.getIdentifiers()).toEqual(["a3"]);
   });
-
 });

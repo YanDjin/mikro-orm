@@ -1,9 +1,14 @@
-import { Embeddable, Embedded, Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Embeddable()
 class Nested {
-
   @Property()
   field1: string;
 
@@ -18,12 +23,10 @@ class Nested {
     this.field2 = field2;
     this.field3 = field3;
   }
-
 }
 
 @Entity()
 class Parent {
-
   @PrimaryKey({ autoincrement: false })
   id: number;
 
@@ -34,7 +37,6 @@ class Parent {
     this.id = id;
     this.nested = nested;
   }
-
 }
 
 let orm: MikroORM;
@@ -42,35 +44,34 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Parent],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
 
 afterAll(() => orm.close(true));
 
-test('load embedded entity twice (GH #3134)', async () => {
+test("load embedded entity twice (GH #3134)", async () => {
   // initial data
-  const nested = new Nested('A', 'B', 'C');
+  const nested = new Nested("A", "B", "C");
   const parent = new Parent(1, nested);
   await orm.em.fork().persistAndFlush(parent);
 
   const em1 = orm.em.fork();
   const p1 = await em1.findOneOrFail(Parent, 1);
-  expect(p1.nested.field1).toBe('A');
-  expect(p1.nested.field2).toBe('B');
-  expect(p1.nested.field3).toBe('C');
+  expect(p1.nested.field1).toBe("A");
+  expect(p1.nested.field2).toBe("B");
+  expect(p1.nested.field3).toBe("C");
 
   const em2 = orm.em.fork();
   const p = await em2.findOneOrFail(Parent, 1);
-  p.nested.field1 = 'Z';
+  p.nested.field1 = "Z";
   await em2.persistAndFlush(p);
 
   await em1.refresh(p1);
   expect(p1.nested).toEqual({
-    field1: 'Z',
-    field2: 'B',
-    field3: 'C',
+    field1: "Z",
+    field2: "B",
+    field3: "C",
   });
 });
-

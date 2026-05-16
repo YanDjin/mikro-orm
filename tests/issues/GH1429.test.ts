@@ -1,25 +1,28 @@
-import { Collection, Entity, ManyToMany, MikroORM, PrimaryKey } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  MikroORM,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
   @ManyToMany({
     entity: () => A,
-    joinColumn: 'a_to_b',
-    inverseJoinColumn: 'b_to_a',
+    joinColumn: "a_to_b",
+    inverseJoinColumn: "b_to_a",
   })
   as = new Collection<A>(this);
 
-  @ManyToMany(() => A, 'as')
+  @ManyToMany(() => A, "as")
   bs = new Collection<A>(this);
-
 }
 
-describe('GH issue 1429', () => {
-
+describe("GH issue 1429", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -39,8 +42,12 @@ describe('GH issue 1429', () => {
     await orm.em.persistAndFlush(fixture1);
     orm.em.clear();
 
-    const found1 = await orm.em.findOneOrFail(A, fixture1.id, { populate: ['as', 'bs'] });
-    const found2 = await orm.em.findOneOrFail(A, fixture2.id, { populate: ['as', 'bs'] });
+    const found1 = await orm.em.findOneOrFail(A, fixture1.id, {
+      populate: ["as", "bs"],
+    });
+    const found2 = await orm.em.findOneOrFail(A, fixture2.id, {
+      populate: ["as", "bs"],
+    });
 
     expect(found1.as.isInitialized()).toBe(true);
     expect(found1.bs.isInitialized()).toBe(true);

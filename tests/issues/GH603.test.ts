@@ -1,67 +1,67 @@
-import { Collection, EntitySchema, MikroORM, OptionalProps } from '@mikro-orm/mysql';
-import { v4 } from 'uuid';
+import {
+  Collection,
+  EntitySchema,
+  MikroORM,
+  OptionalProps,
+} from "@yandjin-mikro-orm/mysql";
+import { v4 } from "uuid";
 
 class TaskProps {
-
   id = v4();
   version = new Date();
   projects = new Collection<ProjectProps>(this);
-  [OptionalProps]?: 'version';
-
+  [OptionalProps]?: "version";
 }
 
 class ProjectProps {
-
   id = v4();
   name!: string;
   tasks = new Collection<TaskProps>(this);
-
 }
 
 const TaskSchema = new EntitySchema<TaskProps>({
   class: TaskProps,
-  tableName: 'task',
+  tableName: "task",
   properties: {
     id: {
-      type: 'string',
+      type: "string",
       primary: true,
       length: 36,
     },
     version: {
-      type: 'Date',
+      type: "Date",
       primary: true,
       length: 6,
     },
     projects: {
       entity: () => ProjectProps,
-      kind: 'm:n',
-      inversedBy: 'tasks',
+      kind: "m:n",
+      inversedBy: "tasks",
     },
   },
 });
 
 const ProjectSchema = new EntitySchema<ProjectProps>({
   class: ProjectProps,
-  tableName: 'project',
+  tableName: "project",
   properties: {
     id: {
-      type: 'string',
+      type: "string",
       primary: true,
       length: 36,
     },
     name: {
-      type: 'string',
+      type: "string",
     },
     tasks: {
       entity: () => TaskProps,
-      mappedBy: 'projects',
-      kind: 'm:n',
+      mappedBy: "projects",
+      kind: "m:n",
     },
   },
 });
 
-describe('GH issue 603', () => {
-
+describe("GH issue 603", () => {
   let orm: MikroORM;
   let projectId: string;
   let taskId: string;
@@ -74,7 +74,7 @@ describe('GH issue 603', () => {
     });
     await orm.schema.refreshDatabase();
 
-    const project = orm.em.create(ProjectProps, { name: 'Test project' });
+    const project = orm.em.create(ProjectProps, { name: "Test project" });
     const task = orm.em.create(TaskProps, {});
     await orm.em.persistAndFlush([project, task]);
     projectId = project.id;
@@ -105,5 +105,4 @@ describe('GH issue 603', () => {
     await expect(orm.em.flush()).resolves.not.toThrow();
     orm.em.clear();
   });
-
 });

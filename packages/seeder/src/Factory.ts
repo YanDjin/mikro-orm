@@ -1,11 +1,15 @@
-import type { RequiredEntityData, EntityData, EntityManager, Constructor } from '@mikro-orm/core';
+import type {
+  RequiredEntityData,
+  EntityData,
+  EntityManager,
+  Constructor,
+} from "@yandjin-mikro-orm/core";
 
 export abstract class Factory<T extends object> {
-
   abstract readonly model: Constructor<T>;
   private eachFunction?: (entity: T) => void;
 
-  constructor(private readonly em: EntityManager) { }
+  constructor(private readonly em: EntityManager) {}
 
   protected abstract definition(): EntityData<T>;
 
@@ -14,10 +18,14 @@ export abstract class Factory<T extends object> {
    * @param overrideParameters Object specifying what default attributes of the entity factory should be overridden
    */
   makeEntity(overrideParameters?: EntityData<T>): T {
-    const entity = this.em.create(this.model, {
-      ...this.definition(),
-      ...overrideParameters,
-    } as unknown as RequiredEntityData<T>, { persist: false });
+    const entity = this.em.create(
+      this.model,
+      {
+        ...this.definition(),
+        ...overrideParameters,
+      } as unknown as RequiredEntityData<T>,
+      { persist: false },
+    );
 
     if (this.eachFunction) {
       this.eachFunction(entity);
@@ -64,7 +72,10 @@ export abstract class Factory<T extends object> {
    * @param amount Number of entities that should be generated
    * @param overrideParameters Object specifying what default attributes of the entity factory should be overridden
    */
-  async create(amount: number, overrideParameters?: EntityData<T>): Promise<T[]> {
+  async create(
+    amount: number,
+    overrideParameters?: EntityData<T>,
+  ): Promise<T[]> {
     const entities = this.make(amount, overrideParameters);
     await this.em.flush();
     return entities;
@@ -79,5 +90,4 @@ export abstract class Factory<T extends object> {
     this.eachFunction = eachFunction;
     return this;
   }
-
 }

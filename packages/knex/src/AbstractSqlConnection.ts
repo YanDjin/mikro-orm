@@ -1,5 +1,5 @@
-import { knex, type Knex } from 'knex';
-import { readFile } from 'fs-extra';
+import { knex, type Knex } from "knex";
+import { readFile } from "fs-extra";
 import {
   Connection,
   EventType,
@@ -14,23 +14,26 @@ import {
   type TransactionEventBroadcaster,
   type LogContext,
   type LoggingOptions,
-} from '@mikro-orm/core';
-import type { AbstractSqlPlatform } from './AbstractSqlPlatform';
-import { MonkeyPatchable } from './MonkeyPatchable';
+} from "@yandjin-mikro-orm/core";
+import type { AbstractSqlPlatform } from "./AbstractSqlPlatform";
+import { MonkeyPatchable } from "./MonkeyPatchable";
 
-const parentTransactionSymbol = Symbol('parentTransaction');
+const parentTransactionSymbol = Symbol("parentTransaction");
 
 function isRootTransaction<T>(trx: Transaction<T>) {
   return !Object.getOwnPropertySymbols(trx).includes(parentTransactionSymbol);
 }
 
 export abstract class AbstractSqlConnection extends Connection {
-
   private static __patched = false;
   declare protected platform: AbstractSqlPlatform;
   protected client!: Knex;
 
-  constructor(config: Configuration, options?: ConnectionOptions, type?: 'read' | 'write') {
+  constructor(
+    config: Configuration,
+    options?: ConnectionOptions,
+    type?: "read" | "write",
+  ) {
     super(config, options, type);
     this.patchKnexClient();
   }
@@ -69,16 +72,28 @@ export abstract class AbstractSqlConnection extends Connection {
   /**
    * @inheritDoc
    */
-  async checkConnection(): Promise<{ ok: boolean; reason?: string; error?: Error }> {
+  async checkConnection(): Promise<{
+    ok: boolean;
+    reason?: string;
+    error?: Error;
+  }> {
     try {
-      await this.getKnex().raw('select 1');
+      await this.getKnex().raw("select 1");
       return { ok: true };
     } catch (error: any) {
       return { ok: false, reason: error.message, error };
     }
   }
 
-  override async transactional<T>(cb: (trx: Transaction<Knex.Transaction>) => Promise<T>, options: { isolationLevel?: IsolationLevel; readOnly?: boolean; ctx?: Knex.Transaction; eventBroadcaster?: TransactionEventBroadcaster } = {}): Promise<T> {
+  override async transactional<T>(
+    cb: (trx: Transaction<Knex.Transaction>) => Promise<T>,
+    options: {
+      isolationLevel?: IsolationLevel;
+      readOnly?: boolean;
+      ctx?: Knex.Transaction;
+      eventBroadcaster?: TransactionEventBroadcaster;
+    } = {},
+  ): Promise<T> {
     const trx = await this.begin(options);
 
     try {
@@ -92,9 +107,18 @@ export abstract class AbstractSqlConnection extends Connection {
     }
   }
 
-  override async begin(options: { isolationLevel?: IsolationLevel; readOnly?: boolean; ctx?: Knex.Transaction; eventBroadcaster?: TransactionEventBroadcaster } = {}): Promise<Knex.Transaction> {
+  override async begin(
+    options: {
+      isolationLevel?: IsolationLevel;
+      readOnly?: boolean;
+      ctx?: Knex.Transaction;
+      eventBroadcaster?: TransactionEventBroadcaster;
+    } = {},
+  ): Promise<Knex.Transaction> {
     if (!options.ctx) {
-      await options.eventBroadcaster?.dispatchEvent(EventType.beforeTransactionStart);
+      await options.eventBroadcaster?.dispatchEvent(
+        EventType.beforeTransactionStart,
+      );
     }
 
     const trx = await (options.ctx || this.getKnex()).transaction(null, {
@@ -103,48 +127,79 @@ export abstract class AbstractSqlConnection extends Connection {
     });
 
     if (!options.ctx) {
-      await options.eventBroadcaster?.dispatchEvent(EventType.afterTransactionStart, trx);
+      await options.eventBroadcaster?.dispatchEvent(
+        EventType.afterTransactionStart,
+        trx,
+      );
     } else {
-      trx[parentTransactionSymbol as unknown as keyof Knex.Transaction] = options.ctx;
+      trx[parentTransactionSymbol as unknown as keyof Knex.Transaction] =
+        options.ctx;
     }
 
     return trx;
   }
 
-  override async commit(ctx: Knex.Transaction, eventBroadcaster?: TransactionEventBroadcaster): Promise<void> {
+  override async commit(
+    ctx: Knex.Transaction,
+    eventBroadcaster?: TransactionEventBroadcaster,
+  ): Promise<void> {
     const runTrxHooks = isRootTransaction(ctx);
 
     if (runTrxHooks) {
-      await eventBroadcaster?.dispatchEvent(EventType.beforeTransactionCommit, ctx);
+      await eventBroadcaster?.dispatchEvent(
+        EventType.beforeTransactionCommit,
+        ctx,
+      );
     }
 
     ctx.commit();
     await ctx.executionPromise; // https://github.com/knex/knex/issues/3847#issuecomment-626330453
 
     if (runTrxHooks) {
-      await eventBroadcaster?.dispatchEvent(EventType.afterTransactionCommit, ctx);
+      await eventBroadcaster?.dispatchEvent(
+        EventType.afterTransactionCommit,
+        ctx,
+      );
     }
   }
 
-  override async rollback(ctx: Knex.Transaction, eventBroadcaster?: TransactionEventBroadcaster): Promise<void> {
+  override async rollback(
+    ctx: Knex.Transaction,
+    eventBroadcaster?: TransactionEventBroadcaster,
+  ): Promise<void> {
     const runTrxHooks = isRootTransaction(ctx);
 
     if (runTrxHooks) {
-      await eventBroadcaster?.dispatchEvent(EventType.beforeTransactionRollback, ctx);
+      await eventBroadcaster?.dispatchEvent(
+        EventType.beforeTransactionRollback,
+        ctx,
+      );
     }
 
     await ctx.rollback();
 
     if (runTrxHooks) {
-      await eventBroadcaster?.dispatchEvent(EventType.afterTransactionRollback, ctx);
+      await eventBroadcaster?.dispatchEvent(
+        EventType.afterTransactionRollback,
+        ctx,
+      );
     }
   }
 
-  async execute<T extends QueryResult | EntityData<AnyEntity> | EntityData<AnyEntity>[] = EntityData<AnyEntity>[]>(queryOrKnex: string | Knex.QueryBuilder | Knex.Raw, params: unknown[] = [], method: 'all' | 'get' | 'run' = 'all', ctx?: Transaction, loggerContext?: LoggingOptions): Promise<T> {
+  async execute<
+    T extends QueryResult | EntityData<AnyEntity> | EntityData<AnyEntity>[] =
+      EntityData<AnyEntity>[],
+  >(
+    queryOrKnex: string | Knex.QueryBuilder | Knex.Raw,
+    params: unknown[] = [],
+    method: "all" | "get" | "run" = "all",
+    ctx?: Transaction,
+    loggerContext?: LoggingOptions,
+  ): Promise<T> {
     await this.ensureConnection();
 
     if (Utils.isObject<Knex.QueryBuilder | Knex.Raw>(queryOrKnex)) {
-      ctx ??= ((queryOrKnex as any).client.transacting ? queryOrKnex : null);
+      ctx ??= (queryOrKnex as any).client.transacting ? queryOrKnex : null;
       const q = queryOrKnex.toSQL();
       queryOrKnex = q.sql;
       params = q.bindings as any[];
@@ -152,16 +207,20 @@ export abstract class AbstractSqlConnection extends Connection {
 
     const formatted = this.platform.formatQuery(queryOrKnex, params);
     const sql = this.getSql(queryOrKnex, formatted, loggerContext);
-    return this.executeQuery<T>(sql, async () => {
-      const query = this.getKnex().raw(formatted);
+    return this.executeQuery<T>(
+      sql,
+      async () => {
+        const query = this.getKnex().raw(formatted);
 
-      if (ctx) {
-        query.transacting(ctx);
-      }
+        if (ctx) {
+          query.transacting(ctx);
+        }
 
-      const res = await query;
-      return this.transformRawResult<T>(res, method);
-    }, { query: queryOrKnex, params, ...loggerContext });
+        const res = await query;
+        return this.transformRawResult<T>(res, method);
+      },
+      { query: queryOrKnex, params, ...loggerContext },
+    );
   }
 
   /**
@@ -173,27 +232,32 @@ export abstract class AbstractSqlConnection extends Connection {
   }
 
   protected createKnexClient(type: string): Knex {
-    const driverOptions = this.config.get('driverOptions');
+    const driverOptions = this.config.get("driverOptions");
 
     if (driverOptions.context?.client instanceof knex.Client) {
-      this.logger.log('info', 'Reusing knex client provided via `driverOptions`');
+      this.logger.log(
+        "info",
+        "Reusing knex client provided via `driverOptions`",
+      );
       return driverOptions as Knex;
     }
 
-    return knex<any, any>(this.getKnexOptions(type))
-      .on('query', data => {
-        if (!data.__knexQueryUid) {
-          this.logQuery(data.sql.toLowerCase().replace(/;$/, ''));
-        }
-      });
+    return knex<any, any>(this.getKnexOptions(type)).on("query", (data) => {
+      if (!data.__knexQueryUid) {
+        this.logQuery(data.sql.toLowerCase().replace(/;$/, ""));
+      }
+    });
   }
 
   protected getKnexOptions(type: string): Knex.Config {
-    const config = Utils.mergeConfig({
-      client: type,
-      connection: this.getConnectionOptions(),
-      pool: this.config.get('pool'),
-    }, this.config.get('driverOptions'));
+    const config = Utils.mergeConfig(
+      {
+        client: type,
+        connection: this.getConnectionOptions(),
+        pool: this.config.get("pool"),
+      },
+      this.config.get("driverOptions"),
+    );
     const options = config.connection as ConnectionOptions;
     const password = options.password;
 
@@ -204,7 +268,7 @@ export abstract class AbstractSqlConnection extends Connection {
     config.connection = async () => {
       const pw = await password();
 
-      if (typeof pw === 'string') {
+      if (typeof pw === "string") {
         return { ...options, password: pw };
       }
 
@@ -218,14 +282,18 @@ export abstract class AbstractSqlConnection extends Connection {
     return config;
   }
 
-  private getSql(query: string, formatted: string, context?: LogContext): string {
+  private getSql(
+    query: string,
+    formatted: string,
+    context?: LogContext,
+  ): string {
     const logger = this.config.getLogger();
 
-    if (!logger.isEnabled('query', context)) {
+    if (!logger.isEnabled("query", context)) {
       return query;
     }
 
-    if (logger.isEnabled('query-params', context)) {
+    if (logger.isEnabled("query-params", context)) {
       return formatted;
     }
 
@@ -248,7 +316,7 @@ export abstract class AbstractSqlConnection extends Connection {
     AbstractSqlConnection.__patched = true;
 
     Client.prototype.query = function (this: any, connection: any, obj: any) {
-      if (typeof obj === 'string') {
+      if (typeof obj === "string") {
         obj = { sql: obj };
       }
 
@@ -258,9 +326,13 @@ export abstract class AbstractSqlConnection extends Connection {
 
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const { __knexUid, __knexTxId } = connection;
-      this.emit('query', Object.assign({ __knexUid, __knexTxId }, obj));
+      this.emit("query", Object.assign({ __knexUid, __knexTxId }, obj));
 
-      return MonkeyPatchable.QueryExecutioner.executeQuery(connection, obj, this);
+      return MonkeyPatchable.QueryExecutioner.executeQuery(
+        connection,
+        obj,
+        this,
+      );
     };
 
     TableCompiler.prototype.raw = function (this: any, query: string) {
@@ -268,6 +340,8 @@ export abstract class AbstractSqlConnection extends Connection {
     };
   }
 
-  protected abstract transformRawResult<T>(res: any, method: 'all' | 'get' | 'run'): T;
-
+  protected abstract transformRawResult<T>(
+    res: any,
+    method: "all" | "get" | "run",
+  ): T;
 }

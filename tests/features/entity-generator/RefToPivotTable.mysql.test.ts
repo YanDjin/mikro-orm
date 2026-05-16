@@ -1,8 +1,8 @@
-import { MikroORM } from '@mikro-orm/mysql';
-import { EntityGenerator } from '@mikro-orm/entity-generator';
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { EntityGenerator } from "@yandjin-mikro-orm/entity-generator";
 
 let orm: MikroORM;
-const schemaName = 'pivot_ref_examples';
+const schemaName = "pivot_ref_examples";
 
 beforeAll(async () => {
   orm = await MikroORM.init({
@@ -17,7 +17,7 @@ beforeAll(async () => {
 
 afterAll(() => orm.close());
 
-test('RefToPivotTable', async () => {
+test("RefToPivotTable", async () => {
   if (await orm.schema.ensureDatabase({ create: true })) {
     await orm.schema.execute(`
 CREATE TABLE IF NOT EXISTS \`sender\` (
@@ -73,5 +73,5 @@ ENGINE = InnoDB;
   `);
   }
   const dump = await orm.entityGenerator.generate();
-  expect(dump).toMatchSnapshot('mysql-entity-dump');
+  expect(dump).toMatchSnapshot("mysql-entity-dump");
 });

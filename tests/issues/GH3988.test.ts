@@ -1,19 +1,24 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, SimpleLogger, Type } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+  SimpleLogger,
+  Type,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 class Id {
-
   readonly value: number;
 
   constructor(value: number) {
     this.value = value;
   }
-
 }
 
 export class IdType extends Type<Id, string> {
-
   override convertToDatabaseValue(value: any) {
     if (value instanceof Id) {
       return value.value;
@@ -23,7 +28,7 @@ export class IdType extends Type<Id, string> {
   }
 
   override convertToJSValue(value: any) {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       const id = Object.create(Id.prototype);
 
       return Object.assign(id, {
@@ -35,18 +40,16 @@ export class IdType extends Type<Id, string> {
   }
 
   override compareAsType() {
-    return 'number';
+    return "number";
   }
 
   override getColumnType() {
-    return 'integer';
+    return "integer";
   }
-
 }
 
 @Entity()
 class ParentEntity {
-
   @PrimaryKey({ type: IdType, autoincrement: false })
   id!: Id;
 
@@ -55,21 +58,18 @@ class ParentEntity {
 
   @OneToMany({
     entity: () => ChildEntity,
-    mappedBy: 'parent',
+    mappedBy: "parent",
   })
   children = new Collection<ChildEntity>(this);
-
 }
 
 @Entity()
 class ChildEntity {
-
   @PrimaryKey({ type: IdType, autoincrement: false })
   id!: Id;
 
   @ManyToOne(() => ParentEntity)
   parent!: ParentEntity;
-
 }
 
 let orm: MikroORM;
@@ -77,8 +77,8 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [ParentEntity, ChildEntity],
-    dbName: ':memory:',
-    loggerFactory: options => new SimpleLogger(options),
+    dbName: ":memory:",
+    loggerFactory: (options) => new SimpleLogger(options),
   });
 
   await orm.schema.createSchema();
@@ -88,7 +88,7 @@ afterAll(async () => {
   await orm.close();
 });
 
-it('should create and persist entity along with child entity', async () => {
+it("should create and persist entity along with child entity", async () => {
   // Create parent
   const parent = new ParentEntity();
   parent.id = new Id(1);
@@ -104,9 +104,11 @@ it('should create and persist entity along with child entity', async () => {
   const mock = mockLogger(orm);
   await orm.em.persistAndFlush(parent);
   expect(mock.mock.calls).toEqual([
-    ['[query] begin'],
-    ['[query] insert into `parent_entity` (`id`, `id2`) values (1, 2)'],
-    ['[query] insert into `child_entity` (`id`, `parent_id`, `parent_id2`) values (1, 1, 2)'],
-    ['[query] commit'],
+    ["[query] begin"],
+    ["[query] insert into `parent_entity` (`id`, `id2`) values (1, 2)"],
+    [
+      "[query] insert into `child_entity` (`id`, `parent_id`, `parent_id2`) values (1, 1, 2)",
+    ],
+    ["[query] commit"],
   ]);
 });

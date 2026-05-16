@@ -1,4 +1,4 @@
-import { ObjectId } from 'bson';
+import { ObjectId } from "bson";
 import {
   ArrayType,
   Entity,
@@ -8,19 +8,21 @@ import {
   OneToOne,
   PrimaryKey,
   Property,
-  SerializedPrimaryKey, OptionalProps,
-} from '@mikro-orm/core';
-import { FooBaz } from './FooBaz';
+  SerializedPrimaryKey,
+  OptionalProps,
+} from "@yandjin-mikro-orm/core";
+import { FooBaz } from "./FooBaz";
 
 @Entity()
-@Index({ options: [
-  { name: 'text', str: 'text', baz: 1 },
-  { weights: { name: 10, str: 5 } },
-] })
+@Index({
+  options: [
+    { name: "text", str: "text", baz: 1 },
+    { weights: { name: 10, str: 5 } },
+  ],
+})
 export default class FooBar {
-
-  [EagerProps]?: 'baz';
-  [OptionalProps]?: 'meta';
+  [EagerProps]?: "baz";
+  [OptionalProps]?: "meta";
 
   @PrimaryKey()
   _id!: ObjectId;
@@ -31,7 +33,14 @@ export default class FooBar {
   @Property()
   name!: string;
 
-  @OneToOne({ entity: () => FooBaz, eager: true, orphanRemoval: true, nullable: true, serializedName: 'fooBaz', serializer: value => `FooBaz id: ${value.id}` })
+  @OneToOne({
+    entity: () => FooBaz,
+    eager: true,
+    orphanRemoval: true,
+    nullable: true,
+    serializedName: "fooBaz",
+    serializer: (value) => `FooBaz id: ${value.id}`,
+  })
   baz!: FooBaz | null;
 
   @OneToOne(() => FooBar, undefined, { nullable: true })
@@ -43,7 +52,7 @@ export default class FooBar {
   @Property({ nullable: true })
   blob2?: Uint8Array;
 
-  @Property({ type: new ArrayType(i => +i), nullable: true })
+  @Property({ type: new ArrayType((i) => +i), nullable: true })
   array?: number[];
 
   @Property({ nullable: true })
@@ -55,10 +64,10 @@ export default class FooBar {
   @Property({ type: JsonType, nullable: true })
   object?: { foo: string; bar: number } | any;
 
-  @Property({ onCreate: (bar: FooBar) => bar.meta.onCreateCalled = true })
+  @Property({ onCreate: (bar: FooBar) => (bar.meta.onCreateCalled = true) })
   onCreateTest?: boolean;
 
-  @Property({ onCreate: (bar: FooBar) => bar.meta.onUpdateCalled = true })
+  @Property({ onCreate: (bar: FooBar) => (bar.meta.onUpdateCalled = true) })
   onUpdateTest?: boolean;
 
   @Property({ nullable: true })
@@ -72,5 +81,4 @@ export default class FooBar {
 
     return bar;
   }
-
 }

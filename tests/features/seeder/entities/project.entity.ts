@@ -1,11 +1,19 @@
-import { Collection, Entity, Ref, ManyToOne, OneToMany, OptionalProps, PrimaryKey, Property } from '@mikro-orm/core';
-import { House } from './house.entity';
-import { User } from './user.entity';
+import {
+  Collection,
+  Entity,
+  Ref,
+  ManyToOne,
+  OneToMany,
+  OptionalProps,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { House } from "./house.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class Project {
-
-  [OptionalProps]?: 'createdAt';
+  [OptionalProps]?: "createdAt";
 
   @PrimaryKey()
   id!: number;
@@ -19,7 +27,7 @@ export class Project {
   @Property()
   worth!: number;
 
-  @OneToMany(() => House, house => house.project)
+  @OneToMany(() => House, (house) => house.project)
   houses = new Collection<House>(this);
 
   @Property()
@@ -28,5 +36,4 @@ export class Project {
   constructor(name: string) {
     this.name = name;
   }
-
 }

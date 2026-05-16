@@ -1,28 +1,32 @@
-import { Entity, Enum, ManyToOne, MikroORM, PrimaryKey, Property } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  Enum,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 enum TaskStatus {
-  OPENED = 'OPENED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED',
-  PAUSED = 'PAUSED',
+  OPENED = "OPENED",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  PAUSED = "PAUSED",
 }
 
 @Entity()
 class Status {
-
   @Enum({ primary: true, length: 20, items: () => TaskStatus })
   name!: TaskStatus;
 
   @Property()
   displayName!: string;
-
 }
 
 @Entity()
 class Task {
-
   @PrimaryKey()
   id!: number;
 
@@ -31,20 +35,19 @@ class Task {
     default: TaskStatus.OPENED,
   })
   status!: Status;
-
 }
 
 test(`default value for relation property`, async () => {
   const orm = await MikroORM.init({
     entities: [Task, Status],
     driver: SqliteDriver,
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.refreshDatabase();
 
   const status = new Status();
   status.name = TaskStatus.OPENED;
-  status.displayName = 'opened';
+  status.displayName = "opened";
   await orm.em.persist(status).flush();
   const task = new Task();
   await orm.em.persist(task).flush();
@@ -59,13 +62,13 @@ test(`default value for relation property (sqlite/returning)`, async () => {
   const orm = await MikroORM.init({
     entities: [Task, Status],
     driver: SqliteDriver,
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.refreshDatabase();
 
   const status = new Status();
   status.name = TaskStatus.OPENED;
-  status.displayName = 'opened';
+  status.displayName = "opened";
   await orm.em.persist(status).flush();
   const task = new Task();
   await orm.em.persist(task).flush();
@@ -80,13 +83,13 @@ test(`default value for relation property (postgres/returning)`, async () => {
   const orm = await MikroORM.init({
     entities: [Task, Status],
     driver: PostgreSqlDriver,
-    dbName: 'mikro_orm_test_x1',
+    dbName: "mikro_orm_test_x1",
   });
   await orm.schema.refreshDatabase();
 
   const status = new Status();
   status.name = TaskStatus.OPENED;
-  status.displayName = 'opened';
+  status.displayName = "opened";
   await orm.em.persist(status).flush();
   const task = new Task();
   await orm.em.persist(task).flush();

@@ -1,11 +1,18 @@
-import { DateType, Cascade, Entity, ManyToMany, ManyToOne, OneToMany, Property } from '@mikro-orm/core';
-import { Book } from './Book';
-import { BaseEntity } from './BaseEntity';
-import { Collection } from '../TsMorphMetadataProvider.test';
+import {
+  DateType,
+  Cascade,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { Book } from "./Book";
+import { BaseEntity } from "./BaseEntity";
+import { Collection } from "../TsMorphMetadataProvider.test";
 
 @Entity()
 export class Author extends BaseEntity {
-
   @Property()
   name: string;
 
@@ -21,13 +28,17 @@ export class Author extends BaseEntity {
   @Property()
   optional?: boolean;
 
-  @Property({ fieldName: 'identitiesArray' })
+  @Property({ fieldName: "identitiesArray" })
   identities?: string[];
 
   @Property({ type: new DateType() })
   born?: string;
 
-  @OneToMany('Book', 'author', { referenceColumnName: '_id', cascade: [Cascade.PERSIST], orphanRemoval: true })
+  @OneToMany("Book", "author", {
+    referenceColumnName: "_id",
+    cascade: [Cascade.PERSIST],
+    orphanRemoval: true,
+  })
   books = new Collection<Book>(this);
 
   @ManyToMany()
@@ -49,12 +60,11 @@ export class Author extends BaseEntity {
     super();
     this.name = name;
     this.email = email;
-    this.foo = 'bar';
+    this.foo = "bar";
   }
 
-  @Property({ name: 'code' })
+  @Property({ name: "code" })
   getCode() {
     return `${this.email} - ${this.name}`;
   }
-
 }

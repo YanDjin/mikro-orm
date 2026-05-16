@@ -1,19 +1,23 @@
-import { Collection, Entity, ManyToMany, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Tag {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   slug!: string;
-
 }
 
 @Entity()
 export class Product {
-
   @PrimaryKey()
   id!: number;
 
@@ -22,30 +26,28 @@ export class Product {
 
   @ManyToMany(() => Tag)
   tags = new Collection<Tag>(this);
-
 }
 
-describe('GH issue 2121', () => {
-
+describe("GH issue 2121", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Tag, Product],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('populating m:n collection', async () => {
-    const tag = orm.em.create(Tag, { slug: 'slug0' });
-    const tag2 = orm.em.create(Tag, { slug: 'slug2' });
+  test("populating m:n collection", async () => {
+    const tag = orm.em.create(Tag, { slug: "slug0" });
+    const tag2 = orm.em.create(Tag, { slug: "slug2" });
 
     for (let i = 0; i < 10; i++) {
       const product = orm.em.create(Product, {
-        name: 'product' + i,
+        name: "product" + i,
         tags: [tag, tag2],
       });
       orm.em.persist(product);
@@ -53,21 +55,28 @@ describe('GH issue 2121', () => {
 
     await orm.em.flush();
     await orm.em.clear();
-    const result = await orm.em.find(Product, { tags: { slug: ['slug0'] } }, {
-      populate: ['tags'],
-      limit: 10,
-      offset: 8,
-    });
+    const result = await orm.em.find(
+      Product,
+      { tags: { slug: ["slug0"] } },
+      {
+        populate: ["tags"],
+        limit: 10,
+        offset: 8,
+      },
+    );
     expect(result[0].tags).toHaveLength(2);
     await orm.em.clear();
 
-    const result2 = await orm.em.find(Product, { tags: { slug: ['slug0'] } }, {
-      populate: ['tags'],
-      limit: 10,
-      offset: 9,
-    });
+    const result2 = await orm.em.find(
+      Product,
+      { tags: { slug: ["slug0"] } },
+      {
+        populate: ["tags"],
+        limit: 10,
+        offset: 9,
+      },
+    );
     expect(result2[0].tags).toHaveLength(2);
     await result2[0].tags.init();
   });
-
 });

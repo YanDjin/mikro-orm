@@ -1,10 +1,22 @@
 import {
-  ConnectionException, ExceptionConverter, InvalidFieldNameException, LockWaitTimeoutException, NonUniqueFieldNameException, CheckConstraintViolationException,
-  NotNullConstraintViolationException, ReadOnlyException, SyntaxErrorException, TableExistsException, TableNotFoundException, UniqueConstraintViolationException, ForeignKeyConstraintViolationException, type Dictionary, type DriverException,
-} from '@mikro-orm/core';
+  ConnectionException,
+  ExceptionConverter,
+  InvalidFieldNameException,
+  LockWaitTimeoutException,
+  NonUniqueFieldNameException,
+  CheckConstraintViolationException,
+  NotNullConstraintViolationException,
+  ReadOnlyException,
+  SyntaxErrorException,
+  TableExistsException,
+  TableNotFoundException,
+  UniqueConstraintViolationException,
+  ForeignKeyConstraintViolationException,
+  type Dictionary,
+  type DriverException,
+} from "@yandjin-mikro-orm/core";
 
 export class SqliteExceptionConverter extends ExceptionConverter {
-
   /* istanbul ignore next */
   /**
    * @inheritDoc
@@ -12,60 +24,62 @@ export class SqliteExceptionConverter extends ExceptionConverter {
    * @link https://github.com/doctrine/dbal/blob/master/src/Driver/AbstractSQLiteDriver.php
    */
   override convertException(exception: Error & Dictionary): DriverException {
-    if (exception.message.includes('database is locked')) {
+    if (exception.message.includes("database is locked")) {
       return new LockWaitTimeoutException(exception);
     }
 
     if (
-      exception.message.includes('must be unique') ||
-      exception.message.includes('is not unique') ||
-      exception.message.includes('are not unique') ||
-      exception.message.includes('UNIQUE constraint failed')
+      exception.message.includes("must be unique") ||
+      exception.message.includes("is not unique") ||
+      exception.message.includes("are not unique") ||
+      exception.message.includes("UNIQUE constraint failed")
     ) {
       return new UniqueConstraintViolationException(exception);
     }
 
-    if (exception.message.includes('may not be NULL') || exception.message.includes('NOT NULL constraint failed')) {
+    if (
+      exception.message.includes("may not be NULL") ||
+      exception.message.includes("NOT NULL constraint failed")
+    ) {
       return new NotNullConstraintViolationException(exception);
     }
 
-    if (exception.message.includes('CHECK constraint failed')) {
+    if (exception.message.includes("CHECK constraint failed")) {
       return new CheckConstraintViolationException(exception);
     }
 
-    if (exception.message.includes('no such table:')) {
+    if (exception.message.includes("no such table:")) {
       return new TableNotFoundException(exception);
     }
 
-    if (exception.message.includes('already exists')) {
+    if (exception.message.includes("already exists")) {
       return new TableExistsException(exception);
     }
 
-    if (exception.message.includes('no such column:')) {
+    if (exception.message.includes("no such column:")) {
       return new InvalidFieldNameException(exception);
     }
 
-    if (exception.message.includes('ambiguous column name')) {
+    if (exception.message.includes("ambiguous column name")) {
       return new NonUniqueFieldNameException(exception);
     }
 
-    if (exception.message.includes('syntax error')) {
+    if (exception.message.includes("syntax error")) {
       return new SyntaxErrorException(exception);
     }
 
-    if (exception.message.includes('attempt to write a readonly database')) {
+    if (exception.message.includes("attempt to write a readonly database")) {
       return new ReadOnlyException(exception);
     }
 
-    if (exception.message.includes('unable to open database file')) {
+    if (exception.message.includes("unable to open database file")) {
       return new ConnectionException(exception);
     }
 
-    if (exception.message.includes('FOREIGN KEY constraint failed')) {
+    if (exception.message.includes("FOREIGN KEY constraint failed")) {
       return new ForeignKeyConstraintViolationException(exception);
     }
 
     return super.convertException(exception);
   }
-
 }

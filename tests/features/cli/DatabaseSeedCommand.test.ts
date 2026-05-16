@@ -1,57 +1,57 @@
-import { SeedManager } from '@mikro-orm/seeder';
-import { Configuration, MikroORM } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
-import { MongoDriver } from '@mikro-orm/mongodb';
-import { CLIHelper } from '@mikro-orm/cli';
+import { SeedManager } from "@yandjin-mikro-orm/seeder";
+import { Configuration, MikroORM } from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
+import { MongoDriver } from "@yandjin-mikro-orm/mongodb";
+import { CLIHelper } from "@yandjin-mikro-orm/cli";
 
 const config = new Configuration({ driver: MongoDriver } as any, false);
-const showHelpMock = jest.spyOn(CLIHelper, 'showHelp');
+const showHelpMock = jest.spyOn(CLIHelper, "showHelp");
 showHelpMock.mockImplementation(() => void 0);
-const closeSpy = jest.spyOn(MikroORM.prototype, 'close');
-const getConfigMock = jest.spyOn(CLIHelper, 'getConfiguration');
+const closeSpy = jest.spyOn(MikroORM.prototype, "close");
+const getConfigMock = jest.spyOn(CLIHelper, "getConfiguration");
 getConfigMock.mockResolvedValue(config as any);
-const dumpMock = jest.spyOn(CLIHelper, 'dump');
+const dumpMock = jest.spyOn(CLIHelper, "dump");
 dumpMock.mockImplementation(() => void 0);
-const seed = jest.spyOn(SeedManager.prototype, 'seedString');
+const seed = jest.spyOn(SeedManager.prototype, "seedString");
 seed.mockImplementation(async () => void 0);
 
 (global as any).console.log = jest.fn();
 
-import { DatabaseSeedCommand } from '../../../packages/cli/src/commands/DatabaseSeedCommand';
-import { initORMSqlite } from '../../bootstrap';
+import { DatabaseSeedCommand } from "../../../packages/cli/src/commands/DatabaseSeedCommand";
+import { initORMSqlite } from "../../bootstrap";
 
-describe('DatabaseSeedCommand', () => {
-
+describe("DatabaseSeedCommand", () => {
   let orm: MikroORM<SqliteDriver>;
 
   beforeAll(async () => {
     orm = await initORMSqlite();
-    const getORMMock = jest.spyOn(CLIHelper, 'getORM');
+    const getORMMock = jest.spyOn(CLIHelper, "getORM");
     getORMMock.mockResolvedValue(orm);
   });
 
   afterAll(async () => await orm.close(true));
 
-  test('handler', async () => {
+  test("handler", async () => {
     const cmd = new DatabaseSeedCommand();
 
     const mockOption = jest.fn();
     const args = { option: mockOption };
     cmd.builder(args as any);
-    expect(mockOption).toHaveBeenCalledWith('c', {
-      alias: 'class',
-      type: 'string',
-      desc: 'Seeder class to run',
+    expect(mockOption).toHaveBeenCalledWith("c", {
+      alias: "class",
+      type: "string",
+      desc: "Seeder class to run",
     });
     await expect(cmd.handler({} as any)).resolves.toBeUndefined();
     expect(seed).toHaveBeenCalledTimes(1);
-    expect(seed).toHaveBeenCalledWith((orm.config.get('seeder').defaultSeeder));
+    expect(seed).toHaveBeenCalledWith(orm.config.get("seeder").defaultSeeder);
     expect(closeSpy).toHaveBeenCalledTimes(1);
 
-    await expect(cmd.handler({ class: 'TestSeeder' } as any)).resolves.toBeUndefined();
+    await expect(
+      cmd.handler({ class: "TestSeeder" } as any),
+    ).resolves.toBeUndefined();
     expect(seed).toHaveBeenCalledTimes(2);
-    expect(seed).toHaveBeenCalledWith(('TestSeeder'));
+    expect(seed).toHaveBeenCalledWith("TestSeeder");
     expect(closeSpy).toHaveBeenCalledTimes(2);
   });
-
 });

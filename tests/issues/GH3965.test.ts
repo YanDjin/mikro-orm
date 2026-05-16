@@ -10,13 +10,12 @@ import {
   PrimaryKeyProp,
   Primary,
   sql,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
-import { randomUUID } from 'crypto';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { randomUUID } from "crypto";
 
 @Entity()
 export class Category {
-
   @PrimaryKey({
     length: 36,
   })
@@ -28,16 +27,14 @@ export class Category {
   })
   createdAt?: Date;
 
-  @OneToMany(() => Article, attr => attr.category, {
+  @OneToMany(() => Article, (attr) => attr.category, {
     cascade: [Cascade.ALL],
   })
   articles = new Collection<Article>(this);
-
 }
 
 @Entity()
 export class Article {
-
   @PrimaryKey({
     length: 36,
   })
@@ -55,18 +52,16 @@ export class Article {
   })
   category!: Ref<Category>;
 
-  [PrimaryKeyProp]?: ['id', 'category'];
+  [PrimaryKeyProp]?: ["id", "category"];
 
-  @OneToMany(() => ArticleAttribute, attr => attr.article, {
+  @OneToMany(() => ArticleAttribute, (attr) => attr.article, {
     cascade: [Cascade.ALL],
   })
   attributes = new Collection<ArticleAttribute>(this);
-
 }
 
 @Entity()
 export class ArticleAttribute {
-
   @PrimaryKey({ length: 36 })
   id!: string;
 
@@ -82,8 +77,7 @@ export class ArticleAttribute {
   })
   article!: Ref<Article>;
 
-  [PrimaryKeyProp]?: ['id', 'article'];
-
+  [PrimaryKeyProp]?: ["id", "article"];
 }
 
 type T = Primary<ArticleAttribute>;
@@ -92,7 +86,7 @@ let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: 'mikro_orm_3965',
+    dbName: "mikro_orm_3965",
     entities: [Article],
     port: 3308,
   });
@@ -101,7 +95,7 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('3965', async () => {
+test("3965", async () => {
   const category = new Category();
   category.id = randomUUID();
 
@@ -119,6 +113,6 @@ test('3965', async () => {
   expect(category.createdAt).toBeDefined();
   expect(category.createdAt).toBeInstanceOf(Date);
 
-  const miss = await orm.em.findOne(ArticleAttribute, ['a', ['1', '1']]);
+  const miss = await orm.em.findOne(ArticleAttribute, ["a", ["1", "1"]]);
   expect(miss).toBeNull();
 });

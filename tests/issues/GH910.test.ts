@@ -1,9 +1,18 @@
-import type { Platform } from '@mikro-orm/sqlite';
-import { Cascade, Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property, Type } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import type { Platform } from "@yandjin-mikro-orm/sqlite";
+import {
+  Cascade,
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  Type,
+} from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 export class Sku {
-
   private constructor(private readonly value: string) {}
 
   static create(value: string): Sku {
@@ -13,12 +22,13 @@ export class Sku {
   toString(): string {
     return this.value;
   }
-
 }
 
 export class SkuType extends Type<Sku, string> {
-
-  override convertToDatabaseValue(value: Sku | string, platform: Platform): string {
+  override convertToDatabaseValue(
+    value: Sku | string,
+    platform: Platform,
+  ): string {
     return value.toString();
   }
 
@@ -29,16 +39,18 @@ export class SkuType extends Type<Sku, string> {
 
     return Sku.create(value);
   }
-
 }
 
 @Entity()
 export class Cart {
-
   @PrimaryKey()
   readonly id: string;
 
-  @OneToMany({ entity: 'CartItem', mappedBy: 'cart', cascade: [Cascade.MERGE, Cascade.PERSIST] })
+  @OneToMany({
+    entity: "CartItem",
+    mappedBy: "cart",
+    cascade: [Cascade.MERGE, Cascade.PERSIST],
+  })
   readonly items = new Collection<CartItem>(this);
 
   constructor(id: string, items: CartItem[]) {
@@ -53,13 +65,11 @@ export class Cart {
   removeItem(item: CartItem): void {
     this.items.remove(item);
   }
-
 }
 
 @Entity()
 export class CartItem {
-
-  @ManyToOne({ primary: true, entity: 'Cart' })
+  @ManyToOne({ primary: true, entity: "Cart" })
   readonly cart!: Cart;
 
   @PrimaryKey({ type: SkuType })
@@ -76,40 +86,43 @@ export class CartItem {
   updateQuantity(quantity: number) {
     this.quantity = quantity;
   }
-
 }
 
-describe('GH issue 910', () => {
-
+describe("GH issue 910", () => {
   test(`composite keys with custom type PK that uses object value`, async () => {
     const orm = await MikroORM.init({
       entities: [Cart, CartItem],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
 
-    const mock = mockLogger(orm, ['query', 'query-params']);
+    const mock = mockLogger(orm, ["query", "query-params"]);
 
-    const id = '123';
-    const item1 = new CartItem(Sku.create('sku1'), 10);
-    const item2 = new CartItem(Sku.create('sku2'), 10);
+    const id = "123";
+    const item1 = new CartItem(Sku.create("sku1"), 10);
+    const item2 = new CartItem(Sku.create("sku2"), 10);
     const cart = new Cart(id, [item1, item2]);
     await orm.em.persistAndFlush(cart);
 
-    const item3 = new CartItem(Sku.create('sku3'), 100);
+    const item3 = new CartItem(Sku.create("sku3"), 100);
     await orm.em.flush();
 
     item2.updateQuantity(33);
     await orm.em.flush();
 
-    expect(mock.mock.calls[0][0]).toMatch('begin');
-    expect(mock.mock.calls[1][0]).toMatch('insert into `cart` (`id`) values (\'123\')');
-    expect(mock.mock.calls[2][0]).toMatch('insert into `cart_item` (`cart_id`, `sku`, `quantity`) values (\'123\', \'sku1\', 10), (\'123\', \'sku2\', 10)');
-    expect(mock.mock.calls[3][0]).toMatch('commit');
-    expect(mock.mock.calls[4][0]).toMatch('begin');
-    expect(mock.mock.calls[5][0]).toMatch('update `cart_item` set `quantity` = 33 where `cart_id` = \'123\' and `sku` = \'sku2\'');
-    expect(mock.mock.calls[6][0]).toMatch('commit');
+    expect(mock.mock.calls[0][0]).toMatch("begin");
+    expect(mock.mock.calls[1][0]).toMatch(
+      "insert into `cart` (`id`) values ('123')",
+    );
+    expect(mock.mock.calls[2][0]).toMatch(
+      "insert into `cart_item` (`cart_id`, `sku`, `quantity`) values ('123', 'sku1', 10), ('123', 'sku2', 10)",
+    );
+    expect(mock.mock.calls[3][0]).toMatch("commit");
+    expect(mock.mock.calls[4][0]).toMatch("begin");
+    expect(mock.mock.calls[5][0]).toMatch(
+      "update `cart_item` set `quantity` = 33 where `cart_id` = '123' and `sku` = 'sku2'",
+    );
+    expect(mock.mock.calls[6][0]).toMatch("commit");
     await orm.close();
   });
-
 });

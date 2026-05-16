@@ -1,18 +1,16 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
 
-  @Property({ type: 'json', defaultRaw: `('{"a": 1}')` })
+  @Property({ type: "json", defaultRaw: `('{"a": 1}')` })
   data!: any;
-
 }
 
 let orm: MikroORM;
@@ -28,10 +26,10 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('default values on json columns', async () => {
+test("default values on json columns", async () => {
   const diff1 = await orm.schema.getUpdateSchemaMigrationSQL({ wrap: false });
   expect(diff1).toEqual({
-    up: '',
-    down: '',
+    up: "",
+    down: "",
   });
 });

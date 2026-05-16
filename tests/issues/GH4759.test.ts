@@ -9,13 +9,12 @@ import {
   Property,
   Ref,
   ref,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/postgresql';
-import { v4 } from 'uuid';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
+import { v4 } from "uuid";
 
 @Entity()
 class Author {
-
   @PrimaryKey()
   id = v4();
 
@@ -24,14 +23,14 @@ class Author {
 
   @OneToMany({
     entity: () => Book,
-    mappedBy: 'author',
+    mappedBy: "author",
   })
   books = new Collection<Book>(this);
 
   @OneToOne({
     entity: () => Book,
     ref: true,
-    formula: alias =>
+    formula: (alias) =>
       `(select "b"."id"
       from (
         select "b"."author_id", min("b"."release_date") "release_date"
@@ -48,12 +47,10 @@ class Author {
   constructor(name: string) {
     this.name = name;
   }
-
 }
 
 @Entity()
 class Book {
-
   @PrimaryKey()
   id = v4();
 
@@ -66,16 +63,15 @@ class Book {
   @ManyToOne({
     entity: () => Author,
     ref: true,
-    inversedBy: 'books',
+    inversedBy: "books",
   })
   author!: Ref<Author>;
 
   constructor(releaseDate: Date = new Date(), name: string, author: Author) {
     this.releaseDate = releaseDate;
     this.name = name;
-    this.author = ref((author));
+    this.author = ref(author);
   }
-
 }
 
 let orm: MikroORM;
@@ -83,7 +79,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Book, Author],
-    dbName: '4759',
+    dbName: "4759",
   });
   await orm.schema.refreshDatabase();
 });
@@ -91,11 +87,15 @@ beforeAll(async () => {
 afterAll(() => orm.close(true));
 
 test(`GH issue 4759`, async () => {
-  const author = new Author('John');
-  const book1 = new Book(new Date('2023-09-01'), 'My second book', author);
-  const book2 = new Book(new Date('2023-01-01'), 'My first book', author);
+  const author = new Author("John");
+  const book1 = new Book(new Date("2023-09-01"), "My second book", author);
+  const book2 = new Book(new Date("2023-01-01"), "My first book", author);
   await orm.em.fork().persistAndFlush([author, book1, book2]);
 
-  const authorFound = await orm.em.find(Author, { firstBook: { name: 'My first book' } }, { populate: ['books', 'firstBook'] });
-  expect(authorFound[0].firstBook?.$.name).toBe('My first book');
+  const authorFound = await orm.em.find(
+    Author,
+    { firstBook: { name: "My first book" } },
+    { populate: ["books", "firstBook"] },
+  );
+  expect(authorFound[0].firstBook?.$.name).toBe("My first book");
 });

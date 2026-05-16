@@ -1,12 +1,17 @@
-import { Cascade, Entity, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Cascade,
+  Entity,
+  OneToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class OrderSummary {
-
   @OneToOne({
     entity: () => Order,
-    deleteRule: 'cascade',
+    deleteRule: "cascade",
     primary: true,
     mapToPk: true,
   })
@@ -14,28 +19,25 @@ export class OrderSummary {
 
   @Property()
   prop!: string;
-
 }
 
 @Entity()
 export class Order {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => OrderSummary, 'orderId', {
+  @OneToOne(() => OrderSummary, "orderId", {
     cascade: [Cascade.ALL],
     eager: true,
   })
   summary!: OrderSummary;
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [Order, OrderSummary],
   });
   await orm.schema.createSchema();
@@ -50,7 +52,7 @@ test(`GH issue 1352`, async () => {
     id: 4,
     summary: orm.em.create(OrderSummary, {
       orderId: 4,
-      prop: '123',
+      prop: "123",
     }),
   });
   orm.em.persist(entity);
@@ -62,7 +64,7 @@ test(`GH issue 4254`, async () => {
     id: 4,
     summary: {
       orderId: 4,
-      prop: '123',
+      prop: "123",
     },
   });
 });

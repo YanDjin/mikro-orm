@@ -1,8 +1,12 @@
-import { Property, Entity, PrimaryKey, MikroORM } from '@mikro-orm/sqlite';
+import {
+  Property,
+  Entity,
+  PrimaryKey,
+  MikroORM,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -16,14 +20,13 @@ class User {
     this.name = name;
     this.email = email;
   }
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [User],
     ensureDatabase: { create: true },
   });
@@ -37,38 +40,38 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('upsert should not modify data object unless it is an entity', async () => {
-  const data = { name: 'Foo', email: 'foo' };
+test("upsert should not modify data object unless it is an entity", async () => {
+  const data = { name: "Foo", email: "foo" };
   orm.em.create(User, data);
   await orm.em.flush();
   orm.em.clear();
 
-  expect(data).toMatchObject({ name: 'Foo', email: 'foo' });
+  expect(data).toMatchObject({ name: "Foo", email: "foo" });
 
-  data.name = 'Bar';
+  data.name = "Bar";
   const newUser = await orm.em.upsert(User, data);
 
-  expect(data).toMatchObject({ name: 'Bar', email: 'foo' });
-  expect({ name: 'Bar', email: 'foo' }).toMatchObject(data);
+  expect(data).toMatchObject({ name: "Bar", email: "foo" });
+  expect({ name: "Bar", email: "foo" }).toMatchObject(data);
 });
 
-test('upsertMany should not modify data object unless it is an entity', async () => {
-  const data1 = { name: 'Foo1', email: 'foo1' };
-  const data2 = { name: 'Foo2', email: 'foo2' };
+test("upsertMany should not modify data object unless it is an entity", async () => {
+  const data1 = { name: "Foo1", email: "foo1" };
+  const data2 = { name: "Foo2", email: "foo2" };
   orm.em.create(User, data1);
   orm.em.create(User, data2);
   await orm.em.flush();
   orm.em.clear();
 
-  expect(data1).toMatchObject({ name: 'Foo1', email: 'foo1' });
-  expect(data2).toMatchObject({ name: 'Foo2', email: 'foo2' });
+  expect(data1).toMatchObject({ name: "Foo1", email: "foo1" });
+  expect(data2).toMatchObject({ name: "Foo2", email: "foo2" });
 
-  data1.name = 'Bar1';
-  data2.name = 'Bar2';
+  data1.name = "Bar1";
+  data2.name = "Bar2";
   const [newUser1, newUser2] = await orm.em.upsertMany(User, [data1, data2]);
 
-  expect(data1).toMatchObject({ name: 'Bar1', email: 'foo1' });
-  expect(data2).toMatchObject({ name: 'Bar2', email: 'foo2' });
-  expect({ name: 'Bar1', email: 'foo1' }).toMatchObject(data1);
-  expect({ name: 'Bar2', email: 'foo2' }).toMatchObject(data2);
+  expect(data1).toMatchObject({ name: "Bar1", email: "foo1" });
+  expect(data2).toMatchObject({ name: "Bar2", email: "foo2" });
+  expect({ name: "Bar1", email: "foo1" }).toMatchObject(data1);
+  expect({ name: "Bar2", email: "foo2" }).toMatchObject(data2);
 });

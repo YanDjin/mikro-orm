@@ -1,10 +1,9 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../../helpers';
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../../helpers";
 
 @Entity()
 class Book {
-
   @PrimaryKey()
   id!: number;
 
@@ -14,7 +13,6 @@ class Book {
   constructor(title: string) {
     this.title = title;
   }
-
 }
 
 let orm: MikroORM;
@@ -23,7 +21,7 @@ beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Book],
     forceEntityConstructor: true,
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
 
   await orm.schema.createSchema();
@@ -33,8 +31,8 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('4426', async () => {
-  await orm.em.fork().persistAndFlush(new Book('test book'));
+test("4426", async () => {
+  await orm.em.fork().persistAndFlush(new Book("test book"));
   const b = await orm.em.findOneOrFail(Book, { id: 1 });
 
   const mock = mockLogger(orm);

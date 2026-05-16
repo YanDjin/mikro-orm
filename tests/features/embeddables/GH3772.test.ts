@@ -1,17 +1,21 @@
-import { Embeddable, Embedded, Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/core';
-import { BetterSqliteDriver } from '@mikro-orm/better-sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { BetterSqliteDriver } from "@yandjin-mikro-orm/better-sqlite";
 
 @Embeddable()
 export class Profile {
-
   @Property()
   username?: string;
-
 }
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -20,7 +24,6 @@ export class User {
 
   @Embedded(() => Profile, { nullable: true })
   profile?: Profile | null;
-
 }
 
 let orm: MikroORM;
@@ -29,7 +32,7 @@ beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Profile, User],
     driver: BetterSqliteDriver,
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
 });
 
@@ -41,31 +44,31 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('multi-insert entity with embedded property null', async () => {
+test("multi-insert entity with embedded property null", async () => {
   const user = orm.em.create(User, {
-    name: 'Peter Pan',
+    name: "Peter Pan",
     profile: null,
   });
   const user2 = orm.em.create(User, {
-    name: 'Peter Pan 2',
+    name: "Peter Pan 2",
     profile: null,
   });
 
   await orm.em.persist([user, user2]).flush();
 
-  user.profile = { username: 'pan1' };
-  user2.profile = { username: 'pan2' };
+  user.profile = { username: "pan1" };
+  user2.profile = { username: "pan2" };
   await orm.em.flush();
 });
 
-test('multi-update entity with embedded property null', async () => {
+test("multi-update entity with embedded property null", async () => {
   const user = orm.em.create(User, {
-    name: 'Peter Pan',
-    profile: { username: 'pan1' },
+    name: "Peter Pan",
+    profile: { username: "pan1" },
   });
   const user2 = orm.em.create(User, {
-    name: 'Peter Pan 2',
-    profile: { username: 'pan2' },
+    name: "Peter Pan 2",
+    profile: { username: "pan2" },
   });
 
   await orm.em.persist([user, user2]).flush();

@@ -1,10 +1,17 @@
-import { Embeddable, Embedded, Entity, MikroORM, OptionalProps, PrimaryKey, Property } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
-import { mockLogger } from '../../helpers';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  MikroORM,
+  OptionalProps,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../../helpers";
 
 @Embeddable()
 export class NestedAudit {
-
   @Property({ nullable: true })
   archived?: Date;
 
@@ -13,12 +20,10 @@ export class NestedAudit {
 
   @Property({ onCreate: () => new Date() })
   created!: Date;
-
 }
 
 @Embeddable()
 export class Audit {
-
   @Property({ nullable: true })
   archived?: Date;
 
@@ -30,13 +35,11 @@ export class Audit {
 
   @Embedded(() => NestedAudit)
   nestedAudit1 = new NestedAudit();
-
 }
 
 @Entity()
 export class MyEntity {
-
-  [OptionalProps]?: 'audit1' | 'audit2';
+  [OptionalProps]?: "audit1" | "audit2";
 
   @PrimaryKey()
   id!: number;
@@ -46,17 +49,15 @@ export class MyEntity {
 
   @Embedded(() => Audit, { object: true })
   audit2 = new Audit();
-
 }
 
-describe('onCreate and onUpdate in embeddables (GH 2283 and 2391)', () => {
-
+describe("onCreate and onUpdate in embeddables (GH 2283 and 2391)", () => {
   let orm: MikroORM<SqliteDriver>;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [MyEntity],
-      dbName: ':memory:',
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -66,8 +67,10 @@ describe('onCreate and onUpdate in embeddables (GH 2283 and 2391)', () => {
     await orm.close(true);
   });
 
-  test('result mapper', async () => {
-    expect(orm.em.getComparator().getResultMapper(MyEntity.name).toString()).toMatchSnapshot();
+  test("result mapper", async () => {
+    expect(
+      orm.em.getComparator().getResultMapper(MyEntity.name).toString(),
+    ).toMatchSnapshot();
   });
 
   test(`GH issue 2283, 2391`, async () => {
@@ -85,26 +88,32 @@ describe('onCreate and onUpdate in embeddables (GH 2283 and 2391)', () => {
     expect(!!line.audit2.created).toBeTruthy();
     expect(!!line.audit2.updated).toBeTruthy();
 
-    const mock = mockLogger(orm, ['query']);
+    const mock = mockLogger(orm, ["query"]);
     await orm.em.flush();
     expect(mock).not.toHaveBeenCalled();
 
-    const tmp1 = line.audit1.archived = new Date();
+    const tmp1 = (line.audit1.archived = new Date());
     await orm.em.flush();
     expect(mock).toHaveBeenCalledTimes(3);
-    expect(mock.mock.calls[1][0]).toMatch('update `my_entity` set `audit1_archived` = ?, `audit1_updated` = ?, `audit1_nested_audit1_updated` = ?, `audit2` = ? where `id` = ?');
+    expect(mock.mock.calls[1][0]).toMatch(
+      "update `my_entity` set `audit1_archived` = ?, `audit1_updated` = ?, `audit1_nested_audit1_updated` = ?, `audit2` = ? where `id` = ?",
+    );
     mock.mockReset();
 
-    const tmp2 = line.audit2.archived = new Date();
+    const tmp2 = (line.audit2.archived = new Date());
     await orm.em.flush();
     expect(mock).toHaveBeenCalledTimes(3);
-    expect(mock.mock.calls[1][0]).toMatch('update `my_entity` set `audit1_updated` = ?, `audit1_nested_audit1_updated` = ?, `audit2` = ? where `id` = ?');
+    expect(mock.mock.calls[1][0]).toMatch(
+      "update `my_entity` set `audit1_updated` = ?, `audit1_nested_audit1_updated` = ?, `audit2` = ? where `id` = ?",
+    );
     mock.mockReset();
 
-    const tmp3 = line.audit2.nestedAudit1.archived = new Date();
+    const tmp3 = (line.audit2.nestedAudit1.archived = new Date());
     await orm.em.flush();
     expect(mock).toHaveBeenCalledTimes(3);
-    expect(mock.mock.calls[1][0]).toMatch('update `my_entity` set `audit1_updated` = ?, `audit1_nested_audit1_updated` = ?, `audit2` = ? where `id` = ?');
+    expect(mock.mock.calls[1][0]).toMatch(
+      "update `my_entity` set `audit1_updated` = ?, `audit1_nested_audit1_updated` = ?, `audit2` = ? where `id` = ?",
+    );
     mock.mockRestore();
 
     const line2 = await orm.em.fork().findOneOrFail(MyEntity, line.id);
@@ -112,5 +121,4 @@ describe('onCreate and onUpdate in embeddables (GH 2283 and 2391)', () => {
     expect(line2.audit2.archived).toEqual(tmp2);
     expect(line2.audit2.nestedAudit1.archived).toEqual(tmp3);
   });
-
 });

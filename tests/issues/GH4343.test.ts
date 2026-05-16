@@ -1,11 +1,17 @@
-import { MikroORM } from '@mikro-orm/sqlite';
-import { Entity, ManyToOne, PrimaryKey, Property, ref, Ref } from '@mikro-orm/core';
-import { v4 } from 'uuid';
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import {
+  Entity,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+  ref,
+  Ref,
+} from "@yandjin-mikro-orm/core";
+import { v4 } from "uuid";
 
 @Entity()
 class LocalizedString {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id = v4();
 
   @Property()
@@ -17,13 +23,11 @@ class LocalizedString {
   constructor(de: string) {
     this.de_DE = de;
   }
-
 }
 
 @Entity()
 class Book {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id = v4();
 
   @ManyToOne(() => LocalizedString, { ref: true })
@@ -36,7 +40,6 @@ class Book {
     this.title = ref(new LocalizedString(title));
     this.description = ref(new LocalizedString(description));
   }
-
 }
 
 let orm: MikroORM;
@@ -54,16 +57,20 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-it('GH #4343', async () => {
+it("GH #4343", async () => {
   async function request(id: number) {
-    const books = await orm.em.find(Book, {}, {
-      populate: ['description', 'title'],
-    });
+    const books = await orm.em.find(
+      Book,
+      {},
+      {
+        populate: ["description", "title"],
+      },
+    );
     expect(books[0].title.isInitialized()).toBe(true);
     expect(books[0].description?.isInitialized()).toBe(true);
   }
 
-  const book = new Book('mikro-orm', 'Book about mikro-orm');
+  const book = new Book("mikro-orm", "Book about mikro-orm");
   await orm.em.fork().persistAndFlush(book);
 
   await Promise.all([request(1), request(2)]);

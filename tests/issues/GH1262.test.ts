@@ -1,11 +1,15 @@
-import 'reflect-metadata';
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
-import { remove } from 'fs-extra';
-import { TEMP_DIR } from '../helpers';
+import "reflect-metadata";
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
+import { remove } from "fs-extra";
+import { TEMP_DIR } from "../helpers";
 
-@Entity({ tableName: 'user' })
+@Entity({ tableName: "user" })
 class UserBefore {
-
   @PrimaryKey()
   id!: string;
 
@@ -17,12 +21,10 @@ class UserBefore {
 
   @Property()
   deleted: Date = new Date();
-
 }
 
-@Entity({ tableName: 'user' })
+@Entity({ tableName: "user" })
 class UserAfter {
-
   @PrimaryKey()
   id!: string;
 
@@ -34,28 +36,25 @@ class UserAfter {
 
   @Property()
   deletedAt: Date = new Date();
-
 }
 
-describe('GH issue 1262', () => {
-
+describe("GH issue 1262", () => {
   async function createAndRunMigration(entities: any[]) {
     const db = await MikroORM.init({
       entities,
-      dbName: TEMP_DIR + '/gh_1262.db',
+      dbName: TEMP_DIR + "/gh_1262.db",
     });
 
     await db.getSchemaGenerator().updateSchema();
     await db.close();
   }
 
-  test('renaming multiple columns at once', async () => {
-    await remove(TEMP_DIR + '/gh_1262.db');
+  test("renaming multiple columns at once", async () => {
+    await remove(TEMP_DIR + "/gh_1262.db");
     await createAndRunMigration([UserBefore]);
 
     // Simulates adding `profile` to the User entity
     await createAndRunMigration([UserAfter]);
-    await remove(TEMP_DIR + '/gh_1262.db');
+    await remove(TEMP_DIR + "/gh_1262.db");
   });
-
 });

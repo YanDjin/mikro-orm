@@ -9,12 +9,11 @@ import {
   PrimaryKey,
   Property,
   Ref,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Organization {
-
   @PrimaryKey()
   id!: number;
 
@@ -24,34 +23,30 @@ class Organization {
   })
   license!: Ref<License>;
 
-  @OneToMany(() => Workspace, workspace => workspace.organization)
+  @OneToMany(() => Workspace, (workspace) => workspace.organization)
   workspaces = new Collection<Workspace>(this);
 
   @Property()
   name!: string;
-
 }
 
 @Entity()
 class License {
-
-  [OptionalProps]?: 'organization';
+  [OptionalProps]?: "organization";
 
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Organization, organization => organization.license)
+  @OneToOne(() => Organization, (organization) => organization.license)
   organization!: Ref<Organization>;
 
   @Property()
   name!: string;
-
 }
 
 @Entity()
 class Workspace {
-
-  [OptionalProps]?: 'organization';
+  [OptionalProps]?: "organization";
 
   @PrimaryKey()
   id!: number;
@@ -61,7 +56,6 @@ class Workspace {
 
   @ManyToOne(() => Organization, { ref: true })
   organization!: Ref<Organization>;
-
 }
 
 let orm: MikroORM;
@@ -69,7 +63,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Organization, License, Workspace],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.refreshDatabase();
 });
@@ -78,23 +72,29 @@ afterAll(async () => {
   await orm.close();
 });
 
-test('3941', async () => {
+test("3941", async () => {
   const organization = orm.em.create(Organization, {
-    name: 'Organization',
+    name: "Organization",
     license: {
-      name: 'License',
+      name: "License",
     },
-    workspaces: [
-      { name: 'Workspace' },
-    ],
+    workspaces: [{ name: "Workspace" }],
   });
   await orm.em.flush();
   orm.em.clear();
 
-  const workspace = await orm.em.findOneOrFail(Workspace, organization.workspaces[0].id);
-  const license = await orm.em.findOneOrFail(License, { organization: { workspaces: workspace } });
+  const workspace = await orm.em.findOneOrFail(
+    Workspace,
+    organization.workspaces[0].id,
+  );
+  const license = await orm.em.findOneOrFail(License, {
+    organization: { workspaces: workspace },
+  });
 
   orm.em.getUnitOfWork().computeChangeSets();
   expect(orm.em.getUnitOfWork().getChangeSets()).toHaveLength(0);
-  expect(helper(license.organization).__originalEntityData).toEqual({ id: 1, license: 1 });
+  expect(helper(license.organization).__originalEntityData).toEqual({
+    id: 1,
+    license: 1,
+  });
 });

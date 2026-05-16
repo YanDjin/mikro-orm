@@ -1,8 +1,15 @@
-import { Entity, MikroORM, PrimaryKey, OneToMany, ManyToOne, Collection, BeforeCreate } from '@mikro-orm/sqlite';
-import { v4 } from 'uuid';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  OneToMany,
+  ManyToOne,
+  Collection,
+  BeforeCreate,
+} from "@yandjin-mikro-orm/sqlite";
+import { v4 } from "uuid";
 
 abstract class Base {
-
   @PrimaryKey()
   id!: string;
 
@@ -10,33 +17,27 @@ abstract class Base {
   definePrimaryKey() {
     this.id = v4();
   }
-
 }
 
 @Entity()
 class Publisher extends Base {
-
-  @OneToMany('Book', (b: Book) => b.publisher)
+  @OneToMany("Book", (b: Book) => b.publisher)
   books = new Collection<Book>(this);
-
 }
 
 @Entity()
 class Book extends Base {
-
   @ManyToOne(() => Publisher, { nullable: true })
   publisher?: Publisher;
-
 }
 
-describe('GH issue 893', () => {
-
+describe("GH issue 893", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Base, Book, Publisher],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
@@ -54,5 +55,4 @@ describe('GH issue 893', () => {
     const reloadedBook = await orm.em.findOne(Book, { id: book.id });
     expect(reloadedBook?.publisher).not.toBeNull();
   });
-
 });

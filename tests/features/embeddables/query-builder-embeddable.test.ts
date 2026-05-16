@@ -1,32 +1,34 @@
-import { MikroORM } from '@mikro-orm/better-sqlite';
-import { Embeddable, Embedded, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { MikroORM } from "@yandjin-mikro-orm/better-sqlite";
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
 
 @Embeddable()
 class Settings {
-
   @Property()
   name: string;
 
   constructor(settings: Settings) {
     this.name = settings.name;
   }
-
 }
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id: number;
 
-  @Embedded({ entity: 'Settings' })
+  @Embedded({ entity: "Settings" })
   settings: Settings;
 
   constructor(user: User) {
     this.id = user.id;
     this.settings = new Settings(user.settings);
   }
-
 }
 
 let orm: MikroORM;
@@ -34,7 +36,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [User, Settings],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
 
   await orm.schema.createSchema();
@@ -43,9 +45,9 @@ beforeAll(async () => {
 afterAll(() => orm.close(true));
 afterEach(() => orm.em.clear());
 
-test('insert an object with embeddable using a QueryBuilder', async () => {
-  const foo = new User({ id: 1, settings: { name: 'foo' } });
-  const bar = new User({ id: 2, settings: { name: 'bar' } });
+test("insert an object with embeddable using a QueryBuilder", async () => {
+  const foo = new User({ id: 1, settings: { name: "foo" } });
+  const bar = new User({ id: 2, settings: { name: "bar" } });
   const repo = orm.em.getRepository(User);
 
   await repo.createQueryBuilder().insert([foo, bar]);
@@ -54,13 +56,19 @@ test('insert an object with embeddable using a QueryBuilder', async () => {
   expect(await repo.findOneOrFail(2)).toEqual(bar);
 });
 
-test('update an object with embeddable using a QueryBuilder', async () => {
-  const foo = new User({ id: 1, settings: { name: 'eh' } });
-  const bar = new User({ id: 2, settings: { name: 'oh' } });
+test("update an object with embeddable using a QueryBuilder", async () => {
+  const foo = new User({ id: 1, settings: { name: "eh" } });
+  const bar = new User({ id: 2, settings: { name: "oh" } });
   const repo = orm.em.getRepository(User);
 
-  await repo.createQueryBuilder().update({ settings: foo.settings }).where({ id: foo.id });
-  await repo.createQueryBuilder().update({ settings: bar.settings }).where({ id: bar.id });
+  await repo
+    .createQueryBuilder()
+    .update({ settings: foo.settings })
+    .where({ id: foo.id });
+  await repo
+    .createQueryBuilder()
+    .update({ settings: bar.settings })
+    .where({ id: bar.id });
 
   expect(await repo.findOneOrFail(1)).toEqual(foo);
   expect(await repo.findOneOrFail(2)).toEqual(bar);

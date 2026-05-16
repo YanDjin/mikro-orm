@@ -1,25 +1,29 @@
-import { Entity, LoadStrategy, MikroORM, OneToOne, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  LoadStrategy,
+  MikroORM,
+  OneToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Checkout {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Discount, discount => discount.checkout, {
+  @OneToOne(() => Discount, (discount) => discount.checkout, {
     nullable: true,
   })
   discount?: any;
-
 }
 
 @Entity()
 class Discount {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Checkout, checkout => checkout.discount, {
+  @OneToOne(() => Checkout, (checkout) => checkout.discount, {
     nullable: true,
     owner: true,
   })
@@ -31,26 +35,22 @@ class Discount {
   constructor(amount: number) {
     this.amount = amount;
   }
-
 }
 
 @Entity()
 class Checkout2 {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Discount2, discount => discount.checkout, {
+  @OneToOne(() => Discount2, (discount) => discount.checkout, {
     nullable: true,
     orphanRemoval: true,
   })
   discount?: any;
-
 }
 
 @Entity()
 class Discount2 {
-
   @PrimaryKey()
   id!: number;
 
@@ -63,15 +63,14 @@ class Discount2 {
   constructor(amount: number) {
     this.amount = amount;
   }
-
 }
 
-describe('Remove entity issue (GH 2273)', () => {
+describe("Remove entity issue (GH 2273)", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
-      dbName: ':memory:',
+      dbName: ":memory:",
       entities: [Discount, Checkout, Discount2, Checkout2],
     });
   });
@@ -86,28 +85,34 @@ describe('Remove entity issue (GH 2273)', () => {
     await orm.close();
   });
 
-  it('Should be able to remove discount from checkout', async () => {
+  it("Should be able to remove discount from checkout", async () => {
     let checkout = new Checkout();
     checkout.discount = new Discount(1000);
     await orm.em.fork().persistAndFlush([checkout]);
 
-    checkout = await orm.em.findOneOrFail(Checkout, checkout.id, { populate: ['discount'] });
+    checkout = await orm.em.findOneOrFail(Checkout, checkout.id, {
+      populate: ["discount"],
+    });
     expect(checkout.discount?.amount).toBe(1000);
 
     orm.em.remove(checkout.discount!);
     await orm.em.flush();
 
-    checkout = await orm.em.fork().findOneOrFail(Checkout, checkout.id, { populate: ['discount'] });
+    checkout = await orm.em
+      .fork()
+      .findOneOrFail(Checkout, checkout.id, { populate: ["discount"] });
 
     expect(checkout.discount).toBeFalsy();
   });
 
-  it('Should be able to remove discount from checkout and add new discount', async () => {
+  it("Should be able to remove discount from checkout and add new discount", async () => {
     let checkout = new Checkout();
     checkout.discount = new Discount(1000);
     await orm.em.fork().persistAndFlush([checkout]);
 
-    checkout = await orm.em.findOneOrFail(Checkout, checkout.id, { populate: ['discount'] });
+    checkout = await orm.em.findOneOrFail(Checkout, checkout.id, {
+      populate: ["discount"],
+    });
     expect(checkout.discount?.amount).toBe(1000);
 
     orm.em.remove(checkout.discount!);
@@ -115,14 +120,16 @@ describe('Remove entity issue (GH 2273)', () => {
     await orm.em.flush();
 
     const newEm = orm.em.fork();
-    checkout = await newEm.findOneOrFail(Checkout, checkout.id, { populate: ['discount'] });
+    checkout = await newEm.findOneOrFail(Checkout, checkout.id, {
+      populate: ["discount"],
+    });
     const discounts = await newEm.find(Discount, {});
 
     expect(checkout.discount?.amount).toBe(2000);
     expect(discounts.length).toBe(1);
   });
 
-  it('Should be able to orphan remove discount from checkout', async () => {
+  it("Should be able to orphan remove discount from checkout", async () => {
     const createdCheckout = new Checkout2();
     createdCheckout.discount = new Discount2(25);
 
@@ -132,7 +139,7 @@ describe('Remove entity issue (GH 2273)', () => {
       // Remove the discount by setting it to null
       const em = orm.em.fork();
       const checkout = await em.findOneOrFail(Checkout2, createdCheckout.id, {
-        populate: ['discount'],
+        populate: ["discount"],
         strategy: LoadStrategy.JOINED,
       });
 
@@ -145,14 +152,15 @@ describe('Remove entity issue (GH 2273)', () => {
 
     {
       // Verify checkout.discount is destroyed
-      const checkout = await orm.em.fork().findOneOrFail(Checkout2, createdCheckout.id, {
-        populate: ['discount'],
-        strategy: LoadStrategy.JOINED,
-      });
+      const checkout = await orm.em
+        .fork()
+        .findOneOrFail(Checkout2, createdCheckout.id, {
+          populate: ["discount"],
+          strategy: LoadStrategy.JOINED,
+        });
       expect(checkout.discount).toBeNull();
       const discounts = await orm.em.fork().find(Discount2, {});
       expect(discounts).toHaveLength(0);
     }
   });
-
 });

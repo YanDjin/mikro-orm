@@ -1,50 +1,51 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book1 {
-
   @PrimaryKey()
   id!: number;
 
-  @Property({ columnType: 'timestamp', defaultRaw: `current_timestamp` })
+  @Property({ columnType: "timestamp", defaultRaw: `current_timestamp` })
   createdAt!: Date;
 
-  @Property({ columnType: 'timestamp', defaultRaw: `current_timestamp`, extra: `on update current_timestamp` })
+  @Property({
+    columnType: "timestamp",
+    defaultRaw: `current_timestamp`,
+    extra: `on update current_timestamp`,
+  })
   updatedAt!: Date;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book2 {
-
   @PrimaryKey()
   id!: number;
 
-  @Property({ columnType: 'timestamp', defaultRaw: `current_timestamp` })
+  @Property({ columnType: "timestamp", defaultRaw: `current_timestamp` })
   createdAt!: Date;
 
-  @Property({ columnType: 'timestamp', defaultRaw: `current_timestamp` })
+  @Property({ columnType: "timestamp", defaultRaw: `current_timestamp` })
   updatedAt!: Date;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book3 {
-
   @PrimaryKey()
   id!: number;
 
-  @Property({ columnType: 'timestamp', defaultRaw: `current_timestamp` })
+  @Property({ columnType: "timestamp", defaultRaw: `current_timestamp` })
   createdAt!: Date;
 
-  @Property({ columnType: 'timestamp', defaultRaw: `current_timestamp`, extra: `on update current_timestamp` })
+  @Property({
+    columnType: "timestamp",
+    defaultRaw: `current_timestamp`,
+    extra: `on update current_timestamp`,
+  })
   updatedAt!: Date;
-
 }
 
-describe('changing column in mysql (GH 2386)', () => {
-
+describe("changing column in mysql (GH 2386)", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -58,20 +59,23 @@ describe('changing column in mysql (GH 2386)', () => {
 
   afterAll(() => orm.close(true));
 
-  test('schema generator respect indexes on FKs on column update', async () => {
+  test("schema generator respect indexes on FKs on column update", async () => {
     const diff0 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff0).toBe('');
-    orm.getMetadata().reset('Book1');
+    expect(diff0).toBe("");
+    orm.getMetadata().reset("Book1");
     await orm.discoverEntity(Book2);
     const diff1 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff1).toBe('alter table `book` modify `updated_at` timestamp not null default current_timestamp;\n\n');
+    expect(diff1).toBe(
+      "alter table `book` modify `updated_at` timestamp not null default current_timestamp;\n\n",
+    );
     await orm.schema.execute(diff1);
 
-    orm.getMetadata().reset('Book2');
+    orm.getMetadata().reset("Book2");
     await orm.discoverEntity(Book3);
     const diff3 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff3).toBe('alter table `book` modify `updated_at` timestamp not null default current_timestamp on update current_timestamp;\n\n');
+    expect(diff3).toBe(
+      "alter table `book` modify `updated_at` timestamp not null default current_timestamp on update current_timestamp;\n\n",
+    );
     await orm.schema.execute(diff3);
   });
-
 });

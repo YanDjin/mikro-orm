@@ -1,13 +1,18 @@
-import { Cascade, Entity, ManyToMany, ManyToOne, Property } from '@mikro-orm/core';
-import type { Publisher } from './Publisher';
-import { Author } from './Author';
-import type { BookTag } from './BookTag';
-import { Collection, Ref } from '../TsMorphMetadataProvider.test';
-import { BaseEntity3 } from './BaseEntity3';
+import {
+  Cascade,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import type { Publisher } from "./Publisher";
+import { Author } from "./Author";
+import type { BookTag } from "./BookTag";
+import { Collection, Ref } from "../TsMorphMetadataProvider.test";
+import { BaseEntity3 } from "./BaseEntity3";
 
 @Entity()
 export class Book extends BaseEntity3 {
-
   @Property()
   title: string;
 
@@ -34,5 +39,4 @@ export class Book extends BaseEntity3 {
     this.title = title;
     this.author = author!;
   }
-
 }

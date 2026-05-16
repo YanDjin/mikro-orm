@@ -8,82 +8,69 @@ import {
   PrimaryKey,
   Property,
   PlainObject,
-} from '@mikro-orm/sqlite';
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class FilterValue {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
 
-  @ManyToOne('Filter', { ref: true })
+  @ManyToOne("Filter", { ref: true })
   filter!: Ref<Filter>;
-
 }
 
 @Entity()
 export class Filter {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
 
-  @ManyToOne('Project', { ref: true })
+  @ManyToOne("Project", { ref: true })
   project!: Ref<Project>;
 
-  @OneToMany('FilterValue', 'filter')
+  @OneToMany("FilterValue", "filter")
   values = new Collection<FilterValue>(this);
-
 }
 
 @Entity()
 export class Project {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
 
-  @OneToMany('Filter', 'project')
+  @OneToMany("Filter", "project")
   filters = new Collection<Filter>(this);
-
 }
 
 export class FilterValueDto extends PlainObject {
-
   name!: string;
-
 }
 
 export class FilterDto extends PlainObject {
-
   name!: string;
 
   values!: FilterValueDto[];
-
 }
 
 export class ProjectDto extends PlainObject {
-
   name!: string;
 
   filters!: FilterDto[];
-
 }
 
-describe('GH issue 1831', () => {
-
+describe("GH issue 1831", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
-      dbName: ':memory:',
+      dbName: ":memory:",
       entities: [Project, Filter, FilterValue],
     });
     await orm.schema.createSchema();
@@ -98,19 +85,16 @@ describe('GH issue 1831', () => {
     const filterDto = new FilterDto();
     const filterValueDto = new FilterValueDto();
 
-    filterValueDto.name = 'Apple';
+    filterValueDto.name = "Apple";
 
-    filterDto.name = 'Fruits';
+    filterDto.name = "Fruits";
     filterDto.values = [filterValueDto];
 
-    projectDto.name = 'Project name';
-    projectDto.filters = [
-      filterDto,
-    ];
+    projectDto.name = "Project name";
+    projectDto.filters = [filterDto];
     const project = orm.em.create(Project, projectDto);
     expect(project.filters.length).toBe(1);
-    expect(project.filters[0].name).toBe('Fruits');
+    expect(project.filters[0].name).toBe("Fruits");
     expect(project.filters[0].id).toBeUndefined();
   });
-
 });

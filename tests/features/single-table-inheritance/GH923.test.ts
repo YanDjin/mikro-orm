@@ -1,85 +1,97 @@
-import { Entity, Enum, MikroORM, PrimaryKey, Property } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  Enum,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
-@Entity({ discriminatorColumn: 'type', abstract: true })
+@Entity({ discriminatorColumn: "type", abstract: true })
 export abstract class Person {
-
   @PrimaryKey()
   id!: string;
 
   @Enum()
-  type!: 'gardener' | 'teacher' | 'chef';
-
+  type!: "gardener" | "teacher" | "chef";
 }
 
-@Entity({ discriminatorValue: 'chef' })
+@Entity({ discriminatorValue: "chef" })
 export class Chef extends Person {
-
   @Property()
   kitchen?: string;
-
 }
 
-@Entity({ discriminatorValue: 'gardener' })
+@Entity({ discriminatorValue: "gardener" })
 export class Gardener extends Person {
-
   @Property()
   plant?: string;
-
 }
 
-@Entity({ discriminatorValue: 'teacher' })
+@Entity({ discriminatorValue: "teacher" })
 export class Teacher extends Person {
-
   @Property()
   subject?: string;
-
 }
 
-describe('GH issue 923', () => {
-
+describe("GH issue 923", () => {
   test(`discovery with STI is not dependent on order of entities 1`, async () => {
     const orm = await MikroORM.init({
       entities: [Person, Chef, Teacher, Gardener],
       driver: SqliteDriver,
-      dbName: ':memory:',
+      dbName: ":memory:",
       connect: false,
     });
-    const meta = orm.getMetadata().get('Person');
-    expect(meta.discriminatorMap).toEqual({ chef: 'Chef', teacher: 'Teacher', gardener: 'Gardener' });
+    const meta = orm.getMetadata().get("Person");
+    expect(meta.discriminatorMap).toEqual({
+      chef: "Chef",
+      teacher: "Teacher",
+      gardener: "Gardener",
+    });
   });
 
   test(`discovery with STI is not dependent on order of entities 2`, async () => {
     const orm = await MikroORM.init({
       entities: [Chef, Teacher, Gardener, Person],
       driver: SqliteDriver,
-      dbName: ':memory:',
+      dbName: ":memory:",
       connect: false,
     });
-    const meta = orm.getMetadata().get('Person');
-    expect(meta.discriminatorMap).toEqual({ chef: 'Chef', teacher: 'Teacher', gardener: 'Gardener' });
+    const meta = orm.getMetadata().get("Person");
+    expect(meta.discriminatorMap).toEqual({
+      chef: "Chef",
+      teacher: "Teacher",
+      gardener: "Gardener",
+    });
   });
 
   test(`discovery with STI is not dependent on order of entities 3`, async () => {
     const orm = await MikroORM.init({
       entities: [Chef, Teacher, Person, Gardener],
       driver: SqliteDriver,
-      dbName: ':memory:',
+      dbName: ":memory:",
       connect: false,
     });
-    const meta = orm.getMetadata().get('Person');
-    expect(meta.discriminatorMap).toEqual({ chef: 'Chef', teacher: 'Teacher', gardener: 'Gardener' });
+    const meta = orm.getMetadata().get("Person");
+    expect(meta.discriminatorMap).toEqual({
+      chef: "Chef",
+      teacher: "Teacher",
+      gardener: "Gardener",
+    });
   });
 
   test(`discovery with STI is not dependent on order of entities 4`, async () => {
     const orm = await MikroORM.init({
       entities: [Chef, Person, Teacher, Gardener],
       driver: SqliteDriver,
-      dbName: ':memory:',
+      dbName: ":memory:",
       connect: false,
     });
-    const meta = orm.getMetadata().get('Person');
-    expect(meta.discriminatorMap).toEqual({ chef: 'Chef', teacher: 'Teacher', gardener: 'Gardener' });
+    const meta = orm.getMetadata().get("Person");
+    expect(meta.discriminatorMap).toEqual({
+      chef: "Chef",
+      teacher: "Teacher",
+      gardener: "Gardener",
+    });
   });
-
 });

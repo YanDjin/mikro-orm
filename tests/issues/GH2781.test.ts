@@ -1,8 +1,13 @@
-import { Entity, ManyToOne, MikroORM, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 class Address {
-
   @PrimaryKey()
   id!: number;
 
@@ -18,12 +23,10 @@ class Address {
   constructor(companyName: string) {
     this.companyName = companyName;
   }
-
 }
 
 @Entity()
 class Customer {
-
   @PrimaryKey()
   id!: number;
 
@@ -43,17 +46,15 @@ class Customer {
     this.customerNumber = customerNumber;
     this.companyAddress = companyAddress;
   }
-
 }
 
-describe('GH issue 2781', () => {
-
+describe("GH issue 2781", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Address, Customer],
-      dbName: 'mikro_orm_test_2781',
+      dbName: "mikro_orm_test_2781",
     });
     await orm.schema.refreshDatabase();
   });
@@ -63,13 +64,12 @@ describe('GH issue 2781', () => {
   });
 
   test(`GH issue 2781`, async () => {
-    const address1 = new Address('test1');
-    const customer = new Customer('100', address1);
+    const address1 = new Address("test1");
+    const customer = new Customer("100", address1);
     orm.em.persist(customer);
     await orm.em.flush();
 
-    customer.companyAddress = new Address('test2');
+    customer.companyAddress = new Address("test2");
     await orm.em.flush();
   });
-
 });

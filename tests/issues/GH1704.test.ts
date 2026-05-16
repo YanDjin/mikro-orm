@@ -1,20 +1,23 @@
-import { Entity, PrimaryKey, Property, OneToOne, MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  OneToOne,
+  MikroORM,
+} from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class Profile {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne('User', 'profile')
+  @OneToOne("User", "profile")
   user: any;
-
 }
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -23,17 +26,15 @@ export class User {
 
   @OneToOne(() => Profile)
   profile!: Profile;
-
 }
 
-describe('GH issue 1704', () => {
-
+describe("GH issue 1704", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [User, Profile],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
@@ -42,15 +43,15 @@ describe('GH issue 1704', () => {
     await orm.close(true);
   });
 
-  test('loading cached entity with relations', async () => {
+  test("loading cached entity with relations", async () => {
     const user = new User();
     user.id = 1;
-    user.name = 'Foo';
+    user.name = "Foo";
     user.profile = new Profile();
     user.profile.id = 2;
     await orm.em.fork().persistAndFlush(user);
 
-    const mock = mockLogger(orm, ['query']);
+    const mock = mockLogger(orm, ["query"]);
 
     const getAndFlush = async (expected: number) => {
       const em = orm.em.fork();
@@ -63,5 +64,4 @@ describe('GH issue 1704', () => {
     await getAndFlush(2); // no cache hit
     await getAndFlush(3); // cache hit, so 2 previous + 1 new query
   });
-
 });

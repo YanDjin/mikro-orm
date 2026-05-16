@@ -1,14 +1,17 @@
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: string;
 
-  @Property({ type: 'json' })
+  @Property({ type: "json" })
   data!: { id: string };
-
 }
 
 let orm: MikroORM;
@@ -16,7 +19,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [User],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
@@ -26,11 +29,11 @@ afterAll(async () => {
 });
 
 test(`GH issue 3054`, async () => {
-  await orm.em.insert(User, { id: '123', data: { id: 'test' } });
+  await orm.em.insert(User, { id: "123", data: { id: "test" } });
   const r = await orm.em.findOneOrFail(User, {
     data: {
-      id: 'test',
+      id: "test",
     },
   });
-  expect(r.data.id).toBe('test');
+  expect(r.data.id).toBe("test");
 });

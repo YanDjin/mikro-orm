@@ -10,15 +10,14 @@ import {
   Property,
   Rel,
   wrap,
-} from '@mikro-orm/sqlite';
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Page {
-
   @PrimaryKey()
   pageId!: number;
 
-  [PrimaryKeyProp]?: 'pageId';
+  [PrimaryKeyProp]?: "pageId";
 
   @Property()
   content!: string;
@@ -34,35 +33,31 @@ class Page {
 
   @Property({ persist: false })
   userId!: number & Opt;
-
 }
 
 @Entity()
 class User {
-
   @PrimaryKey()
   userId!: number;
 
-  [PrimaryKeyProp]?: 'userId';
+  [PrimaryKeyProp]?: "userId";
 
   @Property()
   name!: string;
 
-  @OneToMany(() => Book, book => book.user)
+  @OneToMany(() => Book, (book) => book.user)
   books = new Collection<Book>(this);
 
-  @OneToMany(() => Page, page => page.user)
+  @OneToMany(() => Page, (page) => page.user)
   pages = new Collection<Page>(this);
-
 }
 
 @Entity()
 class Book {
-
   @PrimaryKey()
   bookId!: number;
 
-  [PrimaryKeyProp]?: 'bookId';
+  [PrimaryKeyProp]?: "bookId";
 
   @Property()
   title!: string;
@@ -71,22 +66,21 @@ class Book {
   @Property({ lazy: true, nullable: true })
   description?: string;
 
-  @OneToMany(() => Page, page => page.book)
+  @OneToMany(() => Page, (page) => page.book)
   pages = new Collection<Page>(this);
 
-  @ManyToOne(() => User, { name: 'userId' })
+  @ManyToOne(() => User, { name: "userId" })
   user!: User;
 
   @Property({ persist: false })
   userId!: number & Opt;
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [User, Page, Book],
   });
   await orm.schema.createSchema();
@@ -96,39 +90,39 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('basic CRUD example', async () => {
-  const user = orm.em.create(User, { name: 'Foo' });
-  const book = orm.em.create(Book, { title: '42', user });
+test("basic CRUD example", async () => {
+  const user = orm.em.create(User, { name: "Foo" });
+  const book = orm.em.create(Book, { title: "42", user });
 
-  orm.em.create(Page, { content: 'Lorem', book, user });
-  orm.em.create(Page, { content: 'Ipsum', book, user });
+  orm.em.create(Page, { content: "Lorem", book, user });
+  orm.em.create(Page, { content: "Ipsum", book, user });
 
-  orm.em.create(Book, { title: '42 II', user });
+  orm.em.create(Book, { title: "42 II", user });
 
   await orm.em.flush();
   orm.em.clear();
 
-  const u = await orm.em.findOneOrFail(User, { name: 'Foo' });
+  const u = await orm.em.findOneOrFail(User, { name: "Foo" });
 
   const books = await u.books.loadItems({
-    where: { title: '42' },
-    populate: ['pages'],
+    where: { title: "42" },
+    populate: ["pages"],
   });
 
   expect(wrap(books[0]).toObject()).toEqual({
     bookId: 1,
-    title: '42',
+    title: "42",
     user: 1,
     pages: [
       {
         pageId: 1,
-        content: 'Lorem',
+        content: "Lorem",
         book: 1,
         user: 1,
       },
       {
         pageId: 2,
-        content: 'Ipsum',
+        content: "Ipsum",
         book: 1,
         user: 1,
       },

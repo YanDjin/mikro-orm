@@ -1,17 +1,21 @@
-import { MikroORM, SqliteDriver } from '@mikro-orm/sqlite';
-import { BaseEntity, Entity, PrimaryKey, ManyToOne, ManyToMany, Collection } from '@mikro-orm/core';
+import { MikroORM, SqliteDriver } from "@yandjin-mikro-orm/sqlite";
+import {
+  BaseEntity,
+  Entity,
+  PrimaryKey,
+  ManyToOne,
+  ManyToMany,
+  Collection,
+} from "@yandjin-mikro-orm/core";
 
 @Entity()
 export class Car extends BaseEntity {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Entity()
 export class User extends BaseEntity {
-
   @PrimaryKey()
   id!: number;
 
@@ -20,7 +24,6 @@ export class User extends BaseEntity {
 
   @ManyToMany(() => Car)
   cars = new Collection<Car>(this);
-
 }
 
 let orm: MikroORM;
@@ -28,7 +31,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     driver: SqliteDriver,
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [User, Car],
   });
   await orm.schema.createSchema();
@@ -36,7 +39,7 @@ beforeAll(async () => {
 
 afterAll(async () => await orm.close());
 
-test('assign relation on not managed entity', async () => {
+test("assign relation on not managed entity", async () => {
   const user = new User();
   const car = new Car();
   user.assign({ car, cars: [car] });

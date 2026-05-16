@@ -1,37 +1,44 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
-import type { AbstractSqlDriver } from '@mikro-orm/sqlite';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  PrimaryKeyProp,
+} from "@yandjin-mikro-orm/core";
+import type { AbstractSqlDriver } from "@yandjin-mikro-orm/sqlite";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Category {
-
   @PrimaryKey()
   id!: number;
 
   constructor(id: number) {
     this.id = id;
   }
-
 }
 
 @Entity()
 export class Site {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany({ entity: () => SiteCategory, mappedBy: 'site', orphanRemoval: true })
+  @OneToMany({
+    entity: () => SiteCategory,
+    mappedBy: "site",
+    orphanRemoval: true,
+  })
   siteCategories = new Collection<SiteCategory>(this);
 
   constructor(id: number) {
     this.id = id;
   }
-
 }
 
 @Entity()
 export class SiteCategory {
-
   constructor(site: Site, category: Category) {
     this.site = site;
     this.category = category;
@@ -43,11 +50,10 @@ export class SiteCategory {
   @ManyToOne({ entity: () => Category, primary: true })
   category!: Category;
 
-  [PrimaryKeyProp]?: ['site', 'category'];
-
+  [PrimaryKeyProp]?: ["site", "category"];
 }
 
-describe('GH #1914', () => {
+describe("GH #1914", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -80,11 +86,16 @@ describe('GH #1914', () => {
     orm.em.clear();
   });
 
-  it('should handle remove and add in the same transaction', async () => {
+  it("should handle remove and add in the same transaction", async () => {
     const c2 = orm.em.getReference(Category, 2);
     const c3 = orm.em.getReference(Category, 3);
-    const s = await orm.em.findOneOrFail(Site, 1, { populate: ['siteCategories'] });
-    const sc2 = await orm.em.findOneOrFail(SiteCategory, { site: s, category: c2 });
+    const s = await orm.em.findOneOrFail(Site, 1, {
+      populate: ["siteCategories"],
+    });
+    const sc2 = await orm.em.findOneOrFail(SiteCategory, {
+      site: s,
+      category: c2,
+    });
 
     s.siteCategories.remove(sc2);
     s.siteCategories.add(new SiteCategory(s, c3));
@@ -92,28 +103,39 @@ describe('GH #1914', () => {
     await orm.em.flush();
 
     orm.em.clear();
-    const s2 = await orm.em.findOneOrFail(Site, 1, { populate: ['siteCategories'] });
+    const s2 = await orm.em.findOneOrFail(Site, 1, {
+      populate: ["siteCategories"],
+    });
     expect(s2.siteCategories.count()).toEqual(2);
   });
 
-  it('should handle remove composite entity directly', async () => {
+  it("should handle remove composite entity directly", async () => {
     const c2 = orm.em.getReference(Category, 2);
-    const s = await orm.em.findOneOrFail(Site, 1, { populate: ['siteCategories'] });
-    const sc2 = await orm.em.findOneOrFail(SiteCategory, { site: s, category: c2 });
+    const s = await orm.em.findOneOrFail(Site, 1, {
+      populate: ["siteCategories"],
+    });
+    const sc2 = await orm.em.findOneOrFail(SiteCategory, {
+      site: s,
+      category: c2,
+    });
     expect(s.siteCategories.count()).toEqual(2);
 
     orm.em.remove(sc2);
     await orm.em.flush();
 
     orm.em.clear();
-    const s2 = await orm.em.findOneOrFail(Site, 1, { populate: ['siteCategories'] });
+    const s2 = await orm.em.findOneOrFail(Site, 1, {
+      populate: ["siteCategories"],
+    });
     expect(s2.siteCategories.count()).toEqual(1);
   });
 
-  it('should allow me to reset the collection', async () => {
+  it("should allow me to reset the collection", async () => {
     const c2 = orm.em.getReference(Category, 2);
     const c3 = orm.em.getReference(Category, 3);
-    const s = await orm.em.findOneOrFail(Site, 1, { populate: ['siteCategories'] });
+    const s = await orm.em.findOneOrFail(Site, 1, {
+      populate: ["siteCategories"],
+    });
 
     s.siteCategories.removeAll();
     s.siteCategories.add(new SiteCategory(s, c2), new SiteCategory(s, c3));
@@ -121,7 +143,9 @@ describe('GH #1914', () => {
     await orm.em.flush();
 
     orm.em.clear();
-    const s2 = await orm.em.findOneOrFail(Site, 1, { populate: ['siteCategories'] });
+    const s2 = await orm.em.findOneOrFail(Site, 1, {
+      populate: ["siteCategories"],
+    });
     expect(s2.siteCategories.count()).toEqual(2);
   });
 });

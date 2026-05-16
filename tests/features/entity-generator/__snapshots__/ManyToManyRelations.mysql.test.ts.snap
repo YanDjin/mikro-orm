@@ -2,7 +2,7 @@
 
 exports[`many_to_many_variants bidirectionalRelations=false onlyPurePivotTables=false readOnlyPivotTables=false entitySchema=false: dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -21,7 +21,7 @@ export class CompletedOrders {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Emails {
@@ -37,7 +37,7 @@ export class Emails {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Flags {
@@ -53,7 +53,7 @@ export class Flags {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Orders {
@@ -68,7 +68,7 @@ export class Orders {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -88,7 +88,7 @@ export class UserEmailAvatars {
 
 }
 ",
-  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Users } from './Users';
@@ -109,7 +109,7 @@ export class UserEmailFlags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Orders } from './Orders';
 import { Users } from './Users';
@@ -130,7 +130,7 @@ export class UserEmailOrders {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -150,7 +150,7 @@ export class UserEmails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 import { Orders } from './Orders';
 
@@ -179,7 +179,7 @@ export class Users {
 
 exports[`many_to_many_variants bidirectionalRelations=false onlyPurePivotTables=false readOnlyPivotTables=false entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CompletedOrders {
   id!: number;
@@ -209,7 +209,7 @@ export const CompletedOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Emails {
   [PrimaryKeyProp]?: 'emailId';
@@ -225,7 +225,7 @@ export const EmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Flags {
   [PrimaryKeyProp]?: 'flagId';
@@ -241,7 +241,7 @@ export const FlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Orders {
   [PrimaryKeyProp]?: 'orderId';
@@ -257,7 +257,7 @@ export const OrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailAvatars {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -288,7 +288,7 @@ export const UserEmailAvatarsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailFlags {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -319,7 +319,7 @@ export const UserEmailFlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailOrders {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -348,7 +348,7 @@ export const UserEmailOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmails {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -381,7 +381,7 @@ export const UserEmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 import { Orders } from './Orders';
 
@@ -422,7 +422,7 @@ export const UsersSchema = new EntitySchema({
 
 exports[`many_to_many_variants bidirectionalRelations=false onlyPurePivotTables=false readOnlyPivotTables=true entitySchema=false: dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -441,7 +441,7 @@ export class CompletedOrders {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Emails {
@@ -457,7 +457,7 @@ export class Emails {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Flags {
@@ -473,7 +473,7 @@ export class Flags {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Orders {
@@ -488,7 +488,7 @@ export class Orders {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -508,7 +508,7 @@ export class UserEmailAvatars {
 
 }
 ",
-  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Users } from './Users';
@@ -529,7 +529,7 @@ export class UserEmailFlags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Orders } from './Orders';
 import { Users } from './Users';
@@ -550,7 +550,7 @@ export class UserEmailOrders {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -570,7 +570,7 @@ export class UserEmails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Orders } from './Orders';
@@ -616,7 +616,7 @@ export class Users {
 
 exports[`many_to_many_variants bidirectionalRelations=false onlyPurePivotTables=false readOnlyPivotTables=true entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CompletedOrders {
   id!: number;
@@ -646,7 +646,7 @@ export const CompletedOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Emails {
   [PrimaryKeyProp]?: 'emailId';
@@ -662,7 +662,7 @@ export const EmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Flags {
   [PrimaryKeyProp]?: 'flagId';
@@ -678,7 +678,7 @@ export const FlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Orders {
   [PrimaryKeyProp]?: 'orderId';
@@ -694,7 +694,7 @@ export const OrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailAvatars {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -725,7 +725,7 @@ export const UserEmailAvatarsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailFlags {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -756,7 +756,7 @@ export const UserEmailFlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailOrders {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -785,7 +785,7 @@ export const UserEmailOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmails {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -818,7 +818,7 @@ export const UserEmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Orders } from './Orders';
@@ -900,7 +900,7 @@ export const UsersSchema = new EntitySchema({
 
 exports[`many_to_many_variants bidirectionalRelations=false onlyPurePivotTables=true readOnlyPivotTables=false entitySchema=false: dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -919,7 +919,7 @@ export class CompletedOrders {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Emails {
@@ -935,7 +935,7 @@ export class Emails {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Flags {
@@ -951,7 +951,7 @@ export class Flags {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Orders {
@@ -966,7 +966,7 @@ export class Orders {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -986,7 +986,7 @@ export class UserEmailAvatars {
 
 }
 ",
-  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Users } from './Users';
@@ -1007,7 +1007,7 @@ export class UserEmailFlags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Orders } from './Orders';
 import { Users } from './Users';
@@ -1028,7 +1028,7 @@ export class UserEmailOrders {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -1048,7 +1048,7 @@ export class UserEmails {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -1069,7 +1069,7 @@ export class UserOrders {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 
 @Entity()
@@ -1094,7 +1094,7 @@ export class Users {
 
 exports[`many_to_many_variants bidirectionalRelations=false onlyPurePivotTables=true readOnlyPivotTables=false entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CompletedOrders {
   id!: number;
@@ -1124,7 +1124,7 @@ export const CompletedOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Emails {
   [PrimaryKeyProp]?: 'emailId';
@@ -1140,7 +1140,7 @@ export const EmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Flags {
   [PrimaryKeyProp]?: 'flagId';
@@ -1156,7 +1156,7 @@ export const FlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Orders {
   [PrimaryKeyProp]?: 'orderId';
@@ -1172,7 +1172,7 @@ export const OrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailAvatars {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -1203,7 +1203,7 @@ export const UserEmailAvatarsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailFlags {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -1234,7 +1234,7 @@ export const UserEmailFlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailOrders {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -1263,7 +1263,7 @@ export const UserEmailOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmails {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -1296,7 +1296,7 @@ export const UserEmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserOrders {
   [PrimaryKeyProp]?: ['user', 'order'];
@@ -1322,7 +1322,7 @@ export const UserOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 
 export class Users {
@@ -1352,7 +1352,7 @@ export const UsersSchema = new EntitySchema({
 
 exports[`many_to_many_variants bidirectionalRelations=false onlyPurePivotTables=true readOnlyPivotTables=true entitySchema=false: dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -1371,7 +1371,7 @@ export class CompletedOrders {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Emails {
@@ -1387,7 +1387,7 @@ export class Emails {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Flags {
@@ -1403,7 +1403,7 @@ export class Flags {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Orders {
@@ -1418,7 +1418,7 @@ export class Orders {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -1438,7 +1438,7 @@ export class UserEmailAvatars {
 
 }
 ",
-  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Users } from './Users';
@@ -1459,7 +1459,7 @@ export class UserEmailFlags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Orders } from './Orders';
 import { Users } from './Users';
@@ -1480,7 +1480,7 @@ export class UserEmailOrders {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -1500,7 +1500,7 @@ export class UserEmails {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -1521,7 +1521,7 @@ export class UserOrders {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 
 @Entity()
@@ -1546,7 +1546,7 @@ export class Users {
 
 exports[`many_to_many_variants bidirectionalRelations=false onlyPurePivotTables=true readOnlyPivotTables=true entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CompletedOrders {
   id!: number;
@@ -1576,7 +1576,7 @@ export const CompletedOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Emails {
   [PrimaryKeyProp]?: 'emailId';
@@ -1592,7 +1592,7 @@ export const EmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Flags {
   [PrimaryKeyProp]?: 'flagId';
@@ -1608,7 +1608,7 @@ export const FlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Orders {
   [PrimaryKeyProp]?: 'orderId';
@@ -1624,7 +1624,7 @@ export const OrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailAvatars {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -1655,7 +1655,7 @@ export const UserEmailAvatarsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailFlags {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -1686,7 +1686,7 @@ export const UserEmailFlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailOrders {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -1715,7 +1715,7 @@ export const UserEmailOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmails {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -1748,7 +1748,7 @@ export const UserEmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserOrders {
   [PrimaryKeyProp]?: ['user', 'order'];
@@ -1774,7 +1774,7 @@ export const UserOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 
 export class Users {
@@ -1804,7 +1804,7 @@ export const UsersSchema = new EntitySchema({
 
 exports[`many_to_many_variants bidirectionalRelations=true onlyPurePivotTables=false readOnlyPivotTables=false entitySchema=false: dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -1823,7 +1823,7 @@ export class CompletedOrders {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { UserEmails } from './UserEmails';
 
 @Entity()
@@ -1843,7 +1843,7 @@ export class Emails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { UserEmailFlags } from './UserEmailFlags';
 import { Users } from './Users';
 
@@ -1867,7 +1867,7 @@ export class Flags {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { UserEmailOrders } from './UserEmailOrders';
 import { Users } from './Users';
 
@@ -1890,7 +1890,7 @@ export class Orders {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -1910,7 +1910,7 @@ export class UserEmailAvatars {
 
 }
 ",
-  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Users } from './Users';
@@ -1931,7 +1931,7 @@ export class UserEmailFlags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Orders } from './Orders';
 import { Users } from './Users';
@@ -1952,7 +1952,7 @@ export class UserEmailOrders {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -1972,7 +1972,7 @@ export class UserEmails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 import { Orders } from './Orders';
 import { UserEmails } from './UserEmails';
@@ -2005,7 +2005,7 @@ export class Users {
 
 exports[`many_to_many_variants bidirectionalRelations=true onlyPurePivotTables=false readOnlyPivotTables=false entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CompletedOrders {
   id!: number;
@@ -2035,7 +2035,7 @@ export const CompletedOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { UserEmails } from './UserEmails';
 
 export class Emails {
@@ -2054,7 +2054,7 @@ export const EmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Users } from './Users';
 
 export class Flags {
@@ -2075,7 +2075,7 @@ export const FlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { UserEmailOrders } from './UserEmailOrders';
 import { Users } from './Users';
 
@@ -2097,7 +2097,7 @@ export const OrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailAvatars {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -2128,7 +2128,7 @@ export const UserEmailAvatarsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailFlags {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -2159,7 +2159,7 @@ export const UserEmailFlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailOrders {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -2188,7 +2188,7 @@ export const UserEmailOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmails {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -2221,7 +2221,7 @@ export const UserEmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 import { Orders } from './Orders';
 import { UserEmails } from './UserEmails';
@@ -2265,7 +2265,7 @@ export const UsersSchema = new EntitySchema({
 
 exports[`many_to_many_variants bidirectionalRelations=true onlyPurePivotTables=false readOnlyPivotTables=true entitySchema=false: dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -2284,7 +2284,7 @@ export class CompletedOrders {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { UserEmails } from './UserEmails';
 import { Users } from './Users';
 
@@ -2317,7 +2317,7 @@ export class Emails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { UserEmailFlags } from './UserEmailFlags';
 import { Users } from './Users';
 
@@ -2341,7 +2341,7 @@ export class Flags {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { UserEmailOrders } from './UserEmailOrders';
 import { Users } from './Users';
 
@@ -2364,7 +2364,7 @@ export class Orders {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -2384,7 +2384,7 @@ export class UserEmailAvatars {
 
 }
 ",
-  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Users } from './Users';
@@ -2405,7 +2405,7 @@ export class UserEmailFlags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Orders } from './Orders';
 import { Users } from './Users';
@@ -2426,7 +2426,7 @@ export class UserEmailOrders {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -2446,7 +2446,7 @@ export class UserEmails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Orders } from './Orders';
@@ -2495,7 +2495,7 @@ export class Users {
 
 exports[`many_to_many_variants bidirectionalRelations=true onlyPurePivotTables=false readOnlyPivotTables=true entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CompletedOrders {
   id!: number;
@@ -2525,7 +2525,7 @@ export const CompletedOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { UserEmails } from './UserEmails';
 import { Users } from './Users';
 
@@ -2563,7 +2563,7 @@ export const EmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Users } from './Users';
 
 export class Flags {
@@ -2584,7 +2584,7 @@ export const FlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { UserEmailOrders } from './UserEmailOrders';
 import { Users } from './Users';
 
@@ -2606,7 +2606,7 @@ export const OrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailAvatars {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -2637,7 +2637,7 @@ export const UserEmailAvatarsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailFlags {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -2668,7 +2668,7 @@ export const UserEmailFlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailOrders {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -2697,7 +2697,7 @@ export const UserEmailOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmails {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -2730,7 +2730,7 @@ export const UserEmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Orders } from './Orders';
@@ -2815,7 +2815,7 @@ export const UsersSchema = new EntitySchema({
 
 exports[`many_to_many_variants bidirectionalRelations=true onlyPurePivotTables=true readOnlyPivotTables=false entitySchema=false: dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -2834,7 +2834,7 @@ export class CompletedOrders {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { UserEmails } from './UserEmails';
 
 @Entity()
@@ -2854,7 +2854,7 @@ export class Emails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { UserEmailFlags } from './UserEmailFlags';
 import { Users } from './Users';
 
@@ -2878,7 +2878,7 @@ export class Flags {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { UserOrders } from './UserOrders';
 
 @Entity()
@@ -2897,7 +2897,7 @@ export class Orders {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -2917,7 +2917,7 @@ export class UserEmailAvatars {
 
 }
 ",
-  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Users } from './Users';
@@ -2938,7 +2938,7 @@ export class UserEmailFlags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Orders } from './Orders';
 import { Users } from './Users';
@@ -2959,7 +2959,7 @@ export class UserEmailOrders {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -2979,7 +2979,7 @@ export class UserEmails {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -3000,7 +3000,7 @@ export class UserOrders {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 import { UserOrders } from './UserOrders';
 
@@ -3029,7 +3029,7 @@ export class Users {
 
 exports[`many_to_many_variants bidirectionalRelations=true onlyPurePivotTables=true readOnlyPivotTables=false entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CompletedOrders {
   id!: number;
@@ -3059,7 +3059,7 @@ export const CompletedOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { UserEmails } from './UserEmails';
 
 export class Emails {
@@ -3078,7 +3078,7 @@ export const EmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Users } from './Users';
 
 export class Flags {
@@ -3099,7 +3099,7 @@ export const FlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { UserOrders } from './UserOrders';
 
 export class Orders {
@@ -3118,7 +3118,7 @@ export const OrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailAvatars {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -3149,7 +3149,7 @@ export const UserEmailAvatarsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailFlags {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -3180,7 +3180,7 @@ export const UserEmailFlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailOrders {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -3209,7 +3209,7 @@ export const UserEmailOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmails {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -3242,7 +3242,7 @@ export const UserEmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserOrders {
   [PrimaryKeyProp]?: ['user', 'order'];
@@ -3268,7 +3268,7 @@ export const UserOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 import { UserOrders } from './UserOrders';
 
@@ -3301,7 +3301,7 @@ export const UsersSchema = new EntitySchema({
 
 exports[`many_to_many_variants bidirectionalRelations=true onlyPurePivotTables=true readOnlyPivotTables=true entitySchema=false: dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -3320,7 +3320,7 @@ export class CompletedOrders {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { UserEmails } from './UserEmails';
 
 @Entity()
@@ -3340,7 +3340,7 @@ export class Emails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { UserEmailFlags } from './UserEmailFlags';
 import { Users } from './Users';
 
@@ -3364,7 +3364,7 @@ export class Flags {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { UserOrders } from './UserOrders';
 
 @Entity()
@@ -3383,7 +3383,7 @@ export class Orders {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -3403,7 +3403,7 @@ export class UserEmailAvatars {
 
 }
 ",
-  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, OneToOne, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Flags } from './Flags';
 import { Users } from './Users';
@@ -3424,7 +3424,7 @@ export class UserEmailFlags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Orders } from './Orders';
 import { Users } from './Users';
@@ -3445,7 +3445,7 @@ export class UserEmailOrders {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Users } from './Users';
 
@@ -3465,7 +3465,7 @@ export class UserEmails {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Orders } from './Orders';
 import { Users } from './Users';
 
@@ -3486,7 +3486,7 @@ export class UserOrders {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 import { UserOrders } from './UserOrders';
 
@@ -3515,7 +3515,7 @@ export class Users {
 
 exports[`many_to_many_variants bidirectionalRelations=true onlyPurePivotTables=true readOnlyPivotTables=true entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CompletedOrders {
   id!: number;
@@ -3545,7 +3545,7 @@ export const CompletedOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { UserEmails } from './UserEmails';
 
 export class Emails {
@@ -3564,7 +3564,7 @@ export const EmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Users } from './Users';
 
 export class Flags {
@@ -3585,7 +3585,7 @@ export const FlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { UserOrders } from './UserOrders';
 
 export class Orders {
@@ -3604,7 +3604,7 @@ export const OrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailAvatars {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -3635,7 +3635,7 @@ export const UserEmailAvatarsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailFlags {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -3666,7 +3666,7 @@ export const UserEmailFlagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmailOrders {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -3695,7 +3695,7 @@ export const UserEmailOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserEmails {
   [PrimaryKeyProp]?: ['user', 'email'];
@@ -3728,7 +3728,7 @@ export const UserEmailsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class UserOrders {
   [PrimaryKeyProp]?: ['user', 'order'];
@@ -3754,7 +3754,7 @@ export const UserOrdersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Flags } from './Flags';
 import { UserOrders } from './UserOrders';
 

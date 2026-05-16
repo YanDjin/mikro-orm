@@ -1,4 +1,4 @@
-import { ObjectId } from 'bson';
+import { ObjectId } from "bson";
 import {
   Collection,
   Entity,
@@ -12,17 +12,16 @@ import {
   OptionalProps,
   PrimaryKeyProp,
   EagerProps,
-} from '@mikro-orm/core';
-import { Book } from './Book';
-import { Test } from './test.model';
-import { PublisherType } from './PublisherType';
+} from "@yandjin-mikro-orm/core";
+import { Book } from "./Book";
+import { Test } from "./test.model";
+import { PublisherType } from "./PublisherType";
 
 @Entity()
 export class Publisher {
-
-  [OptionalProps]?: 'type';
-  [PrimaryKeyProp]?: 'id' | '_id';
-  [EagerProps]?: 'tests';
+  [OptionalProps]?: "type";
+  [PrimaryKeyProp]?: "id" | "_id";
+  [EagerProps]?: "tests";
 
   @PrimaryKey()
   _id!: ObjectId;
@@ -33,7 +32,7 @@ export class Publisher {
   @Property()
   name: string;
 
-  @OneToMany({ entity: () => Book, mappedBy: 'publisher' })
+  @OneToMany({ entity: () => Book, mappedBy: "publisher" })
   books = new Collection<Book, Publisher>(this);
 
   @ManyToMany({ entity: () => Test, eager: true })
@@ -45,7 +44,7 @@ export class Publisher {
   @Enum(() => PublisherType)
   type2? = PublisherType.LOCAL;
 
-  constructor(name = 'asd', type = PublisherType.LOCAL) {
+  constructor(name = "asd", type = PublisherType.LOCAL) {
     this.name = name;
     this.type = type;
   }
@@ -54,5 +53,4 @@ export class Publisher {
   beforeCreate() {
     // do sth
   }
-
 }

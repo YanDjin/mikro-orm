@@ -1,14 +1,21 @@
-import { Entity, PrimaryKey, Property, MikroORM, wrap, Ref, OneToOne } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  MikroORM,
+  wrap,
+  Ref,
+  OneToOne,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
   @OneToOne({
-    entity: 'B',
-    mappedBy: 'a',
+    entity: "B",
+    mappedBy: "a",
     ref: true,
     nullable: true,
   })
@@ -18,12 +25,10 @@ class A {
   get calcProp() {
     return this.b.getEntity().prop;
   }
-
 }
 
 @Entity()
 class B {
-
   @PrimaryKey()
   id!: number;
 
@@ -31,12 +36,10 @@ class B {
   a!: Ref<A>;
 
   @Property()
-  prop: string = 'foo';
-
+  prop: string = "foo";
 }
 
-describe('GH issue 535', () => {
-
+describe("GH issue 535", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -59,7 +62,11 @@ describe('GH issue 535', () => {
 
     orm.em.clear();
 
-    const fetchedA = await orm.em.findOneOrFail(A, { id: a.id }, { populate: ['b'] });
-    expect(fetchedA.calcProp).toBe('foo');
+    const fetchedA = await orm.em.findOneOrFail(
+      A,
+      { id: a.id },
+      { populate: ["b"] },
+    );
+    expect(fetchedA.calcProp).toBe("foo");
   });
 });

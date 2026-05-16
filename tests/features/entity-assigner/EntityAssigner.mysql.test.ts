@@ -1,73 +1,83 @@
-import type { MikroORM } from '@mikro-orm/core';
-import { Reference, wrap } from '@mikro-orm/core';
-import { MySqlDriver } from '@mikro-orm/mysql';
-import { initORMMySql } from '../../bootstrap';
-import { Author2, Book2, BookTag2, FooBar2, Publisher2, PublisherType } from '../../entities-sql';
+import type { MikroORM } from "@yandjin-mikro-orm/core";
+import { Reference, wrap } from "@yandjin-mikro-orm/core";
+import { MySqlDriver } from "@yandjin-mikro-orm/mysql";
+import { initORMMySql } from "../../bootstrap";
+import {
+  Author2,
+  Book2,
+  BookTag2,
+  FooBar2,
+  Publisher2,
+  PublisherType,
+} from "../../entities-sql";
 
-describe('EntityAssignerMySql', () => {
-
+describe("EntityAssignerMySql", () => {
   let orm: MikroORM<MySqlDriver>;
 
-  beforeAll(async () => orm = await initORMMySql('mysql', {}, true));
+  beforeAll(async () => (orm = await initORMMySql("mysql", {}, true)));
   beforeEach(async () => orm.schema.clearDatabase());
   afterAll(async () => {
     await orm.schema.dropDatabase();
     await orm.close(true);
   });
 
-  test('assign() should update entity values [mysql]', async () => {
-    const god = new Author2('God', 'hello@heaven.god');
-    const jon = new Author2('Jon Snow', 'snow@wall.st');
-    const book = new Book2('Book2', jon);
+  test("assign() should update entity values [mysql]", async () => {
+    const god = new Author2("God", "hello@heaven.god");
+    const jon = new Author2("Jon Snow", "snow@wall.st");
+    const book = new Book2("Book2", jon);
     await orm.em.persistAndFlush(book);
-    expect(book.title).toBe('Book2');
+    expect(book.title).toBe("Book2");
     expect(book.author).toBe(jon);
     // @ts-expect-error
-    wrap(book).assign({ title: 'Better Book2 1', author: god, notExisting: true });
+    wrap(book).assign({
+      title: "Better Book2 1",
+      author: god,
+      notExisting: true,
+    });
     expect(book.author).toBe(god);
     expect((book as any).notExisting).toBe(true);
     await orm.em.persistAndFlush(god);
-    wrap(book).assign({ title: 'Better Book2 2', author: god.id });
+    wrap(book).assign({ title: "Better Book2 2", author: god.id });
     expect(book.author).toBe(god);
-    wrap(book).assign({ title: 'Better Book2 3', author: jon.id });
-    expect(book.title).toBe('Better Book2 3');
+    wrap(book).assign({ title: "Better Book2 3", author: jon.id });
+    expect(book.title).toBe("Better Book2 3");
     expect(book.author).toBe(jon);
   });
 
-  test('assign() should fix property types [mysql]', async () => {
-    const god = new Author2('God', 'hello@heaven.god');
+  test("assign() should fix property types [mysql]", async () => {
+    const god = new Author2("God", "hello@heaven.god");
     // @ts-expect-error
-    wrap(god).assign({ createdAt: '2018-01-01', termsAccepted: 1 });
-    expect(god.createdAt).toEqual(new Date('2018-01-01'));
+    wrap(god).assign({ createdAt: "2018-01-01", termsAccepted: 1 });
+    expect(god.createdAt).toEqual(new Date("2018-01-01"));
     expect(god.termsAccepted).toBe(true);
 
-    const d1 = +new Date('2018-01-01');
+    const d1 = +new Date("2018-01-01");
     // @ts-expect-error
-    wrap(god).assign({ createdAt: '' + d1, termsAccepted: 0 });
-    expect(god.createdAt).toEqual(new Date('2018-01-01'));
+    wrap(god).assign({ createdAt: "" + d1, termsAccepted: 0 });
+    expect(god.createdAt).toEqual(new Date("2018-01-01"));
     expect(god.termsAccepted).toBe(false);
 
     // @ts-expect-error
     wrap(god).assign({ createdAt: d1, termsAccepted: 0 });
-    expect(god.createdAt).toEqual(new Date('2018-01-01'));
+    expect(god.createdAt).toEqual(new Date("2018-01-01"));
 
-    const d2 = +new Date('2018-01-01 00:00:00.123');
-    wrap(god).assign({ createdAt: '' + d2 });
-    expect(god.createdAt).toEqual(new Date('2018-01-01 00:00:00.123'));
+    const d2 = +new Date("2018-01-01 00:00:00.123");
+    wrap(god).assign({ createdAt: "" + d2 });
+    expect(god.createdAt).toEqual(new Date("2018-01-01 00:00:00.123"));
 
     // @ts-expect-error
     wrap(god).assign({ createdAt: d2 });
-    expect(god.createdAt).toEqual(new Date('2018-01-01 00:00:00.123'));
+    expect(god.createdAt).toEqual(new Date("2018-01-01 00:00:00.123"));
   });
 
-  test('assign() should update entity collection [mysql]', async () => {
-    const other = new BookTag2('other');
+  test("assign() should update entity collection [mysql]", async () => {
+    const other = new BookTag2("other");
     await orm.em.persistAndFlush(other);
-    const jon = new Author2('Jon Snow', 'snow@wall.st');
-    const book = new Book2('Book2', jon);
-    const tag1 = new BookTag2('tag 1');
-    const tag2 = new BookTag2('tag 2');
-    const tag3 = new BookTag2('tag 3');
+    const jon = new Author2("Jon Snow", "snow@wall.st");
+    const book = new Book2("Book2", jon);
+    const tag1 = new BookTag2("tag 1");
+    const tag2 = new BookTag2("tag 2");
+    const tag3 = new BookTag2("tag 3");
     book.tags.add(tag1, tag2, tag3);
     await orm.em.persistAndFlush(book);
     wrap(book).assign({ tags: [other.id] });
@@ -86,28 +96,31 @@ describe('EntityAssignerMySql', () => {
     expect(book2.tags.getIdentifiers()).toMatchObject([tag2.id]);
   });
 
-  test('assign() should update m:1 or 1:1 nested entities [mysql]', async () => {
-    const jon = new Author2('Jon Snow', 'snow@wall.st');
-    const book1 = new Book2('Book2', jon);
-    const jon2 = new Author2('Jon2 Snow', 'snow3@wall.st');
-    const book2 = new Book2('Book2', jon2);
+  test("assign() should update m:1 or 1:1 nested entities [mysql]", async () => {
+    const jon = new Author2("Jon Snow", "snow@wall.st");
+    const book1 = new Book2("Book2", jon);
+    const jon2 = new Author2("Jon2 Snow", "snow3@wall.st");
+    const book2 = new Book2("Book2", jon2);
     await orm.em.persistAndFlush(book1);
     await orm.em.persistAndFlush(book2);
-    wrap(book1).assign({ author: { name: 'Jon Snow2' } });
-    expect(book1.author.name).toEqual('Jon Snow2');
+    wrap(book1).assign({ author: { name: "Jon Snow2" } });
+    expect(book1.author.name).toEqual("Jon Snow2");
     expect(book1.author.email).toBeUndefined();
     expect(book1.author).not.toEqual(jon);
 
-    wrap(book2).assign({ author: { name: 'Jon Snow2' } }, { updateByPrimaryKey: false });
-    expect(book2.author.name).toEqual('Jon Snow2');
-    expect(book2.author.email).toEqual('snow3@wall.st');
+    wrap(book2).assign(
+      { author: { name: "Jon Snow2" } },
+      { updateByPrimaryKey: false },
+    );
+    expect(book2.author.name).toEqual("Jon Snow2");
+    expect(book2.author.email).toEqual("snow3@wall.st");
     expect(book2.author).toEqual(jon2);
   });
 
-  test('assign() with updateNestedEntities flag should ignore not initialized entities [mysql]', async () => {
-    const jon = new Author2('Jon2 Snow', 'snow3@wall.st');
-    const book = new Book2('Book2', jon);
-    const publisher = new Publisher2('Good Books LLC', PublisherType.LOCAL);
+  test("assign() with updateNestedEntities flag should ignore not initialized entities [mysql]", async () => {
+    const jon = new Author2("Jon2 Snow", "snow3@wall.st");
+    const book = new Book2("Book2", jon);
+    const publisher = new Publisher2("Good Books LLC", PublisherType.LOCAL);
     book.publisher = Reference.create(publisher);
     await orm.em.persistAndFlush(book);
 
@@ -127,16 +140,22 @@ describe('EntityAssignerMySql', () => {
 
     const value = Reference.unwrapReference(book2.publisher!);
 
-    wrap(book2).assign({ author: { name: 'Jon Snow2' }, publisher: { name: 'Better Books LLC' } }, { updateNestedEntities: true });
+    wrap(book2).assign(
+      {
+        author: { name: "Jon Snow2" },
+        publisher: { name: "Better Books LLC" },
+      },
+      { updateNestedEntities: true },
+    );
 
     expect(book2.author).not.toEqual(originalAuthorRef);
     expect(book2.publisher).not.toEqual(originalPublisherWrappedRef);
   });
 
-  test('assign() with updateNestedEntities flag should update wrapped initialized entities [mysql]', async () => {
-    const jon = new Author2('Jon2 Snow', 'snow3@wall.st');
-    const book = new Book2('Book2', jon);
-    const publisher = new Publisher2('Good Books LLC', PublisherType.LOCAL);
+  test("assign() with updateNestedEntities flag should update wrapped initialized entities [mysql]", async () => {
+    const jon = new Author2("Jon2 Snow", "snow3@wall.st");
+    const book = new Book2("Book2", jon);
+    const publisher = new Publisher2("Good Books LLC", PublisherType.LOCAL);
     book.publisher = Reference.create(publisher);
     await orm.em.persistAndFlush(book);
 
@@ -155,24 +174,30 @@ describe('EntityAssignerMySql', () => {
 
     const originalValue = Reference.unwrapReference(book2.publisher!);
     const originalRef = book2.publisher!;
-    expect(originalValue.name).toEqual('Good Books LLC');
+    expect(originalValue.name).toEqual("Good Books LLC");
 
-    wrap(book2).assign({ author: { name: 'Jon Snow2' }, publisher: { name: 'Better Books LLC' } }, { updateByPrimaryKey: false });
+    wrap(book2).assign(
+      {
+        author: { name: "Jon Snow2" },
+        publisher: { name: "Better Books LLC" },
+      },
+      { updateByPrimaryKey: false },
+    );
 
     // this means that the original object has been replaced, something updateNestedEntities does not do
     expect(book2.publisher).toEqual(originalRef);
     expect(book2.publisher!.unwrap()).toEqual(originalValue);
-    expect(book2.publisher!.unwrap().name).toEqual('Better Books LLC');
+    expect(book2.publisher!.unwrap().name).toEqual("Better Books LLC");
   });
 
-  test('assign() should update not initialized collection [mysql]', async () => {
-    const other = new BookTag2('other');
+  test("assign() should update not initialized collection [mysql]", async () => {
+    const other = new BookTag2("other");
     await orm.em.persistAndFlush(other);
-    const jon = new Author2('Jon Snow', 'snow@wall.st');
-    const book = new Book2('Book2', jon);
-    const tag1 = new BookTag2('tag 1');
-    const tag2 = new BookTag2('tag 2');
-    const tag3 = new BookTag2('tag 3');
+    const jon = new Author2("Jon Snow", "snow@wall.st");
+    const book = new Book2("Book2", jon);
+    const tag1 = new BookTag2("tag 1");
+    const tag2 = new BookTag2("tag 2");
+    const tag3 = new BookTag2("tag 3");
     book.tags.add(tag1, tag2, tag3);
     await orm.em.persistAndFlush(book);
     orm.em.clear();
@@ -182,59 +207,60 @@ describe('EntityAssignerMySql', () => {
     await orm.em.flush();
     orm.em.clear();
 
-    const book2 = await orm.em.findOneOrFail(Book2, book.uuid, { populate: ['tags'] });
+    const book2 = await orm.em.findOneOrFail(Book2, book.uuid, {
+      populate: ["tags"],
+    });
     expect(book2.tags.getIdentifiers()).toMatchObject([tag1.id, other.id]);
   });
 
-  test('assign() allows deep merging of object properties [mysql]', async () => {
-    const jon = new Author2('Jon Snow', 'snow@wall.st');
-    const book = new Book2('Book2', jon);
-    book.meta = { items: 5, category: 'test' };
-    wrap(book).assign({ meta: { items: 3, category: 'foo' } });
-    expect(book.meta).toEqual({ items: 3, category: 'foo' });
-    wrap(book).assign({ meta: { category: 'bar' } });
-    expect(book.meta).toEqual({ items: 3, category: 'bar' });
-    wrap(book).assign({ meta: { category: 'bar 1' } });
-    expect(book.meta).toEqual({ items: 3, category: 'bar 1' });
-    wrap(book).assign({ meta: { category: 'bar 2' } }, { mergeObjectProperties: false });
-    expect(book.meta).toEqual({ category: 'bar 2' });
-    jon.identities = ['1', '2'];
-    wrap(jon).assign({ identities: ['3', '4'] });
-    expect(jon.identities).toEqual(['3', '4']);
+  test("assign() allows deep merging of object properties [mysql]", async () => {
+    const jon = new Author2("Jon Snow", "snow@wall.st");
+    const book = new Book2("Book2", jon);
+    book.meta = { items: 5, category: "test" };
+    wrap(book).assign({ meta: { items: 3, category: "foo" } });
+    expect(book.meta).toEqual({ items: 3, category: "foo" });
+    wrap(book).assign({ meta: { category: "bar" } });
+    expect(book.meta).toEqual({ items: 3, category: "bar" });
+    wrap(book).assign({ meta: { category: "bar 1" } });
+    expect(book.meta).toEqual({ items: 3, category: "bar 1" });
+    wrap(book).assign(
+      { meta: { category: "bar 2" } },
+      { mergeObjectProperties: false },
+    );
+    expect(book.meta).toEqual({ category: "bar 2" });
+    jon.identities = ["1", "2"];
+    wrap(jon).assign({ identities: ["3", "4"] });
+    expect(jon.identities).toEqual(["3", "4"]);
   });
 
-  test('assigning blobs (GH issue #1406)', async () => {
-    const bar = FooBar2.create('initial name');
-    bar.blob = Buffer.from('abcdefg');
+  test("assigning blobs (GH issue #1406)", async () => {
+    const bar = FooBar2.create("initial name");
+    bar.blob = Buffer.from("abcdefg");
     await orm.em.fork().persistAndFlush(bar);
 
     const em = orm.em.fork();
     const existing = await em.findOneOrFail(FooBar2, bar);
     em.assign(existing, {
-      name: 'updated name',
-      blob: Buffer.from('123456'),
+      name: "updated name",
+      blob: Buffer.from("123456"),
     });
     await em.flush();
 
     const bar1 = await orm.em.fork().findOneOrFail(FooBar2, 1);
-    expect(bar1.name).toBe('updated name');
-    expect(bar1.blob!.toString()).toBe('123456');
+    expect(bar1.name).toBe("updated name");
+    expect(bar1.blob!.toString()).toBe("123456");
   });
 
-  test('assigning to collections with `updateNestedEntities` flag', async () => {
+  test("assigning to collections with `updateNestedEntities` flag", async () => {
     const entity = orm.em.create(Author2, {
-      name: 'god',
-      email: 'e',
-      books: [
-        { title: 'b1' },
-        { title: 'b2' },
-      ],
+      name: "god",
+      email: "e",
+      books: [{ title: "b1" }, { title: "b2" }],
     });
     entity.books.populated();
     const updated = wrap(entity).toObject();
-    updated.books[0].title = 'updated name';
+    updated.books[0].title = "updated name";
     orm.em.assign(entity, updated); // `updateNestedEntities` defaults to true since v5
-    expect(entity.books[0].title).toBe('updated name');
+    expect(entity.books[0].title).toBe("updated name");
   });
-
 });

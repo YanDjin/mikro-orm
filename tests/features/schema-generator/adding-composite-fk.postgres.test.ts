@@ -1,9 +1,17 @@
-import { Cascade, Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import {
+  Cascade,
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class Country {
-
   @PrimaryKey()
   id!: number;
 
@@ -16,14 +24,12 @@ export class Country {
   @Property()
   currencySymbol!: string;
 
-  @OneToMany('State', 'country', { cascade: [Cascade.ALL], nullable: true })
+  @OneToMany("State", "country", { cascade: [Cascade.ALL], nullable: true })
   states = new Collection<State>(this);
-
 }
 
 @Entity()
 export class State {
-
   @ManyToOne(() => Country, { primary: true })
   country!: Country;
 
@@ -33,14 +39,12 @@ export class State {
   @Property()
   name!: string;
 
-  @OneToMany('City', 'state', { cascade: [Cascade.ALL], nullable: true })
+  @OneToMany("City", "state", { cascade: [Cascade.ALL], nullable: true })
   cities = new Collection<City>(this);
-
 }
 
 @Entity()
 export class City {
-
   @ManyToOne(() => State, { primary: true })
   state!: State;
 
@@ -49,12 +53,10 @@ export class City {
 
   @Property()
   name!: string;
-
 }
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id!: string;
 
@@ -67,20 +69,21 @@ export class User {
   @Property({ nullable: true })
   last_name?: string;
 
-  @Property({ columnType: 'date', nullable: true })
+  @Property({ columnType: "date", nullable: true })
   date_of_birth?: Date;
 
-  @Property({ columnType: 'timestamptz', nullable: false })
+  @Property({ columnType: "timestamptz", nullable: false })
   created = new Date();
 
-  @Property({ columnType: 'timestamptz', onUpdate: () => new Date().toISOString() })
+  @Property({
+    columnType: "timestamptz",
+    onUpdate: () => new Date().toISOString(),
+  })
   modified = new Date();
-
 }
 
-@Entity({ tableName: 'user' })
+@Entity({ tableName: "user" })
 export class User1 {
-
   @PrimaryKey()
   id!: string;
 
@@ -93,22 +96,23 @@ export class User1 {
   @Property({ nullable: true })
   last_name?: string;
 
-  @Property({ columnType: 'date', nullable: true })
+  @Property({ columnType: "date", nullable: true })
   date_of_birth?: Date;
 
-  @Property({ columnType: 'timestamptz', nullable: false })
+  @Property({ columnType: "timestamptz", nullable: false })
   created = new Date();
 
-  @Property({ columnType: 'timestamptz', onUpdate: () => new Date().toISOString() })
+  @Property({
+    columnType: "timestamptz",
+    onUpdate: () => new Date().toISOString(),
+  })
   modified = new Date();
 
   @ManyToOne()
   city!: City;
-
 }
 
-describe('adding m:1 with composite PK (FK as PK + scalar PK) (GH 1687)', () => {
-
+describe("adding m:1 with composite PK (FK as PK + scalar PK) (GH 1687)", () => {
   let orm: MikroORM<PostgreSqlDriver>;
 
   beforeAll(async () => {
@@ -123,12 +127,12 @@ describe('adding m:1 with composite PK (FK as PK + scalar PK) (GH 1687)', () => 
 
   afterAll(() => orm.close(true));
 
-  test('schema generator adds the m:1 columns and FK properly', async () => {
+  test("schema generator adds the m:1 columns and FK properly", async () => {
     const diff0 = await orm.schema.getUpdateSchemaMigrationSQL({ wrap: false });
     expect(diff0).toMatchSnapshot();
     await orm.schema.execute(diff0.up);
 
-    orm.getMetadata().reset('User');
+    orm.getMetadata().reset("User");
     await orm.discoverEntity(User1);
     const diff1 = await orm.schema.getUpdateSchemaMigrationSQL({ wrap: false });
     expect(diff1).toMatchSnapshot();
@@ -138,5 +142,4 @@ describe('adding m:1 with composite PK (FK as PK + scalar PK) (GH 1687)', () => 
     await orm.schema.execute(diff1.down);
     await orm.schema.execute(diff0.down);
   });
-
 });

@@ -1,27 +1,31 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/sqlite';
-
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Author {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name: string;
 
-  @OneToMany(() => Book, b => b.author)
+  @OneToMany(() => Book, (b) => b.author)
   books = new Collection<Book>(this);
 
   constructor(name: string) {
     this.name = name;
   }
-
 }
 
 @Entity()
 export class Book {
-
   @PrimaryKey()
   id!: number;
 
@@ -35,17 +39,16 @@ export class Book {
     this.title = title;
     this.author = author;
   }
-
 }
 
 test(`default value for relation property`, async () => {
   const orm = await MikroORM.init({
     entities: [Author, Book],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.refreshDatabase();
 
-  const a = orm.em.create(Book, { title: 'b', author: { name: 'a' } });
+  const a = orm.em.create(Book, { title: "b", author: { name: "a" } });
   await orm.em.persist(a).flush();
   await orm.close(true);
 });

@@ -14,21 +14,20 @@ import {
   Filter,
   OptionalProps,
   EntityKey,
-} from '@mikro-orm/core';
-import { Publisher } from './Publisher';
-import { Author } from './Author';
-import { BookTag } from './book-tag';
-import { BaseEntity3 } from './BaseEntity3';
-import { BookRepository } from '../repositories/BookRepository';
+} from "@yandjin-mikro-orm/core";
+import { Publisher } from "./Publisher";
+import { Author } from "./Author";
+import { BookTag } from "./book-tag";
+import { BaseEntity3 } from "./BaseEntity3";
+import { BookRepository } from "../repositories/BookRepository";
 
-@Entity({ tableName: 'books-table', repository: () => BookRepository })
-@Unique({ properties: ['title', 'author'] })
-@Index({ properties: 'title', type: 'fulltext' })
-@Index({ options: { point: '2dsphere', title: -1 } })
-@Filter({ name: 'writtenBy', cond: args => ({ author: args.author }) })
+@Entity({ tableName: "books-table", repository: () => BookRepository })
+@Unique({ properties: ["title", "author"] })
+@Index({ properties: "title", type: "fulltext" })
+@Index({ options: { point: "2dsphere", title: -1 } })
+@Filter({ name: "writtenBy", cond: (args) => ({ author: args.author }) })
 export class Book extends BaseEntity3 {
-
-  [OptionalProps]?: 'createdAt';
+  [OptionalProps]?: "createdAt";
 
   @Property()
   createdAt: Date = new Date();
@@ -42,14 +41,18 @@ export class Book extends BaseEntity3 {
   @ManyToOne(() => Author)
   author: Author;
 
-  @ManyToOne(() => Publisher, { ref: true, cascade: [Cascade.PERSIST, Cascade.REMOVE], nullable: true })
-  @Index({ name: 'publisher_idx' })
+  @ManyToOne(() => Publisher, {
+    ref: true,
+    cascade: [Cascade.PERSIST, Cascade.REMOVE],
+    nullable: true,
+  })
+  @Index({ name: "publisher_idx" })
   publisher!: Ref<Publisher> | null;
 
-  @ManyToMany(() => BookTag, undefined, { orderBy: { title: 'asc' } })
+  @ManyToMany(() => BookTag, undefined, { orderBy: { title: "asc" } })
   tags = new Collection<BookTag>(this);
 
-  @Property({ type: 'json', nullable: true })
+  @Property({ type: "json", nullable: true })
   metaObject?: Dictionary<unknown>;
 
   @Property({ nullable: true })
@@ -59,7 +62,7 @@ export class Book extends BaseEntity3 {
   metaArrayOfStrings?: string[];
 
   @Property({ nullable: true })
-  @Index({ type: '2dsphere' })
+  @Index({ type: "2dsphere" })
   point?: [number, number];
 
   @Property({ nullable: true })
@@ -71,12 +74,18 @@ export class Book extends BaseEntity3 {
     this.author = author!;
   }
 
-  toJSON<Ignored extends EntityKey<this>>(strict = true, strip: Ignored[] = ['metaObject', 'metaArray', 'metaArrayOfStrings'] as Ignored[]): Omit<EntityDTO<this>, Ignored> | EntityDTO<this> {
+  toJSON<Ignored extends EntityKey<this>>(
+    strict = true,
+    strip: Ignored[] = [
+      "metaObject",
+      "metaArray",
+      "metaArrayOfStrings",
+    ] as Ignored[],
+  ): Omit<EntityDTO<this>, Ignored> | EntityDTO<this> {
     if (strict) {
       return wrap(this).toObject(strip);
     }
 
     return wrap(this).toObject();
   }
-
 }

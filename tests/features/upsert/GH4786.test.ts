@@ -6,61 +6,64 @@ import {
   OptionalProps,
   PrimaryKey,
   Property,
-  SimpleLogger, sql,
+  SimpleLogger,
+  sql,
   Unique,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../../helpers';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../../helpers";
 
 @Entity({ abstract: true })
 abstract class ApplicationEntity<Optionals = never> {
-
-  [OptionalProps]?: Optionals | 'createdAt' | 'updatedAt';
+  [OptionalProps]?: Optionals | "createdAt" | "updatedAt";
 
   @PrimaryKey()
   id!: number;
 
-  @Property({ name: 'created_at', default: sql.now() })
+  @Property({ name: "created_at", default: sql.now() })
   createdAt!: Date;
 
-  @Property({ name: 'updated_at', default: sql.now(), onUpdate: () => new Date() })
+  @Property({
+    name: "updated_at",
+    default: sql.now(),
+    onUpdate: () => new Date(),
+  })
   updatedAt!: Date;
-
 }
 
 @Entity()
 class InternalRole extends ApplicationEntity {
-
   @Property()
   name!: string;
 
-  @OneToMany(() => InternalRolePermission, permission => permission.internalRole, { orphanRemoval: true })
+  @OneToMany(
+    () => InternalRolePermission,
+    (permission) => permission.internalRole,
+    { orphanRemoval: true },
+  )
   permissions = new Collection<InternalRolePermission>(this);
-
 }
 
 @Entity()
-@Unique({ properties: ['subject', 'action', 'internalRole'] })
+@Unique({ properties: ["subject", "action", "internalRole"] })
 class InternalRolePermission extends ApplicationEntity {
-
   @Property()
   subject!: string;
 
   @Property()
   action!: string;
 
-  @ManyToOne(() => InternalRole, { deleteRule: 'cascade' })
+  @ManyToOne(() => InternalRole, { deleteRule: "cascade" })
   internalRole!: InternalRole;
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [InternalRole],
-    loggerFactory: options => new SimpleLogger(options),
+    loggerFactory: (options) => new SimpleLogger(options),
   });
   await orm.schema.createSchema();
 });
@@ -73,60 +76,88 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('4786 (em.upsert)', async () => {
-  orm.em.create(InternalRole, { id: 1, name: 'role' });
+test("4786 (em.upsert)", async () => {
+  orm.em.create(InternalRole, { id: 1, name: "role" });
   await orm.em.flush();
   orm.em.clear();
 
   const mock = mockLogger(orm);
   let role = await orm.em.findOneOrFail(InternalRole, 1);
-  await orm.em.upsert(InternalRolePermission, { subject: 'User', action: 'read', internalRole: role });
+  await orm.em.upsert(InternalRolePermission, {
+    subject: "User",
+    action: "read",
+    internalRole: role,
+  });
 
   expect(mock.mock.calls).toEqual([
-    ['[query] select `i0`.* from `internal_role` as `i0` where `i0`.`id` = 1 limit 1'],
-    ['[query] insert into `internal_role_permission` (`action`, `internal_role_id`, `subject`) values (\'read\', 1, \'User\') on conflict (`subject`, `action`, `internal_role_id`) do nothing returning `id`, `created_at`, `updated_at`'],
+    [
+      "[query] select `i0`.* from `internal_role` as `i0` where `i0`.`id` = 1 limit 1",
+    ],
+    [
+      "[query] insert into `internal_role_permission` (`action`, `internal_role_id`, `subject`) values ('read', 1, 'User') on conflict (`subject`, `action`, `internal_role_id`) do nothing returning `id`, `created_at`, `updated_at`",
+    ],
   ]);
 
   mock.mockReset();
   orm.em.clear();
   role = await orm.em.findOneOrFail(InternalRole, 1);
-  await orm.em.upsert(InternalRolePermission, { subject: 'User', action: 'read', internalRole: role });
+  await orm.em.upsert(InternalRolePermission, {
+    subject: "User",
+    action: "read",
+    internalRole: role,
+  });
 
   expect(mock.mock.calls).toEqual([
-    ['[query] select `i0`.* from `internal_role` as `i0` where `i0`.`id` = 1 limit 1'],
-    ['[query] insert into `internal_role_permission` (`action`, `internal_role_id`, `subject`) values (\'read\', 1, \'User\') on conflict (`subject`, `action`, `internal_role_id`) do nothing returning `id`, `created_at`, `updated_at`'],
-    ['[query] select `i0`.`id`, `i0`.`created_at`, `i0`.`updated_at` from `internal_role_permission` as `i0` where `i0`.`subject` = \'User\' and `i0`.`action` = \'read\' and `i0`.`internal_role_id` = 1 limit 1'],
+    [
+      "[query] select `i0`.* from `internal_role` as `i0` where `i0`.`id` = 1 limit 1",
+    ],
+    [
+      "[query] insert into `internal_role_permission` (`action`, `internal_role_id`, `subject`) values ('read', 1, 'User') on conflict (`subject`, `action`, `internal_role_id`) do nothing returning `id`, `created_at`, `updated_at`",
+    ],
+    [
+      "[query] select `i0`.`id`, `i0`.`created_at`, `i0`.`updated_at` from `internal_role_permission` as `i0` where `i0`.`subject` = 'User' and `i0`.`action` = 'read' and `i0`.`internal_role_id` = 1 limit 1",
+    ],
   ]);
 });
 
-test('4786 (em.upsertMany)', async () => {
-  orm.em.create(InternalRole, { id: 1, name: 'role' });
+test("4786 (em.upsertMany)", async () => {
+  orm.em.create(InternalRole, { id: 1, name: "role" });
   await orm.em.flush();
   orm.em.clear();
 
   const mock = mockLogger(orm);
   let role = await orm.em.findOneOrFail(InternalRole, 1);
   await orm.em.upsertMany(InternalRolePermission, [
-    { subject: 'User', action: 'read', internalRole: role },
-    { subject: 'User', action: 'update', internalRole: role },
+    { subject: "User", action: "read", internalRole: role },
+    { subject: "User", action: "update", internalRole: role },
   ]);
 
   expect(mock.mock.calls).toEqual([
-    ['[query] select `i0`.* from `internal_role` as `i0` where `i0`.`id` = 1 limit 1'],
-    ['[query] insert into `internal_role_permission` (`action`, `internal_role_id`, `subject`) select \'read\' as `action`, 1 as `internal_role_id`, \'User\' as `subject` union all select \'update\' as `action`, 1 as `internal_role_id`, \'User\' as `subject` where true on conflict (`subject`, `action`, `internal_role_id`) do nothing returning `id`, `created_at`, `updated_at`'],
+    [
+      "[query] select `i0`.* from `internal_role` as `i0` where `i0`.`id` = 1 limit 1",
+    ],
+    [
+      "[query] insert into `internal_role_permission` (`action`, `internal_role_id`, `subject`) select 'read' as `action`, 1 as `internal_role_id`, 'User' as `subject` union all select 'update' as `action`, 1 as `internal_role_id`, 'User' as `subject` where true on conflict (`subject`, `action`, `internal_role_id`) do nothing returning `id`, `created_at`, `updated_at`",
+    ],
   ]);
 
   mock.mockReset();
   orm.em.clear();
   role = await orm.em.findOneOrFail(InternalRole, 1);
   await orm.em.upsertMany(InternalRolePermission, [
-    { subject: 'User', action: 'read', internalRole: role },
-    { subject: 'User', action: 'update', internalRole: role },
+    { subject: "User", action: "read", internalRole: role },
+    { subject: "User", action: "update", internalRole: role },
   ]);
 
   expect(mock.mock.calls).toEqual([
-    ['[query] select `i0`.* from `internal_role` as `i0` where `i0`.`id` = 1 limit 1'],
-    ['[query] insert into `internal_role_permission` (`action`, `internal_role_id`, `subject`) select \'read\' as `action`, 1 as `internal_role_id`, \'User\' as `subject` union all select \'update\' as `action`, 1 as `internal_role_id`, \'User\' as `subject` where true on conflict (`subject`, `action`, `internal_role_id`) do nothing returning `id`, `created_at`, `updated_at`'],
-    ['[query] select `i0`.`id`, `i0`.`created_at`, `i0`.`updated_at`, `i0`.`subject`, `i0`.`action`, `i0`.`internal_role_id` from `internal_role_permission` as `i0` where ((`i0`.`subject` = \'User\' and `i0`.`action` = \'read\' and `i0`.`internal_role_id` = 1) or (`i0`.`subject` = \'User\' and `i0`.`action` = \'update\' and `i0`.`internal_role_id` = 1))'],
+    [
+      "[query] select `i0`.* from `internal_role` as `i0` where `i0`.`id` = 1 limit 1",
+    ],
+    [
+      "[query] insert into `internal_role_permission` (`action`, `internal_role_id`, `subject`) select 'read' as `action`, 1 as `internal_role_id`, 'User' as `subject` union all select 'update' as `action`, 1 as `internal_role_id`, 'User' as `subject` where true on conflict (`subject`, `action`, `internal_role_id`) do nothing returning `id`, `created_at`, `updated_at`",
+    ],
+    [
+      "[query] select `i0`.`id`, `i0`.`created_at`, `i0`.`updated_at`, `i0`.`subject`, `i0`.`action`, `i0`.`internal_role_id` from `internal_role_permission` as `i0` where ((`i0`.`subject` = 'User' and `i0`.`action` = 'read' and `i0`.`internal_role_id` = 1) or (`i0`.`subject` = 'User' and `i0`.`action` = 'update' and `i0`.`internal_role_id` = 1))",
+    ],
   ]);
 });

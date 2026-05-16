@@ -1,20 +1,17 @@
-import { MikroORM } from '@mikro-orm/postgresql';
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
 
-@Entity({ tableName: 'user' })
+@Entity({ tableName: "user" })
 class User0 {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   deliveredAt!: Date;
-
 }
 
-@Entity({ tableName: 'user' })
+@Entity({ tableName: "user" })
 class User1 {
-
   @PrimaryKey()
   id!: number;
 
@@ -26,7 +23,6 @@ class User1 {
 
   @Property()
   arrivedAt!: Date;
-
 }
 
 let orm: MikroORM;
@@ -34,7 +30,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [User0],
-    dbName: 'mikro_orm_test_gh_4919',
+    dbName: "mikro_orm_test_gh_4919",
   });
   await orm.schema.ensureDatabase();
   await orm.schema.dropSchema();
@@ -42,7 +38,7 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('GH #4919', async () => {
+test("GH #4919", async () => {
   const testMigration = async (e1: any, e2: any, snap: string) => {
     if (e2) {
       orm.getMetadata().reset(e1.name);
@@ -57,8 +53,8 @@ test('GH #4919', async () => {
   };
 
   const down: string[] = [];
-  down.push(await testMigration(User0, undefined, '0. create schema'));
-  down.push(await testMigration(User0, User1, '1. rename column'));
+  down.push(await testMigration(User0, undefined, "0. create schema"));
+  down.push(await testMigration(User0, User1, "1. rename column"));
 
   for (const sql of down.reverse()) {
     await orm.schema.execute(sql);

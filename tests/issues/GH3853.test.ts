@@ -1,9 +1,13 @@
-import { MikroORM, Entity, PrimaryKey, Property } from '@mikro-orm/mariadb';
-import { mockLogger } from '../helpers';
+import {
+  MikroORM,
+  Entity,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/mariadb";
+import { mockLogger } from "../helpers";
 
 @Entity()
 export class Test {
-
   @PrimaryKey()
   id!: number;
 
@@ -12,7 +16,6 @@ export class Test {
 
   @Property()
   born!: Date;
-
 }
 
 let orm: MikroORM;
@@ -31,10 +34,10 @@ afterAll(async () => {
 });
 
 test(`3847`, async () => {
-  const r = await orm.em.insert(Test, { name: 'n', born: new Date() });
+  const r = await orm.em.insert(Test, { name: "n", born: new Date() });
 
   await orm.em.findOne(Test, { id: r });
-  await orm.em.findOne(Test, { name: 'n' });
+  await orm.em.findOne(Test, { name: "n" });
 
   const mock = mockLogger(orm);
   await orm.em.flush();

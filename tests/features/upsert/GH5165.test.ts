@@ -9,14 +9,13 @@ import {
   MikroORM,
   OneToMany,
   Collection,
-} from '@mikro-orm/sqlite';
+} from "@yandjin-mikro-orm/sqlite";
 
-@Entity({ tableName: 'servers_clients_tags' })
+@Entity({ tableName: "servers_clients_tags" })
 @Unique({
-  properties: ['purchase', 'name'],
+  properties: ["purchase", "name"],
 })
 class Note {
-
   @PrimaryKey()
   readonly id?: number;
 
@@ -30,43 +29,37 @@ class Note {
 
   @Property({ length: 2000 })
   value!: string;
-
 }
 
 @Entity()
 class Purchases {
-
   @PrimaryKey()
   readonly id?: number;
 
   @ManyToOne({ entity: () => Account, ref: true })
   account?: Ref<Account>;
 
-  @OneToMany(() => Note, x => x.purchase)
+  @OneToMany(() => Note, (x) => x.purchase)
   notes = new Collection<Note>(this);
-
 }
 
 @Entity()
 class Account {
-
   @PrimaryKey()
   readonly id?: number;
 
-  @OneToOne(() => Address, billingDetail => billingDetail.account, {
+  @OneToOne(() => Address, (billingDetail) => billingDetail.account, {
     ref: true,
     nullable: true,
   })
   address?: Ref<Address>;
 
-  @OneToMany(() => Purchases, x => x.account)
+  @OneToMany(() => Purchases, (x) => x.account)
   serverClients = new Collection<Purchases>(this);
-
 }
 
 @Entity()
 class Address {
-
   @PrimaryKey()
   readonly id?: number;
 
@@ -75,12 +68,11 @@ class Address {
 
   @OneToOne({
     entity: () => Account,
-    unique: 'billing_details_account_id_key',
+    unique: "billing_details_account_id_key",
     owner: true,
     ref: true,
   })
   account!: Ref<Account>;
-
 }
 
 let orm: MikroORM;
@@ -88,12 +80,12 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Note, Purchases, Account, Address],
-    dbName: ':memory:',
-    loadStrategy: 'select-in',
+    dbName: ":memory:",
+    loadStrategy: "select-in",
   });
   await orm.schema.refreshDatabase();
   const billingDetail = orm.em.create(Address, {
-    company: 'testBillingDetail',
+    company: "testBillingDetail",
     account: orm.em.create(Account, {}),
   });
 
@@ -103,8 +95,8 @@ beforeAll(async () => {
 
   orm.em.create(Note, {
     purchase: serverClient,
-    name: 'testKey',
-    value: 'testValue',
+    name: "testKey",
+    value: "testValue",
   });
   await orm.em.flush();
 });
@@ -114,30 +106,38 @@ afterAll(async () => {
 });
 
 test(`GH issue 5165 upsert one`, async () => {
-  const purchase = await orm.em.findOneOrFail(Purchases, { id: 1 }, {
-    populate: ['notes'],
-  });
+  const purchase = await orm.em.findOneOrFail(
+    Purchases,
+    { id: 1 },
+    {
+      populate: ["notes"],
+    },
+  );
   await orm.em.upsert(Note, {
     purchase,
-    name: 'testKey',
-    value: 'newTestValue',
+    name: "testKey",
+    value: "newTestValue",
   });
 });
 
 test(`GH issue 5165 upsert many`, async () => {
-  const purchase = await orm.em.findOneOrFail(Purchases, { id: 1 }, {
-    populate: ['notes'],
-  });
+  const purchase = await orm.em.findOneOrFail(
+    Purchases,
+    { id: 1 },
+    {
+      populate: ["notes"],
+    },
+  );
   await orm.em.upsertMany(Note, [
     {
       purchase,
-      name: 'testKey',
-      value: 'newTestValue',
+      name: "testKey",
+      value: "newTestValue",
     },
     {
       purchase,
-      name: 'testKey2',
-      value: 'newTestValue2',
+      name: "testKey2",
+      value: "newTestValue2",
     },
   ]);
 });

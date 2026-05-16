@@ -1,9 +1,13 @@
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class Versioned {
-
   @PrimaryKey()
   id!: number;
 
@@ -12,11 +16,9 @@ export class Versioned {
 
   @Property({ version: true })
   version: number = 0;
-
 }
 
-describe('GH issue 2401', () => {
-
+describe("GH issue 2401", () => {
   let orm: MikroORM<PostgreSqlDriver>;
 
   beforeAll(async () => {
@@ -32,13 +34,12 @@ describe('GH issue 2401', () => {
 
   test(`postgres version insert should not fail`, async () => {
     const instance = new Versioned();
-    instance.name = 'name1';
+    instance.name = "name1";
 
     await orm.em.persistAndFlush(instance);
 
-    instance.name = 'name2';
+    instance.name = "name2";
 
     await orm.em.flush();
   });
-
 });

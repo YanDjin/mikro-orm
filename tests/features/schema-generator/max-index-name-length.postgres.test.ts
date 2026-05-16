@@ -1,34 +1,39 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import type { AbstractSqlDriver } from '@mikro-orm/knex';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import type { AbstractSqlDriver } from "@yandjin-mikro-orm/knex";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
-
-@Entity({ tableName: 'very_long_table_name_64_chars_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' })
+@Entity({
+  tableName: "very_long_table_name_64_chars_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+})
 class ChildEntity {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne({ type: 'ParentEntity' })
+  @ManyToOne({ type: "ParentEntity" })
   parent!: any;
 
   @Property({ unique: true })
   key!: string;
-
 }
 
 @Entity()
 class ParentEntity {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany({ entity: () => ChildEntity, mappedBy: 'parent' })
+  @OneToMany({ entity: () => ChildEntity, mappedBy: "parent" })
   children = new Collection<ChildEntity>(this);
-
 }
 
-describe('index and FK names should be a max of 64 chars in mysql (GH 1915)', () => {
+describe("index and FK names should be a max of 64 chars in mysql (GH 1915)", () => {
   let orm: MikroORM<AbstractSqlDriver>;
 
   beforeAll(async () => {
@@ -43,12 +48,11 @@ describe('index and FK names should be a max of 64 chars in mysql (GH 1915)', ()
 
   afterAll(() => orm.close(true));
 
-  test('index and FK names should be a max of 64 chars in mysql', async () => {
+  test("index and FK names should be a max of 64 chars in mysql", async () => {
     const sql = await orm.schema.getCreateSchemaSQL();
     expect(sql).toMatchSnapshot();
     await orm.schema.execute(sql);
     const diff = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff).toBe('');
+    expect(diff).toBe("");
   });
-
 });

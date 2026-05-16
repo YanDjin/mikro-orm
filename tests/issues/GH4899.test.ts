@@ -1,35 +1,38 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  Unique,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany({ entity: () => UserSkill, mappedBy: 'user' })
+  @OneToMany({ entity: () => UserSkill, mappedBy: "user" })
   userSkills = new Collection<UserSkill>(this);
-
 }
 
 @Entity()
 class Skill {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   label!: string;
 
-  @OneToMany(() => UserSkill, 'skill')
+  @OneToMany(() => UserSkill, "skill")
   userSkills = new Collection<UserSkill>(this);
-
 }
 
 @Entity()
-@Unique({ properties: ['user', 'skill'] })
+@Unique({ properties: ["user", "skill"] })
 class UserSkill {
-
   @PrimaryKey()
   id!: number;
 
@@ -38,14 +41,13 @@ class UserSkill {
 
   @ManyToOne(() => Skill)
   skill!: Skill;
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [UserSkill, User, Skill],
     // debug: true,
   });
@@ -54,17 +56,17 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('4899', async () => {
+test("4899", async () => {
   orm.em.create(User, {
     id: 1,
   });
   orm.em.create(Skill, {
     id: 10,
-    label: 'JS',
+    label: "JS",
   });
   orm.em.create(Skill, {
     id: 11,
-    label: 'TS',
+    label: "TS",
   });
   orm.em.create(UserSkill, {
     id: 20,
@@ -84,12 +86,12 @@ test('4899', async () => {
     UserSkill,
     { skill: [10] },
     {
-      populate: ['user.userSkills.skill', 'user.userSkills.user'],
+      populate: ["user.userSkills.skill", "user.userSkills.user"],
     },
   );
 
   expect(userSkill.id).toBe(20);
   expect(userSkill.user.userSkills).toHaveLength(2);
-  expect(userSkill.user.userSkills[0].skill).toHaveProperty('label', 'JS');
-  expect(userSkill.user.userSkills[1].skill).toHaveProperty('label', 'TS');
+  expect(userSkill.user.userSkills[0].skill).toHaveProperty("label", "JS");
+  expect(userSkill.user.userSkills[1].skill).toHaveProperty("label", "TS");
 });

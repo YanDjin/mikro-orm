@@ -1,19 +1,21 @@
-import { Entity, MikroORM, OneToOne, PrimaryKey } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  MikroORM,
+  OneToOne,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class First {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Second, second => second.first)
+  @OneToOne(() => Second, (second) => second.first)
   second?: any;
-
 }
 
 @Entity()
 export class Second {
-
   @PrimaryKey()
   id!: number;
 
@@ -23,23 +25,22 @@ export class Second {
   constructor(first: First) {
     this.first = first;
   }
-
 }
 
-describe('GH issue 2238', () => {
+describe("GH issue 2238", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [First, Second],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('flush after removeAndFlush', async () => {
+  test("flush after removeAndFlush", async () => {
     const a = new First();
     const b = new Second(a);
     orm.em.persist([a, b]);

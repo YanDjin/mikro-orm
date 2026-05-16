@@ -1,1 +1,6 @@
-export { UmzugMigration, MigrateOptions, MigrationResult, MigrationRow } from '@mikro-orm/core';
+export {
+  UmzugMigration,
+  MigrateOptions,
+  MigrationResult,
+  MigrationRow,
+} from "@yandjin-mikro-orm/core";

@@ -1,20 +1,26 @@
-import { Entity, Ref, Index, ManyToOne, MikroORM, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  Ref,
+  Index,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Property,
+  Unique,
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class Author {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book1 {
-
   @PrimaryKey()
   id!: number;
 
@@ -39,19 +45,20 @@ export class Book1 {
   @Property({ unique: true })
   isbn!: string;
 
-  @Property({ type: 'json' })
+  @Property({ type: "json" })
   metaData: any;
-
 }
 
-@Entity({ tableName: 'book' })
-@Index({ properties: 'author1' })
-@Index({ properties: 'author3' })
-@Index({ properties: 'metaData.foo.bar.baz' })
-@Unique({ properties: 'metaData.fooBar.email' })
-@Index({ name: 'custom_index_expr123', expression: 'create  index  "custom_index_expr123" on "book" ("isbn")' })
+@Entity({ tableName: "book" })
+@Index({ properties: "author1" })
+@Index({ properties: "author3" })
+@Index({ properties: "metaData.foo.bar.baz" })
+@Unique({ properties: "metaData.fooBar.email" })
+@Index({
+  name: "custom_index_expr123",
+  expression: 'create  index  "custom_index_expr123" on "book" ("isbn")',
+})
 export class Book2 {
-
   @PrimaryKey()
   id!: number;
 
@@ -76,23 +83,24 @@ export class Book2 {
   @Property()
   title!: string;
 
-  @Property({ unique: 'isbn_unique_constr' })
+  @Property({ unique: "isbn_unique_constr" })
   isbn!: string;
 
-  @Property({ type: 'json' })
+  @Property({ type: "json" })
   metaData: any;
-
 }
 
-@Entity({ tableName: 'book' })
-@Index({ properties: 'author1' })
-@Index({ properties: 'author3', name: 'lol31' })
-@Index({ properties: 'author3', name: 'lol41' })
-@Index({ properties: ['metaData.foo', 'metaData.foo.bar3'] })
-@Unique({ properties: ['metaData.fooBar.bazBaz', 'metaData.fooBar.lol123'] })
-@Index({ name: 'custom_index_expr123', expression: 'create  index  "custom_index_expr123" on "book" ("isbn")' })
+@Entity({ tableName: "book" })
+@Index({ properties: "author1" })
+@Index({ properties: "author3", name: "lol31" })
+@Index({ properties: "author3", name: "lol41" })
+@Index({ properties: ["metaData.foo", "metaData.foo.bar3"] })
+@Unique({ properties: ["metaData.fooBar.bazBaz", "metaData.fooBar.lol123"] })
+@Index({
+  name: "custom_index_expr123",
+  expression: 'create  index  "custom_index_expr123" on "book" ("isbn")',
+})
 export class Book3 {
-
   @PrimaryKey()
   id!: number;
 
@@ -110,10 +118,13 @@ export class Book3 {
   @Index()
   author4!: Author;
 
-  @ManyToOne(() => Author, { index: 'auth_idx5' })
+  @ManyToOne(() => Author, { index: "auth_idx5" })
   author5!: Author;
 
-  @Index({ name: 'custom_index_expr2', expression: 'create index "custom_index_expr2" on "book" ("title")' })
+  @Index({
+    name: "custom_index_expr2",
+    expression: 'create index "custom_index_expr2" on "book" ("title")',
+  })
   @Property()
   title!: string;
 
@@ -121,17 +132,15 @@ export class Book3 {
   @Unique()
   isbn!: string;
 
-  @Property({ type: 'json' })
+  @Property({ type: "json" })
   metaData: any;
-
 }
 
-@Entity({ tableName: 'book' })
-@Index({ properties: 'author1' })
-@Index({ properties: 'author3', name: 'lol32' })
-@Index({ properties: 'author3', name: 'lol42' })
+@Entity({ tableName: "book" })
+@Index({ properties: "author1" })
+@Index({ properties: "author3", name: "lol32" })
+@Index({ properties: "author3", name: "lol42" })
 export class Book4 {
-
   @PrimaryKey()
   id!: number;
 
@@ -149,7 +158,7 @@ export class Book4 {
   @Index()
   author4!: Author;
 
-  @ManyToOne(() => Author, { index: 'auth_idx5' })
+  @ManyToOne(() => Author, { index: "auth_idx5" })
   author5!: Author;
 
   @Property()
@@ -159,13 +168,11 @@ export class Book4 {
   @Unique()
   isbn!: string;
 
-  @Property({ type: 'json' })
+  @Property({ type: "json" })
   metaData: any;
-
 }
 
-describe('indexes on FKs in postgres (GH 1518)', () => {
-
+describe("indexes on FKs in postgres (GH 1518)", () => {
   let orm: MikroORM<PostgreSqlDriver>;
 
   beforeAll(async () => {
@@ -176,37 +183,36 @@ describe('indexes on FKs in postgres (GH 1518)', () => {
     });
 
     await orm.schema.ensureDatabase();
-    await orm.schema.execute('drop table if exists author cascade');
-    await orm.schema.execute('drop table if exists book cascade');
+    await orm.schema.execute("drop table if exists author cascade");
+    await orm.schema.execute("drop table if exists book cascade");
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('schema generator respect indexes on FKs on column update', async () => {
+  test("schema generator respect indexes on FKs on column update", async () => {
     await orm.discoverEntity(Book1);
-    orm.getMetadata().reset('Book0');
+    orm.getMetadata().reset("Book0");
     const diff1 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
     expect(diff1).toMatchSnapshot();
     await orm.schema.execute(diff1);
 
-    orm.getMetadata().reset('Book1');
+    orm.getMetadata().reset("Book1");
     await orm.discoverEntity(Book2);
     const diff2 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
     expect(diff2).toMatchSnapshot();
     await orm.schema.execute(diff2);
 
-    orm.getMetadata().reset('Book2');
+    orm.getMetadata().reset("Book2");
     await orm.discoverEntity(Book3);
     const diff3 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
     expect(diff3).toMatchSnapshot();
     await orm.schema.execute(diff3);
 
-    orm.getMetadata().reset('Book3');
+    orm.getMetadata().reset("Book3");
     await orm.discoverEntity(Book4);
     const diff4 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
     expect(diff4).toMatchSnapshot();
     await orm.schema.execute(diff4);
   });
-
 });

@@ -8,26 +8,23 @@ import {
   PrimaryKey,
   Reference,
   Property,
-} from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class Customer {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
 
-  @OneToMany({ entity: 'License', mappedBy: 'customer' })
+  @OneToMany({ entity: "License", mappedBy: "customer" })
   licenses = new Collection<License>(this);
-
 }
 
 @Entity()
 export class License {
-
   @PrimaryKey()
   id!: number;
 
@@ -37,7 +34,6 @@ export class License {
   constructor(customer: Customer | Ref<Customer>) {
     this.customer = Reference.create(customer);
   }
-
 }
 
 let orm: MikroORM;
@@ -45,32 +41,38 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Customer, License],
-    dbName: 'mikro_orm_test_tmp',
+    dbName: "mikro_orm_test_tmp",
     driver: PostgreSqlDriver,
-    schema: 'myschema',
+    schema: "myschema",
   });
   await orm.schema.refreshDatabase();
 });
 
 afterAll(() => orm.close(true));
 
-test('entity is retrieved from identity map', async () => {
+test("entity is retrieved from identity map", async () => {
   const customer = new Customer();
-  customer.name = 'foo';
+  customer.name = "foo";
   await orm.em.persistAndFlush(customer);
-  expect(orm.em.getUnitOfWork().getIdentityMap().keys()).toEqual(['Customer-myschema:1']);
+  expect(orm.em.getUnitOfWork().getIdentityMap().keys()).toEqual([
+    "Customer-myschema:1",
+  ]);
 
   const check1 = await orm.em.findOneOrFail(Customer, customer.id);
-  expect(orm.em.getUnitOfWork().getIdentityMap().keys()).toEqual(['Customer-myschema:1']);
+  expect(orm.em.getUnitOfWork().getIdentityMap().keys()).toEqual([
+    "Customer-myschema:1",
+  ]);
   expect(check1).toBe(customer);
-  expect(check1.name).toBe('foo');
+  expect(check1.name).toBe("foo");
 
   // simulate change in the database from outside
-  await orm.em.nativeUpdate(Customer, { id: customer.id }, { name: 'bar' });
+  await orm.em.nativeUpdate(Customer, { id: customer.id }, { name: "bar" });
   const check2 = await orm.em.findOneOrFail(Customer, customer.id, {
     refresh: true, // will force reloading the values from database
   });
-  expect(check2.name).toBe('bar');
-  expect(orm.em.getUnitOfWork().getIdentityMap().keys()).toEqual(['Customer-myschema:1']);
+  expect(check2.name).toBe("bar");
+  expect(orm.em.getUnitOfWork().getIdentityMap().keys()).toEqual([
+    "Customer-myschema:1",
+  ]);
   expect(check2).toBe(customer);
 });

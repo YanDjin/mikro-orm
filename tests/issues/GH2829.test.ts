@@ -1,8 +1,13 @@
-import { Entity, ManyToOne, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Author {
-
   @PrimaryKey()
   id!: number;
 
@@ -11,12 +16,10 @@ export class Author {
 
   @Property()
   name!: string;
-
 }
 
 @Entity()
 export class Book {
-
   @PrimaryKey()
   id!: number;
 
@@ -31,22 +34,20 @@ export class Book {
 
   @ManyToOne(() => Book)
   template!: Book;
-
 }
 
-describe('GH issue 2829', () => {
-
+describe("GH issue 2829", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Author, Book],
-      dbName: ':memory:',
+      dbName: ":memory:",
       connect: false,
     });
   });
 
-  test('entities with property `length` and type checking of `orderBy`', async () => {
+  test("entities with property `length` and type checking of `orderBy`", async () => {
     let fn: () => Promise<any>;
 
     fn = () => orm.em.find(Book, {}, { orderBy: { author: { name: 1 } } });
@@ -70,5 +71,4 @@ describe('GH issue 2829', () => {
     // @ts-expect-error invalid property name
     fn = () => orm.em.find(Book, {}, { orderBy: [{ template: { name1: 1 } }] });
   });
-
 });

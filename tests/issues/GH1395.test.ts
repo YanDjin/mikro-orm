@@ -1,4 +1,12 @@
-import { Entity, MikroORM, PrimaryKey, Property, t, wrap, ObjectId } from '@mikro-orm/mongodb';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+  t,
+  wrap,
+  ObjectId,
+} from "@yandjin-mikro-orm/mongodb";
 
 export interface EmailMessageTest {
   html?: string;
@@ -7,14 +15,13 @@ export interface EmailMessageTest {
 
 @Entity()
 class TestTemplate {
-
   @PrimaryKey()
   _id!: ObjectId;
 
   @Property()
   name!: string;
 
-  @Property({ type: 'json', nullable: true })
+  @Property({ type: "json", nullable: true })
   messages?: EmailMessageTest[];
 
   @Property({ type: t.json, nullable: true })
@@ -24,56 +31,54 @@ class TestTemplate {
     width: number;
     height: number;
   };
-
 }
 
-describe('GH issue 1395', () => {
-
+describe("GH issue 1395", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [TestTemplate],
-      clientUrl: 'mongodb://localhost:27017/mikro-orm-test',
+      clientUrl: "mongodb://localhost:27017/mikro-orm-test",
     });
     await orm.em.nativeDelete(TestTemplate, {});
   });
 
   afterAll(() => orm.close(true));
 
-  test('json prop with array of objects', async () => {
+  test("json prop with array of objects", async () => {
     let item = orm.em.create(TestTemplate, {
-      name: 'test',
+      name: "test",
       messages: [
-        { html: 'aaa', language: 'en' },
-        { html: 'bbb', language: 'fr' },
+        { html: "aaa", language: "en" },
+        { html: "bbb", language: "fr" },
       ],
     });
     await orm.em.persistAndFlush(item);
 
     expect(item.messages).toEqual([
-      { html: 'aaa', language: 'en' },
-      { html: 'bbb', language: 'fr' },
+      { html: "aaa", language: "en" },
+      { html: "bbb", language: "fr" },
     ]);
 
     orm.em.clear();
     item = await orm.em.findOneOrFail(TestTemplate, item);
 
     expect(item.messages).toEqual([
-      { html: 'aaa', language: 'en' },
-      { html: 'bbb', language: 'fr' },
+      { html: "aaa", language: "en" },
+      { html: "bbb", language: "fr" },
     ]);
 
     orm.em.assign(item, {
-      name: 'test new name',
+      name: "test new name",
       messages: [
-        { html: 'xxx', language: 'en' },
-        { html: 'yyy', language: 'fr' },
+        { html: "xxx", language: "en" },
+        { html: "yyy", language: "fr" },
       ],
     });
     expect(item.messages).toEqual([
-      { html: 'xxx', language: 'en' },
-      { html: 'yyy', language: 'fr' },
+      { html: "xxx", language: "en" },
+      { html: "yyy", language: "fr" },
     ]);
     await orm.em.flush();
 
@@ -81,17 +86,17 @@ describe('GH issue 1395', () => {
     item = await orm.em.findOneOrFail(TestTemplate, item);
 
     expect(item.messages).toEqual([
-      { html: 'xxx', language: 'en' },
-      { html: 'yyy', language: 'fr' },
+      { html: "xxx", language: "en" },
+      { html: "yyy", language: "fr" },
     ]);
   });
 
-  test('assign to JSON property (GH #2492)', async () => {
+  test("assign to JSON property (GH #2492)", async () => {
     const item1 = orm.em.create(TestTemplate, {
-      name: 'test',
+      name: "test",
       messages: [
-        { html: 'aaa', language: 'en' },
-        { html: 'bbb', language: 'fr' },
+        { html: "aaa", language: "en" },
+        { html: "bbb", language: "fr" },
       ],
       geometry: {
         top: 0,
@@ -101,16 +106,19 @@ describe('GH issue 1395', () => {
       },
     });
     expect(item1).toMatchObject({
-      name: 'test',
-      messages: [{ html: 'aaa', language: 'en' }, { html: 'bbb', language: 'fr' }],
+      name: "test",
+      messages: [
+        { html: "aaa", language: "en" },
+        { html: "bbb", language: "fr" },
+      ],
       geometry: { top: 0, left: 0, width: 640, height: 480 },
     });
 
-    const item2 = orm.em.create(TestTemplate, { name: 'test' });
+    const item2 = orm.em.create(TestTemplate, { name: "test" });
     wrap(item2).assign({
       messages: [
-        { html: 'aaa', language: 'en' },
-        { html: 'bbb', language: 'fr' },
+        { html: "aaa", language: "en" },
+        { html: "bbb", language: "fr" },
       ],
       geometry: {
         top: 0,
@@ -120,10 +128,12 @@ describe('GH issue 1395', () => {
       },
     });
     expect(item2).toMatchObject({
-      name: 'test',
-      messages: [{ html: 'aaa', language: 'en' }, { html: 'bbb', language: 'fr' }],
+      name: "test",
+      messages: [
+        { html: "aaa", language: "en" },
+        { html: "bbb", language: "fr" },
+      ],
       geometry: { top: 0, left: 0, width: 640, height: 480 },
     });
   });
-
 });

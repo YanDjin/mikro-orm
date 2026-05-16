@@ -1,21 +1,19 @@
-import { colors, type MikroORM } from '@mikro-orm/core';
-import type { AbstractSqlDriver } from '@mikro-orm/knex';
-import type { ArgumentsCamelCase, CommandModule } from 'yargs';
-import { CLIHelper } from '../CLIHelper';
+import { colors, type MikroORM } from "@yandjin-mikro-orm/core";
+import type { AbstractSqlDriver } from "@yandjin-mikro-orm/knex";
+import type { ArgumentsCamelCase, CommandModule } from "yargs";
+import { CLIHelper } from "../CLIHelper";
 
 export class ImportCommand implements CommandModule {
-
-  command = 'database:import <file>';
-  describe = 'Imports the SQL file to the database';
+  command = "database:import <file>";
+  describe = "Imports the SQL file to the database";
 
   /**
    * @inheritDoc
    */
   async handler(args: ArgumentsCamelCase) {
-    const orm = await CLIHelper.getORM() as MikroORM<AbstractSqlDriver>;
+    const orm = (await CLIHelper.getORM()) as MikroORM<AbstractSqlDriver>;
     await orm.em.getConnection().loadFile(args.file as string);
     CLIHelper.dump(colors.green(`File ${args.file} successfully imported`));
     await orm.close(true);
   }
-
 }

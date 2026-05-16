@@ -1,65 +1,65 @@
-import { Entity, helper, MikroORM, OneToOne, PrimaryKey, Property } from '@mikro-orm/postgresql';
-import { v4 } from 'uuid';
+import {
+  Entity,
+  helper,
+  MikroORM,
+  OneToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
+import { v4 } from "uuid";
 
 @Entity()
 class Address {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id = v4();
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   name!: string;
-
 }
 
 @Entity()
 class Contact {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id = v4();
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   name!: string;
 
   @OneToOne({ type: Address, nullable: true })
   address?: Address;
-
 }
 
 @Entity()
 class Employee {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id = v4();
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   name!: string;
 
   @OneToOne({ type: Contact, nullable: true })
   contact?: Contact;
-
 }
 
-describe('GH issue 811', () => {
-
+describe("GH issue 811", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Contact, Employee, Address],
-      dbName: 'mikro_orm_test_gh811',
+      dbName: "mikro_orm_test_gh811",
     });
     await orm.schema.refreshDatabase();
   });
 
   afterAll(() => orm.close(true));
 
-  test('loading entity will not cascade merge new entities in the entity graph', async () => {
+  test("loading entity will not cascade merge new entities in the entity graph", async () => {
     // Create a Contact and an Employee
     const contactCreate = new Contact();
-    contactCreate.name = 'My Contact';
+    contactCreate.name = "My Contact";
     const employeeCreate = new Employee();
-    employeeCreate.name = 'My Employee';
+    employeeCreate.name = "My Employee";
     employeeCreate.contact = contactCreate;
 
     // Persist entities
@@ -75,26 +75,36 @@ describe('GH issue 811', () => {
 
     // Create a new address and persist it
     const address = new Address();
-    address.name = 'My Address';
+    address.name = "My Address";
     orm.em.persist(address);
 
     // Assign the created address to the contact
     contact.address = address;
 
     // Find my previously created employee
-    expect(orm.em.getUnitOfWork().getIdentityMap().values().map(e => helper(e).__originalEntityData)).toEqual([
-      { id: contact.id, name: 'My Contact', address: null },
-    ]);
+    expect(
+      orm.em
+        .getUnitOfWork()
+        .getIdentityMap()
+        .values()
+        .map((e) => helper(e).__originalEntityData),
+    ).toEqual([{ id: contact.id, name: "My Contact", address: null }]);
     const employee = await orm.em.findOneOrFail(Employee, employeeCreate.id);
 
     // previously the `Employee.contact.address` was accidentally cascade merged
-    expect(orm.em.getUnitOfWork().getIdentityMap().values().map(e => helper(e).__originalEntityData).filter(Boolean)).toEqual([
-      { id: contact.id, name: 'My Contact', address: null },
-      { id: employee.id, contact: contact.id, name: 'My Employee' },
+    expect(
+      orm.em
+        .getUnitOfWork()
+        .getIdentityMap()
+        .values()
+        .map((e) => helper(e).__originalEntityData)
+        .filter(Boolean),
+    ).toEqual([
+      { id: contact.id, name: "My Contact", address: null },
+      { id: employee.id, contact: contact.id, name: "My Employee" },
     ]);
     await orm.em.flush();
 
     expect(employee).toBeInstanceOf(Employee);
   });
-
 });

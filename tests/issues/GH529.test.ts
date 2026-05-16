@@ -1,23 +1,28 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class Customer {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Entity()
 export class Order {
-
   @PrimaryKey()
   id!: number;
 
   @ManyToOne()
   customer: Customer;
 
-  @OneToMany('OrderItem', 'order')
+  @OneToMany("OrderItem", "order")
   items = new Collection<OrderItem>(this);
 
   @Property()
@@ -32,12 +37,10 @@ export class Order {
   constructor(customer: Customer) {
     this.customer = customer;
   }
-
 }
 
 @Entity()
 export class Product {
-
   @PrimaryKey()
   id!: number;
 
@@ -51,12 +54,10 @@ export class Product {
     this.name = name;
     this.currentPrice = currentPrice;
   }
-
 }
 
 @Entity()
 export class OrderItem {
-
   @ManyToOne({ primary: true })
   order: Order;
 
@@ -75,11 +76,9 @@ export class OrderItem {
     this.offeredPrice = product.currentPrice;
     this.amount = amount;
   }
-
 }
 
-describe('GH issue 529', () => {
-
+describe("GH issue 529", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -96,13 +95,13 @@ describe('GH issue 529', () => {
 
   test(`GH issue 529`, async () => {
     const order = new Order(new Customer());
-    order.items.add(new OrderItem(order, new Product('a', 55)));
-    order.items.add(new OrderItem(order, new Product('b', 66)));
-    order.items.add(new OrderItem(order, new Product('c', 77)));
+    order.items.add(new OrderItem(order, new Product("a", 55)));
+    order.items.add(new OrderItem(order, new Product("b", 66)));
+    order.items.add(new OrderItem(order, new Product("c", 77)));
     await orm.em.persistAndFlush(order);
     orm.em.clear();
 
-    const orders = await orm.em.find(Order, {}, { populate: ['items'] });
+    const orders = await orm.em.find(Order, {}, { populate: ["items"] });
     expect(orders).toHaveLength(1);
     expect(orders[0].items.getItems()).toHaveLength(3);
     orm.em.clear();
@@ -116,5 +115,4 @@ describe('GH issue 529', () => {
     const sql = await orm.schema.getCreateSchemaSQL();
     expect(sql).toMatchSnapshot();
   });
-
 });

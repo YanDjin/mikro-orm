@@ -1,5 +1,5 @@
-import { MikroORM } from '@mikro-orm/sqlite';
-import { v4 } from 'uuid';
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { v4 } from "uuid";
 import {
   Collection,
   Entity,
@@ -10,32 +10,27 @@ import {
   Property,
   Ref,
   Unique,
-} from '@mikro-orm/core';
+} from "@yandjin-mikro-orm/core";
 
 @Entity()
 class Company {
-
-  @PrimaryKey({ columnType: 'uuid' })
+  @PrimaryKey({ columnType: "uuid" })
   id: string = v4();
 
-  @Unique({ name: 'company_name_unique' })
-  @Property({ columnType: 'text', length: 255 })
+  @Unique({ name: "company_name_unique" })
+  @Property({ columnType: "text", length: 255 })
   name!: string;
-
 }
 
 @Entity()
 class User {
-
-  @PrimaryKey({ columnType: 'uuid' })
+  @PrimaryKey({ columnType: "uuid" })
   id: string = v4();
-
 }
 
 @Entity()
 class Reader {
-
-  [PrimaryKeyProp]?: ['user_id', 'company_id', 'book_id'];
+  [PrimaryKeyProp]?: ["user_id", "company_id", "book_id"];
 
   @ManyToOne({
     entity: () => User,
@@ -54,21 +49,19 @@ class Reader {
   @ManyToOne({
     entity: () => Book,
     ref: true,
-    deleteRule: 'cascade',
+    deleteRule: "cascade",
     primary: true,
-    joinColumns: ['book_id', 'company_id'],
+    joinColumns: ["book_id", "company_id"],
   })
   book!: Ref<Book>;
-
 }
 
 @Entity()
 class Book {
+  [PrimaryKeyProp]?: ["id", "company"];
 
-  [PrimaryKeyProp]?: ['id', 'company'];
-
-  @Unique({ name: 'book_id_unique' })
-  @PrimaryKey({ columnType: 'uuid' })
+  @Unique({ name: "book_id_unique" })
+  @PrimaryKey({ columnType: "uuid" })
   id: string = v4();
 
   @ManyToOne({
@@ -80,25 +73,23 @@ class Book {
 
   @OneToMany({
     entity: () => Reader,
-    mappedBy: 'book',
+    mappedBy: "book",
     orphanRemoval: true,
   })
   readers = new Collection<Reader>(this);
 
   @OneToMany({
     entity: () => BookReviewer,
-    mappedBy: 'book',
+    mappedBy: "book",
     orphanRemoval: true,
   })
   reviewers = new Collection<BookReviewer>(this);
-
 }
 
 @Entity()
 class BookReviewer {
-
-  @Unique({ name: 'book_reviewer_id_unique' })
-  @PrimaryKey({ columnType: 'uuid' })
+  @Unique({ name: "book_reviewer_id_unique" })
+  @PrimaryKey({ columnType: "uuid" })
   id: string = v4();
 
   @ManyToOne({
@@ -111,14 +102,13 @@ class BookReviewer {
   @ManyToOne({
     entity: () => Book,
     ref: true,
-    deleteRule: 'cascade',
-    joinColumns: ['book_id', 'company_id'],
+    deleteRule: "cascade",
+    joinColumns: ["book_id", "company_id"],
   })
   book!: Ref<Book>;
 
   @ManyToOne({ entity: () => User, ref: true })
   user!: Ref<User>;
-
 }
 
 let orm: MikroORM;
@@ -136,8 +126,8 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('sharing column in composite pk + seeding', async () => {
-  const company = orm.em.create(Company, { name: 'c' });
+test("sharing column in composite pk + seeding", async () => {
+  const company = orm.em.create(Company, { name: "c" });
   const user = orm.em.create(User, {});
   const book = orm.em.create(Book, { company });
   const reader = orm.em.create(Reader, {

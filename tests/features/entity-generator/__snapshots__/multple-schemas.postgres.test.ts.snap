@@ -2,7 +2,7 @@
 
 exports[`multiple schemas with same table name 1 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity({ tableName: 'test', schema: 'schema1' })
 export class Schema1Test {
@@ -21,7 +21,7 @@ export class Schema1Test {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity({ tableName: 'test', schema: 'schema2' })
 export class Schema2Test {
@@ -40,7 +40,7 @@ export class Schema2Test {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Test {
@@ -64,7 +64,7 @@ export class Test {
 
 exports[`multiple schemas with same table name 2 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Test } from './Test';
 
 @Entity({ tableName: 'test', schema: 'schema1' })
@@ -84,7 +84,7 @@ export class Schema1Test {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Test } from './Test';
 
 @Entity({ tableName: 'test', schema: 'schema2' })
@@ -104,7 +104,7 @@ export class Schema2Test {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Test } from './Test';
 
 @Entity({ tableName: 'test' })

@@ -1,20 +1,25 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: bigint;
 
-  @OneToMany('UserOrganization', 'user')
+  @OneToMany("UserOrganization", "user")
   organizations = new Collection<UserOrganization>(this);
-
 }
 
 @Entity()
 class UserOrganization {
-
   @PrimaryKey()
   id!: bigint;
 
@@ -28,11 +33,9 @@ class UserOrganization {
     this.user = user;
     this.isAdmin = isAdmin;
   }
-
 }
 
-describe('GH issue 940, 1117', () => {
-
+describe("GH issue 940, 1117", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -45,7 +48,7 @@ describe('GH issue 940, 1117', () => {
 
   afterAll(async () => await orm.close(true));
 
-  test('A boolean in the nested where conditions is kept even if the primary key is BigIntType', async () => {
+  test("A boolean in the nested where conditions is kept even if the primary key is BigIntType", async () => {
     const user1 = new User();
     const user2 = new User();
     const user1org = new UserOrganization(user1, true);
@@ -64,7 +67,7 @@ describe('GH issue 940, 1117', () => {
     ]);
   });
 
-  test('bigint type is correctly diffed (null vs undefined) - GH #1117', async () => {
+  test("bigint type is correctly diffed (null vs undefined) - GH #1117", async () => {
     const user1 = new User();
     const user2 = new User();
     const org1 = new UserOrganization(user1, true);
@@ -74,9 +77,8 @@ describe('GH issue 940, 1117', () => {
     orm.em.clear();
 
     const orgs = await orm.em.find(UserOrganization, {});
-    const mock = mockLogger(orm, ['query', 'query-params']);
+    const mock = mockLogger(orm, ["query", "query-params"]);
     await orm.em.flush();
     expect(mock.mock.calls).toHaveLength(0);
   });
-
 });

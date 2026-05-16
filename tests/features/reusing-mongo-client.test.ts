@@ -1,18 +1,18 @@
-import { MikroORM } from '@mikro-orm/core';
-import { MongoDriver } from '@mikro-orm/mongodb';
-import { Author, schema } from '../entities';
+import { MikroORM } from "@yandjin-mikro-orm/core";
+import { MongoDriver } from "@yandjin-mikro-orm/mongodb";
+import { Author, schema } from "../entities";
 
-test('should allow reusing mongo connection', async () => {
+test("should allow reusing mongo connection", async () => {
   const orm = await MikroORM.init({
     driver: MongoDriver,
-    dbName: 'mikro_orm_test',
+    dbName: "mikro_orm_test",
     entities: [Author, schema],
   });
   const mongo = orm.em.getConnection().getClient();
 
   const orm2 = await MikroORM.init({
     driver: MongoDriver,
-    dbName: 'mikro_orm_test',
+    dbName: "mikro_orm_test",
     entities: [Author, schema],
     driverOptions: mongo,
   });

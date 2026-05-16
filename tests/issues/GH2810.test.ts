@@ -1,48 +1,65 @@
-import { Cascade, Collection, Entity, ManyToOne, MikroORM, OneToMany, OneToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/sqlite';
+import {
+  Cascade,
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  OneToOne,
+  PrimaryKey,
+  PrimaryKeyProp,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class NodeEntity {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne({ entity: () => NodeEntity, deleteRule: 'cascade', updateRule: 'cascade', nullable: true })
+  @ManyToOne({
+    entity: () => NodeEntity,
+    deleteRule: "cascade",
+    updateRule: "cascade",
+    nullable: true,
+  })
   parent?: NodeEntity | null;
-
 }
 
 @Entity()
 export class ElementEntity {
+  [PrimaryKeyProp]?: "node";
 
-  [PrimaryKeyProp]?: 'node';
-
-  @OneToOne({ entity: () => NodeEntity, primary: true, deleteRule: 'cascade', updateRule: 'cascade' })
+  @OneToOne({
+    entity: () => NodeEntity,
+    primary: true,
+    deleteRule: "cascade",
+    updateRule: "cascade",
+  })
   node!: NodeEntity;
 
-  @OneToMany({ entity: () => DependentEntity, mappedBy: 'element', cascade: [Cascade.ALL] })
+  @OneToMany({
+    entity: () => DependentEntity,
+    mappedBy: "element",
+    cascade: [Cascade.ALL],
+  })
   dependents = new Collection<DependentEntity>(this);
-
 }
 
 @Entity()
 export class DependentEntity {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne(() => ElementEntity, { deleteRule: 'cascade' })
+  @ManyToOne(() => ElementEntity, { deleteRule: "cascade" })
   element!: ElementEntity;
-
 }
 
-describe('GH issue 2810', () => {
-
+describe("GH issue 2810", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [ElementEntity, DependentEntity, NodeEntity],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
@@ -50,7 +67,7 @@ describe('GH issue 2810', () => {
   beforeEach(async () => await orm.schema.clearDatabase());
   afterAll(async () => await orm.close(true));
 
-  test('create without existing parent', async () => {
+  test("create without existing parent", async () => {
     const element = orm.em.create(ElementEntity, {});
     element.node = new NodeEntity();
     element.node.parent = null;
@@ -62,7 +79,7 @@ describe('GH issue 2810', () => {
     await orm.em.persistAndFlush(element);
   });
 
-  test('create with existing parent', async () => {
+  test("create with existing parent", async () => {
     const parent = orm.em.create(NodeEntity, {});
     await orm.em.fork().persistAndFlush(parent);
 
@@ -76,5 +93,4 @@ describe('GH issue 2810', () => {
 
     await orm.em.persistAndFlush(element);
   });
-
 });

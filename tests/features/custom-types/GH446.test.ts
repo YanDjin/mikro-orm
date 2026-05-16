@@ -1,4 +1,4 @@
-import { v4, parse, stringify } from 'uuid';
+import { v4, parse, stringify } from "uuid";
 import {
   Entity,
   LoadStrategy,
@@ -10,12 +10,11 @@ import {
   Property,
   Type,
   wrap,
-} from '@mikro-orm/core';
-import { MySqlDriver } from '@mikro-orm/mysql';
-import { mockLogger } from '../../helpers';
+} from "@yandjin-mikro-orm/core";
+import { MySqlDriver } from "@yandjin-mikro-orm/mysql";
+import { mockLogger } from "../../helpers";
 
 export class UuidBinaryType extends Type<string, Buffer> {
-
   override convertToDatabaseValue(value: string): Buffer {
     return Buffer.from(parse(value));
   }
@@ -25,55 +24,45 @@ export class UuidBinaryType extends Type<string, Buffer> {
   }
 
   override getColumnType(): string {
-    return 'binary(16)';
+    return "binary(16)";
   }
-
 }
 
 @Entity()
 class A {
-
   @PrimaryKey({ type: UuidBinaryType })
   id: string = v4();
 
   @Property({ nullable: true })
   name?: string;
-
 }
 
 @Entity()
 class B {
-
   @OneToOne({ primary: true })
   a!: A;
 
-  [PrimaryKeyProp]?: 'a';
-
+  [PrimaryKeyProp]?: "a";
 }
 
 @Entity()
 class C {
-
   @OneToOne({ primary: true })
   b!: B;
 
-  [PrimaryKeyProp]?: 'b';
-
+  [PrimaryKeyProp]?: "b";
 }
 
 @Entity()
 class D {
-
   @PrimaryKey({ type: UuidBinaryType })
   id: string = v4();
 
-  @ManyToOne({ deleteRule: 'cascade' })
+  @ManyToOne({ deleteRule: "cascade" })
   a!: A;
-
 }
 
-describe('GH issue 446', () => {
-
+describe("GH issue 446", () => {
   let orm: MikroORM<MySqlDriver>;
 
   beforeAll(async () => {
@@ -105,7 +94,7 @@ describe('GH issue 446', () => {
     await orm.em.persistAndFlush([c, d]);
     orm.em.clear();
 
-    const c1 = await orm.em.findOneOrFail(C, c.b.a.id, { populate: ['b.a'] });
+    const c1 = await orm.em.findOneOrFail(C, c.b.a.id, { populate: ["b.a"] });
     const mock = mockLogger(orm);
     const c23 = await orm.em.findOneOrFail(C, c.b.a.id);
     expect(mock).not.toHaveBeenCalled();
@@ -118,7 +107,10 @@ describe('GH issue 446', () => {
     expect(c1.b.a.id).toBe(a.id);
 
     orm.em.clear();
-    const c2 = await orm.em.findOneOrFail(C, c.b.a.id, { populate: ['b.a'], strategy: LoadStrategy.JOINED });
+    const c2 = await orm.em.findOneOrFail(C, c.b.a.id, {
+      populate: ["b.a"],
+      strategy: LoadStrategy.JOINED,
+    });
     expect(c2).toBeInstanceOf(C);
     expect(c2.b).toBeInstanceOf(B);
     expect(wrap(c2.b).isInitialized()).toBe(true);
@@ -128,21 +120,21 @@ describe('GH issue 446', () => {
   });
 
   test(`update entity with custom type PK (GH #1798)`, async () => {
-    const a1 = orm.em.create(A, { name: 'a1' });
-    const a2 = orm.em.create(A, { name: 'a2' });
+    const a1 = orm.em.create(A, { name: "a1" });
+    const a2 = orm.em.create(A, { name: "a2" });
     await orm.em.persist([a1, a2]).flush();
 
-    a1.name = 'a1 v2';
+    a1.name = "a1 v2";
     await orm.em.flush();
 
-    a1.name = 'a1 v3';
-    a2.name = 'a2 v3';
+    a1.name = "a1 v3";
+    a2.name = "a2 v3";
     await orm.em.flush();
     orm.em.clear();
 
     const as = await orm.em.find(A, {}, { orderBy: { name: 1 } });
-    expect(as.map(a => a.name)).toEqual(['a1 v3', 'a2 v3']);
-    as.forEach(a => orm.em.remove(a));
+    expect(as.map((a) => a.name)).toEqual(["a1 v3", "a2 v3"]);
+    as.forEach((a) => orm.em.remove(a));
     await orm.em.flush();
     orm.em.clear();
 
@@ -152,28 +144,34 @@ describe('GH issue 446', () => {
 
   test(`assign with custom types`, async () => {
     const d = new D();
-    orm.em.assign(d, { id: Buffer.from(parse(v4())) as any, a: Buffer.from(parse(v4())) as any }, { convertCustomTypes: true });
-    expect(typeof d.id).toBe('string');
-    expect(typeof d.a.id).toBe('string');
+    orm.em.assign(
+      d,
+      {
+        id: Buffer.from(parse(v4())) as any,
+        a: Buffer.from(parse(v4())) as any,
+      },
+      { convertCustomTypes: true },
+    );
+    expect(typeof d.id).toBe("string");
+    expect(typeof d.a.id).toBe("string");
     orm.em.assign(d, { id: v4(), a: v4() });
-    expect(typeof d.id).toBe('string');
-    expect(typeof d.a.id).toBe('string');
-    orm.em.assign(d, { id: v4(), a: { id: v4(), name: 'abc' } });
-    expect(typeof d.id).toBe('string');
-    expect(typeof d.a.id).toBe('string');
-    expect(d.a.name).toBe('abc');
+    expect(typeof d.id).toBe("string");
+    expect(typeof d.a.id).toBe("string");
+    orm.em.assign(d, { id: v4(), a: { id: v4(), name: "abc" } });
+    expect(typeof d.id).toBe("string");
+    expect(typeof d.a.id).toBe("string");
+    expect(d.a.name).toBe("abc");
   });
 
-  test('merging cached entity', async () => {
+  test("merging cached entity", async () => {
     const a1 = new A();
-    a1.name = 'test';
-    expect(typeof a1.id).toBe('string');
+    a1.name = "test";
+    expect(typeof a1.id).toBe("string");
     // simulate caching by converting to JSON and back to POJO
     const cache = JSON.parse(JSON.stringify(wrap(a1).toObject()));
-    expect(typeof cache.id).toBe('string');
+    expect(typeof cache.id).toBe("string");
     const a2 = orm.em.getRepository(A).merge(cache);
-    expect(typeof a2.id).toBe('string');
-    expect(a2.name).toBe('test');
+    expect(typeof a2.id).toBe("string");
+    expect(a2.name).toBe("test");
   });
-
 });

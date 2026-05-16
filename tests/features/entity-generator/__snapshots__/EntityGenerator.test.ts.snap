@@ -2,7 +2,7 @@
 
 exports[`EntityGenerator generate entities from schema [sqlite]: sqlite-entity-dump 1`] = `
 [
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book3 } from './book3';
 
 @Entity()
@@ -45,7 +45,7 @@ export class Author3 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BookTag3 {
@@ -61,7 +61,7 @@ export class BookTag3 {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Author3 } from './author3';
 import { Publisher3 } from './publisher3';
 
@@ -88,7 +88,7 @@ export class Book3 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { Book3 } from './book3';
 import { BookTag3 } from './book-tag3';
 
@@ -106,7 +106,7 @@ export class Book3Tags {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Publisher3 {
@@ -122,7 +122,7 @@ export class Publisher3 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { Publisher3 } from './publisher3';
 import { Test3 } from './test3';
 
@@ -140,7 +140,7 @@ export class Publisher3Tests {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Test3 {

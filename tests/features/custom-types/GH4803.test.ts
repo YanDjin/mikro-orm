@@ -1,19 +1,22 @@
-import { EntityProperty, Platform, Type, EntitySchema, Collection, BigIntType } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  EntityProperty,
+  Platform,
+  Type,
+  EntitySchema,
+  Collection,
+  BigIntType,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 class User {
-
   readonly id!: Id;
   readonly email!: string;
   readonly profiles = new Collection<Profile>(this);
-
 }
 
 class Profile {
-
   readonly id!: string;
   readonly user!: Id;
-
 }
 
 const profileSchema = new EntitySchema<Profile>({
@@ -26,15 +29,14 @@ const profileSchema = new EntitySchema<Profile>({
     },
     user: {
       entity: () => User,
-      kind: 'm:1',
-      inversedBy: 'profiles' as any,
+      kind: "m:1",
+      inversedBy: "profiles" as any,
       mapToPk: true,
     },
   },
 });
 
 class Id extends Type<Id | undefined, string> {
-
   readonly value?: bigint;
 
   constructor(value: bigint | number) {
@@ -57,9 +59,8 @@ class Id extends Type<Id | undefined, string> {
   }
 
   compareAsType(): string {
-    return 'string';
+    return "string";
   }
-
 }
 
 const userSchema = new EntitySchema<User>({
@@ -71,12 +72,12 @@ const userSchema = new EntitySchema<User>({
       autoincrement: true,
     },
     email: {
-      type: 'string',
+      type: "string",
     },
     profiles: {
       entity: () => Profile,
-      kind: '1:m',
-      mappedBy: 'user',
+      kind: "1:m",
+      mappedBy: "user",
       nullable: true,
     },
   },
@@ -86,7 +87,7 @@ let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [userSchema, profileSchema],
   });
 
@@ -97,10 +98,10 @@ afterAll(async () => {
   await orm.close();
 });
 
-test('A profile user id should be a custom type', async () => {
+test("A profile user id should be a custom type", async () => {
   const em = orm.em.fork();
   const aUser = orm.em.create(User, {
-    email: 'user@mail.com',
+    email: "user@mail.com",
   });
   await em.persistAndFlush(aUser);
 
@@ -109,9 +110,13 @@ test('A profile user id should be a custom type', async () => {
   });
   await em.persistAndFlush(aProfile);
 
-  const userProfile = await em.findOneOrFail(Profile, { id: aProfile.id }, {
-    refresh: true,
-  });
+  const userProfile = await em.findOneOrFail(
+    Profile,
+    { id: aProfile.id },
+    {
+      refresh: true,
+    },
+  );
 
   expect(userProfile).toBeTruthy();
   expect(userProfile.user).toBeInstanceOf(Id);

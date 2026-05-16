@@ -1,9 +1,9 @@
-import { MikroORM } from '@mikro-orm/postgresql';
-import { EntityGenerator } from '@mikro-orm/entity-generator';
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
+import { EntityGenerator } from "@yandjin-mikro-orm/entity-generator";
 
-test('4911', async () => {
+test("4911", async () => {
   const orm = await MikroORM.init({
-    dbName: '4911',
+    dbName: "4911",
     discovery: {
       warnWhenNoEntities: false,
     },

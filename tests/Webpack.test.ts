@@ -1,12 +1,11 @@
-import { BookWp, AuthorWp } from './entities-webpack';
-import { BookWpI, AuthorWpI } from './entities-webpack-invalid';
-import type { Options } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/core';
-import { MySqlDriver } from '@mikro-orm/mysql';
+import { BookWp, AuthorWp } from "./entities-webpack";
+import { BookWpI, AuthorWpI } from "./entities-webpack-invalid";
+import type { Options } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/core";
+import { MySqlDriver } from "@yandjin-mikro-orm/mysql";
 
-describe('Webpack', () => {
-
-  test('should create entity', async () => {
+describe("Webpack", () => {
+  test("should create entity", async () => {
     const orm = await MikroORM.init({
       dbName: `mikro_orm_test`,
       port: 3308,
@@ -16,16 +15,16 @@ describe('Webpack', () => {
       entities: [AuthorWp, BookWp],
     });
 
-    expect(orm.getMetadata().has('BookWp')).toBe(true);
-    expect(orm.getMetadata().has('AuthorWp')).toBe(true);
-    const author = orm.em.create(AuthorWp, { name: 'Name', email: 'abc' });
+    expect(orm.getMetadata().has("BookWp")).toBe(true);
+    expect(orm.getMetadata().has("AuthorWp")).toBe(true);
+    const author = orm.em.create(AuthorWp, { name: "Name", email: "abc" });
     expect(author).toBeInstanceOf(AuthorWp);
-    expect(author.name).toBe('Name');
+    expect(author.name).toBe("Name");
 
     await orm.close(true);
   });
 
-  test('should throw error for invalid entities', async () => {
+  test("should throw error for invalid entities", async () => {
     const options = {
       dbName: `mikro_orm_test`,
       driver: MySqlDriver,
@@ -36,15 +35,14 @@ describe('Webpack', () => {
     await expect(MikroORM.init(options)).rejects.toThrow(err);
   });
 
-  test('should throw error if entities is not defined', async () => {
+  test("should throw error if entities is not defined", async () => {
     const options = {
       dbName: `mikro_orm_test`,
       driver: MySqlDriver,
-      entities: ['not/existing'],
+      entities: ["not/existing"],
       discovery: { disableDynamicFileAccess: true },
     } as Options;
     const err = `[requireEntitiesArray] Explicit list of entities is required, please use the 'entities' option.`;
     await expect(MikroORM.init(options)).rejects.toThrow(err);
   });
-
 });

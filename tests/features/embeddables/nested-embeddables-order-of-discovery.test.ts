@@ -1,5 +1,14 @@
-import { ArrayType, Embeddable, Embedded, Entity, Enum, MikroORM, PrimaryKey, Property } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  ArrayType,
+  Embeddable,
+  Embedded,
+  Entity,
+  Enum,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 export enum RestrictionMode {
   Blacklist,
@@ -8,18 +17,15 @@ export enum RestrictionMode {
 
 @Embeddable()
 export class RestrictionItem {
-
   @Enum(() => RestrictionMode)
   mode!: RestrictionMode;
 
   @Property({ type: ArrayType })
   value: string[] = [];
-
 }
 
 @Embeddable()
 export class Restriction {
-
   @Property()
   permissions!: bigint;
 
@@ -28,12 +34,10 @@ export class Restriction {
 
   @Embedded(() => RestrictionItem)
   channel!: RestrictionItem;
-
 }
 
 @Entity({ abstract: true })
 export class PluginSettings {
-
   @PrimaryKey()
   id!: bigint;
 
@@ -42,18 +46,21 @@ export class PluginSettings {
 
   @Property({ nullable: true })
   enabled?: boolean;
-
 }
 
 @Entity()
 export class PluginTestSettings extends PluginSettings {}
 
-describe('GH issue 2242', () => {
-
+describe("GH issue 2242", () => {
   test(`order: [PluginTestSettings, PluginSettings, Restriction, RestrictionItem]`, async () => {
     const orm = await MikroORM.init({
-      entities: [PluginTestSettings, PluginSettings, Restriction, RestrictionItem],
-      dbName: ':memory:',
+      entities: [
+        PluginTestSettings,
+        PluginSettings,
+        Restriction,
+        RestrictionItem,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -71,8 +78,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [PluginSettings, PluginTestSettings, Restriction, RestrictionItem]`, async () => {
     const orm = await MikroORM.init({
-      entities: [PluginSettings, PluginTestSettings, Restriction, RestrictionItem],
-      dbName: ':memory:',
+      entities: [
+        PluginSettings,
+        PluginTestSettings,
+        Restriction,
+        RestrictionItem,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -90,8 +102,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [PluginTestSettings, Restriction, RestrictionItem, PluginSettings]`, async () => {
     const orm = await MikroORM.init({
-      entities: [PluginTestSettings, Restriction, RestrictionItem, PluginSettings],
-      dbName: ':memory:',
+      entities: [
+        PluginTestSettings,
+        Restriction,
+        RestrictionItem,
+        PluginSettings,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -109,8 +126,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [RestrictionItem, PluginTestSettings, Restriction, PluginSettings]`, async () => {
     const orm = await MikroORM.init({
-      entities: [RestrictionItem, PluginTestSettings, Restriction, PluginSettings],
-      dbName: ':memory:',
+      entities: [
+        RestrictionItem,
+        PluginTestSettings,
+        Restriction,
+        PluginSettings,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -128,8 +150,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [PluginSettings, Restriction, RestrictionItem, PluginTestSettings]`, async () => {
     const orm = await MikroORM.init({
-      entities: [PluginSettings, Restriction, RestrictionItem, PluginTestSettings],
-      dbName: ':memory:',
+      entities: [
+        PluginSettings,
+        Restriction,
+        RestrictionItem,
+        PluginTestSettings,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -147,8 +174,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [Restriction, RestrictionItem, PluginSettings, PluginTestSettings]`, async () => {
     const orm = await MikroORM.init({
-      entities: [Restriction, RestrictionItem, PluginSettings, PluginTestSettings],
-      dbName: ':memory:',
+      entities: [
+        Restriction,
+        RestrictionItem,
+        PluginSettings,
+        PluginTestSettings,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -166,8 +198,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [Restriction, RestrictionItem, PluginTestSettings, PluginSettings]`, async () => {
     const orm = await MikroORM.init({
-      entities: [Restriction, RestrictionItem, PluginTestSettings, PluginSettings],
-      dbName: ':memory:',
+      entities: [
+        Restriction,
+        RestrictionItem,
+        PluginTestSettings,
+        PluginSettings,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -185,8 +222,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [Restriction, PluginSettings, RestrictionItem, PluginTestSettings]`, async () => {
     const orm = await MikroORM.init({
-      entities: [Restriction, PluginSettings, RestrictionItem, PluginTestSettings],
-      dbName: ':memory:',
+      entities: [
+        Restriction,
+        PluginSettings,
+        RestrictionItem,
+        PluginTestSettings,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -204,8 +246,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [RestrictionItem, Restriction, PluginTestSettings, PluginSettings]`, async () => {
     const orm = await MikroORM.init({
-      entities: [RestrictionItem, Restriction, PluginTestSettings, PluginSettings],
-      dbName: ':memory:',
+      entities: [
+        RestrictionItem,
+        Restriction,
+        PluginTestSettings,
+        PluginSettings,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -223,8 +270,13 @@ describe('GH issue 2242', () => {
 
   test(`order: [RestrictionItem, Restriction, PluginSettings, PluginTestSettings]`, async () => {
     const orm = await MikroORM.init({
-      entities: [RestrictionItem, Restriction, PluginSettings, PluginTestSettings],
-      dbName: ':memory:',
+      entities: [
+        RestrictionItem,
+        Restriction,
+        PluginSettings,
+        PluginTestSettings,
+      ],
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -239,5 +291,4 @@ describe('GH issue 2242', () => {
     expect(item.enabled).toBe(true);
     await orm.close();
   });
-
 });

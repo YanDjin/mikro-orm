@@ -1,17 +1,13 @@
-import { EntitySchema, MikroORM } from '@mikro-orm/postgresql';
-import { v4 } from 'uuid';
+import { EntitySchema, MikroORM } from "@yandjin-mikro-orm/postgresql";
+import { v4 } from "uuid";
 
 class Base {
-
   id?: string;
-
 }
 
 class A extends Base {
-
   childrenA?: A;
   type!: string;
-
 }
 
 const BaseSchema = new EntitySchema<Base>({
@@ -19,7 +15,7 @@ const BaseSchema = new EntitySchema<Base>({
   abstract: true,
   properties: {
     id: {
-      type: 'string',
+      type: "string",
       primary: true,
       length: 36,
       onCreate: () => v4(),
@@ -29,22 +25,21 @@ const BaseSchema = new EntitySchema<Base>({
 
 const ASchema = new EntitySchema<A, Base>({
   class: A,
-  extends: 'Base',
+  extends: "Base",
   properties: {
     type: {
       length: 16,
-      type: 'string',
+      type: "string",
     },
     childrenA: {
       entity: () => A,
-      kind: 'm:1',
+      kind: "m:1",
       nullable: true,
     },
   },
 });
 
-describe('GH issue 560', () => {
-
+describe("GH issue 560", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -61,14 +56,18 @@ describe('GH issue 560', () => {
   });
 
   test(`GH issue 560`, async () => {
-    const children = orm.em.create(A, { type: 'children' });
-    const parent = orm.em.create(A, { type: 'parent', childrenA: children });
+    const children = orm.em.create(A, { type: "children" });
+    const parent = orm.em.create(A, { type: "parent", childrenA: children });
     orm.em.persist(parent);
 
     await expect(orm.em.flush()).resolves.not.toThrow();
     orm.em.clear();
 
-    const fetchedParent = await orm.em.findOneOrFail(A, { type: 'parent' }, { populate: ['*'] });
+    const fetchedParent = await orm.em.findOneOrFail(
+      A,
+      { type: "parent" },
+      { populate: ["*"] },
+    );
     expect(fetchedParent.childrenA).toBeTruthy();
   });
 });

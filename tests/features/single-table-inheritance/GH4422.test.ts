@@ -10,40 +10,37 @@ import {
   Property,
   Ref,
   wrap,
-} from '@mikro-orm/sqlite';
-import { mockLogger } from '../../bootstrap';
+} from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../../bootstrap";
 
 @Entity()
 class Company {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
 
-  @OneToMany(() => Employee, employee => employee.company)
+  @OneToMany(() => Employee, (employee) => employee.company)
   employees = new Collection<Employee>(this);
 
-  @OneToMany(() => Manager, manager => manager.company)
+  @OneToMany(() => Manager, (manager) => manager.company)
   managers = new Collection<Manager>(this);
 
   // this one is not owner
-  @ManyToMany(() => Tag1, tag => tag.companies)
+  @ManyToMany(() => Tag1, (tag) => tag.companies)
   tags1 = new Collection<Tag1>(this);
 
   // this one is owner
-  @ManyToMany(() => Tag2, tag => tag.companies, { owner: true })
+  @ManyToMany(() => Tag2, (tag) => tag.companies, { owner: true })
   tags2 = new Collection<Tag2>(this);
-
 }
 
 @Entity({
-  discriminatorColumn: 'type',
+  discriminatorColumn: "type",
   abstract: true,
 })
 class Tag {
-
   @PrimaryKey()
   id!: number;
 
@@ -51,34 +48,28 @@ class Tag {
   name!: string;
 
   @Enum()
-  type!: 'tag1' | 'tag2';
-
+  type!: "tag1" | "tag2";
 }
 
-@Entity({ discriminatorValue: 'tag1' })
+@Entity({ discriminatorValue: "tag1" })
 class Tag1 extends Tag {
-
-  @ManyToMany(() => Company, company => company.tags1, {
+  @ManyToMany(() => Company, (company) => company.tags1, {
     owner: true,
   })
   companies = new Collection<Tag>(this);
-
 }
 
-@Entity({ discriminatorValue: 'tag2' })
+@Entity({ discriminatorValue: "tag2" })
 class Tag2 extends Tag {
-
-  @ManyToMany(() => Company, company => company.tags2)
+  @ManyToMany(() => Company, (company) => company.tags2)
   companies = new Collection<Tag>(this);
-
 }
 
 @Entity({
-  discriminatorColumn: 'type',
+  discriminatorColumn: "type",
   abstract: true,
 })
 class User {
-
   @PrimaryKey({ type: Number })
   id!: number;
 
@@ -89,55 +80,50 @@ class User {
   company!: Ref<Company>;
 
   @Enum()
-  type!: 'employee' | 'manager';
-
+  type!: "employee" | "manager";
 }
 
-@Entity({ discriminatorValue: 'employee' })
+@Entity({ discriminatorValue: "employee" })
 class Employee extends User {
-
   @ManyToOne(() => Manager, { ref: true, nullable: true })
   manager?: Ref<Manager>;
-
 }
 
-@Entity({ discriminatorValue: 'manager' })
+@Entity({ discriminatorValue: "manager" })
 class Manager extends User {
-
-  @OneToMany(() => Employee, employee => employee.manager)
+  @OneToMany(() => Employee, (employee) => employee.manager)
   employees = new Collection<Employee>(this);
-
 }
 
-describe('GH issue 4422', () => {
+describe("GH issue 4422", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Company, User, Employee, Manager, Tag],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
 
     const tag1 = new Tag1();
-    tag1.name = 'tag1';
+    tag1.name = "tag1";
 
     const tag2 = new Tag2();
-    tag2.name = 'tag2';
+    tag2.name = "tag2";
 
     const company1 = new Company();
-    company1.name = 'company1';
+    company1.name = "company1";
     company1.tags1.set([tag1]);
     company1.tags2.set([tag2]);
 
     const manager1 = new Manager();
     manager1.company = wrap(company1).toReference();
-    manager1.name = 'manager1';
+    manager1.name = "manager1";
 
     const employee = new Employee();
     employee.company = wrap(company1).toReference();
     employee.manager = wrap(manager1).toReference();
-    employee.name = 'employee';
+    employee.name = "employee";
 
     await orm.em.persistAndFlush([employee]);
     orm.em.clear();
@@ -145,12 +131,12 @@ describe('GH issue 4422', () => {
 
   afterAll(() => orm.close(true));
 
-  test('Many to many owner', async () => {
+  test("Many to many owner", async () => {
     const mock = mockLogger(orm);
 
     await orm.em.find(Company, {
       tags1: {
-        name: 'tag1',
+        name: "tag1",
       },
     });
     expect(mock.mock.calls[0][0]).toMatch(
@@ -158,12 +144,12 @@ describe('GH issue 4422', () => {
     );
   });
 
-  test('Many to many not owner', async () => {
+  test("Many to many not owner", async () => {
     const mock = mockLogger(orm);
 
     await orm.em.find(Company, {
       tags2: {
-        name: 'tag2',
+        name: "tag2",
       },
     });
     expect(mock.mock.calls[0][0]).toMatch(
@@ -171,12 +157,12 @@ describe('GH issue 4422', () => {
     );
   });
 
-  test('Many to one', async () => {
+  test("Many to one", async () => {
     const mock = mockLogger(orm);
 
     await orm.em.find(Employee, {
       manager: {
-        name: 'manager1',
+        name: "manager1",
       },
     });
     expect(mock.mock.calls[0][0]).toMatch(
@@ -184,12 +170,12 @@ describe('GH issue 4422', () => {
     );
   });
 
-  test('One to many', async () => {
+  test("One to many", async () => {
     const mock = mockLogger(orm);
 
     await orm.em.find(Company, {
       employees: {
-        name: 'employee',
+        name: "employee",
       },
     });
     expect(mock.mock.calls[0][0]).toMatch(

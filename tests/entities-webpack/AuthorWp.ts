@@ -1,22 +1,26 @@
-import { Collection, Entity, OneToMany, Property, PrimaryKey } from '@mikro-orm/core';
-import { BookWp } from './index';
+import {
+  Collection,
+  Entity,
+  OneToMany,
+  Property,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import { BookWp } from "./index";
 
-@Entity({ tableName: 'author2' })
+@Entity({ tableName: "author2" })
 export class AuthorWp {
-
-  @PrimaryKey({ type: 'number' })
+  @PrimaryKey({ type: "number" })
   id!: number;
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   name!: string;
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   email!: string;
 
-  @Property({ type: 'number', nullable: true })
+  @Property({ type: "number", nullable: true })
   age?: number;
 
-  @OneToMany(() => BookWp, book => book.author)
+  @OneToMany(() => BookWp, (book) => book.author)
   books = new Collection<BookWp>(this);
-
 }

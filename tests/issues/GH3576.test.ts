@@ -1,9 +1,16 @@
-import { MikroORM, Entity, LoadStrategy, OneToOne, PrimaryKey, Property, SimpleLogger } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import {
+  MikroORM,
+  Entity,
+  LoadStrategy,
+  OneToOne,
+  PrimaryKey,
+  Property,
+  SimpleLogger,
+} from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -15,12 +22,10 @@ class User {
 
   @Property()
   isActive!: boolean;
-
 }
 
 @Entity()
 class Customer {
-
   @PrimaryKey()
   id!: number;
 
@@ -32,17 +37,16 @@ class Customer {
 
   @OneToOne(() => User)
   user!: User;
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [Customer, User],
     loadStrategy: LoadStrategy.JOINED,
-    loggerFactory: options => new SimpleLogger(options),
+    loggerFactory: (options) => new SimpleLogger(options),
   });
   await orm.getSchemaGenerator().refreshDatabase();
 });
@@ -52,19 +56,23 @@ afterAll(async () => {
 });
 
 test(`GH issue 3576`, async () => {
-  const user = orm.em.create(User, { username: 'john111', isActive: true });
-  const customer = orm.em.create(Customer, { name: 'John Doe', user });
+  const user = orm.em.create(User, { username: "john111", isActive: true });
+  const customer = orm.em.create(Customer, { name: "John Doe", user });
   await orm.em.flush();
 
-  const loadedCustomer = await orm.em.findOneOrFail(Customer, customer, { populate: ['user'] });
+  const loadedCustomer = await orm.em.findOneOrFail(Customer, customer, {
+    populate: ["user"],
+  });
 
-  const mock = mockLogger(orm, ['query']);
-  loadedCustomer.name = 'Jane Doe';
+  const mock = mockLogger(orm, ["query"]);
+  loadedCustomer.name = "Jane Doe";
   await orm.em.flush();
 
   expect(mock.mock.calls).toEqual([
-    ['[query] begin'],
-    ['[query] update `customer` set `name` = ?, `updated_at` = ? where `id` = ?'],
-    ['[query] commit'],
+    ["[query] begin"],
+    [
+      "[query] update `customer` set `name` = ?, `updated_at` = ? where `id` = ?",
+    ],
+    ["[query] commit"],
   ]);
 });

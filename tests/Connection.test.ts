@@ -1,10 +1,9 @@
-import type { QueryResult } from '@mikro-orm/core';
-import { Configuration, Connection } from '@mikro-orm/core';
-import { MongoDriver } from '@mikro-orm/mongodb';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import type { QueryResult } from "@yandjin-mikro-orm/core";
+import { Configuration, Connection } from "@yandjin-mikro-orm/core";
+import { MongoDriver } from "@yandjin-mikro-orm/mongodb";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 class CustomConnection extends Connection {
-
   protected client: any;
 
   override async close(force?: boolean): Promise<void> {
@@ -15,44 +14,62 @@ class CustomConnection extends Connection {
     return undefined;
   }
 
-  async execute(query: string, params?: any[], method?: 'all' | 'get' | 'run'): Promise<QueryResult | any | any[]> {
+  async execute(
+    query: string,
+    params?: any[],
+    method?: "all" | "get" | "run",
+  ): Promise<QueryResult | any | any[]> {
     return undefined;
   }
 
   getDefaultClientUrl(): string {
-    return '';
+    return "";
   }
 
   async isConnected(): Promise<boolean> {
     return false;
   }
 
-  async checkConnection(): Promise<{ ok: boolean; reason?: string; error?: Error }> {
-    return { ok: false, reason: 'foo' };
+  async checkConnection(): Promise<{
+    ok: boolean;
+    reason?: string;
+    error?: Error;
+  }> {
+    return { ok: false, reason: "foo" };
   }
-
 }
 
-describe('Connection', () => {
-
-  test('by default it throws when trying to use transactions', async () => {
-    const conn = new CustomConnection(new Configuration({ driver: MongoDriver }, false));
-    await expect(conn.transactional(async () => void 0)).rejects.toThrow('Transactions are not supported by current driver');
-    await expect(conn.begin()).rejects.toThrow('Transactions are not supported by current driver');
-    await expect(conn.commit({} as any)).rejects.toThrow('Transactions are not supported by current driver');
-    await expect(conn.rollback({} as any)).rejects.toThrow('Transactions are not supported by current driver');
+describe("Connection", () => {
+  test("by default it throws when trying to use transactions", async () => {
+    const conn = new CustomConnection(
+      new Configuration({ driver: MongoDriver }, false),
+    );
+    await expect(conn.transactional(async () => void 0)).rejects.toThrow(
+      "Transactions are not supported by current driver",
+    );
+    await expect(conn.begin()).rejects.toThrow(
+      "Transactions are not supported by current driver",
+    );
+    await expect(conn.commit({} as any)).rejects.toThrow(
+      "Transactions are not supported by current driver",
+    );
+    await expect(conn.rollback({} as any)).rejects.toThrow(
+      "Transactions are not supported by current driver",
+    );
   });
 
-  test('special characters in username and password', async () => {
-    const options = { driver: PostgreSqlDriver, clientUrl: 'pg://user%40:passw%40rd@host:1234/db%40name' } as const;
+  test("special characters in username and password", async () => {
+    const options = {
+      driver: PostgreSqlDriver,
+      clientUrl: "pg://user%40:passw%40rd@host:1234/db%40name",
+    } as const;
     const conn = new CustomConnection(new Configuration(options, false));
     expect(conn.getConnectionOptions()).toMatchObject({
-      host: 'host',
+      host: "host",
       port: 1234,
-      user: 'user@',
-      password: 'passw@rd',
-      database: 'db@name',
+      user: "user@",
+      password: "passw@rd",
+      database: "db@name",
     });
   });
-
 });

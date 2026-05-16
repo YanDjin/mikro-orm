@@ -1,10 +1,14 @@
-import { Entity, PrimaryKey, Property, MikroORM } from '@mikro-orm/core';
-import { mockLogger } from '../../helpers';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  MikroORM,
+} from "@yandjin-mikro-orm/core";
+import { mockLogger } from "../../helpers";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
@@ -19,11 +23,9 @@ class A {
 
   @Property({ version: true })
   version!: number;
-
 }
 
-describe('default values in sqlite', () => {
-
+describe("default values in sqlite", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -38,7 +40,7 @@ describe('default values in sqlite', () => {
   afterAll(() => orm.close(true));
 
   test(`database defaults will be available after flush`, async () => {
-    const mock = mockLogger(orm, ['query']);
+    const mock = mockLogger(orm, ["query"]);
 
     const a = new A();
     expect(a.foo1).toBeUndefined();
@@ -54,5 +56,4 @@ describe('default values in sqlite', () => {
     expect(a.foo3).toBe(50);
     expect(a.version).toBe(1);
   });
-
 });

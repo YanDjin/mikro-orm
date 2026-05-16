@@ -1,28 +1,31 @@
-import { Entity, MikroORM, OneToOne, PrimaryKey, Property, Ref } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  MikroORM,
+  OneToOne,
+  PrimaryKey,
+  Property,
+  Ref,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Test {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => TestRelation, tr => tr.test, { ref: true, nullable: true })
+  @OneToOne(() => TestRelation, (tr) => tr.test, { ref: true, nullable: true })
   relation?: Ref<TestRelation>;
-
 }
 
 @Entity()
 class TestRelation {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Test, t => t.relation, { ref: true, owner: true })
+  @OneToOne(() => Test, (t) => t.relation, { ref: true, owner: true })
   test!: Ref<Test>;
 
   @Property()
   name!: string;
-
 }
 
 let orm: MikroORM;
@@ -30,7 +33,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Test, TestRelation],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
 
   await orm.schema.createSchema();
@@ -38,7 +41,7 @@ beforeAll(async () => {
   const testInstance = orm.em.create(Test, {});
   orm.em.create(TestRelation, {
     test: testInstance,
-    name: 'test',
+    name: "test",
   });
   await orm.em.flush();
 });
@@ -47,34 +50,47 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('test with QB', async () => {
+test("test with QB", async () => {
   const forkedEm = orm.em.fork();
-  const x = await forkedEm.createQueryBuilder(Test, 't').select(['id']).getResultList();
+  const x = await forkedEm
+    .createQueryBuilder(Test, "t")
+    .select(["id"])
+    .getResultList();
 
   expect(x.length).toBe(1);
   expect(x[0].id).toBe(1);
 
   // If run with refresh it normally loads
-  const normallyLoaded = await forkedEm.findOneOrFail(Test, { id: 1 }, { populate: ['relation'] });
+  const normallyLoaded = await forkedEm.findOneOrFail(
+    Test,
+    { id: 1 },
+    { populate: ["relation"] },
+  );
   expect(normallyLoaded.relation?.$.name).toBeDefined();
-  expect(normallyLoaded.relation?.$.name).toBe('test');
+  expect(normallyLoaded.relation?.$.name).toBe("test");
 });
 
-test('test with em', async () => {
+test("test with em", async () => {
   const forkedEm = orm.em.fork();
-  const x = await forkedEm.find(Test, {}, { fields: ['id'] });
+  const x = await forkedEm.find(Test, {}, { fields: ["id"] });
 
   expect(x.length).toBe(1);
   expect(x[0].id).toBe(1);
 
   // If run with refresh it normally loads
-  const normallyLoaded = await forkedEm.findOneOrFail(Test, { id: 1 }, { populate: ['relation'] });
+  const normallyLoaded = await forkedEm.findOneOrFail(
+    Test,
+    { id: 1 },
+    { populate: ["relation"] },
+  );
   expect(normallyLoaded.relation?.$.name).toBeDefined();
-  expect(normallyLoaded.relation?.$.name).toBe('test');
+  expect(normallyLoaded.relation?.$.name).toBe("test");
 });
 
-test('otherwise loaded can be defined', async () => {
-  const normallyLoaded = await orm.em.fork().findOneOrFail(Test, { id: 1 }, { populate: ['relation'] });
+test("otherwise loaded can be defined", async () => {
+  const normallyLoaded = await orm.em
+    .fork()
+    .findOneOrFail(Test, { id: 1 }, { populate: ["relation"] });
   expect(normallyLoaded.relation?.$.name).toBeDefined();
-  expect(normallyLoaded.relation?.$.name).toBe('test');
+  expect(normallyLoaded.relation?.$.name).toBe("test");
 });

@@ -2,7 +2,7 @@
 
 exports[`ScalarPropsForFks generate entities with columns for all foreign key properties [mysql]: mysql-entity-composite-fk-prop-always-dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 
 @Entity()
@@ -21,7 +21,7 @@ export class Address2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 
 @Entity()
@@ -93,7 +93,7 @@ export class Author2 {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 {
@@ -143,7 +143,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BookTag2 {
@@ -156,7 +156,7 @@ export class BookTag2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { Publisher2 } from './Publisher2';
@@ -210,7 +210,7 @@ export class Book2 {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 
@@ -238,7 +238,7 @@ export class Book2Tags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 
 @Entity()
@@ -261,7 +261,7 @@ export class CarOwner2 {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Car2 {
@@ -281,7 +281,7 @@ export class Car2 {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Test2 } from './Test2';
 
 @Entity()
@@ -304,7 +304,7 @@ export class Configuration2 {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Dummy2 {
@@ -314,7 +314,7 @@ export class Dummy2 {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { FooBaz2 } from './FooBaz2';
 
 @Entity()
@@ -360,7 +360,7 @@ export class FooBar2 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class FooBaz2 {
@@ -376,7 +376,7 @@ export class FooBaz2 {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -407,7 +407,7 @@ export class FooParam2 {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Publisher2 {
@@ -461,7 +461,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, Index, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
 
@@ -487,7 +487,7 @@ export class Publisher2Tests {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sandwich {
@@ -503,7 +503,7 @@ export class Sandwich {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
 
@@ -548,7 +548,7 @@ export class Test2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -588,7 +588,7 @@ export class User2 {
 
 exports[`ScalarPropsForFks generate entities with columns for some foreign key properties [mysql]: mysql-entity-composite-fk-prop-smart-dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 
 @Entity()
@@ -604,7 +604,7 @@ export class Address2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 
 @Entity()
@@ -668,7 +668,7 @@ export class Author2 {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 {
@@ -710,7 +710,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BookTag2 {
@@ -723,7 +723,7 @@ export class BookTag2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { Publisher2 } from './Publisher2';
@@ -769,7 +769,7 @@ export class Book2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 
@@ -789,7 +789,7 @@ export class Book2Tags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 
 @Entity()
@@ -806,7 +806,7 @@ export class CarOwner2 {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Car2 {
@@ -826,7 +826,7 @@ export class Car2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Test2 } from './Test2';
 
 @Entity()
@@ -845,7 +845,7 @@ export class Configuration2 {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Dummy2 {
@@ -855,7 +855,7 @@ export class Dummy2 {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { FooBaz2 } from './FooBaz2';
 
 @Entity()
@@ -893,7 +893,7 @@ export class FooBar2 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class FooBaz2 {
@@ -909,7 +909,7 @@ export class FooBaz2 {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -932,7 +932,7 @@ export class FooParam2 {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Publisher2 {
@@ -986,7 +986,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
 
@@ -1004,7 +1004,7 @@ export class Publisher2Tests {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sandwich {
@@ -1020,7 +1020,7 @@ export class Sandwich {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
 
@@ -1053,7 +1053,7 @@ export class Test2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 

@@ -1,9 +1,9 @@
-import { MikroORM, Utils } from '@mikro-orm/mysql';
-import { EntityGenerator } from '@mikro-orm/entity-generator';
+import { MikroORM, Utils } from "@yandjin-mikro-orm/mysql";
+import { EntityGenerator } from "@yandjin-mikro-orm/entity-generator";
 
 let orm: MikroORM;
 
-const schemaName = 'generated_columns_example';
+const schemaName = "generated_columns_example";
 const schema = `
 CREATE TABLE IF NOT EXISTS \`allowed_ages_at_creation\`
 (
@@ -64,27 +64,32 @@ afterEach(async () => {
 });
 
 describe(schemaName, () => {
-  describe.each([true, false])('entitySchema=%s', entitySchema => {
-      beforeEach(() => {
-        orm.config.get('entityGenerator').entitySchema = entitySchema;
-      });
-
-      test('generates from db', async () => {
-        const dump = await orm.entityGenerator.generate();
-        expect(dump).toMatchSnapshot('dump');
-      });
-
-      test('as functions from extensions', async () => {
-        orm.config.get('entityGenerator').onInitialMetadata = metadata => {
-          const usersMeta = metadata.find(meta => meta.className === 'Users')!;
-          Object.entries(usersMeta.properties).forEach(([propName, propOptions]) => {
-            if (typeof propOptions.generated === 'string') {
-              propOptions.generated = Utils.createFunction(new Map(), `return () => ${JSON.stringify(propOptions.generated)}`);
-            }
-          });
-        };
-        const dump = await orm.entityGenerator.generate();
-        expect(dump).toMatchSnapshot('dump');
-      });
+  describe.each([true, false])("entitySchema=%s", (entitySchema) => {
+    beforeEach(() => {
+      orm.config.get("entityGenerator").entitySchema = entitySchema;
     });
+
+    test("generates from db", async () => {
+      const dump = await orm.entityGenerator.generate();
+      expect(dump).toMatchSnapshot("dump");
+    });
+
+    test("as functions from extensions", async () => {
+      orm.config.get("entityGenerator").onInitialMetadata = (metadata) => {
+        const usersMeta = metadata.find((meta) => meta.className === "Users")!;
+        Object.entries(usersMeta.properties).forEach(
+          ([propName, propOptions]) => {
+            if (typeof propOptions.generated === "string") {
+              propOptions.generated = Utils.createFunction(
+                new Map(),
+                `return () => ${JSON.stringify(propOptions.generated)}`,
+              );
+            }
+          },
+        );
+      };
+      const dump = await orm.entityGenerator.generate();
+      expect(dump).toMatchSnapshot("dump");
+    });
+  });
 });

@@ -12,37 +12,34 @@ import {
   Unique,
   wrap,
   PrimaryKeyProp,
-} from '@mikro-orm/core';
-import { v4 } from 'uuid';
-import { SqliteDriver } from '@mikro-orm/sqlite';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+} from "@yandjin-mikro-orm/core";
+import { v4 } from "uuid";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class Organization {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id: string = v4();
 
   @Unique()
-  @Property({ columnType: 'varchar' })
+  @Property({ columnType: "varchar" })
   name!: string;
 
-  @OneToMany({ entity: 'User', mappedBy: 'organization', cascade: [] })
+  @OneToMany({ entity: "User", mappedBy: "organization", cascade: [] })
   users = new Collection<User>(this);
 
-  @OneToMany({ entity: 'Program', mappedBy: 'organization', cascade: [] })
+  @OneToMany({ entity: "Program", mappedBy: "organization", cascade: [] })
   programs = new Collection<Program>(this);
 
   constructor(value: Partial<Organization> = {}) {
     Object.assign(this, value);
   }
-
 }
 
 @Entity()
 export class User {
-
-  @PrimaryKey({ columnType: 'varchar' })
+  @PrimaryKey({ columnType: "varchar" })
   id!: string;
 
   @ManyToOne({
@@ -51,141 +48,131 @@ export class User {
     ref: true,
     index: true,
     cascade: [],
-    deleteRule: 'no action',
+    deleteRule: "no action",
   })
   organization!: Ref<Organization>;
 
-  @Property({ columnType: 'varchar' })
+  @Property({ columnType: "varchar" })
   firstName!: string;
 
-  @Property({ columnType: 'varchar' })
+  @Property({ columnType: "varchar" })
   lastName!: string;
 
-  @Property({ columnType: 'varchar' })
+  @Property({ columnType: "varchar" })
   email!: string;
 
-  @OneToMany({ entity: 'UserRole', mappedBy: 'user' })
+  @OneToMany({ entity: "UserRole", mappedBy: "user" })
   userRoles = new Collection<UserRole>(this);
 
-  [PrimaryKeyProp]?: ['id', 'organization'];
+  [PrimaryKeyProp]?: ["id", "organization"];
 
   constructor(value: Partial<User> = {}) {
     Object.assign(this, value);
   }
-
 }
 
 @Entity()
 export class Role {
-
-  @PrimaryKey({ columnType: 'varchar' })
+  @PrimaryKey({ columnType: "varchar" })
   id!: string;
 
-  @Property({ columnType: 'varchar' })
+  @Property({ columnType: "varchar" })
   name!: string;
 
-  @OneToMany({ entity: 'UserRole', mappedBy: 'role' })
+  @OneToMany({ entity: "UserRole", mappedBy: "role" })
   userRoles = new Collection<UserRole>(this);
 
   constructor(value: Partial<Role> = {}) {
     Object.assign(this, value);
   }
-
 }
 
 @Entity()
 export class UserRole {
-
   @ManyToOne({
     entity: () => User,
-    inversedBy: x => x.userRoles,
+    inversedBy: (x) => x.userRoles,
     primary: true,
     ref: true,
     cascade: [],
-    deleteRule: 'cascade',
+    deleteRule: "cascade",
   })
   user!: Ref<User>;
 
   @ManyToOne({
     entity: () => Role,
-    inversedBy: x => x.userRoles,
+    inversedBy: (x) => x.userRoles,
     primary: true,
     ref: true,
     cascade: [],
-    deleteRule: 'no action',
+    deleteRule: "no action",
   })
   role!: Ref<Role>;
 
-  [PrimaryKeyProp]?: ['user', 'role'];
+  [PrimaryKeyProp]?: ["user", "role"];
 
   constructor(value: Partial<UserRole> = {}) {
     Object.assign(this, value);
   }
-
 }
 
 @Entity()
 export class Program {
-
-  @PrimaryKey({ columnType: 'varchar' })
+  @PrimaryKey({ columnType: "varchar" })
   id!: string;
 
   @ManyToOne({
     entity: () => Organization,
-    inversedBy: 'programs',
+    inversedBy: "programs",
     primary: true,
     ref: true,
   })
   organization!: Ref<Organization>;
 
-  @OneToMany({ entity: 'Site', mappedBy: 'program', cascade: [] })
+  @OneToMany({ entity: "Site", mappedBy: "program", cascade: [] })
   sites = new Collection<Site, Program>(this);
 
-  @Property({ columnType: 'varchar' })
+  @Property({ columnType: "varchar" })
   name!: string;
 
   constructor(value: Partial<Program> = {}) {
     Object.assign(this, value);
   }
-
 }
 
 @Entity()
 export class Site {
-
-  @PrimaryKey({ columnType: 'varchar' })
+  @PrimaryKey({ columnType: "varchar" })
   id!: string;
 
   @ManyToOne({
     entity: () => Program,
-    inversedBy: 'sites',
+    inversedBy: "sites",
     primary: true,
     ref: true,
     cascade: [],
-    updateRule: 'no action',
-    deleteRule: 'no action',
+    updateRule: "no action",
+    deleteRule: "no action",
   })
   program!: Reference<Program>;
 
-  @Property({ columnType: 'varchar' })
+  @Property({ columnType: "varchar" })
   name!: string;
 
-  [PrimaryKeyProp]?: ['id', 'program'];
+  [PrimaryKeyProp]?: ["id", "program"];
 
   constructor(value: Partial<Site> = {}) {
     Object.assign(this, value);
   }
-
 }
 
-describe('GH issue 1624, 1658 (postgres)', () => {
-
+describe("GH issue 1624, 1658 (postgres)", () => {
   let orm: MikroORM<PostgreSqlDriver>;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [User, UserRole, Organization, Role, Program, Site],
-      dbName: 'mikro_orm_test_1624',
+      dbName: "mikro_orm_test_1624",
       driver: PostgreSqlDriver,
     });
     await orm.schema.refreshDatabase();
@@ -199,10 +186,19 @@ describe('GH issue 1624, 1658 (postgres)', () => {
     const roleId = v4();
     const userId = v4();
     const orgId = v4();
-    const role = new Role({ id: roleId, name: 'r' });
-    const org = new Organization({ id: orgId, name: 'on' });
-    const user = new User({ email: 'e', firstName: 'f', lastName: 'l', organization: wrap(org).toReference(), id: userId });
-    const userRole = new UserRole({ role: wrap(role).toReference(), user: wrap(user).toReference() });
+    const role = new Role({ id: roleId, name: "r" });
+    const org = new Organization({ id: orgId, name: "on" });
+    const user = new User({
+      email: "e",
+      firstName: "f",
+      lastName: "l",
+      organization: wrap(org).toReference(),
+      id: userId,
+    });
+    const userRole = new UserRole({
+      role: wrap(role).toReference(),
+      user: wrap(user).toReference(),
+    });
     user.userRoles.add(userRole);
     await orm.em.persistAndFlush(user);
     orm.em.clear();
@@ -229,7 +225,7 @@ describe('GH issue 1624, 1658 (postgres)', () => {
     const b = await orm.em.findOneOrFail(
       User,
       { id: { $eq: userId }, organization: { $eq: orgId } },
-      { populate: ['userRoles'], strategy: LoadStrategy.JOINED },
+      { populate: ["userRoles"], strategy: LoadStrategy.JOINED },
     );
     expect(b.organization).toBeInstanceOf(Reference);
     expect(b.organization.id).toBe(orgId);
@@ -242,16 +238,19 @@ describe('GH issue 1624, 1658 (postgres)', () => {
   });
 
   test(`GH issue 1658`, async () => {
-    const org = new Organization({ id: 'e3dca7ae-6389-49dc-931d-419716828a79', name: 'Organization' });
+    const org = new Organization({
+      id: "e3dca7ae-6389-49dc-931d-419716828a79",
+      name: "Organization",
+    });
     const program = new Program({
-      id: 'cc455d1f-f4c7-4b57-b833-e6ca88239b61',
+      id: "cc455d1f-f4c7-4b57-b833-e6ca88239b61",
       organization: Reference.create(org),
-      name: 'Program 1',
+      name: "Program 1",
     });
     const site = new Site({
-      id: '7007a128-4cc0-4177-b754-0cda0927368d',
+      id: "7007a128-4cc0-4177-b754-0cda0927368d",
       program: Reference.create(program),
-      name: 'Site 1',
+      name: "Site 1",
     });
 
     orm.em.persist(org);
@@ -260,24 +259,22 @@ describe('GH issue 1624, 1658 (postgres)', () => {
     await orm.em.flush();
 
     const createdSite = await orm.em.findOneOrFail(Site, { id: site.id });
-    createdSite.name = 'Site 2';
+    createdSite.name = "Site 2";
     await orm.em.flush();
 
     orm.em.clear();
     const updatedSite = await orm.em.findOneOrFail(Site, { id: site.id });
     expect(updatedSite.name).toBe(createdSite.name);
   });
-
 });
 
-describe('GH issue 1624, 1658 (sqlite)', () => {
-
+describe("GH issue 1624, 1658 (sqlite)", () => {
   let orm: MikroORM<SqliteDriver>;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [User, UserRole, Organization, Role, Program, Site],
-      dbName: ':memory:',
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -291,10 +288,19 @@ describe('GH issue 1624, 1658 (sqlite)', () => {
     const roleId = v4();
     const userId = v4();
     const orgId = v4();
-    const role = new Role({ id: roleId, name: 'r' });
-    const org = new Organization({ id: orgId, name: 'on' });
-    const user = new User({ email: 'e', firstName: 'f', lastName: 'l', organization: wrap(org).toReference(), id: userId });
-    const userRole = new UserRole({ role: wrap(role).toReference(), user: wrap(user).toReference() });
+    const role = new Role({ id: roleId, name: "r" });
+    const org = new Organization({ id: orgId, name: "on" });
+    const user = new User({
+      email: "e",
+      firstName: "f",
+      lastName: "l",
+      organization: wrap(org).toReference(),
+      id: userId,
+    });
+    const userRole = new UserRole({
+      role: wrap(role).toReference(),
+      user: wrap(user).toReference(),
+    });
     user.userRoles.add(userRole);
     await orm.em.persistAndFlush(user);
     orm.em.clear();
@@ -321,7 +327,7 @@ describe('GH issue 1624, 1658 (sqlite)', () => {
     const b = await orm.em.findOneOrFail(
       User,
       { id: { $eq: userId }, organization: { $eq: orgId } },
-      { populate: ['userRoles'], strategy: LoadStrategy.JOINED },
+      { populate: ["userRoles"], strategy: LoadStrategy.JOINED },
     );
     expect(b.organization).toBeInstanceOf(Reference);
     expect(b.organization.id).toBe(orgId);
@@ -334,16 +340,19 @@ describe('GH issue 1624, 1658 (sqlite)', () => {
   });
 
   test(`GH issue 1658`, async () => {
-    const org = new Organization({ id: 'e3dca7ae-6389-49dc-931d-419716828a79', name: 'Organization' });
+    const org = new Organization({
+      id: "e3dca7ae-6389-49dc-931d-419716828a79",
+      name: "Organization",
+    });
     const program = new Program({
-      id: 'cc455d1f-f4c7-4b57-b833-e6ca88239b61',
+      id: "cc455d1f-f4c7-4b57-b833-e6ca88239b61",
       organization: Reference.create(org),
-      name: 'Program 1',
+      name: "Program 1",
     });
     const site = new Site({
-      id: '7007a128-4cc0-4177-b754-0cda0927368d',
+      id: "7007a128-4cc0-4177-b754-0cda0927368d",
       program: Reference.create(program),
-      name: 'Site 1',
+      name: "Site 1",
     });
 
     orm.em.persist(org);
@@ -352,12 +361,11 @@ describe('GH issue 1624, 1658 (sqlite)', () => {
     await orm.em.flush();
 
     const createdSite = await orm.em.findOneOrFail(Site, { id: site.id });
-    createdSite.name = 'Site 2';
+    createdSite.name = "Site 2";
     await orm.em.flush();
 
     orm.em.clear();
     const updatedSite = await orm.em.findOneOrFail(Site, { id: site.id });
     expect(updatedSite.name).toBe(createdSite.name);
   });
-
 });

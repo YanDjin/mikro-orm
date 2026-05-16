@@ -1,15 +1,22 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Ref, RequiredEntityData } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+  Ref,
+  RequiredEntityData,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Group {
-
   @PrimaryKey()
   id!: number;
 
   @OneToMany({
     entity: () => GroupMember,
-    mappedBy: member => member.group,
+    mappedBy: (member) => member.group,
     eager: true,
     orphanRemoval: true,
   })
@@ -18,12 +25,10 @@ class Group {
   constructor(params: RequiredEntityData<Group>) {
     Object.assign(this, params);
   }
-
 }
 
 @Entity()
 class GroupMember {
-
   @ManyToOne({
     entity: () => Member,
     primary: true,
@@ -41,18 +46,16 @@ class GroupMember {
   constructor(params: RequiredEntityData<GroupMember>) {
     Object.assign(this, params);
   }
-
 }
 
 @Entity()
 class Member {
-
   @PrimaryKey()
   id!: number;
 
   @OneToMany({
     entity: () => GroupMember,
-    mappedBy: group => group.member,
+    mappedBy: (group) => group.member,
     eager: true,
     orphanRemoval: true,
   })
@@ -61,7 +64,6 @@ class Member {
   constructor(params: RequiredEntityData<Member>) {
     Object.assign(this, params);
   }
-
 }
 
 let orm: MikroORM;
@@ -69,7 +71,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Group, Member, GroupMember],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.refreshDatabase();
 });
@@ -99,5 +101,7 @@ test(`GH issue 4234 with 1:m`, async () => {
   orm.em.clear();
   await orm.em.findOneOrFail(Member, memberId);
   await orm.em.findOneOrFail(Group, groupId);
-  await expect(orm.em.findOne(GroupMember, { group: groupId, member: memberId })).resolves.toBeNull();
+  await expect(
+    orm.em.findOne(GroupMember, { group: groupId, member: memberId }),
+  ).resolves.toBeNull();
 });

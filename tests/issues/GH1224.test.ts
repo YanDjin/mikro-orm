@@ -1,43 +1,53 @@
-import { Collection, Entity, Ref, ManyToOne, MikroORM, OneToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Reference } from '@mikro-orm/postgresql';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  Ref,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  OneToOne,
+  PrimaryKey,
+  PrimaryKeyProp,
+  Property,
+  Reference,
+} from "@yandjin-mikro-orm/postgresql";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class Node {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Entity()
 class B {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany('A', 'b', { eager: true })
+  @OneToMany("A", "b", { eager: true })
   as = new Collection<A>(this);
-
 }
-
 
 @Entity()
 class A {
-
-  [PrimaryKeyProp]?: 'node';
-  @OneToOne({ entity: 'Node', ref: true, primary: true, deleteRule: 'cascade', updateRule: 'cascade' })
+  [PrimaryKeyProp]?: "node";
+  @OneToOne({
+    entity: "Node",
+    ref: true,
+    primary: true,
+    deleteRule: "cascade",
+    updateRule: "cascade",
+  })
   node!: Ref<Node>;
 
   @Property()
   name!: string;
 
-  @ManyToOne({ entity: 'B' })
+  @ManyToOne({ entity: "B" })
   b!: B;
-
 }
 
-describe('GH issue 1224', () => {
-
+describe("GH issue 1224", () => {
   let orm: MikroORM;
   const log = jest.fn();
 
@@ -47,10 +57,9 @@ describe('GH issue 1224', () => {
       dbName: `mikro_orm_test_gh_1224`,
       metadataCache: { enabled: false },
     });
-    mockLogger(orm, ['query', 'query-params'], log);
+    mockLogger(orm, ["query", "query-params"], log);
     await orm.schema.ensureDatabase();
   });
-
 
   beforeEach(async () => {
     await orm.schema.dropSchema();
@@ -59,9 +68,9 @@ describe('GH issue 1224', () => {
 
   afterAll(() => orm.close(true));
 
-  test('PK as FK with References & getIdentifiers', async () => {
+  test("PK as FK with References & getIdentifiers", async () => {
     const a1 = new A();
-    a1.name = 'test';
+    a1.name = "test";
     a1.node = Reference.create(new Node());
 
     const b1 = new B();
@@ -78,5 +87,4 @@ describe('GH issue 1224', () => {
 
     expect(ids).toStrictEqual([a1.node.id]);
   });
-
 });

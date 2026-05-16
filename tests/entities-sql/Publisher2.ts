@@ -1,16 +1,25 @@
-import { Collection, Entity, Enum, EnumType, ManyToMany, OneToMany, OptionalProps, Property } from '@mikro-orm/core';
-import { Book2 } from './Book2';
-import { Test2 } from './Test2';
-import { BaseEntity2 } from './BaseEntity2';
+import {
+  Collection,
+  Entity,
+  Enum,
+  EnumType,
+  ManyToMany,
+  OneToMany,
+  OptionalProps,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { Book2 } from "./Book2";
+import { Test2 } from "./Test2";
+import { BaseEntity2 } from "./BaseEntity2";
 
 export enum PublisherType {
-  LOCAL = 'local',
-  GLOBAL = 'global',
+  LOCAL = "local",
+  GLOBAL = "global",
 }
 
 export enum PublisherType2 {
-  LOCAL = 'LOCAL',
-  GLOBAL = 'GLOBAL',
+  LOCAL = "LOCAL",
+  GLOBAL = "GLOBAL",
 }
 
 export const enum Enum1 {
@@ -25,16 +34,22 @@ export enum Enum2 {
 
 @Entity()
 export class Publisher2 extends BaseEntity2 {
+  [OptionalProps]?: "type" | "type2";
 
-  [OptionalProps]?: 'type' | 'type2';
-
-  @Property({ fieldName: 'name' })
+  @Property({ fieldName: "name" })
   name: string;
 
-  @OneToMany(() => Book2, 'publisher', { joinColumn: 'book_uuid', inverseJoinColumn: 'publisher_id' })
+  @OneToMany(() => Book2, "publisher", {
+    joinColumn: "book_uuid",
+    inverseJoinColumn: "publisher_id",
+  })
   books = new Collection<Book2>(this);
 
-  @ManyToMany({ entity: () => Test2, pivotTable: 'publisher2_tests', fixedOrder: true })
+  @ManyToMany({
+    entity: () => Test2,
+    pivotTable: "publisher2_tests",
+    fixedOrder: true,
+  })
   tests = new Collection<Test2>(this);
 
   @Enum(() => PublisherType)
@@ -46,22 +61,21 @@ export class Publisher2 extends BaseEntity2 {
   @Enum({ nullable: true, type: EnumType })
   enum1?: Enum1;
 
-  @Enum({ type: 'Enum2', nullable: true })
+  @Enum({ type: "Enum2", nullable: true })
   enum2?: Enum2;
 
   @Enum({ items: [1, 2, 3], nullable: true })
   enum3?: any;
 
-  @Enum({ items: ['a', 'b', 'c'], nullable: true })
+  @Enum({ items: ["a", "b", "c"], nullable: true })
   enum4?: any;
 
-  @Enum({ items: ['a'], nullable: true })
+  @Enum({ items: ["a"], nullable: true })
   enum5?: any;
 
-  constructor(name = 'asd', type = PublisherType.LOCAL) {
+  constructor(name = "asd", type = PublisherType.LOCAL) {
     super();
     this.name = name;
     this.type = type;
   }
-
 }

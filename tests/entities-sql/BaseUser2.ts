@@ -1,21 +1,27 @@
-import { AfterCreate, AfterUpdate, Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  AfterCreate,
+  AfterUpdate,
+  Entity,
+  Enum,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
 
 export enum Type {
-  Employee = 'employee',
-  Manager = 'manager',
-  Owner = 'owner',
+  Employee = "employee",
+  Manager = "manager",
+  Owner = "owner",
 }
 
 @Entity({
-  discriminatorColumn: 'type',
+  discriminatorColumn: "type",
   discriminatorMap: {
-    employee: 'Employee2',
-    manager: 'Manager2',
-    owner: 'CompanyOwner2',
+    employee: "Employee2",
+    manager: "Manager2",
+    owner: "CompanyOwner2",
   },
 })
 export abstract class BaseUser2 {
-
   @PrimaryKey()
   id!: number;
 
@@ -37,12 +43,11 @@ export abstract class BaseUser2 {
 
   @AfterCreate()
   afterCreate1() {
-    this.baseState = 'created';
+    this.baseState = "created";
   }
 
   @AfterUpdate()
   afterUpdate1() {
-    this.baseState = 'updated';
+    this.baseState = "updated";
   }
-
 }

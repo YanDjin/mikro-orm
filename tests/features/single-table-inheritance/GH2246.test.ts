@@ -1,18 +1,23 @@
-import { Collection, Entity, Enum, ManyToMany, MikroORM, PrimaryKey } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  Enum,
+  ManyToMany,
+  MikroORM,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 @Entity({
-  discriminatorColumn: 'type',
-  discriminatorMap: { person: 'Person', employee: 'Employee' },
+  discriminatorColumn: "type",
+  discriminatorMap: { person: "Person", employee: "Employee" },
 })
 export abstract class BasePerson {
-
   @PrimaryKey()
   id!: number;
 
   @Enum()
-  type!: 'person' | 'employee';
-
+  type!: "person" | "employee";
 }
 
 @Entity()
@@ -22,24 +27,20 @@ export class Person extends BasePerson {
 
 @Entity()
 export class Employee extends BasePerson {
-
-  @ManyToMany({ entity: () => PhotoFile, inversedBy: 'employees' })
+  @ManyToMany({ entity: () => PhotoFile, inversedBy: "employees" })
   photos = new Collection<PhotoFile>(this);
-
 }
 
 @Entity({
-  discriminatorColumn: 'type',
-  discriminatorMap: { custom: 'CustomFile', photo: 'PhotoFile' },
+  discriminatorColumn: "type",
+  discriminatorMap: { custom: "CustomFile", photo: "PhotoFile" },
 })
 export abstract class File {
-
   @PrimaryKey()
   id!: number;
 
   @Enum()
-  type!: 'custom' | 'photo';
-
+  type!: "custom" | "photo";
 }
 
 @Entity()
@@ -49,20 +50,17 @@ export class CustomFile extends File {
 
 @Entity()
 export class PhotoFile extends File {
-
-  @ManyToMany({ entity: () => Employee, mappedBy: 'photos' })
+  @ManyToMany({ entity: () => Employee, mappedBy: "photos" })
   employees = new Collection<Employee>(this);
-
 }
 
-describe('bidirectional many to many with multiple STI entities', () => {
-
+describe("bidirectional many to many with multiple STI entities", () => {
   let orm: MikroORM<SqliteDriver>;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [BasePerson, Employee, Person, File, CustomFile, PhotoFile],
-      dbName: ':memory:',
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -70,24 +68,31 @@ describe('bidirectional many to many with multiple STI entities', () => {
 
   afterAll(() => orm.close(true));
 
-  test('Owning side', async () => {
+  test("Owning side", async () => {
     const b = new Employee();
     await orm.em.persistAndFlush(b);
     orm.em.clear();
 
-    await orm.em.findOne(Employee, { id: 1 }, {
-      populate: ['photos'],
-    });
+    await orm.em.findOne(
+      Employee,
+      { id: 1 },
+      {
+        populate: ["photos"],
+      },
+    );
   });
 
-  test('Inversed side', async () => {
+  test("Inversed side", async () => {
     const a = new PhotoFile();
     await orm.em.persistAndFlush(a);
     orm.em.clear();
 
-    await orm.em.findOne(PhotoFile, { id: 1 }, {
-      populate: ['employees'],
-    });
+    await orm.em.findOne(
+      PhotoFile,
+      { id: 1 },
+      {
+        populate: ["employees"],
+      },
+    );
   });
-
 });

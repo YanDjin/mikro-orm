@@ -1,8 +1,17 @@
-import { Embeddable, Embedded, Entity, ManyToOne, MikroORM, PrimaryKey, Property, Ref, types } from '@mikro-orm/sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Property,
+  Ref,
+  types,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Embeddable()
 class Settings {
-
   @Property({ type: types.string })
   name!: string;
 
@@ -17,12 +26,10 @@ class Settings {
     this.memberCount = memberCount;
     this.isActive = isActive;
   }
-
 }
 
 @Entity()
 class Organization {
-
   @PrimaryKey()
   id!: number;
 
@@ -32,12 +39,10 @@ class Organization {
   constructor(settings: Settings) {
     this.settings = settings;
   }
-
 }
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -54,23 +59,22 @@ class User {
     this.name = name;
     this.email = email;
   }
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [User],
   });
   await orm.schema.createSchema();
 
   orm.em.create(User, {
-    name: 'Foo',
-    email: 'foo',
+    name: "Foo",
+    email: "foo",
     organization: orm.em.create(Organization, {
-      settings: new Settings('Bar', 9000, false),
+      settings: new Settings("Bar", 9000, false),
     }),
   });
   await orm.em.flush();
@@ -81,24 +85,24 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('joined strategy and object embeddables with not matching field names', async () => {
+test("joined strategy and object embeddables with not matching field names", async () => {
   const user = await orm.em.findOneOrFail(
     User,
-    { email: 'foo' },
-    { populate: ['organization'] },
+    { email: "foo" },
+    { populate: ["organization"] },
   );
   const relatedOrganization = user.organization.getEntity();
-  expect(user.name).toBe('Foo');
-  expect(relatedOrganization.settings.name).toBe('Bar');
+  expect(user.name).toBe("Foo");
+  expect(relatedOrganization.settings.name).toBe("Bar");
   expect(relatedOrganization.settings.memberCount).toBe(9000); // This fails
   expect(relatedOrganization.settings.isActive).toBe(false); // This fails too
 });
 
-test('simple find and object embeddables with not matching field names', async () => {
+test("simple find and object embeddables with not matching field names", async () => {
   const organization = await orm.em.findOneOrFail(Organization, {
     id: 1,
   });
-  expect(organization.settings.name).toBe('Bar');
+  expect(organization.settings.name).toBe("Bar");
   expect(organization.settings.memberCount).toBe(9000);
   expect(organization.settings.isActive).toBe(false);
 });

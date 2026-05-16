@@ -2,7 +2,7 @@
 
 exports[`overlap_fk_example scalarPropertiesForRelations=always bidirectionalRelations=false identifiedReferences=false entitySchema=false: dump 1`] = `
 [
-  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Countries {
@@ -14,7 +14,7 @@ export class Countries {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -43,7 +43,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -70,7 +70,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Products {
@@ -92,7 +92,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -128,7 +128,7 @@ export class Sales {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sellers {
@@ -149,7 +149,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=always bidirectionalRelations=false identifiedReferences=false entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Countries {
   [PrimaryKeyProp]?: 'code';
@@ -163,7 +163,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class ProductCountryMap {
   [PrimaryKeyProp]?: ['product', 'countries'];
@@ -195,7 +195,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class ProductSellers {
   [PrimaryKeyProp]?: ['seller', 'product'];
@@ -232,7 +232,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Products {
   [PrimaryKeyProp]?: 'productId';
@@ -252,7 +252,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sales {
   [PrimaryKeyProp]?: 'saleId';
@@ -298,7 +298,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sellers {
   [PrimaryKeyProp]?: 'sellerId';
@@ -319,7 +319,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=always bidirectionalRelations=false identifiedReferences=true entitySchema=false: dump 1`] = `
 [
-  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Countries {
@@ -331,7 +331,7 @@ export class Countries {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -360,7 +360,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -387,7 +387,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Products {
@@ -409,7 +409,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -445,7 +445,7 @@ export class Sales {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sellers {
@@ -466,7 +466,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=always bidirectionalRelations=false identifiedReferences=true entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Countries {
   [PrimaryKeyProp]?: 'code';
@@ -480,7 +480,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -521,7 +521,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -562,7 +562,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Products {
   [PrimaryKeyProp]?: 'productId';
@@ -582,7 +582,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -632,7 +632,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sellers {
   [PrimaryKeyProp]?: 'sellerId';
@@ -653,7 +653,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=always bidirectionalRelations=true identifiedReferences=false entitySchema=false: dump 1`] = `
 [
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 @Entity()
@@ -669,7 +669,7 @@ export class Countries {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -702,7 +702,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -733,7 +733,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -759,7 +759,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -795,7 +795,7 @@ export class Sales {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -820,7 +820,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=always bidirectionalRelations=true identifiedReferences=false entitySchema=true: dump 1`] = `
 [
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 export class Countries {
@@ -837,7 +837,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Sales } from './Sales';
 
 export class ProductCountryMap {
@@ -872,7 +872,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Sales } from './Sales';
 
 export class ProductSellers {
@@ -912,7 +912,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Products {
@@ -935,7 +935,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sales {
   [PrimaryKeyProp]?: 'saleId';
@@ -981,7 +981,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Sellers {
@@ -1005,7 +1005,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=always bidirectionalRelations=true identifiedReferences=true entitySchema=false: dump 1`] = `
 [
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 @Entity()
@@ -1021,7 +1021,7 @@ export class Countries {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -1054,7 +1054,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -1085,7 +1085,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -1111,7 +1111,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -1147,7 +1147,7 @@ export class Sales {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -1172,7 +1172,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=always bidirectionalRelations=true identifiedReferences=true entitySchema=true: dump 1`] = `
 [
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 export class Countries {
@@ -1189,7 +1189,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -1233,7 +1233,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -1277,7 +1277,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Products {
@@ -1300,7 +1300,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -1350,7 +1350,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Sellers {
@@ -1374,7 +1374,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=never bidirectionalRelations=false identifiedReferences=false entitySchema=false: dump 1`] = `
 [
-  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Countries {
@@ -1386,7 +1386,7 @@ export class Countries {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -1408,7 +1408,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -1428,7 +1428,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Products {
@@ -1450,7 +1450,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -1477,7 +1477,7 @@ export class Sales {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sellers {
@@ -1498,7 +1498,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=never bidirectionalRelations=false identifiedReferences=false entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Countries {
   [PrimaryKeyProp]?: 'code';
@@ -1512,7 +1512,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class ProductCountryMap {
   [PrimaryKeyProp]?: ['country', 'product'];
@@ -1540,7 +1540,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class ProductSellers {
   [PrimaryKeyProp]?: ['seller', 'product'];
@@ -1573,7 +1573,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Products {
   [PrimaryKeyProp]?: 'productId';
@@ -1593,7 +1593,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sales {
   [PrimaryKeyProp]?: 'saleId';
@@ -1636,7 +1636,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sellers {
   [PrimaryKeyProp]?: 'sellerId';
@@ -1657,7 +1657,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=never bidirectionalRelations=false identifiedReferences=true entitySchema=false: dump 1`] = `
 [
-  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Countries {
@@ -1669,7 +1669,7 @@ export class Countries {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -1691,7 +1691,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -1711,7 +1711,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Products {
@@ -1733,7 +1733,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -1760,7 +1760,7 @@ export class Sales {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sellers {
@@ -1781,7 +1781,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=never bidirectionalRelations=false identifiedReferences=true entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Countries {
   [PrimaryKeyProp]?: 'code';
@@ -1795,7 +1795,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -1832,7 +1832,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -1869,7 +1869,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Products {
   [PrimaryKeyProp]?: 'productId';
@@ -1889,7 +1889,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -1936,7 +1936,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sellers {
   [PrimaryKeyProp]?: 'sellerId';
@@ -1957,7 +1957,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=never bidirectionalRelations=true identifiedReferences=false entitySchema=false: dump 1`] = `
 [
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 @Entity()
@@ -1973,7 +1973,7 @@ export class Countries {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -1999,7 +1999,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Collection, Entity, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -2023,7 +2023,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -2049,7 +2049,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -2076,7 +2076,7 @@ export class Sales {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -2101,7 +2101,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=never bidirectionalRelations=true identifiedReferences=false entitySchema=true: dump 1`] = `
 [
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 export class Countries {
@@ -2118,7 +2118,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Sales } from './Sales';
 
 export class ProductCountryMap {
@@ -2149,7 +2149,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Sales } from './Sales';
 
 export class ProductSellers {
@@ -2185,7 +2185,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Products {
@@ -2208,7 +2208,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sales {
   [PrimaryKeyProp]?: 'saleId';
@@ -2251,7 +2251,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Sellers {
@@ -2275,7 +2275,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=never bidirectionalRelations=true identifiedReferences=true entitySchema=false: dump 1`] = `
 [
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 @Entity()
@@ -2291,7 +2291,7 @@ export class Countries {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -2317,7 +2317,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Collection, Entity, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -2341,7 +2341,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -2367,7 +2367,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -2394,7 +2394,7 @@ export class Sales {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -2419,7 +2419,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=never bidirectionalRelations=true identifiedReferences=true entitySchema=true: dump 1`] = `
 [
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 export class Countries {
@@ -2436,7 +2436,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -2476,7 +2476,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -2516,7 +2516,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Products {
@@ -2539,7 +2539,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -2586,7 +2586,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Sellers {
@@ -2610,7 +2610,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=smart bidirectionalRelations=false identifiedReferences=false entitySchema=false: dump 1`] = `
 [
-  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Countries {
@@ -2622,7 +2622,7 @@ export class Countries {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -2644,7 +2644,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -2664,7 +2664,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Products {
@@ -2686,7 +2686,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -2713,7 +2713,7 @@ export class Sales {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sellers {
@@ -2734,7 +2734,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=smart bidirectionalRelations=false identifiedReferences=false entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Countries {
   [PrimaryKeyProp]?: 'code';
@@ -2748,7 +2748,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class ProductCountryMap {
   [PrimaryKeyProp]?: ['country', 'product'];
@@ -2776,7 +2776,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class ProductSellers {
   [PrimaryKeyProp]?: ['seller', 'product'];
@@ -2809,7 +2809,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Products {
   [PrimaryKeyProp]?: 'productId';
@@ -2829,7 +2829,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sales {
   [PrimaryKeyProp]?: 'saleId';
@@ -2872,7 +2872,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sellers {
   [PrimaryKeyProp]?: 'sellerId';
@@ -2893,7 +2893,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=smart bidirectionalRelations=false identifiedReferences=true entitySchema=false: dump 1`] = `
 [
-  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Countries {
@@ -2905,7 +2905,7 @@ export class Countries {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -2927,7 +2927,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -2947,7 +2947,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Products {
@@ -2969,7 +2969,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -2996,7 +2996,7 @@ export class Sales {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sellers {
@@ -3017,7 +3017,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=smart bidirectionalRelations=false identifiedReferences=true entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Countries {
   [PrimaryKeyProp]?: 'code';
@@ -3031,7 +3031,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 
@@ -3068,7 +3068,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sellers } from './Sellers';
 
@@ -3105,7 +3105,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Products {
   [PrimaryKeyProp]?: 'productId';
@@ -3125,7 +3125,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -3172,7 +3172,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sellers {
   [PrimaryKeyProp]?: 'sellerId';
@@ -3193,7 +3193,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=smart bidirectionalRelations=true identifiedReferences=false entitySchema=false: dump 1`] = `
 [
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 @Entity()
@@ -3209,7 +3209,7 @@ export class Countries {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -3235,7 +3235,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Collection, Entity, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -3259,7 +3259,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -3285,7 +3285,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -3312,7 +3312,7 @@ export class Sales {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -3337,7 +3337,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=smart bidirectionalRelations=true identifiedReferences=false entitySchema=true: dump 1`] = `
 [
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 export class Countries {
@@ -3354,7 +3354,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Sales } from './Sales';
 
 export class ProductCountryMap {
@@ -3385,7 +3385,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Sales } from './Sales';
 
 export class ProductSellers {
@@ -3421,7 +3421,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Products {
@@ -3444,7 +3444,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Sales {
   [PrimaryKeyProp]?: 'saleId';
@@ -3487,7 +3487,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Sellers {
@@ -3511,7 +3511,7 @@ export const SellersSchema = new EntitySchema({
 
 exports[`overlap_fk_example scalarPropertiesForRelations=smart bidirectionalRelations=true identifiedReferences=true entitySchema=false: dump 1`] = `
 [
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 @Entity()
@@ -3527,7 +3527,7 @@ export class Countries {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -3553,7 +3553,7 @@ export class ProductCountryMap {
 
 }
 ",
-  "import { Collection, Entity, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToOne, OneToMany, Opt, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -3577,7 +3577,7 @@ export class ProductSellers {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, Opt, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -3603,7 +3603,7 @@ export class Products {
 
 }
 ",
-  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@mikro-orm/core';
+  "import { Entity, Index, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -3630,7 +3630,7 @@ export class Sales {
 
 }
 ",
-  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, OneToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 @Entity()
@@ -3655,7 +3655,7 @@ export class Sellers {
 
 exports[`overlap_fk_example scalarPropertiesForRelations=smart bidirectionalRelations=true identifiedReferences=true entitySchema=true: dump 1`] = `
 [
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 
 export class Countries {
@@ -3672,7 +3672,7 @@ export const CountriesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Countries } from './Countries';
 import { Products } from './Products';
 import { Sales } from './Sales';
@@ -3712,7 +3712,7 @@ export const ProductCountryMapSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { Products } from './Products';
 import { Sales } from './Sales';
 import { Sellers } from './Sellers';
@@ -3752,7 +3752,7 @@ export const ProductSellersSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Products {
@@ -3775,7 +3775,7 @@ export const ProductsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp, Ref } from '@yandjin-mikro-orm/core';
 import { ProductCountryMap } from './ProductCountryMap';
 import { ProductSellers } from './ProductSellers';
 
@@ -3822,7 +3822,7 @@ export const SalesSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { ProductSellers } from './ProductSellers';
 
 export class Sellers {

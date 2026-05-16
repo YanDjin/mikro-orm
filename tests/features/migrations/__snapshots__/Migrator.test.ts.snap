@@ -30,7 +30,7 @@ exports[`Migrator - with explicit migrations runner: migrator-migrations-list 1`
 
 exports[`Migrator do not log a migration if the schema does not exist yet: initial-migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -434,7 +434,7 @@ exports.Migration20191013214813 = Migration20191013214813;
 
 exports[`Migrator generate migration with custom name: migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -482,7 +482,7 @@ export class Migration20191013214813 extends Migration {
 
 exports[`Migrator generate schema migration: migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -530,7 +530,7 @@ export class Migration20191013214813 extends Migration {
 
 exports[`Migrator log a migration when the schema already exists: initial-migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 

@@ -1,30 +1,36 @@
-import { AbstractSqlPlatform, QueryOrder } from '@mikro-orm/knex';
-import { MariaDbSchemaHelper } from './MariaDbSchemaHelper';
-import { MariaDbExceptionConverter } from './MariaDbExceptionConverter';
-import { Utils, type SimpleColumnMeta, type Dictionary, type Type } from '@mikro-orm/core';
+import { AbstractSqlPlatform, QueryOrder } from "@yandjin-mikro-orm/knex";
+import { MariaDbSchemaHelper } from "./MariaDbSchemaHelper";
+import { MariaDbExceptionConverter } from "./MariaDbExceptionConverter";
+import {
+  Utils,
+  type SimpleColumnMeta,
+  type Dictionary,
+  type Type,
+} from "@yandjin-mikro-orm/core";
 
 export class MariaDbPlatform extends AbstractSqlPlatform {
-
-  protected override readonly schemaHelper: MariaDbSchemaHelper = new MariaDbSchemaHelper(this);
-  protected override readonly exceptionConverter = new MariaDbExceptionConverter();
+  protected override readonly schemaHelper: MariaDbSchemaHelper =
+    new MariaDbSchemaHelper(this);
+  protected override readonly exceptionConverter =
+    new MariaDbExceptionConverter();
 
   override getDefaultCharset(): string {
-    return 'utf8mb4';
+    return "utf8mb4";
   }
 
   override getBooleanTypeDeclarationSQL(): string {
-    return 'tinyint(1)';
+    return "tinyint(1)";
   }
 
   override getDefaultMappedType(type: string): Type<unknown> {
-    if (type === 'tinyint(1)') {
-      return super.getDefaultMappedType('boolean');
+    if (type === "tinyint(1)") {
+      return super.getDefaultMappedType("boolean");
     }
 
     const normalizedType = this.extractSimpleType(type);
     const map = {
-      int: 'integer',
-      timestamp: 'datetime',
+      int: "integer",
+      timestamp: "datetime",
     } as Dictionary;
 
     return super.getDefaultMappedType(map[normalizedType] ?? type);
@@ -38,8 +44,12 @@ export class MariaDbPlatform extends AbstractSqlPlatform {
    * Returns the default name of index for the given columns
    * cannot go past 64 character length for identifiers in MySQL
    */
-  override getIndexName(tableName: string, columns: string[], type: 'index' | 'unique' | 'foreign' | 'primary' | 'sequence'): string {
-    if (type === 'primary') {
+  override getIndexName(
+    tableName: string,
+    columns: string[],
+    type: "index" | "unique" | "foreign" | "primary" | "sequence",
+  ): string {
+    if (type === "primary") {
       return this.getDefaultPrimaryName(tableName, columns);
     }
 
@@ -54,7 +64,7 @@ export class MariaDbPlatform extends AbstractSqlPlatform {
   }
 
   override getDefaultPrimaryName(tableName: string, columns: string[]): string {
-    return 'PRIMARY'; // https://dev.mysql.com/doc/refman/8.0/en/create-table.html#create-table-indexes-keys
+    return "PRIMARY"; // https://dev.mysql.com/doc/refman/8.0/en/create-table.html#create-table-indexes-keys
   }
 
   override supportsCreatingFullTextIndex(): boolean {
@@ -65,34 +75,41 @@ export class MariaDbPlatform extends AbstractSqlPlatform {
     return `match(:column:) against (:query in boolean mode)`;
   }
 
-  override getFullTextIndexExpression(indexName: string, schemaName: string | undefined, tableName: string, columns: SimpleColumnMeta[]): string {
+  override getFullTextIndexExpression(
+    indexName: string,
+    schemaName: string | undefined,
+    tableName: string,
+    columns: SimpleColumnMeta[],
+  ): string {
     /* istanbul ignore next */
-    const quotedTableName = this.quoteIdentifier(schemaName ? `${schemaName}.${tableName}` : tableName);
-    const quotedColumnNames = columns.map(c => this.quoteIdentifier(c.name));
+    const quotedTableName = this.quoteIdentifier(
+      schemaName ? `${schemaName}.${tableName}` : tableName,
+    );
+    const quotedColumnNames = columns.map((c) => this.quoteIdentifier(c.name));
     const quotedIndexName = this.quoteIdentifier(indexName);
 
-    return `alter table ${quotedTableName} add fulltext index ${quotedIndexName}(${quotedColumnNames.join(',')})`;
+    return `alter table ${quotedTableName} add fulltext index ${quotedIndexName}(${quotedColumnNames.join(",")})`;
   }
 
   private readonly ORDER_BY_NULLS_TRANSLATE = {
-    [QueryOrder.asc_nulls_first]: 'is not null',
-    [QueryOrder.asc_nulls_last]: 'is null',
-    [QueryOrder.desc_nulls_first]: 'is not null',
-    [QueryOrder.desc_nulls_last]: 'is null',
+    [QueryOrder.asc_nulls_first]: "is not null",
+    [QueryOrder.asc_nulls_last]: "is null",
+    [QueryOrder.desc_nulls_first]: "is not null",
+    [QueryOrder.desc_nulls_last]: "is null",
   } as const;
 
   /* istanbul ignore next */
   override getOrderByExpression(column: string, direction: string): string[] {
     const ret: string[] = [];
-    const dir = direction.toLowerCase() as keyof typeof this.ORDER_BY_NULLS_TRANSLATE;
+    const dir =
+      direction.toLowerCase() as keyof typeof this.ORDER_BY_NULLS_TRANSLATE;
 
     if (dir in this.ORDER_BY_NULLS_TRANSLATE) {
       ret.push(`${column} ${this.ORDER_BY_NULLS_TRANSLATE[dir]}`);
     }
 
-    ret.push(`${column} ${dir.replace(/(\s|nulls|first|last)*/gi, '')}`);
+    ret.push(`${column} ${dir.replace(/(\s|nulls|first|last)*/gi, "")}`);
 
     return ret;
   }
-
 }

@@ -1,20 +1,22 @@
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity({
-  tableName: 'test.DEVICES',
+  tableName: "test.DEVICES",
 })
 export class Device {
-
-  @PrimaryKey({ fieldName: 'ID', type: 'number' })
+  @PrimaryKey({ fieldName: "ID", type: "number" })
   id!: number;
 
-  @Property({ fieldName: 'TOKEN' })
+  @Property({ fieldName: "TOKEN" })
   token!: string;
-
 }
 
-describe('GH issue 1143', () => {
-
+describe("GH issue 1143", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -33,9 +35,8 @@ describe('GH issue 1143', () => {
     await orm.close(true);
   });
 
-  it('diffing schema with custom schema name', async () => {
+  it("diffing schema with custom schema name", async () => {
     const sql = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(sql).toBe('');
+    expect(sql).toBe("");
   });
-
 });

@@ -1,5 +1,10 @@
-import 'reflect-metadata';
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import "reflect-metadata";
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 interface BookData {
   title: string;
@@ -7,30 +12,30 @@ interface BookData {
 
 @Entity()
 class Book {
-
   @PrimaryKey()
   id!: string;
 
-  @Property({ type: 'object' })
+  @Property({ type: "object" })
   data!: BookData;
-
 }
 
 test(`GH issue 3221`, async () => {
   const orm = await MikroORM.init({
     entities: [Book],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
 
   const newBook = orm.em.create(Book, {
-    id: 'testId',
+    id: "testId",
     data: {
-      title: 'testTitle',
+      title: "testTitle",
     },
   });
 
-  const result = { status: 'OK', data: newBook };
-  expect(JSON.stringify(result)).toBe('{"status":"OK","data":{"id":"testId","data":{"title":"testTitle"}}}');
+  const result = { status: "OK", data: newBook };
+  expect(JSON.stringify(result)).toBe(
+    '{"status":"OK","data":{"id":"testId","data":{"title":"testTitle"}}}',
+  );
 
   await orm.close(true);
 });

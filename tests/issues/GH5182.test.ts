@@ -1,8 +1,13 @@
-import { Collection, Entity, MikroORM, ManyToMany, PrimaryKey } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  MikroORM,
+  ManyToMany,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Author {
-
   @PrimaryKey()
   id!: number;
 
@@ -11,42 +16,37 @@ class Author {
 
   @ManyToMany(() => Post)
   posts = new Collection<Post>(this);
-
 }
 
 @Entity()
 class Tag {
-
   @PrimaryKey()
   id!: number;
 
   @ManyToMany(() => Post)
   posts = new Collection<Post>(this);
 
-  @ManyToMany(() => Author, 'tags')
+  @ManyToMany(() => Author, "tags")
   authors = new Collection<Post>(this);
-
 }
 
 @Entity()
 class Post {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToMany(() => Tag, 'posts')
+  @ManyToMany(() => Tag, "posts")
   tags = new Collection<Tag>(this);
 
-  @ManyToMany(() => Author, 'posts')
+  @ManyToMany(() => Author, "posts")
   authors = new Collection<Author>(this);
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [Author, Post, Tag],
   });
   await orm.schema.createSchema();
@@ -71,31 +71,31 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('it should map the entities correctly', async () => {
+test("it should map the entities correctly", async () => {
   const fork = orm.em.fork();
   const result = await fork
-    .qb(Author, 'a')
-    .select('*')
-    .leftJoinAndSelect('a.tags', 't')
-    .leftJoinAndSelect('t.posts', 'p')
-    .leftJoin('p.authors', 'a2')
-    .where('a.id = a2.id')
-    .orderBy({ 'a.id': 'DESC' })
+    .qb(Author, "a")
+    .select("*")
+    .leftJoinAndSelect("a.tags", "t")
+    .leftJoinAndSelect("t.posts", "p")
+    .leftJoin("p.authors", "a2")
+    .where("a.id = a2.id")
+    .orderBy({ "a.id": "DESC" })
     .getSingleResult();
   expect(result!.tags[0].posts[0].id).toBe(2);
 });
 
-test('the above test should return the same result as this one', async () => {
+test("the above test should return the same result as this one", async () => {
   const fork = orm.em.fork();
   const result = await fork
-    .qb(Author, 'a')
-    .select('*')
-    .leftJoinAndSelect('a.tags', 't')
-    .leftJoinAndSelect('t.posts', 'p')
-    .leftJoin('p.authors', 'a2')
-    .where('a.id = a2.id')
-    .orderBy({ 'a.id': 'DESC' })
+    .qb(Author, "a")
+    .select("*")
+    .leftJoinAndSelect("a.tags", "t")
+    .leftJoinAndSelect("t.posts", "p")
+    .leftJoin("p.authors", "a2")
+    .where("a.id = a2.id")
+    .orderBy({ "a.id": "DESC" })
     .execute();
-  const authors = result.map(r => fork.fork().map(Author, r));
+  const authors = result.map((r) => fork.fork().map(Author, r));
   expect(authors[0].tags[0].posts[0].id).toBe(2);
 });

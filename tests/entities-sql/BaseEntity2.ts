@@ -1,7 +1,11 @@
-import { BeforeCreate, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  BeforeCreate,
+  Opt,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
 
 export abstract class BaseEntity2 {
-
   @PrimaryKey()
   id!: number;
 
@@ -12,5 +16,4 @@ export abstract class BaseEntity2 {
   baseBeforeCreate() {
     this.hookTest = true;
   }
-
 }

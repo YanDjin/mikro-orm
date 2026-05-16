@@ -1,19 +1,19 @@
 import {
   ChangeSetType,
   Entity,
-  EventSubscriber, FlushEventArgs,
+  EventSubscriber,
+  FlushEventArgs,
   Index,
   MikroORM,
   PrimaryKey,
   Property,
   wrap,
-} from '@mikro-orm/core';
-import { FullTextType, PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { randomUUID } from 'crypto';
+} from "@yandjin-mikro-orm/core";
+import { FullTextType, PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
+import { randomUUID } from "crypto";
 
 @Entity()
 export class Test {
-
   @PrimaryKey({ autoincrement: true })
   id!: number;
 
@@ -26,22 +26,20 @@ export class Test {
   @Property({ nullable: true })
   clientLastName?: string;
 
-  @Index({ type: 'fulltext' })
+  @Index({ type: "fulltext" })
   @Property({
     type: FullTextType,
     nullable: true,
     onUpdate: (e: Test) =>
-      `${e.clientFirstName || ''} ${e.clientMiddleName || ''} ${e.clientLastName || ''}`
-        .replace(/\s+/g, ' ')
+      `${e.clientFirstName || ""} ${e.clientMiddleName || ""} ${e.clientLastName || ""}`
+        .replace(/\s+/g, " ")
         .trim(),
   })
   clientNameFull?: string;
-
 }
 
 @Entity()
 export class TestHistory {
-
   @PrimaryKey()
   id!: string;
 
@@ -54,19 +52,21 @@ export class TestHistory {
   @Property({ nullable: true })
   clientLastName?: string;
 
-  @Index({ type: 'fulltext' })
+  @Index({ type: "fulltext" })
   @Property({ type: FullTextType, nullable: true })
   clientNameFull?: string;
-
 }
 
 export class CaseHistorySubscriber implements EventSubscriber<Test> {
-
   async onFlush(args: FlushEventArgs): Promise<void> {
     const changeSets = args.uow.getChangeSets();
 
     for (const cs of changeSets) {
-      if ((cs.type === ChangeSetType.UPDATE || cs.type === ChangeSetType.CREATE) && cs.entity instanceof Test) {
+      if (
+        (cs.type === ChangeSetType.UPDATE ||
+          cs.type === ChangeSetType.CREATE) &&
+        cs.entity instanceof Test
+      ) {
         const record = args.em.create(TestHistory, {
           ...cs.entity,
           id: randomUUID(),
@@ -75,7 +75,6 @@ export class CaseHistorySubscriber implements EventSubscriber<Test> {
       }
     }
   }
-
 }
 
 let orm: MikroORM<PostgreSqlDriver>;
@@ -92,15 +91,15 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('load entities', async () => {
+test("load entities", async () => {
   const test = new Test();
   await orm.em.fork().persistAndFlush(test);
 
   const testGet = await orm.em.findOneOrFail(Test, 1);
 
   wrap(testGet).assign({
-    clientFirstName: 'Janet?',
-    clientLastName: 'Smith',
+    clientFirstName: "Janet?",
+    clientLastName: "Smith",
   });
 
   await orm.em.flush();

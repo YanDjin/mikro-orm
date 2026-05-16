@@ -1,23 +1,32 @@
-import type { EventSubscriber, FlushEventArgs } from '@mikro-orm/better-sqlite';
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property, wrap } from '@mikro-orm/better-sqlite';
+import type {
+  EventSubscriber,
+  FlushEventArgs,
+} from "@yandjin-mikro-orm/better-sqlite";
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  wrap,
+} from "@yandjin-mikro-orm/better-sqlite";
 
-@Entity({ tableName: 'customers' })
+@Entity({ tableName: "customers" })
 class Customer {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
-  name: string = 'Foo';
+  name: string = "Foo";
 
-  @OneToMany(() => Order, order => order.customer)
+  @OneToMany(() => Order, (order) => order.customer)
   orders = new Collection<Order>(this);
-
 }
 
-@Entity({ tableName: 'orders' })
+@Entity({ tableName: "orders" })
 class Order {
-
   @PrimaryKey()
   id!: number;
 
@@ -26,11 +35,9 @@ class Order {
 
   @ManyToOne(() => Customer)
   customer!: Customer;
-
 }
 
 class OrdersSubscriber implements EventSubscriber<Order> {
-
   getSubscribedEntities() {
     return [Order];
   }
@@ -40,11 +47,10 @@ class OrdersSubscriber implements EventSubscriber<Order> {
 
     for (const changeSet of changeSets) {
       if (changeSet.entity instanceof Order) {
-        await args.em.populate(changeSet.entity, ['customer']);
+        await args.em.populate(changeSet.entity, ["customer"]);
       }
     }
   }
-
 }
 
 let orm: MikroORM;
@@ -52,7 +58,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Order, Customer],
-    dbName: ':memory:',
+    dbName: ":memory:",
     subscribers: [OrdersSubscriber],
   });
   await orm.schema.refreshDatabase();
@@ -60,7 +66,7 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('GH issue 3005', async () => {
+test("GH issue 3005", async () => {
   const a = new Order();
   a.customer = new Customer();
   await orm.em.fork().persistAndFlush(a);
@@ -71,5 +77,5 @@ test('GH issue 3005', async () => {
   expect(order.customer.name).toBeUndefined();
   await orm.em.flush();
   expect(wrap(order.customer).isInitialized()).toBe(true);
-  expect(order.customer.name).toBe('Foo');
+  expect(order.customer.name).toBe("Foo");
 });

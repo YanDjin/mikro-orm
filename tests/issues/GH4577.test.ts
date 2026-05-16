@@ -1,12 +1,11 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
-import { v4 } from 'uuid';
-import { mockLogger } from '../helpers';
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { v4 } from "uuid";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class Customer {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   uuid: string = v4();
 
   @Property()
@@ -14,7 +13,6 @@ class Customer {
 
   @Property({ autoincrement: true, default: 0 })
   number?: number;
-
 }
 
 let orm: MikroORM;
@@ -33,8 +31,8 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-it('4577', async () => {
-  orm.em.create(Customer, { name: 'foo' });
+it("4577", async () => {
+  orm.em.create(Customer, { name: "foo" });
   await orm.em.flush();
   const mock = mockLogger(orm);
   await orm.em.flush();

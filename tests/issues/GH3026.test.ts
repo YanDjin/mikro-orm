@@ -1,37 +1,41 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property, wrap } from '@mikro-orm/better-sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  wrap,
+} from "@yandjin-mikro-orm/better-sqlite";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class Ingredient {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
 
-  @OneToMany('RecipeIngredient', 'ingredient')
+  @OneToMany("RecipeIngredient", "ingredient")
   recipeIngredients = new Collection<RecipeIngredient>(this);
-
 }
 
 @Entity()
 class Recipe {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name!: string;
 
-  @OneToMany('RecipeIngredient', 'recipe', { eager: true, orphanRemoval: true })
+  @OneToMany("RecipeIngredient", "recipe", { eager: true, orphanRemoval: true })
   ingredients = new Collection<RecipeIngredient>(this);
-
 }
 
 @Entity()
 class RecipeIngredient {
-
   @PrimaryKey()
   id!: number;
 
@@ -43,7 +47,6 @@ class RecipeIngredient {
 
   @ManyToOne(() => Recipe)
   recipe!: Recipe;
-
 }
 
 let orm: MikroORM;
@@ -51,7 +54,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Ingredient, Recipe, RecipeIngredient],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
@@ -62,9 +65,9 @@ afterAll(async () => {
 
 test(`GH issue 3026`, async () => {
   const ingredients = [
-    { id: 1, name: 'Tomato' },
-    { id: 2, name: 'Cheese' },
-    { id: 3, name: 'Basil' },
+    { id: 1, name: "Tomato" },
+    { id: 2, name: "Cheese" },
+    { id: 3, name: "Basil" },
   ];
 
   for (const data of ingredients) {
@@ -75,7 +78,7 @@ test(`GH issue 3026`, async () => {
 
   const recipe = {
     id: 1,
-    name: 'Pizza',
+    name: "Pizza",
     ingredients: [
       {
         id: 1,
@@ -90,7 +93,7 @@ test(`GH issue 3026`, async () => {
 
   const updatedRecipe = {
     id: 1,
-    name: 'Pizza',
+    name: "Pizza",
     ingredients: [
       {
         id: 1,
@@ -106,7 +109,9 @@ test(`GH issue 3026`, async () => {
   const mock = mockLogger(orm);
   await orm.em.flush();
   expect(mock).toHaveBeenCalledTimes(3);
-  expect(mock.mock.calls[1][0]).toMatch('update `recipe_ingredient` set `quantity` = 2, `ingredient_id` = 2 where `id` = 1');
+  expect(mock.mock.calls[1][0]).toMatch(
+    "update `recipe_ingredient` set `quantity` = 2, `ingredient_id` = 2 where `id` = 1",
+  );
 
   const reloadedRecipe = await orm.em.fork().findOneOrFail(Recipe, 1);
   const finalRecipe = wrap(reloadedRecipe).toObject();

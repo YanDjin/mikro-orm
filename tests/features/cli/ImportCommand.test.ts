@@ -1,30 +1,28 @@
-import { Configuration } from '@mikro-orm/core';
-import { CLIHelper } from '@mikro-orm/cli';
-import { MongoDriver } from '@mikro-orm/mongodb';
+import { Configuration } from "@yandjin-mikro-orm/core";
+import { CLIHelper } from "@yandjin-mikro-orm/cli";
+import { MongoDriver } from "@yandjin-mikro-orm/mongodb";
 
 const close = jest.fn();
 const config = new Configuration({ driver: MongoDriver } as any, false);
 const connection = { loadFile: jest.fn() };
 const em = { getConnection: () => connection };
-const showHelpMock = jest.spyOn(CLIHelper, 'showHelp');
+const showHelpMock = jest.spyOn(CLIHelper, "showHelp");
 showHelpMock.mockImplementation(() => void 0);
-const getORMMock = jest.spyOn(CLIHelper, 'getORM');
+const getORMMock = jest.spyOn(CLIHelper, "getORM");
 getORMMock.mockResolvedValue({ em, config, close } as any);
-const dumpMock = jest.spyOn(CLIHelper, 'dump');
+const dumpMock = jest.spyOn(CLIHelper, "dump");
 dumpMock.mockImplementation(() => void 0);
 
 (global as any).console.log = jest.fn();
 
-import { ImportCommand } from '../../../packages/cli/src/commands/ImportCommand';
+import { ImportCommand } from "../../../packages/cli/src/commands/ImportCommand";
 
-describe('ImportDatabaseCommand', () => {
-
-  test('handler', async () => {
+describe("ImportDatabaseCommand", () => {
+  test("handler", async () => {
     const cmd = new ImportCommand();
 
     await expect(cmd.handler({} as any)).resolves.toBeUndefined();
     expect(close).toHaveBeenCalledTimes(1);
     expect(connection.loadFile.mock.calls.length).toBe(1);
   });
-
 });

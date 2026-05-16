@@ -1,17 +1,20 @@
-import { Embeddable, Embedded, Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/better-sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/better-sqlite";
 
 @Embeddable()
 export class Profile {
-
   @Property()
   username?: string;
-
 }
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -20,7 +23,6 @@ export class User {
 
   @Embedded(() => Profile, { array: true })
   profiles: Profile[] = [];
-
 }
 
 let orm: MikroORM;
@@ -28,7 +30,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [User],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
@@ -37,14 +39,16 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('null value instead of object inside embedded property', async () => {
+test("null value instead of object inside embedded property", async () => {
   const user = orm.em.create(User, {
-    name: 'Peter Pan',
+    name: "Peter Pan",
     profiles: [null as any],
   });
   await orm.em.insert(user);
   expect(user.id).toBeDefined();
 
   const u = await orm.em.fork().findOneOrFail(User, user);
-  expect(JSON.stringify(u)).toBe('{"id":1,"name":"Peter Pan","profiles":[null]}');
+  expect(JSON.stringify(u)).toBe(
+    '{"id":1,"name":"Peter Pan","profiles":[null]}',
+  );
 });

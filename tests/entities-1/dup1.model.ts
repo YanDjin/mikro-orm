@@ -1,16 +1,19 @@
-import { ObjectId } from 'bson';
-import { Entity, PrimaryKey, Property, SerializedPrimaryKey } from '@mikro-orm/core';
+import { ObjectId } from "bson";
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  SerializedPrimaryKey,
+} from "@yandjin-mikro-orm/core";
 
 @Entity()
 export class Dup1 {
-
-  @PrimaryKey({ type: 'ObjectId' })
+  @PrimaryKey({ type: "ObjectId" })
   _id!: ObjectId;
 
-  @SerializedPrimaryKey({ type: 'string' })
+  @SerializedPrimaryKey({ type: "string" })
   id!: string;
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   name1?: string;
-
 }

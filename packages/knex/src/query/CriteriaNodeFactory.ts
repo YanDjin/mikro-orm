@@ -7,20 +7,30 @@ import {
   ReferenceKind,
   Utils,
   ValidationError,
-} from '@mikro-orm/core';
-import { ObjectCriteriaNode } from './ObjectCriteriaNode';
-import { ArrayCriteriaNode } from './ArrayCriteriaNode';
-import { ScalarCriteriaNode } from './ScalarCriteriaNode';
-import type { ICriteriaNode } from '../typings';
+} from "@yandjin-mikro-orm/core";
+import { ObjectCriteriaNode } from "./ObjectCriteriaNode";
+import { ArrayCriteriaNode } from "./ArrayCriteriaNode";
+import { ScalarCriteriaNode } from "./ScalarCriteriaNode";
+import type { ICriteriaNode } from "../typings";
 
 /**
  * @internal
  */
 export class CriteriaNodeFactory {
-
-  static createNode<T extends object>(metadata: MetadataStorage, entityName: string, payload: any, parent?: ICriteriaNode<T>, key?: EntityKey<T>): ICriteriaNode<T> {
-    const customExpression = RawQueryFragment.isKnownFragment(key || '');
-    const scalar = Utils.isPrimaryKey(payload) || Utils.isRawSql(payload) || payload as unknown instanceof RegExp || payload as unknown instanceof Date || customExpression;
+  static createNode<T extends object>(
+    metadata: MetadataStorage,
+    entityName: string,
+    payload: any,
+    parent?: ICriteriaNode<T>,
+    key?: EntityKey<T>,
+  ): ICriteriaNode<T> {
+    const customExpression = RawQueryFragment.isKnownFragment(key || "");
+    const scalar =
+      Utils.isPrimaryKey(payload) ||
+      Utils.isRawSql(payload) ||
+      (payload as unknown) instanceof RegExp ||
+      (payload as unknown) instanceof Date ||
+      customExpression;
 
     if (Array.isArray(payload) && !scalar) {
       return this.createArrayNode(metadata, entityName, payload, parent, key);
@@ -33,20 +43,32 @@ export class CriteriaNodeFactory {
     return this.createScalarNode(metadata, entityName, payload, parent, key);
   }
 
-  static createScalarNode<T extends object>(metadata: MetadataStorage, entityName: string, payload: any, parent?: ICriteriaNode<T>, key?: EntityKey<T>): ICriteriaNode<T> {
+  static createScalarNode<T extends object>(
+    metadata: MetadataStorage,
+    entityName: string,
+    payload: any,
+    parent?: ICriteriaNode<T>,
+    key?: EntityKey<T>,
+  ): ICriteriaNode<T> {
     const node = new ScalarCriteriaNode<T>(metadata, entityName, parent, key);
     node.payload = payload;
 
     return node;
   }
 
-  static createArrayNode<T extends object>(metadata: MetadataStorage, entityName: string, payload: any[], parent?: ICriteriaNode<T>, key?: EntityKey<T>): ICriteriaNode<T> {
+  static createArrayNode<T extends object>(
+    metadata: MetadataStorage,
+    entityName: string,
+    payload: any[],
+    parent?: ICriteriaNode<T>,
+    key?: EntityKey<T>,
+  ): ICriteriaNode<T> {
     const node = new ArrayCriteriaNode<T>(metadata, entityName, parent, key);
     node.payload = payload.map((item, index) => {
       const n = this.createNode(metadata, entityName, item, node);
 
       // we care about branching only for $and
-      if (key === '$and' && payload.length > 1) {
+      if (key === "$and" && payload.length > 1) {
         n.index = index;
       }
 
@@ -56,21 +78,42 @@ export class CriteriaNodeFactory {
     return node;
   }
 
-  static createObjectNode<T extends object>(metadata: MetadataStorage, entityName: string, payload: Dictionary, parent?: ICriteriaNode<T>, key?: EntityKey<T>): ICriteriaNode<T> {
+  static createObjectNode<T extends object>(
+    metadata: MetadataStorage,
+    entityName: string,
+    payload: Dictionary,
+    parent?: ICriteriaNode<T>,
+    key?: EntityKey<T>,
+  ): ICriteriaNode<T> {
     const meta = metadata.find(entityName);
 
     const node = new ObjectCriteriaNode(metadata, entityName, parent, key);
     node.payload = Object.keys(payload).reduce((o, item) => {
-      o[item] = this.createObjectItemNode(metadata, entityName, node, payload, item, meta);
+      o[item] = this.createObjectItemNode(
+        metadata,
+        entityName,
+        node,
+        payload,
+        item,
+        meta,
+      );
       return o;
     }, {} as Dictionary);
 
     return node;
   }
 
-  static createObjectItemNode<T extends object>(metadata: MetadataStorage, entityName: string, node: ICriteriaNode<T>, payload: Dictionary, key: EntityKey<T>, meta?: EntityMetadata<T>) {
+  static createObjectItemNode<T extends object>(
+    metadata: MetadataStorage,
+    entityName: string,
+    node: ICriteriaNode<T>,
+    payload: Dictionary,
+    key: EntityKey<T>,
+    meta?: EntityMetadata<T>,
+  ) {
     const prop = meta?.properties[key];
-    const childEntity = prop && prop.kind !== ReferenceKind.SCALAR ? prop.type : entityName;
+    const childEntity =
+      prop && prop.kind !== ReferenceKind.SCALAR ? prop.type : entityName;
 
     if (prop?.kind !== ReferenceKind.EMBEDDED) {
       return this.createNode(metadata, childEntity, payload[key], node, key);
@@ -86,11 +129,17 @@ export class CriteriaNodeFactory {
     }
 
     // array operators can be used on embedded properties
-    const allowedOperators = ['$contains', '$contained', '$overlap'];
-    const operator = Object.keys(payload[key]).some(f => Utils.isOperator(f) && !allowedOperators.includes(f));
+    const allowedOperators = ["$contains", "$contained", "$overlap"];
+    const operator = Object.keys(payload[key]).some(
+      (f) => Utils.isOperator(f) && !allowedOperators.includes(f),
+    );
 
     if (operator) {
-      throw ValidationError.cannotUseOperatorsInsideEmbeddables(entityName, prop.name, payload);
+      throw ValidationError.cannotUseOperatorsInsideEmbeddables(
+        entityName,
+        prop.name,
+        payload,
+      );
     }
 
     const map = Object.keys(payload[key]).reduce((oo, k) => {
@@ -100,7 +149,7 @@ export class CriteriaNodeFactory {
 
       if (prop.embeddedProps[k]) {
         oo[prop.embeddedProps[k].name] = payload[key][k];
-      } else if (typeof payload[key][k] === 'object') {
+      } else if (typeof payload[key][k] === "object") {
         oo[k] = JSON.stringify(payload[key][k]);
       } else {
         oo[k] = payload[key][k];
@@ -111,5 +160,4 @@ export class CriteriaNodeFactory {
 
     return this.createNode(metadata, entityName, map, node, key);
   }
-
 }

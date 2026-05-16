@@ -1,18 +1,26 @@
-import { ObjectId } from 'bson';
-import { BeforeCreate, Entity, Enum, ManyToMany, OneToMany, PrimaryKey, Property, SerializedPrimaryKey } from '@mikro-orm/core';
-import type { Book } from './Book';
-import type { Test } from './Test';
-import { Collection } from '../TsMorphMetadataProvider.test';
-import { PublisherType } from './PublisherType';
+import { ObjectId } from "bson";
+import {
+  BeforeCreate,
+  Entity,
+  Enum,
+  ManyToMany,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  SerializedPrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import type { Book } from "./Book";
+import type { Test } from "./Test";
+import { Collection } from "../TsMorphMetadataProvider.test";
+import { PublisherType } from "./PublisherType";
 
 export enum PublisherType2 {
-  LOCAL2 = 'local2',
-  GLOBAL2 = 'global2',
+  LOCAL2 = "local2",
+  GLOBAL2 = "global2",
 }
 
 @Entity()
 export class Publisher {
-
   @PrimaryKey()
   _id!: ObjectId;
 
@@ -22,7 +30,7 @@ export class Publisher {
   @Property()
   name!: number;
 
-  @OneToMany({ mappedBy: 'publisher' })
+  @OneToMany({ mappedBy: "publisher" })
   books = new Collection<Book>(this);
 
   @ManyToMany({ eager: true })
@@ -37,7 +45,7 @@ export class Publisher {
   @Enum({ array: true })
   types2 = [PublisherType2.LOCAL2];
 
-  constructor(name = 'asd', type = PublisherType.LOCAL) {
+  constructor(name = "asd", type = PublisherType.LOCAL) {
     // this.name = name;
     this.type = type;
   }
@@ -46,5 +54,4 @@ export class Publisher {
   beforeCreate() {
     // do sth
   }
-
 }

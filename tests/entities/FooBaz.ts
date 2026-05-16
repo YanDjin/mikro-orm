@@ -5,17 +5,17 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryKey,
-  Property, Ref,
+  Property,
+  Ref,
   SerializedPrimaryKey,
-} from '@mikro-orm/core';
-import { ObjectId } from 'bson';
-import { Book } from './Book';
-import FooBar from './FooBar';
+} from "@yandjin-mikro-orm/core";
+import { ObjectId } from "bson";
+import { Book } from "./Book";
+import FooBar from "./FooBar";
 
 @Entity()
 export class FooBaz {
-
-  [EagerProps]?: 'bar' | 'book';
+  [EagerProps]?: "bar" | "book";
 
   @PrimaryKey()
   _id!: ObjectId;
@@ -27,7 +27,7 @@ export class FooBaz {
   @Index()
   name!: string;
 
-  @OneToOne(() => FooBar, bar => bar.baz, { eager: true, ref: true })
+  @OneToOne(() => FooBar, (bar) => bar.baz, { eager: true, ref: true })
   bar!: Ref<FooBar>;
 
   @ManyToOne(() => Book, { eager: true, nullable: true, ref: true })
@@ -39,5 +39,4 @@ export class FooBaz {
 
     return baz;
   }
-
 }

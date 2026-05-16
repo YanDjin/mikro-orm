@@ -2,7 +2,7 @@
 
 exports[`Migrator (postgres) generate initial migration: initial-migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -190,7 +190,7 @@ export class Migration20191013214813 extends Migration {
 
 exports[`Migrator (postgres) generate initial migration: initial-migration-dump 2`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -425,7 +425,7 @@ exports[`Migrator (postgres) generate migration with custom migrator: migration-
 {
   "code": "// this file was generated via custom migration generator
 
-import { Migration } from '@mikro-orm/migrations';
+import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -467,7 +467,7 @@ export class Migration20191013214813 extends Migration {
 
 exports[`Migrator (postgres) generate migration with custom name with name option: migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813_custom_name extends Migration {
 
@@ -509,7 +509,7 @@ export class Migration20191013214813_custom_name extends Migration {
 
 exports[`Migrator (postgres) generate migration with custom name: migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -551,7 +551,7 @@ export class Migration20191013214813 extends Migration {
 
 exports[`Migrator (postgres) generate migration with snapshot: migration-snapshot-dump-1 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -604,7 +604,7 @@ exports[`Migrator (postgres) generate migration with snapshot: migration-snapsho
 
 exports[`Migrator (postgres) generate schema migration: migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 

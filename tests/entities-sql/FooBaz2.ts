@@ -1,16 +1,20 @@
-import { Entity, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { FooBar2 } from './FooBar2';
+import {
+  Entity,
+  OneToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { FooBar2 } from "./FooBar2";
 
 @Entity()
 export class FooBaz2 {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name: string;
 
-  @OneToOne(() => FooBar2, 'baz', { nullable: true })
+  @OneToOne(() => FooBar2, "baz", { nullable: true })
   bar?: FooBar2;
 
   @Property({ version: true })
@@ -19,5 +23,4 @@ export class FooBaz2 {
   constructor(name: string) {
     this.name = name;
   }
-
 }

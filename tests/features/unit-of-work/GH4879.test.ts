@@ -1,5 +1,11 @@
-import { BigIntType, EntitySchema, ref, Ref, wrap } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  BigIntType,
+  EntitySchema,
+  ref,
+  Ref,
+  wrap,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 type ProfileProps = {
   imageUrl: string;
@@ -9,7 +15,6 @@ type ProfileProps = {
 };
 
 class Profile {
-
   readonly id: number;
   readonly imageUrl: string;
   readonly active: boolean;
@@ -21,7 +26,6 @@ class Profile {
     this.id = props.id ?? 1;
     this.user = ref(User, props.userOrId);
   }
-
 }
 
 type CreateUserProps = {
@@ -34,7 +38,6 @@ type CreateUserProps = {
 };
 
 class User {
-
   readonly id!: number;
   readonly firstName!: string;
   readonly lastName!: string;
@@ -47,7 +50,6 @@ class User {
   constructor(props: CreateUserProps) {
     wrap<User>(this).assign(props);
   }
-
 }
 
 const profileSchema = new EntitySchema({
@@ -68,8 +70,8 @@ const profileSchema = new EntitySchema({
     },
     user: {
       entity: () => User,
-      kind: '1:1',
-      mappedBy: 'profile',
+      kind: "1:1",
+      mappedBy: "profile",
       ref: true,
       nullable: true,
     },
@@ -86,27 +88,27 @@ const userSchema = new EntitySchema<User>({
       autoincrement: true,
     },
     firstName: {
-      type: 'string',
+      type: "string",
     },
     lastName: {
-      type: 'string',
+      type: "string",
     },
     email: {
-      type: 'string',
+      type: "string",
     },
     createdAt: {
-      type: 'timestamp',
+      type: "timestamp",
       onCreate: () => new Date(),
     },
     updatedAt: {
-      type: 'timestamp',
+      type: "timestamp",
       onCreate: () => new Date(),
       onUpdate: () => new Date(),
     },
     profile: {
       entity: () => Profile,
-      kind: '1:1',
-      inversedBy: 'user',
+      kind: "1:1",
+      inversedBy: "user",
       nullable: true,
       ref: true,
     },
@@ -117,7 +119,7 @@ let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [userSchema, profileSchema],
   });
   await orm.schema.createSchema();
@@ -131,12 +133,12 @@ afterAll(async () => {
   await orm.close();
 });
 
-test('creates a user and assign a profile to it (using entity)', async () => {
+test("creates a user and assign a profile to it (using entity)", async () => {
   // Arrange
   const aUser = orm.em.create(User, {
-    firstName: 'firstName',
-    lastName: 'lastName',
-    email: 'email@mail.com',
+    firstName: "firstName",
+    lastName: "lastName",
+    email: "email@mail.com",
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -146,7 +148,7 @@ test('creates a user and assign a profile to it (using entity)', async () => {
   const em = orm.em.fork();
 
   const aProfile = new Profile({
-    imageUrl: 'https://example.com',
+    imageUrl: "https://example.com",
     userOrId: aUser,
   });
 
@@ -154,19 +156,23 @@ test('creates a user and assign a profile to it (using entity)', async () => {
   await em.persistAndFlush(aProfile);
 
   // Assert
-  const userWithProfile = await em.findOneOrFail(User, { id: aUser.id }, {
-    populate: ['profile'],
-    refresh: true,
-  });
+  const userWithProfile = await em.findOneOrFail(
+    User,
+    { id: aUser.id },
+    {
+      populate: ["profile"],
+      refresh: true,
+    },
+  );
   expect(userWithProfile.profile).toBeTruthy();
 });
 
-test('creates a user and assign a profile to it (using id)', async () => {
+test("creates a user and assign a profile to it (using id)", async () => {
   // Arrange
   const aUser = orm.em.create(User, {
-    firstName: 'firstName',
-    lastName: 'lastName',
-    email: 'email@mail.com',
+    firstName: "firstName",
+    lastName: "lastName",
+    email: "email@mail.com",
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -175,7 +181,7 @@ test('creates a user and assign a profile to it (using id)', async () => {
   const em = orm.em.fork();
 
   const aProfile = new Profile({
-    imageUrl: 'https://example.com',
+    imageUrl: "https://example.com",
     userOrId: aUser.id,
   });
 
@@ -183,9 +189,13 @@ test('creates a user and assign a profile to it (using id)', async () => {
   await em.persistAndFlush(aProfile);
 
   // Assert
-  const userWithProfile = await em.findOneOrFail(User, { id: aUser.id }, {
-    populate: ['profile'],
-    refresh: true,
-  });
+  const userWithProfile = await em.findOneOrFail(
+    User,
+    { id: aUser.id },
+    {
+      populate: ["profile"],
+      refresh: true,
+    },
+  );
   expect(userWithProfile.profile).toBeTruthy();
 });

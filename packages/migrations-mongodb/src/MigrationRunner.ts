@@ -1,18 +1,19 @@
-import type { MigrationsOptions, Transaction } from '@mikro-orm/core';
-import type { MongoDriver, MongoConnection } from '@mikro-orm/mongodb';
-import type { Migration } from './Migration';
+import type { MigrationsOptions, Transaction } from "@yandjin-mikro-orm/core";
+import type { MongoDriver, MongoConnection } from "@yandjin-mikro-orm/mongodb";
+import type { Migration } from "./Migration";
 
 export class MigrationRunner {
-
   private readonly connection: MongoConnection;
   private masterTransaction?: Transaction;
 
-  constructor(protected readonly driver: MongoDriver,
-              protected readonly options: MigrationsOptions) {
+  constructor(
+    protected readonly driver: MongoDriver,
+    protected readonly options: MigrationsOptions,
+  ) {
     this.connection = this.driver.getConnection();
   }
 
-  async run(migration: Migration, method: 'up' | 'down'): Promise<void> {
+  async run(migration: Migration, method: "up" | "down"): Promise<void> {
     migration.reset();
 
     if (!this.options.transactional || !migration.isTransactional()) {
@@ -21,10 +22,13 @@ export class MigrationRunner {
       migration.setTransactionContext(this.masterTransaction);
       await migration[method]();
     } else {
-      await this.connection.transactional(async tx => {
-        migration.setTransactionContext(tx);
-        await migration[method]();
-      }, { ctx: this.masterTransaction });
+      await this.connection.transactional(
+        async (tx) => {
+          migration.setTransactionContext(tx);
+          await migration[method]();
+        },
+        { ctx: this.masterTransaction },
+      );
     }
   }
 
@@ -35,5 +39,4 @@ export class MigrationRunner {
   unsetMasterMigration() {
     delete this.masterTransaction;
   }
-
 }

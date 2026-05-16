@@ -1,17 +1,22 @@
-import { Entity, HiddenProps, PrimaryKey, Property, SerializedPrimaryKey } from '@mikro-orm/core';
+import {
+  Entity,
+  HiddenProps,
+  PrimaryKey,
+  Property,
+  SerializedPrimaryKey,
+} from "@yandjin-mikro-orm/core";
 
 @Entity()
 export class Test {
+  [HiddenProps]?: "hiddenField";
 
-  [HiddenProps]?: 'hiddenField';
-
-  @PrimaryKey({ type: 'ObjectId' })
+  @PrimaryKey({ type: "ObjectId" })
   _id: any;
 
   @SerializedPrimaryKey()
   id!: string;
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   name: any;
 
   @Property({ hidden: true })
@@ -32,5 +37,4 @@ export class Test {
 
     return t;
   }
-
 }

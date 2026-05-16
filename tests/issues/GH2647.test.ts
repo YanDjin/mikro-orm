@@ -1,32 +1,32 @@
-import { Entity, ManyToOne, MikroORM, PrimaryKey } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Provider {
-
   @PrimaryKey()
   id: number;
 
   constructor(id: number) {
     this.id = id;
   }
-
 }
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id: number;
 
   constructor(id: number) {
     this.id = id;
   }
-
 }
 
 @Entity()
 export class Member {
-
   @ManyToOne(() => Provider, { eager: true, primary: true })
   provider: Provider;
 
@@ -37,12 +37,10 @@ export class Member {
     this.provider = a;
     this.user = b;
   }
-
 }
 
 @Entity()
 export class Session {
-
   @PrimaryKey()
   id: number;
 
@@ -56,12 +54,10 @@ export class Session {
     this.id = id;
     this.owner = owner;
   }
-
 }
 
 @Entity()
 export class Participant {
-
   @ManyToOne(() => Session, { eager: true, primary: true })
   session: Session;
 
@@ -72,11 +68,9 @@ export class Participant {
     this.session = session;
     this.member = member;
   }
-
 }
 
-describe('GH #2647, #2742', () => {
-
+describe("GH #2647, #2742", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -99,7 +93,9 @@ describe('GH #2647, #2742', () => {
     await orm.em.nativeDelete(Provider, {});
   });
 
-  function createEntities(pks: [providerId: number, userId: number, sessionId: number]) {
+  function createEntities(
+    pks: [providerId: number, userId: number, sessionId: number],
+  ) {
     const provider = new Provider(pks[0]);
     const user = new User(pks[1]);
     const member = new Member(provider, user);
@@ -111,68 +107,79 @@ describe('GH #2647, #2742', () => {
     return { provider, user, member, session, participant };
   }
 
-  it('should be able to populate circularity (select-in)', async () => {
+  it("should be able to populate circularity (select-in)", async () => {
     const { session, member } = createEntities([1, 2, 3]);
     await orm.em.flush();
     orm.em.clear();
 
-    const res = await orm.em.find(Participant, { session, member }, { strategy: 'select-in' });
+    const res = await orm.em.find(
+      Participant,
+      { session, member },
+      { strategy: "select-in" },
+    );
     expect(res).toHaveLength(1);
     expect(res[0]).toBe(res[0].session.lastActionBy);
     orm.em.getUnitOfWork().computeChangeSets();
     expect(orm.em.getUnitOfWork().getChangeSets()).toHaveLength(0);
   });
 
-  it('should be able to find entity with nested composite key (multi insert, select-in)', async () => {
+  it("should be able to find entity with nested composite key (multi insert, select-in)", async () => {
     createEntities([11, 12, 13]);
     createEntities([21, 22, 23]);
     createEntities([31, 32, 33]);
     await orm.em.flush();
     orm.em.clear();
 
-    const res = await orm.em.find(Participant, {}, { strategy: 'select-in' });
+    const res = await orm.em.find(Participant, {}, { strategy: "select-in" });
     expect(res).toHaveLength(3);
     expect(res[0]).toBe(res[0].session.lastActionBy);
     expect(res[1]).toBe(res[1].session.lastActionBy);
     expect(res[2]).toBe(res[2].session.lastActionBy);
   });
 
-  it('should be able to populate circularity (joined)', async () => {
+  it("should be able to populate circularity (joined)", async () => {
     const { session, member } = createEntities([1, 2, 3]);
     await orm.em.flush();
     orm.em.clear();
 
-    const res = await orm.em.find(Participant, { session, member }, { strategy: 'joined' });
+    const res = await orm.em.find(
+      Participant,
+      { session, member },
+      { strategy: "joined" },
+    );
     expect(res).toHaveLength(1);
     expect(res[0]).toBe(res[0].session.lastActionBy);
     orm.em.getUnitOfWork().computeChangeSets();
     expect(orm.em.getUnitOfWork().getChangeSets()).toHaveLength(0);
   });
 
-  it('should be able to find entity with nested composite key (multi insert, joined)', async () => {
+  it("should be able to find entity with nested composite key (multi insert, joined)", async () => {
     createEntities([11, 12, 13]);
     createEntities([21, 22, 23]);
     createEntities([31, 32, 33]);
     await orm.em.flush();
     orm.em.clear();
 
-    const res = await orm.em.find(Participant, {}, { strategy: 'joined' });
+    const res = await orm.em.find(Participant, {}, { strategy: "joined" });
     expect(res).toHaveLength(3);
     expect(res[0]).toBe(res[0].session.lastActionBy);
     expect(res[1]).toBe(res[1].session.lastActionBy);
     expect(res[2]).toBe(res[2].session.lastActionBy);
   });
 
-  test('creating entity instance from POJO', async () => {
-    const participant = orm.em.getEntityFactory().create(Participant, {
-      session: {
-        id: 3,
-        owner: { provider: { id: 1 }, user: { id: 2 } },
-        lastActionBy: [3, [1, 2]],
+  test("creating entity instance from POJO", async () => {
+    const participant = orm.em.getEntityFactory().create(
+      Participant,
+      {
+        session: {
+          id: 3,
+          owner: { provider: { id: 1 }, user: { id: 2 } },
+          lastActionBy: [3, [1, 2]],
+        },
+        member: { provider: { id: 1 }, user: { id: 2 } },
       },
-      member: { provider: { id: 1 }, user: { id: 2 } },
-    }, { merge: true, newEntity: false });
+      { merge: true, newEntity: false },
+    );
     expect(participant).toBe(participant.session.lastActionBy);
   });
-
 });

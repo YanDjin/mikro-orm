@@ -1,9 +1,9 @@
-import { MikroORM } from '@mikro-orm/mysql';
-import { EntityGenerator } from '@mikro-orm/entity-generator';
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { EntityGenerator } from "@yandjin-mikro-orm/entity-generator";
 
 let orm: MikroORM;
 
-const schemaName = 'many_to_many_variants';
+const schemaName = "many_to_many_variants";
 const schema = `
 CREATE TABLE IF NOT EXISTS \`users\` (
   \`user_id\` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -207,27 +207,42 @@ afterEach(async () => {
 });
 
 describe(schemaName, () => {
-  describe.each([true, false])('bidirectionalRelations=%s', bidirectionalRelations => {
-    beforeEach(() => {
-      orm.config.get('entityGenerator').bidirectionalRelations = bidirectionalRelations;
-    });
-    describe.each([true, false])('onlyPurePivotTables=%s', onlyPurePivotTables => {
+  describe.each([true, false])(
+    "bidirectionalRelations=%s",
+    (bidirectionalRelations) => {
       beforeEach(() => {
-        orm.config.get('entityGenerator').onlyPurePivotTables = onlyPurePivotTables;
+        orm.config.get("entityGenerator").bidirectionalRelations =
+          bidirectionalRelations;
       });
+      describe.each([true, false])(
+        "onlyPurePivotTables=%s",
+        (onlyPurePivotTables) => {
+          beforeEach(() => {
+            orm.config.get("entityGenerator").onlyPurePivotTables =
+              onlyPurePivotTables;
+          });
 
-      describe.each([true, false])('readOnlyPivotTables=%s', readOnlyPivotTables => {
-        beforeEach(() => {
-          orm.config.get('entityGenerator').readOnlyPivotTables = readOnlyPivotTables;
-        });
+          describe.each([true, false])(
+            "readOnlyPivotTables=%s",
+            (readOnlyPivotTables) => {
+              beforeEach(() => {
+                orm.config.get("entityGenerator").readOnlyPivotTables =
+                  readOnlyPivotTables;
+              });
 
-        test.each([true, false])('entitySchema=%s', async entitySchema => {
-          orm.config.get('entityGenerator').entitySchema = entitySchema;
+              test.each([true, false])(
+                "entitySchema=%s",
+                async (entitySchema) => {
+                  orm.config.get("entityGenerator").entitySchema = entitySchema;
 
-          const dump = await orm.entityGenerator.generate();
-          expect(dump).toMatchSnapshot('dump');
-        });
-      });
-    });
-  });
+                  const dump = await orm.entityGenerator.generate();
+                  expect(dump).toMatchSnapshot("dump");
+                },
+              );
+            },
+          );
+        },
+      );
+    },
+  );
 });

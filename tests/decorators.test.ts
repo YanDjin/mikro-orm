@@ -11,23 +11,26 @@ import {
   CreateRequestContext,
   EnsureRequestContext,
   RequestContext,
-} from '@mikro-orm/core';
-import type { Dictionary } from '@mikro-orm/core';
-import { Test } from './entities';
+} from "@yandjin-mikro-orm/core";
+import type { Dictionary } from "@yandjin-mikro-orm/core";
+import { Test } from "./entities";
 
 class Test2 {}
 class Test3 {}
 class Test4 {}
 class Test5 {}
 class Test6 {}
-const TEST_VALUE = 'expected value';
+const TEST_VALUE = "expected value";
 
 const DI = {} as Dictionary;
 
-const ASYNC_ORM: Promise<MikroORM> =  Promise.resolve(Object.create(MikroORM.prototype, { em: { value: { name: 'default', fork: jest.fn() } } }));
+const ASYNC_ORM: Promise<MikroORM> = Promise.resolve(
+  Object.create(MikroORM.prototype, {
+    em: { value: { name: "default", fork: jest.fn() } },
+  }),
+);
 
 class TestClass {
-
   constructor(private readonly orm: MikroORM) {}
 
   @CreateRequestContext()
@@ -64,11 +67,9 @@ class TestClass {
   async methodWithAsyncOrmInstance() {
     return TEST_VALUE;
   }
-
 }
 
 class TestClass2 {
-
   constructor(private readonly orm: MikroORM) {}
 
   @EnsureRequestContext()
@@ -95,85 +96,112 @@ class TestClass2 {
   methodWithCallback() {
     //
   }
-
 }
 
 class TestClass3 {
-
   constructor(private readonly orm: Promise<MikroORM>) {}
 
   @CreateRequestContext()
   methodWithAsyncOrmPropertyAndReturnsNothing() {
     //
   }
-
 }
 
-describe('decorators', () => {
+describe("decorators", () => {
+  const lookupPathFromDecorator = jest.spyOn(Utils, "lookupPathFromDecorator");
+  lookupPathFromDecorator.mockReturnValue("/path/to/entity");
 
-  const lookupPathFromDecorator = jest.spyOn(Utils, 'lookupPathFromDecorator');
-  lookupPathFromDecorator.mockReturnValue('/path/to/entity');
-
-  test('ManyToMany', () => {
+  test("ManyToMany", () => {
     const storage = MetadataStorage.getMetadata();
-    const key = 'Test2-' + Utils.hash('/path/to/entity');
-    const err = 'Mixing first decorator parameter as options object with other parameters is forbidden. If you want to use the options parameter at first position, provide all options inside it.';
-    expect(() => ManyToMany({ entity: () => Test }, 'name')(new Test2(), 'test0')).toThrow(err);
-    ManyToMany({ entity: () => Test })(new Test2(), 'test0');
-    ManyToMany({ entity: () => Test })(new Test2(), 'test0'); // calling multiple times won't throw
-    expect(storage[key].properties.test0).toMatchObject({ kind: ReferenceKind.MANY_TO_MANY, name: 'test0' });
+    const key = "Test2-" + Utils.hash("/path/to/entity");
+    const err =
+      "Mixing first decorator parameter as options object with other parameters is forbidden. If you want to use the options parameter at first position, provide all options inside it.";
+    expect(() =>
+      ManyToMany({ entity: () => Test }, "name")(new Test2(), "test0"),
+    ).toThrow(err);
+    ManyToMany({ entity: () => Test })(new Test2(), "test0");
+    ManyToMany({ entity: () => Test })(new Test2(), "test0"); // calling multiple times won't throw
+    expect(storage[key].properties.test0).toMatchObject({
+      kind: ReferenceKind.MANY_TO_MANY,
+      name: "test0",
+    });
     expect(storage[key].properties.test0.entity()).toBe(Test);
     expect(Object.keys(MetadataStorage.getMetadata())).toHaveLength(7);
     MetadataStorage.clear();
     expect(Object.keys(MetadataStorage.getMetadata())).toHaveLength(0);
   });
 
-  test('ManyToOne', () => {
+  test("ManyToOne", () => {
     const storage = MetadataStorage.getMetadata();
-    const key = 'Test3-' + Utils.hash('/path/to/entity');
-    ManyToOne({ entity: () => Test })(new Test3(), 'test1');
-    ManyToOne({ entity: () => Test })(new Test3(), 'test1'); // calling multiple times won't throw
-    expect(storage[key].properties.test1).toMatchObject({ kind: ReferenceKind.MANY_TO_ONE, name: 'test1' });
+    const key = "Test3-" + Utils.hash("/path/to/entity");
+    ManyToOne({ entity: () => Test })(new Test3(), "test1");
+    ManyToOne({ entity: () => Test })(new Test3(), "test1"); // calling multiple times won't throw
+    expect(storage[key].properties.test1).toMatchObject({
+      kind: ReferenceKind.MANY_TO_ONE,
+      name: "test1",
+    });
     expect(storage[key].properties.test1.entity()).toBe(Test);
   });
 
-  test('OneToOne', () => {
+  test("OneToOne", () => {
     const storage = MetadataStorage.getMetadata();
-    const key = 'Test6-' + Utils.hash('/path/to/entity');
-    OneToOne({ entity: () => Test, inversedBy: 'test5' } as any)(new Test6(), 'test1');
-    expect(storage[key].properties.test1).toMatchObject({ kind: ReferenceKind.ONE_TO_ONE, name: 'test1', inversedBy: 'test5' });
+    const key = "Test6-" + Utils.hash("/path/to/entity");
+    OneToOne({ entity: () => Test, inversedBy: "test5" } as any)(
+      new Test6(),
+      "test1",
+    );
+    expect(storage[key].properties.test1).toMatchObject({
+      kind: ReferenceKind.ONE_TO_ONE,
+      name: "test1",
+      inversedBy: "test5",
+    });
     expect(storage[key].properties.test1.entity()).toBe(Test);
   });
 
-  test('OneToMany', () => {
+  test("OneToMany", () => {
     const storage = MetadataStorage.getMetadata();
-    const key = 'Test4-' + Utils.hash('/path/to/entity');
-    OneToMany({ entity: () => Test, mappedBy: 'test' } as any)(new Test4(), 'test2');
-    OneToMany({ entity: () => Test, mappedBy: 'test' } as any)(new Test4(), 'test2'); // calling multiple times won't throw
-    expect(storage[key].properties.test2).toMatchObject({ kind: ReferenceKind.ONE_TO_MANY, name: 'test2', mappedBy: 'test' });
+    const key = "Test4-" + Utils.hash("/path/to/entity");
+    OneToMany({ entity: () => Test, mappedBy: "test" } as any)(
+      new Test4(),
+      "test2",
+    );
+    OneToMany({ entity: () => Test, mappedBy: "test" } as any)(
+      new Test4(),
+      "test2",
+    ); // calling multiple times won't throw
+    expect(storage[key].properties.test2).toMatchObject({
+      kind: ReferenceKind.ONE_TO_MANY,
+      name: "test2",
+      mappedBy: "test",
+    });
     expect(storage[key].properties.test2.entity()).toBe(Test);
   });
 
-  test('Property', () => {
+  test("Property", () => {
     const storage = MetadataStorage.getMetadata();
-    const key = 'Test5-' + Utils.hash('/path/to/entity');
-    Property()(new Test5(), 'test3');
-    expect(storage[key].properties.test3).toMatchObject({ kind: ReferenceKind.SCALAR, name: 'test3' });
+    const key = "Test5-" + Utils.hash("/path/to/entity");
+    Property()(new Test5(), "test3");
+    expect(storage[key].properties.test3).toMatchObject({
+      kind: ReferenceKind.SCALAR,
+      name: "test3",
+    });
   });
 
-  test('babel support', () => {
-    const ret1 = Property()(new Test5(), 'test3');
+  test("babel support", () => {
+    const ret1 = Property()(new Test5(), "test3");
     expect(ret1).toBeUndefined();
-    process.env.BABEL_DECORATORS_COMPAT = 'true';
-    const ret2 = Property()(new Test5(), 'test3');
+    process.env.BABEL_DECORATORS_COMPAT = "true";
+    const ret2 = Property()(new Test5(), "test3");
     expect(ret2).not.toBeUndefined();
     delete process.env.BABEL_DECORATORS_COMPAT;
-    const ret3 = Property()(new Test5(), 'test3');
+    const ret3 = Property()(new Test5(), "test3");
     expect(ret3).toBeUndefined();
   });
 
-  test('CreateRequestContext', async () => {
-    const orm = Object.create(MikroORM.prototype, { em: { value: { name: 'default', fork: jest.fn() } } });
+  test("CreateRequestContext", async () => {
+    const orm = Object.create(MikroORM.prototype, {
+      em: { value: { name: "default", fork: jest.fn() } },
+    });
     const test = new TestClass(orm);
 
     const ret1 = await test.asyncMethodReturnsValue();
@@ -193,7 +221,8 @@ describe('decorators', () => {
     const ret6 = await test2.methodWithCallback();
     expect(ret6).toBeUndefined();
 
-    const err = '@CreateRequestContext() decorator can only be applied to methods of classes with `orm: MikroORM` property, or with a callback parameter like `@CreateRequestContext(() => orm)`';
+    const err =
+      "@CreateRequestContext() decorator can only be applied to methods of classes with `orm: MikroORM` property, or with a callback parameter like `@CreateRequestContext(() => orm)`";
     await expect(test2.asyncMethodReturnsValue()).rejects.toThrow(err);
     const ret7 = await test.methodWithAsyncCallback();
     expect(ret7).toEqual(TEST_VALUE);
@@ -205,8 +234,10 @@ describe('decorators', () => {
     expect(ret9).toBeUndefined();
   });
 
-  test('EnsureRequestContext', async () => {
-    const orm = Object.create(MikroORM.prototype, { em: { value: { name: 'default', fork: jest.fn() } } });
+  test("EnsureRequestContext", async () => {
+    const orm = Object.create(MikroORM.prototype, {
+      em: { value: { name: "default", fork: jest.fn() } },
+    });
     const test = new TestClass2(orm);
 
     const ret1 = await test.asyncMethodReturnsValue();
@@ -226,12 +257,12 @@ describe('decorators', () => {
     const ret6 = await test2.methodWithCallback();
     expect(ret6).toBeUndefined();
 
-    const err = '@EnsureRequestContext() decorator can only be applied to methods of classes with `orm: MikroORM` property, or with a callback parameter like `@EnsureRequestContext(() => orm)`';
+    const err =
+      "@EnsureRequestContext() decorator can only be applied to methods of classes with `orm: MikroORM` property, or with a callback parameter like `@EnsureRequestContext(() => orm)`";
     await expect(test2.asyncMethodReturnsValue()).rejects.toThrow(err);
 
     await RequestContext.create(orm.em, async () => {
       await expect(test2.asyncMethodReturnsValue()).resolves.toBe(TEST_VALUE);
     });
   });
-
 });

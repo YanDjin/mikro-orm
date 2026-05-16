@@ -1,30 +1,29 @@
 (global as any).process.env.FORCE_COLOR = 0;
 
-import { MikroORM } from '@mikro-orm/core';
-import { SchemaGenerator, SqliteDriver } from '@mikro-orm/sqlite';
-import { CLIHelper } from '@mikro-orm/cli';
-import { CreateDatabaseCommand } from '../../../packages/cli/src/commands/CreateDatabaseCommand';
-import { initORMSqlite } from '../../bootstrap';
+import { MikroORM } from "@yandjin-mikro-orm/core";
+import { SchemaGenerator, SqliteDriver } from "@yandjin-mikro-orm/sqlite";
+import { CLIHelper } from "@yandjin-mikro-orm/cli";
+import { CreateDatabaseCommand } from "../../../packages/cli/src/commands/CreateDatabaseCommand";
+import { initORMSqlite } from "../../bootstrap";
 
-const closeSpy = jest.spyOn(MikroORM.prototype, 'close');
-const showHelpMock = jest.spyOn(CLIHelper, 'showHelp');
+const closeSpy = jest.spyOn(MikroORM.prototype, "close");
+const showHelpMock = jest.spyOn(CLIHelper, "showHelp");
 showHelpMock.mockImplementation(() => void 0);
-const ensureDatabase = jest.spyOn(SchemaGenerator.prototype, 'ensureDatabase');
+const ensureDatabase = jest.spyOn(SchemaGenerator.prototype, "ensureDatabase");
 ensureDatabase.mockImplementation(async () => false);
-const dumpMock = jest.spyOn(CLIHelper, 'dump');
+const dumpMock = jest.spyOn(CLIHelper, "dump");
 dumpMock.mockImplementation(() => void 0);
 
-describe('CreateDatabaseCommand', () => {
-
+describe("CreateDatabaseCommand", () => {
   let orm: MikroORM<SqliteDriver>;
 
   beforeAll(async () => {
     orm = await initORMSqlite();
-    const getORMMock = jest.spyOn(CLIHelper, 'getORM');
+    const getORMMock = jest.spyOn(CLIHelper, "getORM");
     getORMMock.mockResolvedValue(orm);
   });
 
-  test('handler', async () => {
+  test("handler", async () => {
     const cmd = new CreateDatabaseCommand();
 
     await expect(cmd.handler({} as any)).resolves.toBeUndefined();
@@ -32,5 +31,4 @@ describe('CreateDatabaseCommand', () => {
     expect(ensureDatabase).toHaveBeenCalled();
     expect(closeSpy).toHaveBeenCalledTimes(1);
   });
-
 });

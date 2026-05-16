@@ -1,14 +1,13 @@
-import type { MikroORM } from '@mikro-orm/core';
-import { wrap } from '@mikro-orm/core';
-import { MySqlDriver } from '@mikro-orm/mysql';
-import { initORMMySql } from './bootstrap';
-import { FooBar2, FooBaz2 } from './entities-sql';
+import type { MikroORM } from "@yandjin-mikro-orm/core";
+import { wrap } from "@yandjin-mikro-orm/core";
+import { MySqlDriver } from "@yandjin-mikro-orm/mysql";
+import { initORMMySql } from "./bootstrap";
+import { FooBar2, FooBaz2 } from "./entities-sql";
 
-describe('EntityHelperMySql', () => {
-
+describe("EntityHelperMySql", () => {
   let orm: MikroORM<MySqlDriver>;
 
-  beforeAll(async () => orm = await initORMMySql('mysql', {}, true));
+  beforeAll(async () => (orm = await initORMMySql("mysql", {}, true)));
   beforeEach(async () => orm.schema.clearDatabase());
   afterAll(async () => {
     await orm.schema.dropDatabase();
@@ -16,29 +15,32 @@ describe('EntityHelperMySql', () => {
   });
 
   test(`toObject allows to hide PK (GH issue 644)`, async () => {
-    const bar = FooBar2.create('fb');
+    const bar = FooBar2.create("fb");
     await orm.em.persistAndFlush(bar);
-    const dto = wrap(bar).toObject(['id']);
-    expect(dto).not.toMatchObject({ id: bar.id, name: 'fb' });
+    const dto = wrap(bar).toObject(["id"]);
+    expect(dto).not.toMatchObject({ id: bar.id, name: "fb" });
     // @ts-expect-error
     expect(dto.id).toBeUndefined();
   });
 
   test(`toObject handles recursion in 1:1 (select-in)`, async () => {
-    const bar = FooBar2.create('fb');
-    bar.baz = new FooBaz2('fz');
+    const bar = FooBar2.create("fb");
+    bar.baz = new FooBaz2("fz");
     await orm.em.persistAndFlush(bar);
     orm.em.clear();
 
     const repo = orm.em.getRepository(FooBar2);
-    const a = await repo.findOneOrFail(bar.id, { populate: ['baz.bar'], strategy: 'select-in' });
+    const a = await repo.findOneOrFail(bar.id, {
+      populate: ["baz.bar"],
+      strategy: "select-in",
+    });
     expect(wrap(a.baz!).isInitialized()).toBe(true);
     expect(wrap(a.baz!.bar!).isInitialized()).toBe(true);
     expect(wrap(a).toJSON()).toEqual({
       baz: {
         bar: {
           id: 1,
-          name: 'fb',
+          name: "fb",
           nameWithSpace: null,
           objectProperty: null,
           random: 123,
@@ -49,12 +51,12 @@ describe('EntityHelperMySql', () => {
           fooBar: null,
         }, // circular reference breaks the cycle
         id: 1,
-        name: 'fz',
+        name: "fz",
         version: a.baz!.version,
       },
       fooBar: null,
       id: 1,
-      name: 'fb',
+      name: "fb",
       nameWithSpace: null,
       random: 123,
       version: a.version,
@@ -66,20 +68,23 @@ describe('EntityHelperMySql', () => {
   });
 
   test(`toObject handles recursion in 1:1 (joined)`, async () => {
-    const bar = FooBar2.create('fb');
-    bar.baz = new FooBaz2('fz');
+    const bar = FooBar2.create("fb");
+    bar.baz = new FooBaz2("fz");
     await orm.em.persistAndFlush(bar);
     orm.em.clear();
 
     const repo = orm.em.getRepository(FooBar2);
-    const a = await repo.findOneOrFail(bar.id, { populate: ['baz.bar'], strategy: 'joined' });
+    const a = await repo.findOneOrFail(bar.id, {
+      populate: ["baz.bar"],
+      strategy: "joined",
+    });
     expect(wrap(a.baz!).isInitialized()).toBe(true);
     expect(wrap(a.baz!.bar!).isInitialized()).toBe(true);
     expect(wrap(a).toJSON()).toEqual({
       baz: {
         bar: {
           id: 1,
-          name: 'fb',
+          name: "fb",
           nameWithSpace: null,
           objectProperty: null,
           random: 123,
@@ -90,12 +95,12 @@ describe('EntityHelperMySql', () => {
           fooBar: null,
         }, // circular reference breaks the cycle
         id: 1,
-        name: 'fz',
+        name: "fz",
         version: a.baz!.version,
       },
       fooBar: null,
       id: 1,
-      name: 'fb',
+      name: "fb",
       nameWithSpace: null,
       random: 123,
       version: a.version,
@@ -105,5 +110,4 @@ describe('EntityHelperMySql', () => {
       blob2: null,
     });
   });
-
 });

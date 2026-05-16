@@ -1,9 +1,18 @@
-import { MikroORM } from '@mikro-orm/better-sqlite';
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, ref, LoadStrategy } from '@mikro-orm/core';
+import { MikroORM } from "@yandjin-mikro-orm/better-sqlite";
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  Ref,
+  ref,
+  LoadStrategy,
+} from "@yandjin-mikro-orm/core";
 
 @Entity()
 class Author {
-
   @PrimaryKey()
   id!: number;
 
@@ -15,14 +24,14 @@ class Author {
 
   @OneToMany({
     entity: () => Publisher,
-    mappedBy: p => p.bestSellingAuthor,
+    mappedBy: (p) => p.bestSellingAuthor,
     eager: true,
   })
   publishers = new Collection<Publisher>(this);
 
   @OneToMany({
     entity: () => Book,
-    mappedBy: b => b.author,
+    mappedBy: (b) => b.author,
   })
   books = new Collection<Book>(this);
 
@@ -30,12 +39,10 @@ class Author {
     this.name = name;
     this.email = email;
   }
-
 }
 
 @Entity()
 class Book {
-
   @PrimaryKey()
   id!: number;
 
@@ -48,7 +55,11 @@ class Book {
   @ManyToOne(() => Publisher, { ref: true, nullable: true })
   publisher?: Ref<Publisher>;
 
-  constructor({ author, publisher, title }: {
+  constructor({
+    author,
+    publisher,
+    title,
+  }: {
     author: Author;
     publisher: Publisher;
     title: string;
@@ -57,12 +68,10 @@ class Book {
     this.publisher = ref(publisher);
     this.title = title;
   }
-
 }
 
 @Entity()
 class Publisher {
-
   @PrimaryKey()
   id!: number;
 
@@ -77,7 +86,7 @@ class Publisher {
 
   @OneToMany({
     entity: () => Book,
-    mappedBy: a => a.publisher,
+    mappedBy: (a) => a.publisher,
     eager: true,
   })
   books = new Collection<Book>(this);
@@ -86,7 +95,6 @@ class Publisher {
     this.name = name;
     this.bestSellingAuthor = ref(bestSellingAuthor);
   }
-
 }
 
 async function seed(orm: MikroORM) {
@@ -98,7 +106,7 @@ async function seed(orm: MikroORM) {
 
   const publisher = em.create(Publisher, {
     name: `pub`,
-    country: 'neverland',
+    country: "neverland",
     bestSellingAuthor: author,
   });
 
@@ -120,7 +128,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Author],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
   await seed(orm);
@@ -130,23 +138,27 @@ beforeEach(() => orm.em.clear());
 afterAll(() => orm.close(true));
 
 // should run around 15ms when run separately (M1 Pro 32g)
-test('perf: eager loading with cycles (select-in)', async () => {
-  console.time('perf: eager loading with cycles');
+test("perf: eager loading with cycles (select-in)", async () => {
+  console.time("perf: eager loading with cycles");
   const res = await orm.em.find(Book, {}, { strategy: LoadStrategy.SELECT_IN });
-  console.timeEnd('perf: eager loading with cycles');
+  console.timeEnd("perf: eager loading with cycles");
 
   expect(res).toHaveLength(50);
-  expect(res[0].author.unwrap().publishers[0].books[0].title).toBe('Bible pt.0');
+  expect(res[0].author.unwrap().publishers[0].books[0].title).toBe(
+    "Bible pt.0",
+  );
   expect(res[0]).toBe(res[0].author.unwrap().publishers[0].books[0]);
 });
 
 // should run around 15ms when run separately (M1 Pro 32g)
-test('perf: eager loading with cycles (joined)', async () => {
-  console.time('perf: eager loading with cycles');
+test("perf: eager loading with cycles (joined)", async () => {
+  console.time("perf: eager loading with cycles");
   const res = await orm.em.find(Book, {}, { strategy: LoadStrategy.JOINED });
-  console.timeEnd('perf: eager loading with cycles');
+  console.timeEnd("perf: eager loading with cycles");
 
   expect(res).toHaveLength(50);
-  expect(res[0].author.unwrap().publishers[0].books[0].title).toBe('Bible pt.0');
+  expect(res[0].author.unwrap().publishers[0].books[0].title).toBe(
+    "Bible pt.0",
+  );
   expect(res[0]).toBe(res[0].author.unwrap().publishers[0].books[0]);
 });

@@ -1,33 +1,38 @@
-import { Entity, MikroORM, PrimaryKey, OneToMany, ManyToOne, Collection, ValidationError, ArrayCollection } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  OneToMany,
+  ManyToOne,
+  Collection,
+  ValidationError,
+  ArrayCollection,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany(() => B, b => b.a)
+  @OneToMany(() => B, (b) => b.a)
   bItems = new Collection<B>(this);
-
 }
 
 @Entity()
 class B {
-
   @PrimaryKey()
   id!: number;
 
   @ManyToOne(() => A, { nullable: true })
   a?: A;
-
 }
-describe('GH issue 949', () => {
+describe("GH issue 949", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [A, B],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
@@ -44,7 +49,9 @@ describe('GH issue 949', () => {
 
     await orm.em.persistAndFlush(aEntity);
 
-    if (!aEntity) { return; }
+    if (!aEntity) {
+      return;
+    }
     const reloadedBook = await aEntity.bItems.loadCount();
     expect(reloadedBook).toBe(1);
 
@@ -59,7 +66,6 @@ describe('GH issue 949', () => {
     // Testing array collection implementation
     await orm.em.flush();
     orm.em.clear();
-
 
     // Updates when removing an item
     aEntity = (await orm.em.findOne(A, aEntity.id))!;

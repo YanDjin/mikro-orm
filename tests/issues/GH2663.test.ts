@@ -1,54 +1,56 @@
-import { Embeddable, Embedded, Entity, LoadStrategy, ManyToOne, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  LoadStrategy,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Embeddable()
 export class Z {
-
   @Property()
   name!: string;
-
 }
 
 @Entity()
 export class A {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded({ entity: () => Z, object: true })
   z!: Z;
-
 }
 
 @Entity()
 export class B {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne({ entity: () => A, deleteRule: 'cascade' })
+  @ManyToOne({ entity: () => A, deleteRule: "cascade" })
   a!: A;
-
 }
 
-describe('GH issue 2663', () => {
-
+describe("GH issue 2663", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [A, B, Z],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('should return Z data', async () => {
+  test("should return Z data", async () => {
     // Create sample data
     const a = orm.em.create(A, {
       z: {
-        name: 'test',
+        name: "test",
       },
     });
     orm.em.persist(a);
@@ -59,10 +61,10 @@ describe('GH issue 2663', () => {
     await orm.em.flush();
 
     const r = await orm.em.fork().findOne(B, b.id, {
-      populate: ['a'],
+      populate: ["a"],
       strategy: LoadStrategy.JOINED,
     });
 
-    expect(r?.a.z?.name).toEqual('test');
+    expect(r?.a.z?.name).toEqual("test");
   });
 });

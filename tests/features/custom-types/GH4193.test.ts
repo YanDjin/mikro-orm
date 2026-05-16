@@ -1,22 +1,20 @@
-import { MikroORM } from '@mikro-orm/mysql';
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
 
 @Entity()
 class User {
-
-  @PrimaryKey({ type: 'number' })
+  @PrimaryKey({ type: "number" })
   id?: number;
 
-  @Property({ type: 'json' })
+  @Property({ type: "json" })
   value!: string;
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: 'mo-test',
+    dbName: "mo-test",
     port: 3308,
     entities: [User],
   });
@@ -25,12 +23,12 @@ beforeAll(async () => {
 
 afterAll(() => orm.close());
 
-test('It should fetch record matching by json column', async () => {
+test("It should fetch record matching by json column", async () => {
   const user = new User();
   user.id = 1;
-  user.value = 'test';
+  user.value = "test";
   await orm.em.fork().persistAndFlush(user);
 
-  const c = await orm.em.findOne(User, { value: 'test' });
+  const c = await orm.em.findOne(User, { value: "test" });
   expect(c).not.toBeNull();
 });

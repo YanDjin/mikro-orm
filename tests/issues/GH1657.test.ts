@@ -1,27 +1,33 @@
-import { Collection, Entity, LoadStrategy, ManyToOne, MikroORM, OneToMany, PrimaryKey, wrap } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  LoadStrategy,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  wrap,
+} from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class Order {
-
   @PrimaryKey()
   id: number;
 
-  @OneToMany('OrderItem', 'order1')
+  @OneToMany("OrderItem", "order1")
   orderItems1 = new Collection<OrderItem>(this);
 
-  @OneToMany('OrderItem', 'order2')
+  @OneToMany("OrderItem", "order2")
   orderItems2 = new Collection<OrderItem>(this);
 
   constructor(id: number) {
     this.id = id;
   }
-
 }
 
 @Entity()
 class OrderItem {
-
   @PrimaryKey()
   id: number;
 
@@ -43,24 +49,22 @@ class OrderItem {
   constructor(id: number) {
     this.id = id;
   }
-
 }
 
-describe('GH issue 1657', () => {
-
+describe("GH issue 1657", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Order, OrderItem],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('eager loading m:1 with joined strategy', async () => {
+  test("eager loading m:1 with joined strategy", async () => {
     const order1 = new Order(1);
     const order2 = new Order(2);
     const orderItem1 = new OrderItem(3);
@@ -70,18 +74,21 @@ describe('GH issue 1657', () => {
     await orm.em.persistAndFlush([order1, order2]);
     orm.em.clear();
 
-    const mock = mockLogger(orm, ['query', 'query-params']);
+    const mock = mockLogger(orm, ["query", "query-params"]);
     const res1 = await orm.em.find(OrderItem, { id: { $lte: 100 } });
     expect(res1).toHaveLength(2);
     expect(wrap(res1[0].order1!).isInitialized()).toBe(true);
     expect(wrap(res1[1].order2!).isInitialized()).toBe(true);
 
     // first query loads item and joins the order2 relation (eager + joined strategy)
-    expect(mock.mock.calls[0][0]).toMatch('select `o0`.*, `o1`.`id` as `o1__id` from `order_item` as `o0` left join `order` as `o1` on `o0`.`order2_id` = `o1`.`id` where `o0`.`id` <= 100');
+    expect(mock.mock.calls[0][0]).toMatch(
+      "select `o0`.*, `o1`.`id` as `o1__id` from `order_item` as `o0` left join `order` as `o1` on `o0`.`order2_id` = `o1`.`id` where `o0`.`id` <= 100",
+    );
     // second query loads order1 relation (eager + select-in strategy)
-    expect(mock.mock.calls[1][0]).toMatch('select `o0`.* from `order` as `o0` where `o0`.`id` in (1)');
+    expect(mock.mock.calls[1][0]).toMatch(
+      "select `o0`.* from `order` as `o0` where `o0`.`id` in (1)",
+    );
 
     expect(mock.mock.calls).toHaveLength(2);
   });
-
 });

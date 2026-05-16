@@ -1,12 +1,17 @@
-import { Entity, JsonType, MikroORM, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  JsonType,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 interface GeoJSONPolygon {
-  type: 'Polygon';
+  type: "Polygon";
   coordinates: number[][][];
 }
 
 class GeoJSONPolygonType extends JsonType {
-
   convertToJSValueSQL(key: string) {
     return `ST_AsGeoJSON(${key},15)`;
   }
@@ -16,24 +21,21 @@ class GeoJSONPolygonType extends JsonType {
   }
 
   getColumnType(): string {
-    return 'GEOGRAPHY(POLYGON,4326)';
+    return "GEOGRAPHY(POLYGON,4326)";
   }
-
 }
 
 @Entity()
 class DeliveryZone {
-
   @PrimaryKey()
   id!: number;
 
   @Property({ type: GeoJSONPolygonType })
   polygon!: GeoJSONPolygon;
-
 }
 
 export const polygonOne: GeoJSONPolygon = {
-  type: 'Polygon',
+  type: "Polygon",
   coordinates: [
     [
       [44.25, 46.33],
@@ -43,10 +45,10 @@ export const polygonOne: GeoJSONPolygon = {
 };
 
 export const polygonTwo: GeoJSONPolygon = {
-  type: 'Polygon',
+  type: "Polygon",
   coordinates: [
     [
-      [44.27, 46.30],
+      [44.27, 46.3],
       [44.27, 46.29],
     ],
   ],
@@ -56,12 +58,12 @@ let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: '5176',
+    dbName: "5176",
     port: 5433,
     entities: [DeliveryZone],
   });
   await orm.schema.ensureDatabase();
-  await orm.schema.execute('create extension if not exists postgis');
+  await orm.schema.execute("create extension if not exists postgis");
   await orm.schema.refreshDatabase();
 });
 
@@ -74,7 +76,7 @@ beforeEach(async () => {
   await orm.schema.clearDatabase();
 });
 
-test('update entity', async () => {
+test("update entity", async () => {
   const deliveryZone = orm.em.create(DeliveryZone, { polygon: polygonOne });
   await orm.em.flush();
 
@@ -84,7 +86,7 @@ test('update entity', async () => {
   expect(deliveryZone.polygon).toStrictEqual(polygonTwo);
 });
 
-test('insert/update many entities', async () => {
+test("insert/update many entities", async () => {
   const deliveryZone1 = orm.em.create(DeliveryZone, { polygon: polygonOne });
   const deliveryZone2 = orm.em.create(DeliveryZone, { polygon: polygonTwo });
   await orm.em.flush();
@@ -97,18 +99,22 @@ test('insert/update many entities', async () => {
   expect(deliveryZone2.polygon).toStrictEqual(polygonOne);
 });
 
-test('native update entity', async () => {
+test("native update entity", async () => {
   const deliveryZone = orm.em.create(DeliveryZone, { polygon: polygonOne });
   await orm.em.flush();
 
   deliveryZone.polygon = polygonTwo;
-  await orm.em.nativeUpdate(DeliveryZone, { id: deliveryZone.id }, { polygon: polygonTwo });
+  await orm.em.nativeUpdate(
+    DeliveryZone,
+    { id: deliveryZone.id },
+    { polygon: polygonTwo },
+  );
   await orm.em.refresh(deliveryZone);
 
   expect(deliveryZone.polygon).toStrictEqual(polygonTwo);
 });
 
-test('create entity', async () => {
+test("create entity", async () => {
   const deliveryZone = orm.em.create(DeliveryZone, { polygon: polygonOne });
   await orm.em.flush();
 
@@ -118,12 +124,15 @@ test('create entity', async () => {
   });
 });
 
-test('fetch entity', async () => {
+test("fetch entity", async () => {
   const deliveryZone = orm.em.create(DeliveryZone, { polygon: polygonOne });
   await orm.em.flush();
   await orm.em.clear();
 
-  const refetchedDeliveryZone = await orm.em.findOneOrFail(DeliveryZone, deliveryZone.id);
+  const refetchedDeliveryZone = await orm.em.findOneOrFail(
+    DeliveryZone,
+    deliveryZone.id,
+  );
 
   expect(deliveryZone).toStrictEqual(refetchedDeliveryZone);
 });

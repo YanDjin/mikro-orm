@@ -1,9 +1,17 @@
-import { Embeddable, Embedded, Entity, MikroORM, Options, PrimaryKey, Property, t } from '@mikro-orm/core';
-import { PLATFORMS } from '../../bootstrap';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  MikroORM,
+  Options,
+  PrimaryKey,
+  Property,
+  t,
+} from "@yandjin-mikro-orm/core";
+import { PLATFORMS } from "../../bootstrap";
 
 @Embeddable()
 class FieldValue {
-
   @Property({ type: t.json, nullable: true })
   primitive?: string | number | boolean | null;
 
@@ -12,13 +20,11 @@ class FieldValue {
 
   @Property({ type: t.json, nullable: true })
   array?: string[];
-
 }
 
 @Entity()
 class Field {
-
-  @PrimaryKey({ name: '_id' })
+  @PrimaryKey({ name: "_id" })
   id: number = 1;
 
   @Embedded({ entity: () => FieldValue, array: true })
@@ -29,23 +35,27 @@ class Field {
 
   @Embedded({ entity: () => FieldValue, object: false })
   inline?: FieldValue;
-
 }
 
-describe.each(['sqlite', 'better-sqlite', 'mysql', 'postgresql', 'mongo'] as const)('GH #3327 (%s)', type => {
-
+describe.each([
+  "sqlite",
+  "better-sqlite",
+  "mysql",
+  "postgresql",
+  "mongo",
+] as const)("GH #3327 (%s)", (type) => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     const options: Options = {};
 
-    if (type === 'mysql') {
+    if (type === "mysql") {
       options.port = 3308;
     }
 
     orm = await MikroORM.init({
       entities: [Field],
-      dbName: type.includes('sqlite') ? ':memory:' : 'mikro_orm_3327',
+      dbName: type.includes("sqlite") ? ":memory:" : "mikro_orm_3327",
       driver: PLATFORMS[type],
       ...options,
     });
@@ -60,13 +70,17 @@ describe.each(['sqlite', 'better-sqlite', 'mysql', 'postgresql', 'mongo'] as con
     const value = new FieldValue();
     value.primitive = 1;
     value.object = { field: true };
-    value.array = ['1', '2', '3'];
+    value.array = ["1", "2", "3"];
     const value2 = new FieldValue();
     value2.primitive = null;
     value2.object = { field: false };
-    value2.array = ['4', '5', '6'];
+    value2.array = ["4", "5", "6"];
 
-    const entity = orm.em.create(Field, { values: [value, value2], value, inline: value2 });
+    const entity = orm.em.create(Field, {
+      values: [value, value2],
+      value,
+      inline: value2,
+    });
 
     await orm.em.persistAndFlush(entity);
 
@@ -79,13 +93,16 @@ describe.each(['sqlite', 'better-sqlite', 'mysql', 'postgresql', 'mongo'] as con
     expect(result.values[0]).toBeInstanceOf(FieldValue);
     expect(result).toEqual({
       id: result.id,
-      value: { primitive: 1, object: { field: true }, array: ['1', '2', '3'] },
+      value: { primitive: 1, object: { field: true }, array: ["1", "2", "3"] },
       values: [
-        { primitive: 1, object: { field: true }, array: ['1', '2', '3'] },
-        { primitive: null, object: { field: false }, array: ['4', '5', '6'] },
+        { primitive: 1, object: { field: true }, array: ["1", "2", "3"] },
+        { primitive: null, object: { field: false }, array: ["4", "5", "6"] },
       ],
-      inline: { primitive: null, object: { field: false }, array: ['4', '5', '6'] },
+      inline: {
+        primitive: null,
+        object: { field: false },
+        array: ["4", "5", "6"],
+      },
     });
   });
-
 });

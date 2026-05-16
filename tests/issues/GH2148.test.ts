@@ -1,24 +1,26 @@
-import { Entity, Ref, ManyToOne, MikroORM, PrimaryKey, Reference } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  Ref,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  Reference,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class First {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Entity()
 export class Second {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Entity()
 export class Third {
-
   @ManyToOne({ primary: true, entity: () => First, ref: true })
   first: Ref<First>;
 
@@ -29,24 +31,22 @@ export class Third {
     this.first = Reference.create(first);
     this.second = Reference.create(second);
   }
-
 }
 
-describe('GH issue 2148', () => {
-
+describe("GH issue 2148", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [First, Second, Third],
-      dbName: 'mikro_orm_test_2148',
+      dbName: "mikro_orm_test_2148",
     });
     await orm.schema.refreshDatabase();
   });
 
   afterAll(() => orm.close(true));
 
-  test('persisting composite PK entity with reference wrapper', async () => {
+  test("persisting composite PK entity with reference wrapper", async () => {
     const a = new First();
     const b = new Second();
     const c = new Third(a, b);
@@ -59,5 +59,4 @@ describe('GH issue 2148', () => {
     });
     await orm.em.remove(cc).flush();
   });
-
 });

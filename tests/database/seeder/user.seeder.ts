@@ -1,15 +1,17 @@
-import { Seeder } from '@mikro-orm/seeder';
-import type { Dictionary, EntityManager } from '@mikro-orm/core';
-import { User } from '../../features/seeder/entities/user.entity';
+import { Seeder } from "@yandjin-mikro-orm/seeder";
+import type { Dictionary, EntityManager } from "@yandjin-mikro-orm/core";
+import { User } from "../../features/seeder/entities/user.entity";
 
 export class UserSeeder extends Seeder {
-
   async run(em: EntityManager, context: Dictionary): Promise<void> {
-    context.user = em.create(User, {
-      name: 'Scrooge McDuck',
-      email: 'scrooge@money.dc',
-      password: 'MoneyIsForSwimming',
-    }, { persist: true });
+    context.user = em.create(
+      User,
+      {
+        name: "Scrooge McDuck",
+        email: "scrooge@money.dc",
+        password: "MoneyIsForSwimming",
+      },
+      { persist: true },
+    );
   }
-
 }

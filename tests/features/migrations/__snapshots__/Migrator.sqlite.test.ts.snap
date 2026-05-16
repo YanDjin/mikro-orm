@@ -2,7 +2,7 @@
 
 exports[`Migrator (sqlite) generate initial migration: initial-migration-dump 1`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 
@@ -84,7 +84,7 @@ export class Migration20191013214813 extends Migration {
 
 exports[`Migrator (sqlite) generate initial migration: initial-migration-dump 2`] = `
 {
-  "code": "import { Migration } from '@mikro-orm/migrations';
+  "code": "import { Migration } from '@yandjin-mikro-orm/migrations';
 
 export class Migration20191013214813 extends Migration {
 

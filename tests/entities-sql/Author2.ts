@@ -27,15 +27,14 @@ import {
   Embedded,
   sql,
   OptionalProps,
-} from '@mikro-orm/core';
+} from "@yandjin-mikro-orm/core";
 
-import { Book2 } from './Book2';
-import { BaseEntity2 } from './BaseEntity2';
-import { Address2 } from './Address2';
+import { Book2 } from "./Book2";
+import { BaseEntity2 } from "./BaseEntity2";
+import { Address2 } from "./Address2";
 
 @Embeddable()
 export class Identity {
-
   @Property({ hidden: true })
   foo: string & Hidden;
 
@@ -49,19 +48,17 @@ export class Identity {
 
   @Property({ persist: false })
   get fooBar() {
-    return this.foo + ' ' + this.bar;
+    return this.foo + " " + this.bar;
   }
-
 }
 
 @Entity()
-@Index({ properties: ['name', 'age'] })
-@Index({ name: 'custom_idx_name_123', properties: ['name'] })
-@Unique({ properties: ['name', 'email'] })
+@Index({ properties: ["name", "age"] })
+@Index({ name: "custom_idx_name_123", properties: ["name"] })
+@Unique({ properties: ["name", "email"] })
 export class Author2 extends BaseEntity2 {
-
   // just for testing the types, this is not needed
-  [OptionalProps]?: 'id';
+  [OptionalProps]?: "id";
 
   static beforeDestroyCalled = 0;
   static afterDestroyCalled = 0;
@@ -75,8 +72,8 @@ export class Author2 extends BaseEntity2 {
   @Property()
   name: string;
 
-  @Property({ unique: 'custom_email_unique_name' })
-  @Index({ name: 'custom_email_index_name' })
+  @Property({ unique: "custom_email_unique_name" })
+  @Index({ name: "custom_email_index_name" })
   email: string;
 
   @Property({ nullable: true, default: null })
@@ -92,31 +89,44 @@ export class Author2 extends BaseEntity2 {
   @Property({ nullable: true })
   identities?: string[];
 
-  @Property({ type: 'date', index: true, nullable: true })
+  @Property({ type: "date", index: true, nullable: true })
   born?: string;
 
-  @Property({ type: t.time, index: 'born_time_idx', nullable: true })
+  @Property({ type: t.time, index: "born_time_idx", nullable: true })
   bornTime?: string;
 
-  @OneToMany({ entity: () => Book2, mappedBy: 'author', orderBy: { title: QueryOrder.ASC } })
+  @OneToMany({
+    entity: () => Book2,
+    mappedBy: "author",
+    orderBy: { title: QueryOrder.ASC },
+  })
   books = new Collection<Book2>(this);
 
-  @OneToMany({ entity: () => Book2, mappedBy: 'author', strategy: LoadStrategy.JOINED, orderBy: { title: QueryOrder.ASC } })
+  @OneToMany({
+    entity: () => Book2,
+    mappedBy: "author",
+    strategy: LoadStrategy.JOINED,
+    orderBy: { title: QueryOrder.ASC },
+  })
   books2 = new Collection<Book2>(this);
 
-  @OneToOne({ entity: () => Address2, mappedBy: address => address.author, cascade: [Cascade.ALL] })
+  @OneToOne({
+    entity: () => Address2,
+    mappedBy: (address) => address.author,
+    cascade: [Cascade.ALL],
+  })
   address?: Address2;
 
-  @ManyToMany({ entity: () => Author2, pivotTable: 'author_to_friend' })
+  @ManyToMany({ entity: () => Author2, pivotTable: "author_to_friend" })
   friends = new Collection<Author2>(this);
 
   @ManyToMany(() => Author2)
   following = new Collection<Author2>(this);
 
-  @ManyToMany(() => Author2, a => a.following)
+  @ManyToMany(() => Author2, (a) => a.following)
   followers = new Collection<Author2>(this);
 
-  @ManyToOne({ nullable: true, updateRule: 'no action', deleteRule: 'cascade' })
+  @ManyToOne({ nullable: true, updateRule: "no action", deleteRule: "cascade" })
   favouriteBook?: Book2;
 
   @ManyToOne({ nullable: true })
@@ -165,7 +175,7 @@ export class Author2 extends BaseEntity2 {
 
   @AfterCreate()
   afterCreate(args: EventArgs<this>) {
-    this.versionAsString = 'v' + this.version;
+    this.versionAsString = "v" + this.version;
     this.hookParams.push(args);
   }
 
@@ -177,7 +187,7 @@ export class Author2 extends BaseEntity2 {
 
   @AfterUpdate()
   afterUpdate(args: EventArgs<this>) {
-    this.versionAsString = 'v' + this.version;
+    this.versionAsString = "v" + this.version;
     this.hookParams.push(args);
   }
 
@@ -191,7 +201,7 @@ export class Author2 extends BaseEntity2 {
     Author2.afterDestroyCalled += 1;
   }
 
-  @Property({ name: 'code' })
+  @Property({ name: "code" })
   getCode(): string & Opt {
     return `${this.email} - ${this.name}`;
   }
@@ -200,5 +210,4 @@ export class Author2 extends BaseEntity2 {
   get code2(): string & Opt {
     return `${this.email} - ${this.name}`;
   }
-
 }

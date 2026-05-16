@@ -1,28 +1,45 @@
-import { ObjectId } from 'bson';
+import { ObjectId } from "bson";
 import {
- Platform, MongoNamingStrategy, Utils, ReferenceKind, MetadataError, type
-  IPrimaryKey, type Primary, type NamingStrategy, type Constructor, type EntityRepository, type EntityProperty, type
-  PopulateOptions, type EntityMetadata, type IDatabaseDriver, type EntityManager, type Configuration, type MikroORM } from '@mikro-orm/core';
-import { MongoExceptionConverter } from './MongoExceptionConverter';
-import { MongoEntityRepository } from './MongoEntityRepository';
-import { MongoSchemaGenerator } from './MongoSchemaGenerator';
+  Platform,
+  MongoNamingStrategy,
+  Utils,
+  ReferenceKind,
+  MetadataError,
+  type IPrimaryKey,
+  type Primary,
+  type NamingStrategy,
+  type Constructor,
+  type EntityRepository,
+  type EntityProperty,
+  type PopulateOptions,
+  type EntityMetadata,
+  type IDatabaseDriver,
+  type EntityManager,
+  type Configuration,
+  type MikroORM,
+} from "@yandjin-mikro-orm/core";
+import { MongoExceptionConverter } from "./MongoExceptionConverter";
+import { MongoEntityRepository } from "./MongoEntityRepository";
+import { MongoSchemaGenerator } from "./MongoSchemaGenerator";
 
 export class MongoPlatform extends Platform {
-
-  protected override readonly exceptionConverter = new MongoExceptionConverter();
+  protected override readonly exceptionConverter =
+    new MongoExceptionConverter();
 
   override setConfig(config: Configuration) {
-    config.set('autoJoinOneToOneOwner', false);
-    config.set('loadStrategy', 'select-in');
-    config.get('discovery').inferDefaultValues = false;
+    config.set("autoJoinOneToOneOwner", false);
+    config.set("loadStrategy", "select-in");
+    config.get("discovery").inferDefaultValues = false;
     super.setConfig(config);
   }
 
-  override getNamingStrategy(): { new(): NamingStrategy} {
+  override getNamingStrategy(): { new (): NamingStrategy } {
     return MongoNamingStrategy;
   }
 
-  override getRepositoryClass<T extends object>(): Constructor<EntityRepository<T>> {
+  override getRepositoryClass<T extends object>(): Constructor<
+    EntityRepository<T>
+  > {
     return MongoEntityRepository as unknown as Constructor<EntityRepository<T>>;
   }
 
@@ -32,11 +49,16 @@ export class MongoPlatform extends Platform {
   }
 
   /* istanbul ignore next: kept for type inference only */
-  override getSchemaGenerator(driver: IDatabaseDriver, em?: EntityManager): MongoSchemaGenerator {
-    return new MongoSchemaGenerator(em ?? driver as any);
+  override getSchemaGenerator(
+    driver: IDatabaseDriver,
+    em?: EntityManager,
+  ): MongoSchemaGenerator {
+    return new MongoSchemaGenerator(em ?? (driver as any));
   }
 
-  override normalizePrimaryKey<T extends number | string = number | string>(data: Primary<T> | IPrimaryKey | ObjectId): T {
+  override normalizePrimaryKey<T extends number | string = number | string>(
+    data: Primary<T> | IPrimaryKey | ObjectId,
+  ): T {
     if (data instanceof ObjectId) {
       return data.toHexString() as T;
     }
@@ -49,7 +71,7 @@ export class MongoPlatform extends Platform {
   }
 
   override getSerializedPrimaryKeyField(field: string): string {
-    return 'id';
+    return "id";
   }
 
   override usesDifferentSerializedPrimaryKey(): boolean {
@@ -83,7 +105,11 @@ export class MongoPlatform extends Platform {
     return ret;
   }
 
-  override shouldHaveColumn<T>(prop: EntityProperty<T>, populate: PopulateOptions<T>[], exclude?: string[]): boolean {
+  override shouldHaveColumn<T>(
+    prop: EntityProperty<T>,
+    populate: PopulateOptions<T>[],
+    exclude?: string[],
+  ): boolean {
     if (super.shouldHaveColumn(prop, populate, exclude)) {
       return true;
     }
@@ -94,13 +120,12 @@ export class MongoPlatform extends Platform {
   override validateMetadata(meta: EntityMetadata): void {
     const pk = meta.getPrimaryProps()[0];
 
-    if (pk && pk.fieldNames?.[0] !== '_id') {
-      throw MetadataError.invalidPrimaryKey(meta, pk, '_id');
+    if (pk && pk.fieldNames?.[0] !== "_id") {
+      throw MetadataError.invalidPrimaryKey(meta, pk, "_id");
     }
   }
 
   override isAllowedTopLevelOperator(operator: string) {
-    return ['$not', '$fulltext'].includes(operator);
+    return ["$not", "$fulltext"].includes(operator);
   }
-
 }

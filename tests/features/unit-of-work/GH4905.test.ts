@@ -1,10 +1,9 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../../helpers';
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../../helpers";
 
 @Entity()
 class Book {
-
   @PrimaryKey()
   id!: string;
 
@@ -15,7 +14,6 @@ class Book {
     this.id = id;
     this.title = title;
   }
-
 }
 
 let orm: MikroORM;
@@ -23,7 +21,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Book],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
 
   await orm.schema.createSchema();
@@ -33,27 +31,27 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('entity with known primary key is added to the identity map as early as on persist call (1/2)', async () => {
+test("entity with known primary key is added to the identity map as early as on persist call (1/2)", async () => {
   const mock = mockLogger(orm);
-  const e1 = new Book('abc', 'title: abc');
-  const e2 = new Book('def', 'title: def');
+  const e1 = new Book("abc", "title: abc");
+  const e2 = new Book("def", "title: def");
 
   orm.em.persist(e1);
   orm.em.persist(e2);
 
   orm.em.remove(e1);
-  orm.em.remove(orm.em.getReference(Book, 'def'));
+  orm.em.remove(orm.em.getReference(Book, "def"));
 
   await orm.em.flush();
   expect(mock).not.toHaveBeenCalled();
 });
 
-test('entity with known primary key is added to the identity map as early as on persist call (2/2)', async () => {
+test("entity with known primary key is added to the identity map as early as on persist call (2/2)", async () => {
   const mock = mockLogger(orm);
-  const e1 = new Book('abc', 'title: abc');
+  const e1 = new Book("abc", "title: abc");
   orm.em.persist(e1);
 
-  const e2 = await orm.em.findOneOrFail(Book, 'abc');
+  const e2 = await orm.em.findOneOrFail(Book, "abc");
   orm.em.remove(e2);
 
   await orm.em.flush();

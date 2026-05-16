@@ -1,11 +1,18 @@
-import { MikroORM } from '@mikro-orm/sqlite';
-import { Embeddable, Embedded, Entity, OneToOne, PrimaryKey, Property, Rel } from '@mikro-orm/core';
-import { v4 } from 'uuid';
-import { mockLogger } from '../helpers';
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  OneToOne,
+  PrimaryKey,
+  Property,
+  Rel,
+} from "@yandjin-mikro-orm/core";
+import { v4 } from "uuid";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class Course {
-
   @PrimaryKey()
   id: string = v4();
 
@@ -14,31 +21,25 @@ class Course {
 
   @OneToOne({ entity: () => Customization, nullable: true })
   published?: Rel<Customization>;
-
 }
 
 @Entity()
 class Customization {
-
   @PrimaryKey()
   id: string = v4();
 
   @Embedded(() => Topic, { array: true, nullable: true })
   topics?: Topic[] = [];
-
 }
-
 
 @Embeddable()
 class Topic {
-
   @Property()
   private _name!: string;
 
   get name(): string {
     return this._name;
   }
-
 }
 
 function createCustomization() {
@@ -54,7 +55,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Course, Customization, Topic],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.getSchemaGenerator().createSchema();
 
@@ -72,8 +73,8 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('json property hydration', async () => {
-  await orm.em.find(Course, {}, { populate: ['*'] });
+test("json property hydration", async () => {
+  await orm.em.find(Course, {}, { populate: ["*"] });
   const mock = mockLogger(orm);
   await orm.em.flush();
   expect(mock).not.toHaveBeenCalled();

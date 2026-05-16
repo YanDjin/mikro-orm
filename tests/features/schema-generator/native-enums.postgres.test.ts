@@ -1,14 +1,21 @@
-import { MikroORM } from '@mikro-orm/postgresql';
-import { Entity, Enum, EntitySchema, EnumType, Type, PrimaryKey } from '@mikro-orm/core';
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
+import {
+  Entity,
+  Enum,
+  EntitySchema,
+  EnumType,
+  Type,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/core";
 
 export enum PublisherType {
-  LOCAL = 'local',
-  GLOBAL = 'global',
+  LOCAL = "local",
+  GLOBAL = "global",
 }
 
 export enum PublisherType2 {
-  LOCAL = 'LOCAL',
-  GLOBAL = 'GLOBAL',
+  LOCAL = "LOCAL",
+  GLOBAL = "GLOBAL",
 }
 
 export const enum Enum1 {
@@ -23,32 +30,29 @@ export enum Enum2 {
 
 @Entity()
 export class EnumEntity {
-
   @PrimaryKey()
   id!: number;
 
-  @Enum({ items: () => PublisherType, nativeEnumName: 'enum_entity_type' })
+  @Enum({ items: () => PublisherType, nativeEnumName: "enum_entity_type" })
   type = PublisherType.LOCAL;
 
-  @Enum({ items: () => PublisherType2, nativeEnumName: 'enum_entity_type2' })
+  @Enum({ items: () => PublisherType2, nativeEnumName: "enum_entity_type2" })
   type2 = PublisherType2.LOCAL;
 
-  @Enum({ items: () => Enum2, nullable: true, nativeEnumName: 'enum2' })
+  @Enum({ items: () => Enum2, nullable: true, nativeEnumName: "enum2" })
   enum2?: Enum2;
 
-  @Enum({ items: [1, 2, 3], nullable: true, nativeEnumName: 'enum3' })
+  @Enum({ items: [1, 2, 3], nullable: true, nativeEnumName: "enum3" })
   enum3?: any;
 
-  @Enum({ items: ['a', 'b', 'c'], nullable: true, nativeEnumName: 'enum4' })
+  @Enum({ items: ["a", "b", "c"], nullable: true, nativeEnumName: "enum4" })
   enum4?: any;
 
-  @Enum({ items: ['a'], nullable: true, nativeEnumName: 'enum5' })
+  @Enum({ items: ["a"], nullable: true, nativeEnumName: "enum5" })
   enum5?: any;
-
 }
 
-describe('native enums in postgres', () => {
-
+describe("native enums in postgres", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -58,90 +62,97 @@ describe('native enums in postgres', () => {
     });
 
     await orm.schema.ensureDatabase();
-    await orm.schema.execute('drop table if exists new_table cascade');
+    await orm.schema.execute("drop table if exists new_table cascade");
     await orm.schema.refreshDatabase();
   });
 
   afterAll(() => orm.close());
 
-  test('generate schema from metadata [postgres]', async () => {
-    orm.getMetadata().reset('NewTable');
-    orm.em.getConnection().execute('drop schema if exists different_schema cascade');
+  test("generate schema from metadata [postgres]", async () => {
+    orm.getMetadata().reset("NewTable");
+    orm.em
+      .getConnection()
+      .execute("drop schema if exists different_schema cascade");
     const dump = await orm.schema.getCreateSchemaSQL();
-    expect(dump).toMatchSnapshot('postgres-schema-dump');
+    expect(dump).toMatchSnapshot("postgres-schema-dump");
 
     const dropDump = await orm.schema.getDropSchemaSQL();
-    expect(dropDump).toMatchSnapshot('postgres-drop-schema-dump');
+    expect(dropDump).toMatchSnapshot("postgres-drop-schema-dump");
     await orm.schema.execute(dropDump, { wrap: true });
 
     const createDump = await orm.schema.getCreateSchemaSQL();
-    expect(createDump).toMatchSnapshot('postgres-create-schema-dump');
+    expect(createDump).toMatchSnapshot("postgres-create-schema-dump");
     await orm.schema.execute(createDump, { wrap: true });
 
     const updateDump = await orm.schema.getUpdateSchemaSQL();
-    expect(updateDump).toMatchSnapshot('postgres-update-schema-dump');
+    expect(updateDump).toMatchSnapshot("postgres-update-schema-dump");
     await orm.schema.execute(updateDump, { wrap: true });
   });
 
-  test('enum diffing', async () => {
-    orm.em.getConnection().execute('drop schema if exists different_schema cascade');
+  test("enum diffing", async () => {
+    orm.em
+      .getConnection()
+      .execute("drop schema if exists different_schema cascade");
     const newTableMeta = new EntitySchema({
-      schema: 'different_schema',
+      schema: "different_schema",
       properties: {
         id: {
           primary: true,
-          name: 'id',
-          type: 'number',
-          fieldName: 'id',
-          columnType: 'int',
+          name: "id",
+          type: "number",
+          fieldName: "id",
+          columnType: "int",
         },
         enumTest: {
-          type: 'string',
-          name: 'enumTest',
-          fieldName: 'enum_test',
-          columnType: 'varchar(255)',
+          type: "string",
+          name: "enumTest",
+          fieldName: "enum_test",
+          columnType: "varchar(255)",
         },
       },
-      name: 'NewTable',
-      tableName: 'new_table',
+      name: "NewTable",
+      tableName: "new_table",
     }).init().meta;
-    orm.getMetadata().set('NewTable', newTableMeta);
+    orm.getMetadata().set("NewTable", newTableMeta);
     let diff = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff).toMatchSnapshot('postgres-update-schema-enums-1');
+    expect(diff).toMatchSnapshot("postgres-update-schema-enums-1");
     await orm.schema.execute(diff);
 
     // change type to enum
-    newTableMeta.properties.enumTest.items = ['a', 'b'];
+    newTableMeta.properties.enumTest.items = ["a", "b"];
     newTableMeta.properties.enumTest.enum = true;
-    newTableMeta.properties.enumTest.nativeEnumName = 'enum_test';
-    newTableMeta.properties.enumTest.type = 'object';
+    newTableMeta.properties.enumTest.nativeEnumName = "enum_test";
+    newTableMeta.properties.enumTest.type = "object";
     delete newTableMeta.properties.enumTest.columnTypes[0];
-    newTableMeta.properties.enumTest.columnTypes[0] = Type.getType(EnumType).getColumnType(newTableMeta.properties.enumTest, orm.em.getPlatform());
+    newTableMeta.properties.enumTest.columnTypes[0] = Type.getType(
+      EnumType,
+    ).getColumnType(newTableMeta.properties.enumTest, orm.em.getPlatform());
     diff = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff).toMatchSnapshot('postgres-update-schema-enums-2');
+    expect(diff).toMatchSnapshot("postgres-update-schema-enums-2");
     await orm.schema.execute(diff);
 
     // change enum items
-    newTableMeta.properties.enumTest.items = ['a', 'b', 'c'];
+    newTableMeta.properties.enumTest.items = ["a", "b", "c"];
     delete newTableMeta.properties.enumTest.columnTypes[0];
-    newTableMeta.properties.enumTest.columnTypes[0] = Type.getType(EnumType).getColumnType(newTableMeta.properties.enumTest, orm.em.getPlatform());
+    newTableMeta.properties.enumTest.columnTypes[0] = Type.getType(
+      EnumType,
+    ).getColumnType(newTableMeta.properties.enumTest, orm.em.getPlatform());
     diff = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff).toMatchSnapshot('postgres-update-schema-enums-3');
+    expect(diff).toMatchSnapshot("postgres-update-schema-enums-3");
     await orm.schema.execute(diff);
 
     // check that we do not produce anything as the schema should be up-to-date
     diff = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff).toBe('');
+    expect(diff).toBe("");
 
     // change the type from enum to int
     delete newTableMeta.properties.enumTest.items;
     delete newTableMeta.properties.enumTest.nativeEnumName;
-    newTableMeta.properties.enumTest.columnTypes[0] = 'text';
+    newTableMeta.properties.enumTest.columnTypes[0] = "text";
     newTableMeta.properties.enumTest.enum = false;
-    newTableMeta.properties.enumTest.type = 'string';
+    newTableMeta.properties.enumTest.type = "string";
     diff = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff).toMatchSnapshot('postgres-update-schema-enums-4');
+    expect(diff).toMatchSnapshot("postgres-update-schema-enums-4");
     await orm.schema.execute(diff);
   });
-
 });

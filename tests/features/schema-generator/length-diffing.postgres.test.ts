@@ -1,9 +1,8 @@
-import { Entity, PrimaryKey, Property, t } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/postgresql';
+import { Entity, PrimaryKey, Property, t } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book0 {
-
   @PrimaryKey()
   id!: number;
 
@@ -18,12 +17,10 @@ export class Book0 {
 
   @Property({ length: 2 })
   createdAt!: Date;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book1 {
-
   @PrimaryKey({ type: t.bigint })
   id!: string;
 
@@ -38,12 +35,10 @@ export class Book1 {
 
   @Property({ length: 3 })
   createdAt!: Date;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book2 {
-
   @PrimaryKey({ type: t.bigint })
   id!: string;
 
@@ -58,12 +53,10 @@ export class Book2 {
 
   @Property({ length: 3 })
   createdAt!: Date;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book3 {
-
   @PrimaryKey({ type: t.bigint })
   id!: string;
 
@@ -73,36 +66,32 @@ export class Book3 {
   @Property({ unsigned: true })
   length!: number;
 
-  @Property({ columnType: 'decimal(16,4)' })
+  @Property({ columnType: "decimal(16,4)" })
   price!: number;
 
   @Property({ length: 3 })
   createdAt!: Date;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book4 {
-
   @PrimaryKey({ type: t.bigint })
   id!: string;
 
-  @Property({ columnType: 'varchar(100)' })
+  @Property({ columnType: "varchar(100)" })
   name!: string;
 
   @Property({ unsigned: true })
   length!: number;
 
-  @Property({ columnType: 'decimal(16,4)' })
+  @Property({ columnType: "decimal(16,4)" })
   price!: number;
 
   @Property({ length: 3 })
   createdAt!: Date;
-
 }
 
-describe('length diffing in postgres', () => {
-
+describe("length diffing in postgres", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -111,38 +100,39 @@ describe('length diffing in postgres', () => {
       dbName: `mikro_orm_test_length_diffing`,
     });
     await orm.schema.ensureDatabase();
-    await orm.schema.execute('drop table if exists book');
+    await orm.schema.execute("drop table if exists book");
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('schema orm.schema updates column types when length changes (varchar, decimal, ...)', async () => {
-    orm.getMetadata().reset('Book0');
+  test("schema orm.schema updates column types when length changes (varchar, decimal, ...)", async () => {
+    orm.getMetadata().reset("Book0");
     await orm.discoverEntity(Book1);
     const diff1 = await orm.schema.getUpdateSchemaMigrationSQL({ wrap: false });
     expect(diff1).toMatchSnapshot();
     await orm.schema.execute(diff1.up);
 
-    orm.getMetadata().reset('Book1');
+    orm.getMetadata().reset("Book1");
     await orm.discoverEntity(Book2);
     const diff2 = await orm.schema.getUpdateSchemaMigrationSQL({ wrap: false });
     expect(diff2).toMatchSnapshot();
     await orm.schema.execute(diff2.up);
 
-    orm.getMetadata().reset('Book2');
+    orm.getMetadata().reset("Book2");
     await orm.discoverEntity(Book3);
     const diff3 = await orm.schema.getUpdateSchemaMigrationSQL({ wrap: false });
     expect(diff3).toMatchSnapshot();
     await orm.schema.execute(diff3.up);
 
-    orm.getMetadata().reset('Book3');
+    orm.getMetadata().reset("Book3");
     await orm.discoverEntity(Book4);
 
-    await expect(orm.schema.getUpdateSchemaMigrationSQL({ wrap: false })).resolves.toEqual({
-      down: '',
-      up: '',
+    await expect(
+      orm.schema.getUpdateSchemaMigrationSQL({ wrap: false }),
+    ).resolves.toEqual({
+      down: "",
+      up: "",
     });
   });
-
 });

@@ -1,19 +1,25 @@
-import { Entity, ManyToOne, OneToOne, Opt, PrimaryKey, Property, Ref, wrap } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { v4 } from 'uuid';
+import {
+  Entity,
+  ManyToOne,
+  OneToOne,
+  Opt,
+  PrimaryKey,
+  Property,
+  Ref,
+  wrap,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { v4 } from "uuid";
 
 @Entity()
 class Organization {
-
-  @PrimaryKey({ columnType: 'uuid' })
+  @PrimaryKey({ columnType: "uuid" })
   id = v4();
-
 }
 
 @Entity()
 class Project {
-
-  @PrimaryKey({ columnType: 'uuid' })
+  @PrimaryKey({ columnType: "uuid" })
   id = v4();
 
   @ManyToOne({ entity: () => Organization, ref: true, primary: true })
@@ -24,17 +30,15 @@ class Project {
 
   @OneToOne({
     entity: () => ProjectUpdate,
-    mappedBy: 'project',
+    mappedBy: "project",
     ref: true,
   })
   projectUpdate!: Ref<ProjectUpdate> & Opt;
-
 }
 
 @Entity()
 class ProjectUpdate {
-
-  @PrimaryKey({ columnType: 'uuid' })
+  @PrimaryKey({ columnType: "uuid" })
   id = v4();
 
   @ManyToOne({ entity: () => Organization, ref: true, primary: true })
@@ -43,10 +47,9 @@ class ProjectUpdate {
   @OneToOne({
     entity: () => Project,
     ref: true,
-    joinColumns: ['project_id', 'organization_id'],
+    joinColumns: ["project_id", "organization_id"],
   })
   project!: Ref<Project>;
-
 }
 
 let orm: MikroORM;
@@ -55,7 +58,7 @@ let project: Project;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [Project, Organization, ProjectUpdate],
   });
 
@@ -64,7 +67,7 @@ beforeAll(async () => {
   org = new Organization();
   project = orm.em.create(Project, {
     organization: org,
-    name: 'init',
+    name: "init",
   });
 
   orm.em.create(ProjectUpdate, {
@@ -81,11 +84,15 @@ afterAll(async () => {
 
 beforeEach(() => orm.em.clear());
 
-test('extra updates with 1:1 relations (select-in)', async () => {
-  const result = await orm.em.findOneOrFail(Project, { id: project.id, organization: org.id }, {
-    populate: ['projectUpdate'],
-    strategy: 'select-in',
-  });
+test("extra updates with 1:1 relations (select-in)", async () => {
+  const result = await orm.em.findOneOrFail(
+    Project,
+    { id: project.id, organization: org.id },
+    {
+      populate: ["projectUpdate"],
+      strategy: "select-in",
+    },
+  );
 
   expect(wrap(result.projectUpdate.$).isTouched()).toBe(false);
   expect(wrap(result).isTouched()).toBe(false);
@@ -93,11 +100,15 @@ test('extra updates with 1:1 relations (select-in)', async () => {
   expect(orm.em.getUnitOfWork().getChangeSets()).toHaveLength(0);
 });
 
-test('extra updates with 1:1 relations (joined)', async () => {
-  const result = await orm.em.findOneOrFail(Project, { id: project.id, organization: org.id }, {
-    populate: ['projectUpdate'],
-    strategy: 'joined',
-  });
+test("extra updates with 1:1 relations (joined)", async () => {
+  const result = await orm.em.findOneOrFail(
+    Project,
+    { id: project.id, organization: org.id },
+    {
+      populate: ["projectUpdate"],
+      strategy: "joined",
+    },
+  );
 
   expect(wrap(result.projectUpdate.$).isTouched()).toBe(false);
   expect(wrap(result).isTouched()).toBe(false);

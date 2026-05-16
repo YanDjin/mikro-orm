@@ -2,7 +2,7 @@
 
 exports[`RefToPivotTable: mysql-entity-dump 1`] = `
 [
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { SenderEmails } from './SenderEmails';
 
@@ -22,7 +22,7 @@ export class EmailMessagesLog {
 
 }
 ",
-  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Emails {
@@ -38,7 +38,7 @@ export class Emails {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, PrimaryKey, PrimaryKeyProp, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { SenderEmails } from './SenderEmails';
 
@@ -59,7 +59,7 @@ export class Sender {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Emails } from './Emails';
 import { Sender } from './Sender';
 

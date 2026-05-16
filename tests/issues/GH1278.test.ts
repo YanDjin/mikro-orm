@@ -1,38 +1,39 @@
-import { Entity, MikroORM, OneToOne, PrimaryKey, Property } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Entity,
+  MikroORM,
+  OneToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 @Entity()
 export class GroupCode {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
-  code: string = 'some-randomly-generated-code';
+  code: string = "some-randomly-generated-code";
 
-  @OneToOne({ type: 'Group', mappedBy: 'code', nullable: true })
+  @OneToOne({ type: "Group", mappedBy: "code", nullable: true })
   group?: any;
-
 }
 
 @Entity()
 export class Group {
-
   @PrimaryKey()
   id!: number;
 
   @OneToOne({ nullable: true, orphanRemoval: true })
   code?: GroupCode;
-
 }
 
-describe('GH issue 1278', () => {
-
+describe("GH issue 1278", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
-      dbName: ':memory:',
+      dbName: ":memory:",
       entities: [Group, GroupCode],
     });
     await orm.schema.createSchema();
@@ -43,7 +44,7 @@ describe('GH issue 1278', () => {
   });
 
   test(`GH issue 1278`, async () => {
-    const mock = mockLogger(orm, ['query']);
+    const mock = mockLogger(orm, ["query"]);
 
     const group = new Group();
     const groupCode = new GroupCode();
@@ -57,17 +58,26 @@ describe('GH issue 1278', () => {
     await orm.em.persistAndFlush(group);
     expect(group.code.id).not.toBeUndefined();
 
-    expect(mock.mock.calls[0][0]).toMatch('begin');
-    expect(mock.mock.calls[1][0]).toMatch('insert into `group_code` (`code`) values (?)');
-    expect(mock.mock.calls[2][0]).toMatch('insert into `group` (`code_id`) values (?)');
-    expect(mock.mock.calls[3][0]).toMatch('commit');
-    expect(mock.mock.calls[4][0]).toMatch('begin');
-    expect(mock.mock.calls[5][0]).toMatch('delete from `group_code` where `id` in (?)');
-    expect(mock.mock.calls[6][0]).toMatch('commit');
-    expect(mock.mock.calls[7][0]).toMatch('begin');
-    expect(mock.mock.calls[8][0]).toMatch('insert into `group_code` (`code`) values (?)');
-    expect(mock.mock.calls[9][0]).toMatch('update `group` set `code_id` = ? where `id` = ?');
-    expect(mock.mock.calls[10][0]).toMatch('commit');
+    expect(mock.mock.calls[0][0]).toMatch("begin");
+    expect(mock.mock.calls[1][0]).toMatch(
+      "insert into `group_code` (`code`) values (?)",
+    );
+    expect(mock.mock.calls[2][0]).toMatch(
+      "insert into `group` (`code_id`) values (?)",
+    );
+    expect(mock.mock.calls[3][0]).toMatch("commit");
+    expect(mock.mock.calls[4][0]).toMatch("begin");
+    expect(mock.mock.calls[5][0]).toMatch(
+      "delete from `group_code` where `id` in (?)",
+    );
+    expect(mock.mock.calls[6][0]).toMatch("commit");
+    expect(mock.mock.calls[7][0]).toMatch("begin");
+    expect(mock.mock.calls[8][0]).toMatch(
+      "insert into `group_code` (`code`) values (?)",
+    );
+    expect(mock.mock.calls[9][0]).toMatch(
+      "update `group` set `code_id` = ? where `id` = ?",
+    );
+    expect(mock.mock.calls[10][0]).toMatch("commit");
   });
-
 });

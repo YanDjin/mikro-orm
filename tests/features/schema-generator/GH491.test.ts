@@ -1,9 +1,8 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mariadb';
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mariadb";
 
 @Entity()
 export class FooEntity {
-
   @PrimaryKey()
   id!: number;
 
@@ -24,11 +23,9 @@ export class FooEntity {
 
   @Property({ nullable: true })
   nullableNumberProperty?: number;
-
 }
 
-describe('GH issue 491', () => {
-
+describe("GH issue 491", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -43,7 +40,6 @@ describe('GH issue 491', () => {
   afterAll(() => orm.close(true));
 
   test(`GH issue 491`, async () => {
-    expect(await orm.schema.getUpdateSchemaSQL({ wrap: false })).toBe('');
+    expect(await orm.schema.getUpdateSchemaSQL({ wrap: false })).toBe("");
   });
-
 });

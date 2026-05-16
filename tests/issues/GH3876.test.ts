@@ -1,11 +1,20 @@
-import { MikroORM } from '@mikro-orm/postgresql';
-import { Collection, OneToMany, OneToOne, Rel, Entity, LoadStrategy, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { v4 } from 'uuid';
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
+import {
+  Collection,
+  OneToMany,
+  OneToOne,
+  Rel,
+  Entity,
+  LoadStrategy,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { v4 } from "uuid";
 
 @Entity()
 class Book {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id: string = v4();
 
   @Property()
@@ -16,13 +25,11 @@ class Book {
 
   @ManyToOne({ entity: () => User })
   user!: Rel<User>;
-
 }
 
 @Entity()
 class ProfileInfo {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id: string = v4();
 
   @Property()
@@ -30,16 +37,14 @@ class ProfileInfo {
 
   @OneToOne({
     entity: () => User,
-    mappedBy: user => user.profileInfo,
+    mappedBy: (user) => user.profileInfo,
   })
   user!: Rel<User>;
-
 }
 
 @Entity()
 class User {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id: string = v4();
 
   @Property()
@@ -53,10 +58,9 @@ class User {
 
   @OneToMany({
     entity: () => Book,
-    mappedBy: book => book.user,
+    mappedBy: (book) => book.user,
   })
   books = new Collection<Book>(this);
-
 }
 
 let orm: MikroORM;
@@ -64,7 +68,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     loadStrategy: LoadStrategy.JOINED,
-    dbName: 'mikro_orm_3876',
+    dbName: "mikro_orm_3876",
     entities: [Book, User, ProfileInfo],
   });
   await orm.getSchemaGenerator().refreshDatabase();
@@ -74,22 +78,22 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('3876', async () => {
+test("3876", async () => {
   const user = orm.em.create(User, {
-    name: 'user1',
+    name: "user1",
   });
   orm.em.create(Book, {
-    name: 'book1',
+    name: "book1",
     user,
   });
   orm.em.create(Book, {
-    name: 'book2',
+    name: "book2",
     user,
   });
   await orm.em.flush();
   await orm.em.clear();
 
-  await orm.em.find(Book, {}, { populate: ['user'] });
+  await orm.em.find(Book, {}, { populate: ["user"] });
   const uow1 = orm.em.getUnitOfWork();
   uow1.computeChangeSets();
 

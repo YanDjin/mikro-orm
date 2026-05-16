@@ -1,4 +1,4 @@
-import { AsyncLocalStorage } from 'async_hooks';
+import { AsyncLocalStorage } from "async_hooks";
 import type {
   AnyEntity,
   Dictionary,
@@ -10,27 +10,36 @@ import type {
   FilterQuery,
   IPrimaryKeyValue,
   Primary,
-} from '../typings';
-import { Collection, EntityHelper, EntityIdentifier, helper, Reference } from '../entity';
-import { ChangeSet, ChangeSetType } from './ChangeSet';
-import { ChangeSetComputer } from './ChangeSetComputer';
-import { ChangeSetPersister } from './ChangeSetPersister';
-import { CommitOrderCalculator } from './CommitOrderCalculator';
-import { Utils } from '../utils/Utils';
-import type { EntityManager } from '../EntityManager';
-import { Cascade, EventType, LockMode, ReferenceKind } from '../enums';
-import { OptimisticLockError, ValidationError } from '../errors';
-import type { Transaction } from '../connections';
-import { type EventManager, TransactionEventBroadcaster } from '../events';
-import { IdentityMap } from './IdentityMap';
-import type { LockOptions } from '../drivers/IDatabaseDriver';
-import type { EntityComparator, MetadataStorage, Platform } from '@mikro-orm/core';
+} from "../typings";
+import {
+  Collection,
+  EntityHelper,
+  EntityIdentifier,
+  helper,
+  Reference,
+} from "../entity";
+import { ChangeSet, ChangeSetType } from "./ChangeSet";
+import { ChangeSetComputer } from "./ChangeSetComputer";
+import { ChangeSetPersister } from "./ChangeSetPersister";
+import { CommitOrderCalculator } from "./CommitOrderCalculator";
+import { Utils } from "../utils/Utils";
+import type { EntityManager } from "../EntityManager";
+import { Cascade, EventType, LockMode, ReferenceKind } from "../enums";
+import { OptimisticLockError, ValidationError } from "../errors";
+import type { Transaction } from "../connections";
+import { type EventManager, TransactionEventBroadcaster } from "../events";
+import { IdentityMap } from "./IdentityMap";
+import type { LockOptions } from "../drivers/IDatabaseDriver";
+import type {
+  EntityComparator,
+  MetadataStorage,
+  Platform,
+} from "@yandjin-mikro-orm/core";
 
 // to deal with validation for flush inside flush hooks and `Promise.all`
 const insideFlush = new AsyncLocalStorage<boolean>();
 
 export class UnitOfWork {
-
   /** map of references to managed entities */
   private readonly identityMap = new IdentityMap();
 
@@ -39,7 +48,14 @@ export class UnitOfWork {
   private readonly orphanRemoveStack = new Set<AnyEntity>();
   private readonly changeSets = new Map<AnyEntity, ChangeSet<any>>();
   private readonly collectionUpdates = new Set<Collection<AnyEntity>>();
-  private readonly extraUpdates = new Set<[AnyEntity, string | string[], AnyEntity | AnyEntity[] | Reference<any> | Collection<any>, ChangeSet<any> | undefined]>();
+  private readonly extraUpdates = new Set<
+    [
+      AnyEntity,
+      string | string[],
+      AnyEntity | AnyEntity[] | Reference<any> | Collection<any>,
+      ChangeSet<any> | undefined,
+    ]
+  >();
   private readonly metadata: MetadataStorage;
   private readonly platform: Platform;
   private readonly eventManager: EventManager;
@@ -56,8 +72,22 @@ export class UnitOfWork {
     this.platform = this.em.getPlatform();
     this.eventManager = this.em.getEventManager();
     this.comparator = this.em.getComparator();
-    this.changeSetComputer = new ChangeSetComputer(this.em.getValidator(), this.collectionUpdates, this.metadata, this.platform, this.em.config, this.em);
-    this.changeSetPersister = new ChangeSetPersister(this.em.getDriver(), this.metadata, this.em.config.getHydrator(this.metadata), this.em.getEntityFactory(), this.em.getValidator(), this.em.config);
+    this.changeSetComputer = new ChangeSetComputer(
+      this.em.getValidator(),
+      this.collectionUpdates,
+      this.metadata,
+      this.platform,
+      this.em.config,
+      this.em,
+    );
+    this.changeSetPersister = new ChangeSetPersister(
+      this.em.getDriver(),
+      this.metadata,
+      this.em.config.getHydrator(this.metadata),
+      this.em.getEntityFactory(),
+      this.em.getValidator(),
+      this.em.config,
+    );
   }
 
   merge<T extends object>(entity: T, visited?: Set<AnyEntity>): void {
@@ -89,7 +119,11 @@ export class UnitOfWork {
   /**
    * @internal
    */
-  register<T extends object>(entity: T, data?: EntityData<T>, options?: RegisterOptions): T {
+  register<T extends object>(
+    entity: T,
+    data?: EntityData<T>,
+    options?: RegisterOptions,
+  ): T {
     this.identityMap.store(entity);
     EntityHelper.ensurePropagation(entity);
 
@@ -107,26 +141,44 @@ export class UnitOfWork {
     wrapped.__managed = true;
 
     if (data && (options?.refresh || !wrapped.__originalEntityData)) {
-      Object.keys(data).forEach(key => wrapped.__loadedProperties.add(key));
+      Object.keys(data).forEach((key) => wrapped.__loadedProperties.add(key));
 
-      wrapped.__meta.relations.forEach(prop => {
+      wrapped.__meta.relations.forEach((prop) => {
         if (Utils.isPlainObject(data[prop.name])) {
-          data[prop.name] = Utils.getPrimaryKeyValues(data[prop.name], prop.targetMeta!.primaryKeys, true);
+          data[prop.name] = Utils.getPrimaryKeyValues(
+            data[prop.name],
+            prop.targetMeta!.primaryKeys,
+            true,
+          );
         }
       });
 
-      wrapped.__meta.props.forEach(prop => {
-        if (prop.kind === ReferenceKind.EMBEDDED && !prop.object && Utils.isPlainObject(data[prop.name])) {
-          prop.targetMeta?.props.forEach(p => {
-            const prefix = prop.prefix === false ? '' : prop.prefix === true ? prop.name + '_' : prop.prefix;
-            data[prefix + p.name as EntityKey] = data[prop.name as EntityKey][p.name];
+      wrapped.__meta.props.forEach((prop) => {
+        if (
+          prop.kind === ReferenceKind.EMBEDDED &&
+          !prop.object &&
+          Utils.isPlainObject(data[prop.name])
+        ) {
+          prop.targetMeta?.props.forEach((p) => {
+            const prefix =
+              prop.prefix === false
+                ? ""
+                : prop.prefix === true
+                  ? prop.name + "_"
+                  : prop.prefix;
+            data[(prefix + p.name) as EntityKey] =
+              data[prop.name as EntityKey][p.name];
           });
-          data[prop.name] = Utils.getPrimaryKeyValues(data[prop.name], prop.targetMeta!.primaryKeys, true);
+          data[prop.name] = Utils.getPrimaryKeyValues(
+            data[prop.name],
+            prop.targetMeta!.primaryKeys,
+            true,
+          );
         }
       });
 
-      if (this.em.config.get('forceUndefined')) {
-        Utils.keys(data).forEach(key => {
+      if (this.em.config.get("forceUndefined")) {
+        Utils.keys(data).forEach((key) => {
           if (data[key] === null) {
             data[key] = undefined;
           }
@@ -146,7 +198,11 @@ export class UnitOfWork {
   async dispatchOnLoadEvent(): Promise<void> {
     for (const entity of this.loadedEntities) {
       if (this.eventManager.hasListeners(EventType.onLoad, entity.__meta)) {
-        await this.eventManager.dispatchEvent(EventType.onLoad, { entity, meta: entity.__meta, em: this.em });
+        await this.eventManager.dispatchEvent(EventType.onLoad, {
+          entity,
+          meta: entity.__meta,
+          em: this.em,
+        });
         helper(entity).__onLoadFired = true;
       }
     }
@@ -157,7 +213,11 @@ export class UnitOfWork {
   /**
    * Returns entity from the identity map. For composite keys, you need to pass an array of PKs in the same order as they are defined in `meta.primaryKeys`.
    */
-  getById<T extends object>(entityName: string, id: Primary<T> | Primary<T>[], schema?: string): T | undefined {
+  getById<T extends object>(
+    entityName: string,
+    id: Primary<T> | Primary<T>[],
+    schema?: string,
+  ): T | undefined {
     if (id == null || (Array.isArray(id) && id.length === 0)) {
       return undefined;
     }
@@ -166,13 +226,15 @@ export class UnitOfWork {
     let hash: string;
 
     if (meta.simplePK) {
-      hash = '' + id;
+      hash = "" + id;
     } else {
-      const keys = Array.isArray(id) ? Utils.flatten(id as string[][]) : [id as string];
+      const keys = Array.isArray(id)
+        ? Utils.flatten(id as string[][])
+        : [id as string];
       hash = Utils.getPrimaryKeyHash(keys);
     }
 
-    schema ??= meta.schema ?? this.em.config.get('schema');
+    schema ??= meta.schema ?? this.em.config.get("schema");
 
     if (schema) {
       hash = `${schema}:${hash}`;
@@ -181,8 +243,17 @@ export class UnitOfWork {
     return this.identityMap.getByHash(meta, hash);
   }
 
-  tryGetById<T extends object>(entityName: string, where: FilterQuery<T>, schema?: string, strict = true): T | null {
-    const pk = Utils.extractPK(where, this.metadata.find<T>(entityName)!, strict);
+  tryGetById<T extends object>(
+    entityName: string,
+    where: FilterQuery<T>,
+    schema?: string,
+    strict = true,
+  ): T | null {
+    const pk = Utils.extractPK(
+      where,
+      this.metadata.find<T>(entityName)!,
+      strict,
+    );
 
     if (!pk) {
       return null;
@@ -201,7 +272,9 @@ export class UnitOfWork {
   /**
    * Returns stored snapshot of entity state that is used for change set computation.
    */
-  getOriginalEntityData<T extends object>(entity: T): EntityData<T> | undefined {
+  getOriginalEntityData<T extends object>(
+    entity: T,
+  ): EntityData<T> | undefined {
     return helper(entity as T).__originalEntityData;
   }
 
@@ -221,7 +294,14 @@ export class UnitOfWork {
     return [...this.collectionUpdates];
   }
 
-  getExtraUpdates(): Set<[AnyEntity, string | string[], (AnyEntity | AnyEntity[] | Reference<any> | Collection<any>), ChangeSet<any> | undefined]> {
+  getExtraUpdates(): Set<
+    [
+      AnyEntity,
+      string | string[],
+      AnyEntity | AnyEntity[] | Reference<any> | Collection<any>,
+      ChangeSet<any> | undefined,
+    ]
+  > {
     return this.extraUpdates;
   }
 
@@ -230,7 +310,10 @@ export class UnitOfWork {
       return false;
     }
 
-    if (this.queuedActions.has(meta.className) || this.queuedActions.has(meta.root.className)) {
+    if (
+      this.queuedActions.has(meta.className) ||
+      this.queuedActions.has(meta.root.className)
+    ) {
       return true;
     }
 
@@ -251,7 +334,10 @@ export class UnitOfWork {
     const wrapped = helper(entity);
 
     if (type) {
-      this.changeSets.set(entity, new ChangeSet(entity, type, {}, wrapped.__meta));
+      this.changeSets.set(
+        entity,
+        new ChangeSet(entity, type, {}, wrapped.__meta),
+      );
       return;
     }
 
@@ -280,12 +366,17 @@ export class UnitOfWork {
     /* istanbul ignore else */
     if (cs && !this.checkUniqueProps(cs)) {
       Object.assign(changeSet.payload, cs.payload);
-      helper(entity).__originalEntityData = this.comparator.prepareEntity(entity);
+      helper(entity).__originalEntityData =
+        this.comparator.prepareEntity(entity);
       helper(entity).__touched = false;
     }
   }
 
-  persist<T extends object>(entity: T, visited?: Set<AnyEntity>, options: { checkRemoveStack?: boolean; cascade?: boolean } = {}): void {
+  persist<T extends object>(
+    entity: T,
+    visited?: Set<AnyEntity>,
+    options: { checkRemoveStack?: boolean; cascade?: boolean } = {},
+  ): void {
     EntityHelper.ensurePropagation(entity);
 
     if (options.checkRemoveStack && this.removeStack.has(entity)) {
@@ -306,7 +397,11 @@ export class UnitOfWork {
     }
   }
 
-  remove<T extends object>(entity: T, visited?: Set<AnyEntity>, options: { cascade?: boolean } = {}): void {
+  remove<T extends object>(
+    entity: T,
+    visited?: Set<AnyEntity>,
+    options: { cascade?: boolean } = {},
+  ): void {
     // allow removing not managed entities if they are not part of the persist stack
     if (helper(entity).__managed || !this.persistStack.has(entity)) {
       this.removeStack.add(entity);
@@ -322,12 +417,17 @@ export class UnitOfWork {
       const relation = Reference.unwrapReference(entity[prop.name] as T);
       const prop2 = prop.targetMeta!.properties[inverseProp];
 
-      if (prop.kind === ReferenceKind.ONE_TO_MANY && prop2.nullable && Utils.isCollection<AnyEntity>(relation)) {
-        relation.getItems(false).forEach(item => delete item[inverseProp]);
+      if (
+        prop.kind === ReferenceKind.ONE_TO_MANY &&
+        prop2.nullable &&
+        Utils.isCollection<AnyEntity>(relation)
+      ) {
+        relation.getItems(false).forEach((item) => delete item[inverseProp]);
         continue;
       }
 
-      const target = relation && relation[inverseProp as keyof typeof relation] as unknown;
+      const target =
+        relation && (relation[inverseProp as keyof typeof relation] as unknown);
 
       if (relation && Utils.isCollection(target)) {
         target.removeWithoutPropagation(entity);
@@ -371,48 +471,77 @@ export class UnitOfWork {
     const oldTx = this.em.getTransactionContext();
 
     try {
-      await this.eventManager.dispatchEvent(EventType.beforeFlush, { em: this.em, uow: this });
+      await this.eventManager.dispatchEvent(EventType.beforeFlush, {
+        em: this.em,
+        uow: this,
+      });
       this.computeChangeSets();
-      this.changeSets.forEach(cs => {
+      this.changeSets.forEach((cs) => {
         cs.entity.__helper.__processing = true;
       });
-      await this.eventManager.dispatchEvent(EventType.onFlush, { em: this.em, uow: this });
+      await this.eventManager.dispatchEvent(EventType.onFlush, {
+        em: this.em,
+        uow: this,
+      });
 
       // nothing to do, do not start transaction
-      if (this.changeSets.size === 0 && this.collectionUpdates.size === 0 && this.extraUpdates.size === 0) {
-        return void await this.eventManager.dispatchEvent(EventType.afterFlush, { em: this.em, uow: this });
+      if (
+        this.changeSets.size === 0 &&
+        this.collectionUpdates.size === 0 &&
+        this.extraUpdates.size === 0
+      ) {
+        return void (await this.eventManager.dispatchEvent(
+          EventType.afterFlush,
+          { em: this.em, uow: this },
+        ));
       }
 
       const groups = this.getChangeSetGroups();
       const platform = this.em.getPlatform();
-      const runInTransaction = !this.em.isInTransaction() && platform.supportsTransactions() && this.em.config.get('implicitTransactions');
+      const runInTransaction =
+        !this.em.isInTransaction() &&
+        platform.supportsTransactions() &&
+        this.em.config.get("implicitTransactions");
 
       if (runInTransaction) {
-        await this.em.getConnection('write').transactional(trx => this.persistToDatabase(groups, trx), {
-          ctx: oldTx,
-          eventBroadcaster: new TransactionEventBroadcaster(this.em, this),
-        });
+        await this.em
+          .getConnection("write")
+          .transactional((trx) => this.persistToDatabase(groups, trx), {
+            ctx: oldTx,
+            eventBroadcaster: new TransactionEventBroadcaster(this.em, this),
+          });
       } else {
         await this.persistToDatabase(groups, this.em.getTransactionContext());
       }
       this.resetTransaction(oldTx);
 
-      this.changeSets.forEach(cs => {
+      this.changeSets.forEach((cs) => {
         cs.entity.__helper.__processing = false;
       });
 
-      await this.eventManager.dispatchEvent(EventType.afterFlush, { em: this.em, uow: this });
+      await this.eventManager.dispatchEvent(EventType.afterFlush, {
+        em: this.em,
+        uow: this,
+      });
     } finally {
       this.resetTransaction(oldTx);
     }
   }
 
   async lock<T extends object>(entity: T, options: LockOptions): Promise<void> {
-    if (!this.getById((entity as Dictionary).constructor.name, helper(entity).__primaryKeys, helper(entity).__schema)) {
+    if (
+      !this.getById(
+        (entity as Dictionary).constructor.name,
+        helper(entity).__primaryKeys,
+        helper(entity).__schema,
+      )
+    ) {
       throw ValidationError.entityNotManaged(entity);
     }
 
-    const meta = this.metadata.find<T>((entity as Dictionary).constructor.name)!;
+    const meta = this.metadata.find<T>(
+      (entity as Dictionary).constructor.name,
+    )!;
 
     if (options.lockMode === LockMode.OPTIMISTIC) {
       await this.lockOptimistic(entity, meta, options.lockVersion!);
@@ -461,13 +590,21 @@ export class UnitOfWork {
     visited.clear();
 
     for (const entity of this.persistStack) {
-      this.cascade(entity, Cascade.PERSIST, visited, { checkRemoveStack: true });
+      this.cascade(entity, Cascade.PERSIST, visited, {
+        checkRemoveStack: true,
+      });
     }
 
     for (const entity of this.identityMap) {
-      if (!this.removeStack.has(entity) && !this.persistStack.has(entity) && !this.orphanRemoveStack.has(entity)) {
+      if (
+        !this.removeStack.has(entity) &&
+        !this.persistStack.has(entity) &&
+        !this.orphanRemoveStack.has(entity)
+      ) {
         this.persistStack.add(entity);
-        this.cascade(entity, Cascade.PERSIST, visited, { checkRemoveStack: true });
+        this.cascade(entity, Cascade.PERSIST, visited, {
+          checkRemoveStack: true,
+        });
       }
     }
 
@@ -507,11 +644,20 @@ export class UnitOfWork {
         continue;
       }
 
-      const deletePkHash = [wrapped.getSerializedPrimaryKey(), ...this.expandUniqueProps(entity)];
+      const deletePkHash = [
+        wrapped.getSerializedPrimaryKey(),
+        ...this.expandUniqueProps(entity),
+      ];
       let type = ChangeSetType.DELETE;
 
       for (const cs of inserts[wrapped.__meta.className] ?? []) {
-        if (deletePkHash.some(hash => hash === cs.getSerializedPrimaryKey() || this.expandUniqueProps(cs.entity).find(child => hash === child))) {
+        if (
+          deletePkHash.some(
+            (hash) =>
+              hash === cs.getSerializedPrimaryKey() ||
+              this.expandUniqueProps(cs.entity).find((child) => hash === child),
+          )
+        ) {
           type = ChangeSetType.DELETE_EARLY;
         }
       }
@@ -520,14 +666,22 @@ export class UnitOfWork {
     }
   }
 
-  scheduleExtraUpdate<T extends object>(changeSet: ChangeSet<T>, props: EntityProperty<T>[]): void {
+  scheduleExtraUpdate<T extends object>(
+    changeSet: ChangeSet<T>,
+    props: EntityProperty<T>[],
+  ): void {
     if (props.length === 0) {
       return;
     }
 
-    this.extraUpdates.add([changeSet.entity, props.map(p => p.name), props.map(p => changeSet.entity[p.name]), changeSet]);
-    props.forEach(p => delete changeSet.entity[p.name]);
-    props.forEach(p => delete changeSet.payload[p.name]);
+    this.extraUpdates.add([
+      changeSet.entity,
+      props.map((p) => p.name),
+      props.map((p) => changeSet.entity[p.name]),
+      changeSet,
+    ]);
+    props.forEach((p) => delete changeSet.entity[p.name]);
+    props.forEach((p) => delete changeSet.payload[p.name]);
   }
 
   scheduleOrphanRemoval(entity?: AnyEntity, visited?: Set<AnyEntity>): void {
@@ -551,7 +705,12 @@ export class UnitOfWork {
     return this.changeSetPersister;
   }
 
-  private findNewEntities<T extends object>(entity: T, visited: Set<AnyEntity>, idx = 0, processed = new Set<AnyEntity>()): void {
+  private findNewEntities<T extends object>(
+    entity: T,
+    visited: Set<AnyEntity>,
+    idx = 0,
+    processed = new Set<AnyEntity>(),
+  ): void {
     if (visited.has(entity)) {
       return;
     }
@@ -560,7 +719,11 @@ export class UnitOfWork {
     processed.add(entity);
     const wrapped = helper(entity);
 
-    if (wrapped.__processing || this.removeStack.has(entity) || this.orphanRemoveStack.has(entity)) {
+    if (
+      wrapped.__processing ||
+      this.removeStack.has(entity) ||
+      this.orphanRemoveStack.has(entity)
+    ) {
       return;
     }
 
@@ -587,15 +750,23 @@ export class UnitOfWork {
    * Returns `true` when the change set should be skipped as it will be empty after the extra update.
    */
   private checkUniqueProps<T extends object>(changeSet: ChangeSet<T>): boolean {
-    if (this.platform.allowsUniqueBatchUpdates() || changeSet.type !== ChangeSetType.UPDATE) {
+    if (
+      this.platform.allowsUniqueBatchUpdates() ||
+      changeSet.type !== ChangeSetType.UPDATE
+    ) {
       return false;
     }
 
     // when changing a unique nullable property (or a 1:1 relation), we can't do it in a single query as it would cause unique constraint violations
-    const uniqueProps = changeSet.meta.uniqueProps.filter(prop => prop.nullable && changeSet.payload[prop.name] != null);
+    const uniqueProps = changeSet.meta.uniqueProps.filter(
+      (prop) => prop.nullable && changeSet.payload[prop.name] != null,
+    );
     this.scheduleExtraUpdate(changeSet, uniqueProps);
 
-    return changeSet.type === ChangeSetType.UPDATE && !Utils.hasObjectKeys(changeSet.payload);
+    return (
+      changeSet.type === ChangeSetType.UPDATE &&
+      !Utils.hasObjectKeys(changeSet.payload)
+    );
   }
 
   private expandUniqueProps<T extends object>(entity: T): string[] {
@@ -605,30 +776,44 @@ export class UnitOfWork {
       return [];
     }
 
-    const simpleUniqueHashes = wrapped.__meta.uniqueProps.map(prop => {
-      if (entity[prop.name] != null) {
-        return prop.kind === ReferenceKind.SCALAR || prop.mapToPk ? entity[prop.name] : helper(entity[prop.name]!).getSerializedPrimaryKey();
-      }
+    const simpleUniqueHashes = wrapped.__meta.uniqueProps
+      .map((prop) => {
+        if (entity[prop.name] != null) {
+          return prop.kind === ReferenceKind.SCALAR || prop.mapToPk
+            ? entity[prop.name]
+            : helper(entity[prop.name]!).getSerializedPrimaryKey();
+        }
 
-      if (wrapped.__originalEntityData?.[prop.name] != null) {
-        return Utils.getPrimaryKeyHash(Utils.asArray(wrapped.__originalEntityData![prop.name] as string));
-      }
+        if (wrapped.__originalEntityData?.[prop.name] != null) {
+          return Utils.getPrimaryKeyHash(
+            Utils.asArray(wrapped.__originalEntityData![prop.name] as string),
+          );
+        }
 
-      return undefined;
-    }).filter(i => i) as string[];
+        return undefined;
+      })
+      .filter((i) => i) as string[];
 
-    const compoundUniqueHashes = wrapped.__meta.uniques.map(unique => {
-      const props = Utils.asArray<EntityKey<T>>(unique.properties);
+    const compoundUniqueHashes = wrapped.__meta.uniques
+      .map((unique) => {
+        const props = Utils.asArray<EntityKey<T>>(unique.properties);
 
-      if (props.every(prop => entity[prop] != null)) {
-        return Utils.getPrimaryKeyHash(props.map(p => {
-          const prop = wrapped.__meta.properties[p];
-          return prop.kind === ReferenceKind.SCALAR || prop.mapToPk ? entity[prop.name] : helper(entity[prop.name as EntityKey]!).getSerializedPrimaryKey();
-        }) as any);
-      }
+        if (props.every((prop) => entity[prop] != null)) {
+          return Utils.getPrimaryKeyHash(
+            props.map((p) => {
+              const prop = wrapped.__meta.properties[p];
+              return prop.kind === ReferenceKind.SCALAR || prop.mapToPk
+                ? entity[prop.name]
+                : helper(
+                    entity[prop.name as EntityKey]!,
+                  ).getSerializedPrimaryKey();
+            }) as any,
+          );
+        }
 
-      return undefined;
-    }).filter(i => i) as string[];
+        return undefined;
+      })
+      .filter((i) => i) as string[];
 
     return simpleUniqueHashes.concat(compoundUniqueHashes);
   }
@@ -650,17 +835,27 @@ export class UnitOfWork {
     }
   }
 
-  private processReference<T extends object>(parent: T, prop: EntityProperty<T>, kind: any, visited: Set<AnyEntity>, processed: Set<AnyEntity>, idx: number): void {
-    const isToOne = prop.kind === ReferenceKind.MANY_TO_ONE || prop.kind === ReferenceKind.ONE_TO_ONE;
+  private processReference<T extends object>(
+    parent: T,
+    prop: EntityProperty<T>,
+    kind: any,
+    visited: Set<AnyEntity>,
+    processed: Set<AnyEntity>,
+    idx: number,
+  ): void {
+    const isToOne =
+      prop.kind === ReferenceKind.MANY_TO_ONE ||
+      prop.kind === ReferenceKind.ONE_TO_ONE;
 
     if (isToOne && Utils.isEntity(kind)) {
       return this.processToOneReference(kind, visited, processed, idx);
     }
 
     if (Utils.isCollection<any>(kind)) {
-      kind.getItems(false)
-        .filter(item => !item.__helper!.__originalEntityData)
-        .forEach(item => {
+      kind
+        .getItems(false)
+        .filter((item) => !item.__helper!.__originalEntityData)
+        .forEach((item) => {
           // propagate schema from parent
           item.__helper!.__schema ??= helper(parent).__schema;
         });
@@ -671,13 +866,24 @@ export class UnitOfWork {
     }
   }
 
-  private processToOneReference(kind: any, visited: Set<AnyEntity>, processed: Set<AnyEntity>, idx: number): void {
+  private processToOneReference(
+    kind: any,
+    visited: Set<AnyEntity>,
+    processed: Set<AnyEntity>,
+    idx: number,
+  ): void {
     if (!kind.__helper!.__managed) {
       this.findNewEntities(kind, visited, idx, processed);
     }
   }
 
-  private processToManyReference<T extends object>(collection: Collection<AnyEntity>, visited: Set<AnyEntity>, processed: Set<AnyEntity>, parent: T, prop: EntityProperty<T>): void {
+  private processToManyReference<T extends object>(
+    collection: Collection<AnyEntity>,
+    visited: Set<AnyEntity>,
+    processed: Set<AnyEntity>,
+    parent: T,
+    prop: EntityProperty<T>,
+  ): void {
     if (this.isCollectionSelfReferenced(collection, processed)) {
       this.extraUpdates.add([parent, prop.name, collection, undefined]);
       const coll = new Collection<AnyEntity, T>(parent);
@@ -687,12 +893,17 @@ export class UnitOfWork {
       return;
     }
 
-    collection.getItems(false)
-      .filter(item => !item.__helper!.__originalEntityData)
-      .forEach(item => this.findNewEntities(item, visited, 0, processed));
+    collection
+      .getItems(false)
+      .filter((item) => !item.__helper!.__originalEntityData)
+      .forEach((item) => this.findNewEntities(item, visited, 0, processed));
   }
 
-  private async runHooks<T extends object>(type: EventType, changeSet: ChangeSet<T>, sync = false): Promise<void> {
+  private async runHooks<T extends object>(
+    type: EventType,
+    changeSet: ChangeSet<T>,
+    sync = false,
+  ): Promise<void> {
     const meta = changeSet.meta;
 
     if (!this.eventManager.hasListeners(type, meta)) {
@@ -700,24 +911,36 @@ export class UnitOfWork {
     }
 
     if (!sync) {
-      await this.eventManager.dispatchEvent(type, { entity: changeSet.entity, meta, em: this.em, changeSet });
+      await this.eventManager.dispatchEvent(type, {
+        entity: changeSet.entity,
+        meta,
+        em: this.em,
+        changeSet,
+      });
       return;
     }
 
     const copy = this.comparator.prepareEntity(changeSet.entity) as T;
-    await this.eventManager.dispatchEvent(type, { entity: changeSet.entity, meta, em: this.em, changeSet });
+    await this.eventManager.dispatchEvent(type, {
+      entity: changeSet.entity,
+      meta,
+      em: this.em,
+      changeSet,
+    });
     const current = this.comparator.prepareEntity(changeSet.entity) as T;
     const diff = this.comparator.diffEntities<T>(changeSet.name, copy, current);
     Object.assign(changeSet.payload, diff);
     const wrapped = helper(changeSet.entity);
 
     if (wrapped.__identifier && diff[wrapped.__meta.primaryKeys[0]]) {
-      wrapped.__identifier.setValue(diff[wrapped.__meta.primaryKeys[0]] as IPrimaryKeyValue);
+      wrapped.__identifier.setValue(
+        diff[wrapped.__meta.primaryKeys[0]] as IPrimaryKeyValue,
+      );
     }
   }
 
   private postCommitCleanup(): void {
-    this.changeSets.forEach(cs => {
+    this.changeSets.forEach((cs) => {
       const wrapped = helper(cs.entity);
       wrapped.__processing = false;
       delete wrapped.__pk;
@@ -732,7 +955,12 @@ export class UnitOfWork {
     this.working = false;
   }
 
-  private cascade<T extends object>(entity: T, type: Cascade, visited = new Set<AnyEntity>(), options: { checkRemoveStack?: boolean; cascade?: boolean } = {}): void {
+  private cascade<T extends object>(
+    entity: T,
+    type: Cascade,
+    visited = new Set<AnyEntity>(),
+    options: { checkRemoveStack?: boolean; cascade?: boolean } = {},
+  ): void {
     if (visited.has(entity)) {
       return;
     }
@@ -740,11 +968,21 @@ export class UnitOfWork {
     visited.add(entity);
 
     switch (type) {
-      case Cascade.PERSIST: this.persist(entity, visited, options); break;
-      case Cascade.MERGE: this.merge(entity, visited); break;
-      case Cascade.REMOVE: this.remove(entity, visited, options); break;
-      case Cascade.SCHEDULE_ORPHAN_REMOVAL: this.scheduleOrphanRemoval(entity, visited); break;
-      case Cascade.CANCEL_ORPHAN_REMOVAL: this.cancelOrphanRemoval(entity, visited); break;
+      case Cascade.PERSIST:
+        this.persist(entity, visited, options);
+        break;
+      case Cascade.MERGE:
+        this.merge(entity, visited);
+        break;
+      case Cascade.REMOVE:
+        this.remove(entity, visited, options);
+        break;
+      case Cascade.SCHEDULE_ORPHAN_REMOVAL:
+        this.scheduleOrphanRemoval(entity, visited);
+        break;
+      case Cascade.CANCEL_ORPHAN_REMOVAL:
+        this.cancelOrphanRemoval(entity, visited);
+        break;
     }
 
     for (const prop of helper(entity).__meta.relations) {
@@ -752,35 +990,66 @@ export class UnitOfWork {
     }
   }
 
-  private cascadeReference<T extends object>(entity: T, prop: EntityProperty<T>, type: Cascade, visited: Set<AnyEntity>, options: { checkRemoveStack?: boolean }): void {
+  private cascadeReference<T extends object>(
+    entity: T,
+    prop: EntityProperty<T>,
+    type: Cascade,
+    visited: Set<AnyEntity>,
+    options: { checkRemoveStack?: boolean },
+  ): void {
     this.fixMissingReference(entity, prop);
 
     if (!this.shouldCascade(prop, type)) {
       return;
     }
 
-    const kind = Reference.unwrapReference(entity[prop.name] as object) as T | Collection<AnyEntity>;
+    const kind = Reference.unwrapReference(entity[prop.name] as object) as
+      | T
+      | Collection<AnyEntity>;
 
-    if ([ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(prop.kind) && Utils.isEntity(kind)) {
+    if (
+      [ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(
+        prop.kind,
+      ) &&
+      Utils.isEntity(kind)
+    ) {
       return this.cascade(kind as T, type, visited, options);
     }
 
     const collection = kind as Collection<AnyEntity>;
 
-    if ([ReferenceKind.ONE_TO_MANY, ReferenceKind.MANY_TO_MANY].includes(prop.kind) && collection) {
+    if (
+      [ReferenceKind.ONE_TO_MANY, ReferenceKind.MANY_TO_MANY].includes(
+        prop.kind,
+      ) &&
+      collection
+    ) {
       collection
         .getItems(false)
-        .forEach(item => this.cascade(item, type, visited, options));
+        .forEach((item) => this.cascade(item, type, visited, options));
     }
   }
 
-  private isCollectionSelfReferenced(collection: Collection<AnyEntity>, processed: Set<AnyEntity>): boolean {
-    const filtered = collection.getItems(false).filter(item => !helper(item).__originalEntityData);
-    return filtered.some(items => processed.has(items));
+  private isCollectionSelfReferenced(
+    collection: Collection<AnyEntity>,
+    processed: Set<AnyEntity>,
+  ): boolean {
+    const filtered = collection
+      .getItems(false)
+      .filter((item) => !helper(item).__originalEntityData);
+    return filtered.some((items) => processed.has(items));
   }
 
   private shouldCascade(prop: EntityProperty, type: Cascade): boolean {
-    if ([Cascade.REMOVE, Cascade.SCHEDULE_ORPHAN_REMOVAL, Cascade.CANCEL_ORPHAN_REMOVAL, Cascade.ALL].includes(type) && prop.orphanRemoval) {
+    if (
+      [
+        Cascade.REMOVE,
+        Cascade.SCHEDULE_ORPHAN_REMOVAL,
+        Cascade.CANCEL_ORPHAN_REMOVAL,
+        Cascade.ALL,
+      ].includes(type) &&
+      prop.orphanRemoval
+    ) {
       return true;
     }
 
@@ -789,18 +1058,33 @@ export class UnitOfWork {
       return true;
     }
 
-    return prop.cascade && (prop.cascade.includes(type) || prop.cascade.includes(Cascade.ALL));
+    return (
+      prop.cascade &&
+      (prop.cascade.includes(type) || prop.cascade.includes(Cascade.ALL))
+    );
   }
 
-  private async lockPessimistic<T extends object>(entity: T, options: LockOptions): Promise<void> {
+  private async lockPessimistic<T extends object>(
+    entity: T,
+    options: LockOptions,
+  ): Promise<void> {
     if (!this.em.isInTransaction()) {
       throw ValidationError.transactionRequired();
     }
 
-    await this.em.getDriver().lockPessimistic(entity, { ctx: this.em.getTransactionContext(), ...options });
+    await this.em
+      .getDriver()
+      .lockPessimistic(entity, {
+        ctx: this.em.getTransactionContext(),
+        ...options,
+      });
   }
 
-  private async lockOptimistic<T extends object>(entity: T, meta: EntityMetadata<T>, version: number | Date): Promise<void> {
+  private async lockOptimistic<T extends object>(
+    entity: T,
+    meta: EntityMetadata<T>,
+    version: number | Date,
+  ): Promise<void> {
     if (!meta.versionProperty) {
       throw OptimisticLockError.notVersioned(meta);
     }
@@ -815,23 +1099,42 @@ export class UnitOfWork {
       await wrapped.init();
     }
 
-    const previousVersion = entity[meta.versionProperty] as unknown as Date | number;
+    const previousVersion = entity[meta.versionProperty] as unknown as
+      | Date
+      | number;
 
     if (previousVersion !== version) {
-      throw OptimisticLockError.lockFailedVersionMismatch(entity, version, previousVersion);
+      throw OptimisticLockError.lockFailedVersionMismatch(
+        entity,
+        version,
+        previousVersion,
+      );
     }
   }
 
-  private fixMissingReference<T extends object>(entity: T, prop: EntityProperty<T>): void {
+  private fixMissingReference<T extends object>(
+    entity: T,
+    prop: EntityProperty<T>,
+  ): void {
     const reference = entity[prop.name] as object;
     const kind = Reference.unwrapReference(reference);
 
-    if ([ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(prop.kind) && kind && !prop.mapToPk) {
+    if (
+      [ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(
+        prop.kind,
+      ) &&
+      kind &&
+      !prop.mapToPk
+    ) {
       if (!Utils.isEntity(kind)) {
-        entity[prop.name] = this.em.getReference(prop.type, kind, { wrapped: !!prop.ref }) as EntityValue<T>;
+        entity[prop.name] = this.em.getReference(prop.type, kind, {
+          wrapped: !!prop.ref,
+        }) as EntityValue<T>;
       } else if (!helper(kind).__initialized && !helper(kind).__em) {
         const pk = helper(kind).getPrimaryKey();
-        entity[prop.name] = this.em.getReference(prop.type, pk, { wrapped: !!prop.ref }) as EntityValue<T>;
+        entity[prop.name] = this.em.getReference(prop.type, pk, {
+          wrapped: !!prop.ref,
+        }) as EntityValue<T>;
       }
     }
 
@@ -840,7 +1143,10 @@ export class UnitOfWork {
       kind.property = prop as EntityProperty<any>;
     }
 
-    const isCollection = [ReferenceKind.ONE_TO_MANY, ReferenceKind.MANY_TO_MANY].includes(prop.kind);
+    const isCollection = [
+      ReferenceKind.ONE_TO_MANY,
+      ReferenceKind.MANY_TO_MANY,
+    ].includes(prop.kind);
 
     if (isCollection && Array.isArray(kind)) {
       const collection = new Collection<AnyEntity>(entity);
@@ -850,7 +1156,10 @@ export class UnitOfWork {
     }
   }
 
-  private async persistToDatabase(groups: { [K in ChangeSetType]: Map<string, ChangeSet<any>[]> }, ctx?: Transaction): Promise<void> {
+  private async persistToDatabase(
+    groups: { [K in ChangeSetType]: Map<string, ChangeSet<any>[]> },
+    ctx?: Transaction,
+  ): Promise<void> {
     if (ctx) {
       this.em.setTransactionContext(ctx);
     }
@@ -860,22 +1169,34 @@ export class UnitOfWork {
 
     // 1. early delete - when we recreate entity in the same UoW, we need to issue those delete queries before inserts
     for (const name of commitOrderReversed) {
-      await this.commitDeleteChangeSets(groups[ChangeSetType.DELETE_EARLY].get(name) ?? [], ctx);
+      await this.commitDeleteChangeSets(
+        groups[ChangeSetType.DELETE_EARLY].get(name) ?? [],
+        ctx,
+      );
     }
 
     // 2. early update - when we recreate entity in the same UoW, we need to issue those delete queries before inserts
     for (const name of commitOrder) {
-      await this.commitUpdateChangeSets(groups[ChangeSetType.UPDATE_EARLY].get(name) ?? [], ctx);
+      await this.commitUpdateChangeSets(
+        groups[ChangeSetType.UPDATE_EARLY].get(name) ?? [],
+        ctx,
+      );
     }
 
     // 3. create
     for (const name of commitOrder) {
-      await this.commitCreateChangeSets(groups[ChangeSetType.CREATE].get(name) ?? [], ctx);
+      await this.commitCreateChangeSets(
+        groups[ChangeSetType.CREATE].get(name) ?? [],
+        ctx,
+      );
     }
 
     // 4. update
     for (const name of commitOrder) {
-      await this.commitUpdateChangeSets(groups[ChangeSetType.UPDATE].get(name) ?? [], ctx);
+      await this.commitUpdateChangeSets(
+        groups[ChangeSetType.UPDATE].get(name) ?? [],
+        ctx,
+      );
     }
 
     // 5. extra updates
@@ -890,7 +1211,10 @@ export class UnitOfWork {
 
     // 7. delete - entity deletions need to be in reverse commit order
     for (const name of commitOrderReversed) {
-      await this.commitDeleteChangeSets(groups[ChangeSetType.DELETE].get(name) ?? [], ctx);
+      await this.commitDeleteChangeSets(
+        groups[ChangeSetType.DELETE].get(name) ?? [],
+        ctx,
+      );
     }
 
     // 8. take snapshots of all persisted collections
@@ -901,15 +1225,22 @@ export class UnitOfWork {
     }
   }
 
-  private async commitCreateChangeSets<T extends object>(changeSets: ChangeSet<T>[], ctx?: Transaction): Promise<void> {
+  private async commitCreateChangeSets<T extends object>(
+    changeSets: ChangeSet<T>[],
+    ctx?: Transaction,
+  ): Promise<void> {
     if (changeSets.length === 0) {
       return;
     }
 
-    const props = changeSets[0].meta.root.relations.filter(prop => {
-      return (prop.kind === ReferenceKind.ONE_TO_ONE && prop.owner)
-        || prop.kind === ReferenceKind.MANY_TO_ONE
-        || (prop.kind === ReferenceKind.MANY_TO_MANY && prop.owner && !this.platform.usesPivotTable());
+    const props = changeSets[0].meta.root.relations.filter((prop) => {
+      return (
+        (prop.kind === ReferenceKind.ONE_TO_ONE && prop.owner) ||
+        prop.kind === ReferenceKind.MANY_TO_ONE ||
+        (prop.kind === ReferenceKind.MANY_TO_MANY &&
+          prop.owner &&
+          !this.platform.usesPivotTable())
+      );
     });
 
     for (const changeSet of changeSets) {
@@ -925,7 +1256,10 @@ export class UnitOfWork {
     }
   }
 
-  private findExtraUpdates<T extends object>(changeSet: ChangeSet<T>, props: EntityProperty<T>[]): void {
+  private findExtraUpdates<T extends object>(
+    changeSet: ChangeSet<T>,
+    props: EntityProperty<T>[],
+  ): void {
     for (const prop of props) {
       const ref = changeSet.entity[prop.name];
 
@@ -934,9 +1268,10 @@ export class UnitOfWork {
       }
 
       if (Utils.isCollection(ref)) {
-        ref.getItems(false).some(item => {
+        ref.getItems(false).some((item) => {
           const cs = this.changeSets.get(Reference.unwrapReference(item));
-          const isScheduledForInsert = cs && cs.type === ChangeSetType.CREATE && !cs.persisted;
+          const isScheduledForInsert =
+            cs && cs.type === ChangeSetType.CREATE && !cs.persisted;
 
           if (isScheduledForInsert) {
             this.scheduleExtraUpdate(changeSet, [prop]);
@@ -948,7 +1283,8 @@ export class UnitOfWork {
       }
 
       const cs = this.changeSets.get(Reference.unwrapReference(ref));
-      const isScheduledForInsert = cs && cs.type === ChangeSetType.CREATE && !cs.persisted;
+      const isScheduledForInsert =
+        cs && cs.type === ChangeSetType.CREATE && !cs.persisted;
 
       if (isScheduledForInsert) {
         this.scheduleExtraUpdate(changeSet, [prop]);
@@ -956,12 +1292,22 @@ export class UnitOfWork {
     }
   }
 
-  private findEarlyUpdates<T extends object>(changeSet: ChangeSet<T>, inserts: ChangeSet<T>[] = []): void {
+  private findEarlyUpdates<T extends object>(
+    changeSet: ChangeSet<T>,
+    inserts: ChangeSet<T>[] = [],
+  ): void {
     const props = changeSet.meta.uniqueProps;
 
     for (const prop of props) {
-      const insert = inserts.find(c => Utils.equals(c.payload[prop.name], changeSet.originalEntity![prop.name]));
-      const propEmpty = changeSet.payload[prop.name] === null || changeSet.payload[prop.name] === undefined;
+      const insert = inserts.find((c) =>
+        Utils.equals(
+          c.payload[prop.name],
+          changeSet.originalEntity![prop.name],
+        ),
+      );
+      const propEmpty =
+        changeSet.payload[prop.name] === null ||
+        changeSet.payload[prop.name] === undefined;
 
       if (
         prop.name in changeSet.payload &&
@@ -975,7 +1321,11 @@ export class UnitOfWork {
     }
   }
 
-  private async commitUpdateChangeSets<T extends object>(changeSets: ChangeSet<T>[], ctx?: Transaction, batched = true): Promise<void> {
+  private async commitUpdateChangeSets<T extends object>(
+    changeSets: ChangeSet<T>[],
+    ctx?: Transaction,
+    batched = true,
+  ): Promise<void> {
     if (changeSets.length === 0) {
       return;
     }
@@ -987,14 +1337,18 @@ export class UnitOfWork {
     await this.changeSetPersister.executeUpdates(changeSets, batched, { ctx });
 
     for (const changeSet of changeSets) {
-      helper(changeSet.entity).__originalEntityData = this.comparator.prepareEntity(changeSet.entity);
+      helper(changeSet.entity).__originalEntityData =
+        this.comparator.prepareEntity(changeSet.entity);
       helper(changeSet.entity).__touched = false;
       helper(changeSet.entity).__initialized = true;
       await this.runHooks(EventType.afterUpdate, changeSet);
     }
   }
 
-  private async commitDeleteChangeSets<T extends object>(changeSets: ChangeSet<T>[], ctx?: Transaction): Promise<void> {
+  private async commitDeleteChangeSets<T extends object>(
+    changeSets: ChangeSet<T>[],
+    ctx?: Transaction,
+  ): Promise<void> {
     if (changeSets.length === 0) {
       return;
     }
@@ -1011,24 +1365,34 @@ export class UnitOfWork {
     }
   }
 
-  private async commitExtraUpdates<T extends object>(ctx?: Transaction): Promise<void> {
+  private async commitExtraUpdates<T extends object>(
+    ctx?: Transaction,
+  ): Promise<void> {
     const extraUpdates: [ChangeSet<any>, ChangeSet<any> | undefined][] = [];
 
     for (const extraUpdate of this.extraUpdates) {
       if (Array.isArray(extraUpdate[1])) {
-        extraUpdate[1].forEach((p, i) => extraUpdate[0][p] = (extraUpdate[2] as unknown[])[i]);
+        extraUpdate[1].forEach(
+          (p, i) => (extraUpdate[0][p] = (extraUpdate[2] as unknown[])[i]),
+        );
       } else {
         extraUpdate[0][extraUpdate[1]] = extraUpdate[2];
       }
 
-      const changeSet = this.changeSetComputer.computeChangeSet(extraUpdate[0])!;
+      const changeSet = this.changeSetComputer.computeChangeSet(
+        extraUpdate[0],
+      )!;
 
       if (changeSet) {
         extraUpdates.push([changeSet, extraUpdate[3]]);
       }
     }
 
-    await this.commitUpdateChangeSets(extraUpdates.map(u => u[0]), ctx, false);
+    await this.commitUpdateChangeSets(
+      extraUpdates.map((u) => u[0]),
+      ctx,
+      false,
+    );
 
     // propagate the new values to the original changeset
     for (const extraUpdate of extraUpdates) {
@@ -1041,7 +1405,9 @@ export class UnitOfWork {
   /**
    * Orders change sets so FK constrains are maintained, ensures stable order (needed for node < 11)
    */
-  private getChangeSetGroups(): { [K in ChangeSetType]: Map<string, ChangeSet<any>[]> } {
+  private getChangeSetGroups(): {
+    [K in ChangeSetType]: Map<string, ChangeSet<any>[]>;
+  } {
     const groups = {
       [ChangeSetType.CREATE]: new Map<string, ChangeSet<any>[]>(),
       [ChangeSetType.UPDATE]: new Map<string, ChangeSet<any>[]>(),
@@ -1050,7 +1416,7 @@ export class UnitOfWork {
       [ChangeSetType.DELETE_EARLY]: new Map<string, ChangeSet<any>[]>(),
     };
 
-    this.changeSets.forEach(cs => {
+    this.changeSets.forEach((cs) => {
       const group = groups[cs.type];
       const classGroup = group.get(cs.name) ?? [];
       classGroup.push(cs);
@@ -1068,7 +1434,7 @@ export class UnitOfWork {
     const calc = new CommitOrderCalculator();
     const set = new Set<string>();
     const rootMap: Map<string, Set<string>> = new Map<string, Set<string>>();
-    this.changeSets.forEach(cs => {
+    this.changeSets.forEach((cs) => {
       const { name, rootName } = cs;
       set.add(name);
       if (!rootMap.has(rootName)) {
@@ -1078,7 +1444,7 @@ export class UnitOfWork {
     });
 
     const rootSet = Array.from(rootMap.keys());
-    rootSet.forEach(entityName => calc.addNode(entityName));
+    rootSet.forEach((entityName) => calc.addNode(entityName));
 
     for (const entityName of set) {
       const meta = this.metadata.find(entityName)!;
@@ -1088,7 +1454,10 @@ export class UnitOfWork {
     }
 
     // re-map to children
-    return calc.sort().map(rootName => rootMap.get(rootName)!).reduce((groups, curr) => [...groups, ...curr.values()], [] as string[]);
+    return calc
+      .sort()
+      .map((rootName) => rootMap.get(rootName)!)
+      .reduce((groups, curr) => [...groups, ...curr.values()], [] as string[]);
   }
 
   private resetTransaction(oldTx: Transaction): void {
@@ -1102,13 +1471,16 @@ export class UnitOfWork {
   /**
    * Takes snapshots of all processed collections
    */
-  private takeCollectionSnapshots<T extends object>(entity: T, visited: Set<unknown>) {
+  private takeCollectionSnapshots<T extends object>(
+    entity: T,
+    visited: Set<unknown>,
+  ) {
     if (visited.has(entity)) {
       return;
     }
 
     visited.add(entity);
-    helper(entity)?.__meta.relations.forEach(prop => {
+    helper(entity)?.__meta.relations.forEach((prop) => {
       const value = entity[prop.name];
 
       if (Utils.isCollection(value)) {
@@ -1121,7 +1493,6 @@ export class UnitOfWork {
       }
     });
   }
-
 }
 
 export interface RegisterOptions {

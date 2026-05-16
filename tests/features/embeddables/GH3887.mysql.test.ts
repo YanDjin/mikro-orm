@@ -1,33 +1,35 @@
-import { Embeddable, Embedded, Entity, PrimaryKey, Property, MikroORM, sql } from '@mikro-orm/mysql';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  PrimaryKey,
+  Property,
+  MikroORM,
+  sql,
+} from "@yandjin-mikro-orm/mysql";
 
 @Embeddable()
 class NestedTime {
-
   @Property({ default: sql.now() })
   timestamp!: Date;
-
 }
 
 @Embeddable()
 class Time {
-
   @Property({ default: sql.now() })
   timestamp!: Date;
 
   @Embedded(() => NestedTime)
   nested!: NestedTime;
-
 }
 
 @Entity()
 class Test {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded(() => Time)
   time!: Time;
-
 }
 
 let orm: MikroORM;
@@ -35,7 +37,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Test],
-    dbName: '3887',
+    dbName: "3887",
     port: 3308,
   });
   await orm.schema.refreshDatabase();
@@ -45,7 +47,7 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('reloading database defaults from inlined embeddables', async () => {
+test("reloading database defaults from inlined embeddables", async () => {
   const test = new Test();
   test.time = {} as Time;
   test.time.nested = {} as Time;

@@ -8,15 +8,14 @@ import {
   OptionalProps,
   PrimaryKey,
   Property,
-} from '@mikro-orm/core';
-import { Book2 } from './Book2';
-import { Configuration2 } from './Configuration2';
-import { FooBar2 } from './FooBar2';
+} from "@yandjin-mikro-orm/core";
+import { Book2 } from "./Book2";
+import { Configuration2 } from "./Configuration2";
+import { FooBar2 } from "./FooBar2";
 
 @Entity()
 export class Test2 {
-
-  [OptionalProps]?: 'version';
+  [OptionalProps]?: "version";
 
   @PrimaryKey()
   id!: number;
@@ -30,7 +29,7 @@ export class Test2 {
   @ManyToOne({ entity: () => Test2, mapToPk: true, nullable: true })
   parent?: number;
 
-  @OneToMany(() => Configuration2, config => config.test)
+  @OneToMany(() => Configuration2, (config) => config.test)
   config = new Collection<Configuration2>(this);
 
   @Property({ version: true })
@@ -52,7 +51,6 @@ export class Test2 {
   }
 
   getConfiguration() {
-    return this.config.indexBy('property', 'value');
+    return this.config.indexBy("property", "value");
   }
-
 }

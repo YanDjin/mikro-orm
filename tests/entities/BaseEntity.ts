@@ -1,4 +1,4 @@
-import { ObjectId } from 'bson';
+import { ObjectId } from "bson";
 import {
   BeforeCreate,
   PrimaryKey,
@@ -7,14 +7,16 @@ import {
   BaseEntity as MikroBaseEntity,
   OptionalProps,
   PrimaryKeyProp,
-} from '@mikro-orm/core';
+} from "@yandjin-mikro-orm/core";
 
-export type BaseEntityOptional = 'updatedAt' | 'hookTest';
+export type BaseEntityOptional = "updatedAt" | "hookTest";
 
-export abstract class BaseEntity<T extends object, Optional extends keyof T = never> extends MikroBaseEntity {
-
+export abstract class BaseEntity<
+  T extends object,
+  Optional extends keyof T = never,
+> extends MikroBaseEntity {
   [OptionalProps]?: BaseEntityOptional | Optional;
-  [PrimaryKeyProp]?: 'id' | '_id';
+  [PrimaryKeyProp]?: "id" | "_id";
 
   @PrimaryKey()
   _id!: ObjectId;
@@ -38,5 +40,4 @@ export abstract class BaseEntity<T extends object, Optional extends keyof T = ne
   baseBeforeCreate() {
     this.hookTest = true;
   }
-
 }

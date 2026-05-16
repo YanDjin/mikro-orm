@@ -1,9 +1,9 @@
-import { MikroORM, MikroORMOptions } from '@mikro-orm/mysql';
-import { EntityGenerator } from '@mikro-orm/entity-generator';
+import { MikroORM, MikroORMOptions } from "@yandjin-mikro-orm/mysql";
+import { EntityGenerator } from "@yandjin-mikro-orm/entity-generator";
 
 let orm: MikroORM;
 
-const schemaName = 'fk_shared_with_column_example';
+const schemaName = "fk_shared_with_column_example";
 const schema = `
 CREATE TABLE IF NOT EXISTS \`countries\` (
   \`code\` CHAR(2) NOT NULL,
@@ -76,29 +76,46 @@ afterEach(async () => {
 });
 
 describe(schemaName, () => {
-  describe.each(['never', 'always', 'smart'])('scalarPropertiesForRelations=%s', i => {
-    const scalarPropertiesForRelations = i as NonNullable<MikroORMOptions['entityGenerator']['scalarPropertiesForRelations']>;
-    beforeEach(() => {
-      orm.config.get('entityGenerator').scalarPropertiesForRelations = scalarPropertiesForRelations;
-    });
-
-    describe.each([true, false])('bidirectionalRelations=%s', bidirectionalRelations => {
+  describe.each(["never", "always", "smart"])(
+    "scalarPropertiesForRelations=%s",
+    (i) => {
+      const scalarPropertiesForRelations = i as NonNullable<
+        MikroORMOptions["entityGenerator"]["scalarPropertiesForRelations"]
+      >;
       beforeEach(() => {
-        orm.config.get('entityGenerator').bidirectionalRelations = bidirectionalRelations;
+        orm.config.get("entityGenerator").scalarPropertiesForRelations =
+          scalarPropertiesForRelations;
       });
 
-      describe.each([true, false])('identifiedReferences=%s', identifiedReferences => {
-        beforeEach(() => {
-          orm.config.get('entityGenerator').identifiedReferences = identifiedReferences;
-        });
+      describe.each([true, false])(
+        "bidirectionalRelations=%s",
+        (bidirectionalRelations) => {
+          beforeEach(() => {
+            orm.config.get("entityGenerator").bidirectionalRelations =
+              bidirectionalRelations;
+          });
 
-        test.each([true, false])('entitySchema=%s', async entitySchema => {
-          orm.config.get('entityGenerator').entitySchema = entitySchema;
+          describe.each([true, false])(
+            "identifiedReferences=%s",
+            (identifiedReferences) => {
+              beforeEach(() => {
+                orm.config.get("entityGenerator").identifiedReferences =
+                  identifiedReferences;
+              });
 
-          const dump = await orm.entityGenerator.generate();
-          expect(dump).toMatchSnapshot('dump');
-        });
-      });
-    });
-  });
+              test.each([true, false])(
+                "entitySchema=%s",
+                async (entitySchema) => {
+                  orm.config.get("entityGenerator").entitySchema = entitySchema;
+
+                  const dump = await orm.entityGenerator.generate();
+                  expect(dump).toMatchSnapshot("dump");
+                },
+              );
+            },
+          );
+        },
+      );
+    },
+  );
 });

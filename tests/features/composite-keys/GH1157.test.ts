@@ -1,57 +1,56 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, OneToOne, PrimaryKey } from '@mikro-orm/core';
-import type { AbstractSqlDriver } from '@mikro-orm/knex';
-import { v4 } from 'uuid';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  OneToOne,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import type { AbstractSqlDriver } from "@yandjin-mikro-orm/knex";
+import { v4 } from "uuid";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class D {
-
   @PrimaryKey()
   id: string = v4();
 
-  @ManyToOne({ entity: 'A' })
+  @ManyToOne({ entity: "A" })
   a!: any;
-
 }
 
 @Entity()
 export class C {
-
   @PrimaryKey()
   id: string = v4();
-
 }
 
 @Entity()
 export class B {
-
   @PrimaryKey()
   id: string = v4();
-
 }
 
 @Entity()
 export class A {
-
-  @OneToOne({ entity: 'B', joinColumn: 'id', primary: true })
+  @OneToOne({ entity: "B", joinColumn: "id", primary: true })
   id!: B;
 
-  @ManyToOne({ entity: 'C', primary: true })
+  @ManyToOne({ entity: "C", primary: true })
   c!: C;
 
-  @OneToMany({ entity: 'D', mappedBy: 'a', eager: true })
+  @OneToMany({ entity: "D", mappedBy: "a", eager: true })
   d = new Collection<D>(this);
-
 }
 
-describe('GH issue 1157', () => {
-
+describe("GH issue 1157", () => {
   let orm: MikroORM<AbstractSqlDriver>;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [A, B, C, D],
-      dbName: ':memory:',
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -59,7 +58,7 @@ describe('GH issue 1157', () => {
 
   afterAll(() => orm.close(true));
 
-  test('searching by composite key relation', async () => {
+  test("searching by composite key relation", async () => {
     const c = orm.em.create(C, {});
     const b = orm.em.create(B, {});
     const a = orm.em.create(A, { id: b, c });
@@ -69,5 +68,4 @@ describe('GH issue 1157', () => {
     const d1 = await orm.em.findOneOrFail(D, { a });
     expect(d1.a.id).toBeInstanceOf(B);
   });
-
 });

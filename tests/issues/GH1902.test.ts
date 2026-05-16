@@ -11,76 +11,79 @@ import {
   LoadStrategy,
   OptionalProps,
   PrimaryKeyProp,
-} from '@mikro-orm/sqlite';
+} from "@yandjin-mikro-orm/sqlite";
 
-@Entity({ tableName: 'users' })
+@Entity({ tableName: "users" })
 class UserEntity {
-
-  @PrimaryKey({ type: 'number' })
+  @PrimaryKey({ type: "number" })
   id!: number;
 
-  @Property({ type: 'string', fieldName: 'firstName' })
+  @Property({ type: "string", fieldName: "firstName" })
   name!: string;
 
-  @Unique({ name: 'UQ_89f3fc6f491c6a3e548b9c92d93' })
-  @Property({ type: 'string' })
+  @Unique({ name: "UQ_89f3fc6f491c6a3e548b9c92d93" })
+  @Property({ type: "string" })
   email!: string;
 
-  @OneToMany(() => UserTenantEntity, item => item.user)
+  @OneToMany(() => UserTenantEntity, (item) => item.user)
   items = new Collection<UserTenantEntity>(this);
-
 }
 
-@Entity({ tableName: 'tenants' })
+@Entity({ tableName: "tenants" })
 class TenantEntity {
+  [OptionalProps]?: "isEnabled";
 
-  [OptionalProps]?: 'isEnabled';
-
-  @PrimaryKey({ type: 'number' })
+  @PrimaryKey({ type: "number" })
   id!: number;
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   name!: string;
 
-  @Unique({ name: 'UQ_392df8e04b97895b69cc4a469b8' })
-  @Property({ type: 'string' })
+  @Unique({ name: "UQ_392df8e04b97895b69cc4a469b8" })
+  @Property({ type: "string" })
   schema!: string;
 
-  @Property({ type: 'boolean', fieldName: 'isEnabled' })
+  @Property({ type: "boolean", fieldName: "isEnabled" })
   isEnabled: boolean = true;
 
-  @OneToMany(() => UserTenantEntity, item => item.tenant)
+  @OneToMany(() => UserTenantEntity, (item) => item.tenant)
   items = new Collection<UserTenantEntity>(this);
-
 }
 
-@Entity({ tableName: 'user_tenant' })
-@Filter({ name: 'byUser', cond: args => ({ user: { id: args.id } }) })
-@Filter({ name: 'byTenant', cond: args => ({ tenant: { id: args.id } }) })
+@Entity({ tableName: "user_tenant" })
+@Filter({ name: "byUser", cond: (args) => ({ user: { id: args.id } }) })
+@Filter({ name: "byTenant", cond: (args) => ({ tenant: { id: args.id } }) })
 class UserTenantEntity {
-
-  @ManyToOne({ primary: true, entity: () => UserEntity, fieldName: 'userId', cascade: [] })
+  @ManyToOne({
+    primary: true,
+    entity: () => UserEntity,
+    fieldName: "userId",
+    cascade: [],
+  })
   user!: UserEntity;
 
-  @ManyToOne({ primary: true, entity: () => TenantEntity, fieldName: 'tenantId', cascade: [] })
+  @ManyToOne({
+    primary: true,
+    entity: () => TenantEntity,
+    fieldName: "tenantId",
+    cascade: [],
+  })
   tenant!: TenantEntity;
 
-  [PrimaryKeyProp]?: ['user', 'tenant'];
-  [OptionalProps]?: 'isActive';
+  [PrimaryKeyProp]?: ["user", "tenant"];
+  [OptionalProps]?: "isActive";
 
-  @Property({ type: 'boolean', fieldName: 'isActive' })
+  @Property({ type: "boolean", fieldName: "isActive" })
   isActive: boolean = true;
-
 }
 
-describe('GH issue 1902', () => {
-
+describe("GH issue 1902", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [UserEntity, TenantEntity, UserTenantEntity],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
@@ -90,12 +93,21 @@ describe('GH issue 1902', () => {
   });
 
   test(`GH issue 1902`, async () => {
-    const user = orm.em.create(UserEntity, { name: 'user one', email: 'one@email' });
+    const user = orm.em.create(UserEntity, {
+      name: "user one",
+      email: "one@email",
+    });
     await orm.em.flush();
 
-    const tenant1 = orm.em.create(TenantEntity, { name: 'tenant one', schema: 'tenant_one' });
+    const tenant1 = orm.em.create(TenantEntity, {
+      name: "tenant one",
+      schema: "tenant_one",
+    });
     await orm.em.flush();
-    const tenant2 = orm.em.create(TenantEntity, { name: 'tenant two', schema: 'tenant_two' });
+    const tenant2 = orm.em.create(TenantEntity, {
+      name: "tenant two",
+      schema: "tenant_two",
+    });
     await orm.em.flush();
 
     const repoUserTenant = orm.em.getRepository(UserTenantEntity);
@@ -109,16 +121,18 @@ describe('GH issue 1902', () => {
       filters: {
         byUser: { id: 1 },
       },
-      populate: ['tenant'] as const,
+      populate: ["tenant"] as const,
     };
     const f1 = await repoUserTenant.findAll(findOpts);
-    expect(f1.length).toBe(2);	// succeeds
+    expect(f1.length).toBe(2); // succeeds
     orm.em.clear();
 
-    const f2 = await repoUserTenant.findAll({ ...findOpts, strategy: LoadStrategy.JOINED });
-    expect(f2.length).toBe(2);	// fails
+    const f2 = await repoUserTenant.findAll({
+      ...findOpts,
+      strategy: LoadStrategy.JOINED,
+    });
+    expect(f2.length).toBe(2); // fails
 
     return;
   });
-
 });

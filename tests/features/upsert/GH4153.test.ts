@@ -1,10 +1,9 @@
-import { Entity, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
+import { Entity, PrimaryKey, Property, Unique } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
 
 @Entity()
-@Unique({ properties: ['uniq1', 'uniq2'] })
+@Unique({ properties: ["uniq1", "uniq2"] })
 class MyEntity1 {
-
   @PrimaryKey()
   id?: number;
 
@@ -16,14 +15,13 @@ class MyEntity1 {
 
   @Property()
   name!: string;
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: 'mikro_4153',
+    dbName: "mikro_4153",
     port: 3308,
     entities: [MyEntity1],
   });
@@ -32,24 +30,24 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('mapping PKs after upsert based on unique properties', async () => {
+test("mapping PKs after upsert based on unique properties", async () => {
   await orm.em.insertMany(MyEntity1, [
-    { id: 1, uniq1: 1, uniq2: 1, name: 'first' },
-    { id: 2, uniq1: 2, uniq2: 1, name: 'second' },
+    { id: 1, uniq1: 1, uniq2: 1, name: "first" },
+    { id: 2, uniq1: 2, uniq2: 1, name: "second" },
   ]);
 
   const entity1 = new MyEntity1();
   entity1.uniq1 = 1;
   entity1.uniq2 = 1;
-  entity1.name = 'first updated';
+  entity1.name = "first updated";
 
   const entity2 = new MyEntity1();
   entity2.uniq1 = 2;
   entity2.uniq2 = 1;
-  entity2.name = 'second updated';
+  entity2.name = "second updated";
 
   const result = await orm.em.upsertMany([entity2, entity1]);
 
-  expect(result.find(v => v.uniq1 === 1 && v.uniq2 === 1)!.id).toBe(1);
-  expect(result.find(v => v.uniq1 === 2 && v.uniq2 === 1)!.id).toBe(2);
+  expect(result.find((v) => v.uniq1 === 1 && v.uniq2 === 1)!.id).toBe(1);
+  expect(result.find((v) => v.uniq1 === 2 && v.uniq2 === 1)!.id).toBe(2);
 });

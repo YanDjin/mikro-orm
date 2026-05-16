@@ -1,14 +1,20 @@
-import { Entity, MikroORM, PrimaryKey, Property, Filter, Index } from '@mikro-orm/core';
-import type { AbstractSqlDriver, EntityManager } from '@mikro-orm/knex';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+  Filter,
+  Index,
+} from "@yandjin-mikro-orm/core";
+import type { AbstractSqlDriver, EntityManager } from "@yandjin-mikro-orm/knex";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
-@Entity({ discriminatorColumn: 'type', abstract: true })
+@Entity({ discriminatorColumn: "type", abstract: true })
 @Filter({
-  name: 'isActive',
-  cond: { benefitStatus: 'A', createdAt: { $lte: new Date() } },
+  name: "isActive",
+  cond: { benefitStatus: "A", createdAt: { $lte: new Date() } },
 })
 abstract class Benefit {
-
   @PrimaryKey()
   id!: number;
 
@@ -16,31 +22,27 @@ abstract class Benefit {
   benefitStatus!: string;
 
   @Index()
-  @Property({ columnType: 'timestamp' })
+  @Property({ columnType: "timestamp" })
   createdAt: Date = new Date();
 
   @Property()
   type!: string;
-
 }
 
 @Entity({
-  discriminatorValue: 'Profit',
+  discriminatorValue: "Profit",
 })
 class Profit extends Benefit {
-
   @Property()
   title!: string;
-
 }
 
 @Filter({
-  name: 'isActiveLost',
-  cond: () => ({ lostStatus: 'L', createdAt: { $lte: new Date() } }),
+  name: "isActiveLost",
+  cond: () => ({ lostStatus: "L", createdAt: { $lte: new Date() } }),
 })
 @Entity()
 class Lost {
-
   @PrimaryKey()
   id!: number;
 
@@ -51,12 +53,11 @@ class Lost {
   title!: string;
 
   @Index()
-  @Property({ columnType: 'timestamp' })
+  @Property({ columnType: "timestamp" })
   createdAt: Date = new Date();
-
 }
 
-describe('GH issue 1979', () => {
+describe("GH issue 1979", () => {
   let orm: MikroORM<AbstractSqlDriver>;
   let em: EntityManager;
 
@@ -79,35 +80,35 @@ describe('GH issue 1979', () => {
     const now = Date.now();
     const ACTIVE_PROFIT_1 = new Profit();
     ACTIVE_PROFIT_1.id = 1;
-    ACTIVE_PROFIT_1.benefitStatus = 'A';
+    ACTIVE_PROFIT_1.benefitStatus = "A";
     ACTIVE_PROFIT_1.createdAt = new Date(now - 320000);
-    ACTIVE_PROFIT_1.title = 'PROFIT_A';
+    ACTIVE_PROFIT_1.title = "PROFIT_A";
     const ACTIVE_PROFIT_2 = new Profit();
     ACTIVE_PROFIT_2.id = 2;
-    ACTIVE_PROFIT_2.benefitStatus = 'A';
+    ACTIVE_PROFIT_2.benefitStatus = "A";
     ACTIVE_PROFIT_2.createdAt = new Date(now - 320000);
-    ACTIVE_PROFIT_2.title = 'PROFIT_B';
+    ACTIVE_PROFIT_2.title = "PROFIT_B";
     const INACTIVE_PROFIT = new Profit();
     INACTIVE_PROFIT.id = 3;
-    INACTIVE_PROFIT.benefitStatus = 'B';
+    INACTIVE_PROFIT.benefitStatus = "B";
     INACTIVE_PROFIT.createdAt = new Date(now + 320000);
-    INACTIVE_PROFIT.title = 'PROFIT_C';
+    INACTIVE_PROFIT.title = "PROFIT_C";
 
     const ACTIVE_LOST_1 = new Lost();
     ACTIVE_LOST_1.id = 1;
-    ACTIVE_LOST_1.lostStatus = 'L';
+    ACTIVE_LOST_1.lostStatus = "L";
     ACTIVE_LOST_1.createdAt = new Date(now - 320000);
-    ACTIVE_LOST_1.title = 'Lost_A';
+    ACTIVE_LOST_1.title = "Lost_A";
     const ACTIVE_LOST_2 = new Lost();
     ACTIVE_LOST_2.id = 2;
-    ACTIVE_LOST_2.lostStatus = 'L';
+    ACTIVE_LOST_2.lostStatus = "L";
     ACTIVE_LOST_2.createdAt = new Date(now - 320000);
-    ACTIVE_LOST_2.title = 'Lost_B';
+    ACTIVE_LOST_2.title = "Lost_B";
     const INACTIVE_LOST = new Lost();
     INACTIVE_LOST.id = 3;
-    INACTIVE_LOST.lostStatus = 'X';
+    INACTIVE_LOST.lostStatus = "X";
     INACTIVE_LOST.createdAt = new Date(now + 320000);
-    INACTIVE_LOST.title = 'Lost_C';
+    INACTIVE_LOST.title = "Lost_C";
 
     await em.persistAndFlush([
       ACTIVE_PROFIT_1,
@@ -124,39 +125,39 @@ describe('GH issue 1979', () => {
     await orm.close(true);
   });
 
-  test('count with Filter (benefit)', async () => {
+  test("count with Filter (benefit)", async () => {
     const count = await em.count(
       Profit,
       {},
       {
-        filters: ['isActive'],
+        filters: ["isActive"],
       },
     );
     expect(count).toBe(2);
   });
 
-  test('count with out Filter (benefit)', async () => {
+  test("count with out Filter (benefit)", async () => {
     const count = await em.count(Profit, {
-      benefitStatus: 'A',
+      benefitStatus: "A",
       createdAt: { $lte: new Date() },
     });
     expect(count).toBe(2);
   });
 
-  test('count with Filter (lost)', async () => {
+  test("count with Filter (lost)", async () => {
     const count = await em.count(
       Lost,
       {},
       {
-        filters: ['isActiveLost'],
+        filters: ["isActiveLost"],
       },
     );
     expect(count).toBe(2);
   });
 
-  test('count with out Filter (lost)', async () => {
+  test("count with out Filter (lost)", async () => {
     const count = await em.count(Lost, {
-      lostStatus: 'L',
+      lostStatus: "L",
       createdAt: { $lte: new Date() },
     });
     expect(count).toBe(2);

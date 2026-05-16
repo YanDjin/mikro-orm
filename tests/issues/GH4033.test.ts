@@ -1,19 +1,24 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, SimpleLogger, Type } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+  SimpleLogger,
+  Type,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../helpers";
 
 class Id {
-
   readonly value: string;
 
   constructor(value: string) {
     this.value = value;
   }
-
 }
 
 class IdType extends Type<Id, string> {
-
   override convertToDatabaseValue(value: any) {
     if (value instanceof Id) {
       return value.value;
@@ -23,7 +28,7 @@ class IdType extends Type<Id, string> {
   }
 
   override convertToJSValue(value: any) {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       const id = Object.create(Id.prototype);
 
       return Object.assign(id, {
@@ -35,38 +40,33 @@ class IdType extends Type<Id, string> {
   }
 
   override compareAsType() {
-    return 'string';
+    return "string";
   }
 
   override getColumnType() {
-    return 'text';
+    return "text";
   }
-
 }
 @Entity()
 class ParentEntity {
-
   @PrimaryKey({ type: IdType, autoincrement: false })
   id!: Id;
 
   @OneToMany({
     entity: () => ChildEntity,
-    mappedBy: 'parent',
+    mappedBy: "parent",
     orphanRemoval: true,
   })
   children = new Collection<ChildEntity>(this);
-
 }
 
 @Entity()
 class ChildEntity {
-
   @PrimaryKey({ type: IdType, autoincrement: false })
   id!: Id;
 
   @ManyToOne(() => ParentEntity)
   parent!: ParentEntity;
-
 }
 
 let orm: MikroORM;
@@ -74,17 +74,17 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [ParentEntity, ChildEntity],
-    dbName: ':memory:',
-    loggerFactory: options => new SimpleLogger(options),
+    dbName: ":memory:",
+    loggerFactory: (options) => new SimpleLogger(options),
   });
 
   await orm.schema.createSchema();
 
   const parent = new ParentEntity();
-  parent.id = new Id('1');
+  parent.id = new Id("1");
 
   const child = new ChildEntity();
-  child.id = new Id('123');
+  child.id = new Id("123");
   parent.children.add(child);
 
   await orm.em.fork().persistAndFlush(parent);
@@ -94,9 +94,10 @@ afterAll(async () => {
   await orm.close();
 });
 
-test('should remove child entities', async () => {
-  const parent = await orm.em.createQueryBuilder(ParentEntity, 'p')
-    .leftJoinAndSelect('p.children', 'c')
+test("should remove child entities", async () => {
+  const parent = await orm.em
+    .createQueryBuilder(ParentEntity, "p")
+    .leftJoinAndSelect("p.children", "c")
     .where({ id: 1 })
     .getSingleResult();
 
@@ -105,11 +106,11 @@ test('should remove child entities', async () => {
   const mock = mockLogger(orm);
   await orm.em.flush();
   expect(mock.mock.calls).toEqual([
-    ['[query] begin'],
+    ["[query] begin"],
     ["[query] delete from `child_entity` where `id` in ('123')"],
-    ['[query] commit'],
+    ["[query] commit"],
   ]);
 
-  const records = await orm.em.getKnex().select('*').from('child_entity');
+  const records = await orm.em.getKnex().select("*").from("child_entity");
   expect(records).toEqual([]);
 });

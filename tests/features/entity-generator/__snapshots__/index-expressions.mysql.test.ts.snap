@@ -2,7 +2,7 @@
 
 exports[`4911 1`] = `
 [
-  "import { Entity, Index, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 @Unique({ name: 'dcim_device_unique_name_site', expression: 'create unique index \`dcim_device_unique_name_site\` on \`dcim_device\` ((case when (\`tenant_id\` is null) then lower(\`name\`) end))' })

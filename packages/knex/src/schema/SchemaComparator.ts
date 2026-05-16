@@ -1,4 +1,4 @@
-import { inspect } from 'util';
+import { inspect } from "util";
 import {
   ArrayType,
   BooleanType,
@@ -9,18 +9,23 @@ import {
   type Dictionary,
   type EntityProperty,
   type Logger,
-} from '@mikro-orm/core';
-import type { Column, ForeignKey, IndexDef, SchemaDifference, TableDifference } from '../typings';
-import type { DatabaseSchema } from './DatabaseSchema';
-import type { DatabaseTable } from './DatabaseTable';
-import type { AbstractSqlPlatform } from '../AbstractSqlPlatform';
-import type { SchemaHelper } from './SchemaHelper';
+} from "@yandjin-mikro-orm/core";
+import type {
+  Column,
+  ForeignKey,
+  IndexDef,
+  SchemaDifference,
+  TableDifference,
+} from "../typings";
+import type { DatabaseSchema } from "./DatabaseSchema";
+import type { DatabaseTable } from "./DatabaseTable";
+import type { AbstractSqlPlatform } from "../AbstractSqlPlatform";
+import type { SchemaHelper } from "./SchemaHelper";
 
 /**
  * Compares two Schemas and return an instance of SchemaDifference.
  */
 export class SchemaComparator {
-
   private readonly helper: SchemaHelper;
   private readonly logger: Logger;
 
@@ -36,12 +41,27 @@ export class SchemaComparator {
    * operations to change the schema stored in fromSchema to the schema that is
    * stored in toSchema.
    */
-  compare(fromSchema: DatabaseSchema, toSchema: DatabaseSchema, inverseDiff?: SchemaDifference): SchemaDifference {
-    const diff: SchemaDifference = { newTables: {}, removedTables: {}, changedTables: {}, orphanedForeignKeys: [], newNamespaces: new Set(), removedNamespaces: new Set(), fromSchema };
+  compare(
+    fromSchema: DatabaseSchema,
+    toSchema: DatabaseSchema,
+    inverseDiff?: SchemaDifference,
+  ): SchemaDifference {
+    const diff: SchemaDifference = {
+      newTables: {},
+      removedTables: {},
+      changedTables: {},
+      orphanedForeignKeys: [],
+      newNamespaces: new Set(),
+      removedNamespaces: new Set(),
+      fromSchema,
+    };
     const foreignKeysToTable: Dictionary<ForeignKey[]> = {};
 
     for (const namespace of toSchema.getNamespaces()) {
-      if (fromSchema.hasNamespace(namespace) || namespace === this.platform.getDefaultSchemaName()) {
+      if (
+        fromSchema.hasNamespace(namespace) ||
+        namespace === this.platform.getDefaultSchemaName()
+      ) {
         continue;
       }
 
@@ -49,7 +69,10 @@ export class SchemaComparator {
     }
 
     for (const namespace of fromSchema.getNamespaces()) {
-      if (toSchema.hasNamespace(namespace) || namespace === this.platform.getDefaultSchemaName()) {
+      if (
+        toSchema.hasNamespace(namespace) ||
+        namespace === this.platform.getDefaultSchemaName()
+      ) {
         continue;
       }
 
@@ -62,7 +85,11 @@ export class SchemaComparator {
       if (!fromSchema.hasTable(tableName)) {
         diff.newTables[tableName] = toSchema.getTable(tableName)!;
       } else {
-        const tableDifferences = this.diffTable(fromSchema.getTable(tableName)!, toSchema.getTable(tableName)!, inverseDiff?.changedTables[tableName]);
+        const tableDifferences = this.diffTable(
+          fromSchema.getTable(tableName)!,
+          toSchema.getTable(tableName)!,
+          inverseDiff?.changedTables[tableName],
+        );
 
         if (tableDifferences !== false) {
           diff.changedTables[tableName] = tableDifferences;
@@ -90,7 +117,7 @@ export class SchemaComparator {
     }
 
     for (const table of Object.values(diff.removedTables)) {
-      const tableName = (table.schema ? table.schema + '.' : '') + table.name;
+      const tableName = (table.schema ? table.schema + "." : "") + table.name;
 
       if (!foreignKeysToTable[tableName]) {
         continue;
@@ -106,7 +133,9 @@ export class SchemaComparator {
           continue;
         }
 
-        for (const [key, fk] of Object.entries(diff.changedTables[localTableName].removedForeignKeys)) {
+        for (const [key, fk] of Object.entries(
+          diff.changedTables[localTableName].removedForeignKeys,
+        )) {
           // We check if the key is from the removed table, if not we skip.
           if (tableName !== fk.referencedTableName) {
             continue;
@@ -124,7 +153,11 @@ export class SchemaComparator {
    * Returns the difference between the tables fromTable and toTable.
    * If there are no differences this method returns the boolean false.
    */
-  diffTable(fromTable: DatabaseTable, toTable: DatabaseTable, inverseTableDiff?: TableDifference): TableDifference | false {
+  diffTable(
+    fromTable: DatabaseTable,
+    toTable: DatabaseTable,
+    inverseTableDiff?: TableDifference,
+  ): TableDifference | false {
     let changes = 0;
     const tableDifferences: TableDifference = {
       name: fromTable.getShortestName(),
@@ -148,12 +181,16 @@ export class SchemaComparator {
 
     if (this.diffComment(fromTable.comment, toTable.comment)) {
       tableDifferences.changedComment = toTable.comment;
-      this.log(`table comment changed for ${tableDifferences.name}`, { fromTableComment: fromTable.comment, toTableComment: toTable.comment });
+      this.log(`table comment changed for ${tableDifferences.name}`, {
+        fromTableComment: fromTable.comment,
+        toTableComment: toTable.comment,
+      });
     }
 
     const fromTableColumns = fromTable.getColumns();
     const toTableColumns = toTable.getColumns();
-    const tableName = (toTable.schema ? toTable.schema + '.' : '') + toTable.name;
+    const tableName =
+      (toTable.schema ? toTable.schema + "." : "") + toTable.name;
 
     // See if all the columns in "from" table exist in "to" table
     for (const column of toTableColumns) {
@@ -162,7 +199,9 @@ export class SchemaComparator {
       }
 
       tableDifferences.addedColumns[column.name] = column;
-      this.log(`column ${tableDifferences.name}.${column.name} of type ${column.type} added`);
+      this.log(
+        `column ${tableDifferences.name}.${column.name} of type ${column.type} added`,
+      );
       changes++;
     }
 
@@ -177,14 +216,20 @@ export class SchemaComparator {
       }
 
       // See if column has changed properties in "to" table.
-      const changedProperties = this.diffColumn(column, toTable.getColumn(column.name)!, tableName);
+      const changedProperties = this.diffColumn(
+        column,
+        toTable.getColumn(column.name)!,
+        tableName,
+      );
 
       if (changedProperties.size === 0) {
         continue;
       }
 
-      if (changedProperties.size === 1 && changedProperties.has('generated')) {
-        tableDifferences.addedColumns[column.name] = toTable.getColumn(column.name)!;
+      if (changedProperties.size === 1 && changedProperties.has("generated")) {
+        tableDifferences.addedColumns[column.name] = toTable.getColumn(
+          column.name,
+        )!;
         tableDifferences.removedColumns[column.name] = column;
         changes++;
         continue;
@@ -196,7 +241,9 @@ export class SchemaComparator {
         column: toTable.getColumn(column.name)!,
         changedProperties,
       };
-      this.log(`column ${tableDifferences.name}.${column.name} changed`, { changedProperties });
+      this.log(`column ${tableDifferences.name}.${column.name} changed`, {
+        changedProperties,
+      });
       changes++;
     }
 
@@ -206,34 +253,50 @@ export class SchemaComparator {
 
     // See if all the indexes in "from" table exist in "to" table
     for (const index of Object.values(toTableIndexes)) {
-      if ((index.primary && fromTableIndexes.find(i => i.primary)) || fromTable.hasIndex(index.keyName)) {
+      if (
+        (index.primary && fromTableIndexes.find((i) => i.primary)) ||
+        fromTable.hasIndex(index.keyName)
+      ) {
         continue;
       }
 
       tableDifferences.addedIndexes[index.keyName] = index;
-      this.log(`index ${index.keyName} added to table ${tableDifferences.name}`, { index });
+      this.log(
+        `index ${index.keyName} added to table ${tableDifferences.name}`,
+        { index },
+      );
       changes++;
     }
 
     // See if there are any removed indexes in "to" table
     for (const index of fromTableIndexes) {
       // See if index is removed in "to" table.
-      if ((index.primary && !toTable.hasPrimaryKey()) || !index.primary && !toTable.hasIndex(index.keyName)) {
+      if (
+        (index.primary && !toTable.hasPrimaryKey()) ||
+        (!index.primary && !toTable.hasIndex(index.keyName))
+      ) {
         tableDifferences.removedIndexes[index.keyName] = index;
-        this.log(`index ${index.keyName} removed from table ${tableDifferences.name}`);
+        this.log(
+          `index ${index.keyName} removed from table ${tableDifferences.name}`,
+        );
         changes++;
         continue;
       }
 
       // See if index has changed in "to" table.
-      const toTableIndex = index.primary ? toTable.getPrimaryKey()! : toTable.getIndex(index.keyName)!;
+      const toTableIndex = index.primary
+        ? toTable.getPrimaryKey()!
+        : toTable.getIndex(index.keyName)!;
 
       if (!this.diffIndex(index, toTableIndex)) {
         continue;
       }
 
       tableDifferences.changedIndexes[index.keyName] = toTableIndex!;
-      this.log(`index ${index.keyName} changed in table ${tableDifferences.name}`, { fromTableIndex: index, toTableIndex });
+      this.log(
+        `index ${index.keyName} changed in table ${tableDifferences.name}`,
+        { fromTableIndex: index, toTableIndex },
+      );
       changes++;
     }
 
@@ -249,7 +312,10 @@ export class SchemaComparator {
       }
 
       tableDifferences.addedChecks[check.name] = check;
-      this.log(`check constraint ${check.name} added to table ${tableDifferences.name}`, { check });
+      this.log(
+        `check constraint ${check.name} added to table ${tableDifferences.name}`,
+        { check },
+      );
       changes++;
     }
 
@@ -257,7 +323,9 @@ export class SchemaComparator {
     for (const check of fromTableChecks) {
       if (!toTable.hasCheck(check.name)) {
         tableDifferences.removedChecks[check.name] = check;
-        this.log(`check constraint ${check.name} removed from table ${tableDifferences.name}`);
+        this.log(
+          `check constraint ${check.name} removed from table ${tableDifferences.name}`,
+        );
         changes++;
         continue;
       }
@@ -265,11 +333,19 @@ export class SchemaComparator {
       // See if index has changed in "to" table
       const toTableCheck = toTable.getCheck(check.name)!;
 
-      if (!this.diffExpression(check.expression as string, toTableCheck.expression as string)) {
+      if (
+        !this.diffExpression(
+          check.expression as string,
+          toTableCheck.expression as string,
+        )
+      ) {
         continue;
       }
 
-      this.log(`check constraint ${check.name} changed in table ${tableDifferences.name}`, { fromTableCheck: check, toTableCheck });
+      this.log(
+        `check constraint ${check.name} changed in table ${tableDifferences.name}`,
+        { fromTableCheck: check, toTableCheck },
+      );
       tableDifferences.changedChecks[check.name] = toTableCheck;
       changes++;
     }
@@ -282,9 +358,16 @@ export class SchemaComparator {
         if (!this.diffForeignKey(fromConstraint, toConstraint)) {
           delete fromForeignKeys[fromConstraint.constraintName];
           delete toForeignKeys[toConstraint.constraintName];
-        } else if (fromConstraint.constraintName.toLowerCase() === toConstraint.constraintName.toLowerCase()) {
-          this.log(`FK constraint ${fromConstraint.constraintName} changed in table ${tableDifferences.name}`, { fromConstraint, toConstraint });
-          tableDifferences.changedForeignKeys[toConstraint.constraintName] = toConstraint;
+        } else if (
+          fromConstraint.constraintName.toLowerCase() ===
+          toConstraint.constraintName.toLowerCase()
+        ) {
+          this.log(
+            `FK constraint ${fromConstraint.constraintName} changed in table ${tableDifferences.name}`,
+            { fromConstraint, toConstraint },
+          );
+          tableDifferences.changedForeignKeys[toConstraint.constraintName] =
+            toConstraint;
           changes++;
           delete fromForeignKeys[fromConstraint.constraintName];
           delete toForeignKeys[toConstraint.constraintName];
@@ -293,14 +376,21 @@ export class SchemaComparator {
     }
 
     for (const fromConstraint of Object.values(fromForeignKeys)) {
-      tableDifferences.removedForeignKeys[fromConstraint.constraintName] = fromConstraint;
-      this.log(`FK constraint ${fromConstraint.constraintName} removed from table ${tableDifferences.name}`);
+      tableDifferences.removedForeignKeys[fromConstraint.constraintName] =
+        fromConstraint;
+      this.log(
+        `FK constraint ${fromConstraint.constraintName} removed from table ${tableDifferences.name}`,
+      );
       changes++;
     }
 
     for (const toConstraint of Object.values(toForeignKeys)) {
-      tableDifferences.addedForeignKeys[toConstraint.constraintName] = toConstraint;
-      this.log(`FK constraint ${toConstraint.constraintName} added from table ${tableDifferences.name}`, { constraint: toConstraint });
+      tableDifferences.addedForeignKeys[toConstraint.constraintName] =
+        toConstraint;
+      this.log(
+        `FK constraint ${toConstraint.constraintName} added from table ${tableDifferences.name}`,
+        { constraint: toConstraint },
+      );
       changes++;
     }
 
@@ -311,24 +401,31 @@ export class SchemaComparator {
    * Try to find columns that only changed their name, rename operations maybe cheaper than add/drop
    * however ambiguities between different possibilities should not lead to renaming at all.
    */
-  private detectColumnRenamings(tableDifferences: TableDifference, inverseTableDiff?: TableDifference): void {
+  private detectColumnRenamings(
+    tableDifferences: TableDifference,
+    inverseTableDiff?: TableDifference,
+  ): void {
     const renameCandidates: Dictionary<[Column, Column][]> = {};
 
     for (const addedColumn of Object.values(tableDifferences.addedColumns)) {
-      for (const removedColumn of Object.values(tableDifferences.removedColumns)) {
+      for (const removedColumn of Object.values(
+        tableDifferences.removedColumns,
+      )) {
         const diff = this.diffColumn(addedColumn, removedColumn);
 
         if (diff.size !== 0) {
           continue;
         }
 
-        const renamedColumn = inverseTableDiff?.renamedColumns[addedColumn.name];
+        const renamedColumn =
+          inverseTableDiff?.renamedColumns[addedColumn.name];
 
         if (renamedColumn && renamedColumn?.name !== removedColumn.name) {
           continue;
         }
 
-        renameCandidates[addedColumn.name] = renameCandidates[addedColumn.name] ?? [];
+        renameCandidates[addedColumn.name] =
+          renameCandidates[addedColumn.name] ?? [];
         renameCandidates[addedColumn.name].push([removedColumn, addedColumn]);
       }
     }
@@ -350,7 +447,10 @@ export class SchemaComparator {
       tableDifferences.renamedColumns[removedColumnName] = addedColumn;
       delete tableDifferences.addedColumns[addedColumnName];
       delete tableDifferences.removedColumns[removedColumnName];
-      this.log(`renamed column detected in table ${tableDifferences.name}`, { old: removedColumnName, new: addedColumnName });
+      this.log(`renamed column detected in table ${tableDifferences.name}`, {
+        old: removedColumnName,
+        new: addedColumnName,
+      });
     }
   }
 
@@ -363,12 +463,15 @@ export class SchemaComparator {
 
     // Gather possible rename candidates by comparing each added and removed index based on semantics.
     for (const addedIndex of Object.values(tableDifferences.addedIndexes)) {
-      for (const removedIndex of Object.values(tableDifferences.removedIndexes)) {
+      for (const removedIndex of Object.values(
+        tableDifferences.removedIndexes,
+      )) {
         if (this.diffIndex(addedIndex, removedIndex)) {
           continue;
         }
 
-        renameCandidates[addedIndex.keyName] = renameCandidates[addedIndex.keyName] ?? [];
+        renameCandidates[addedIndex.keyName] =
+          renameCandidates[addedIndex.keyName] ?? [];
         renameCandidates[addedIndex.keyName].push([removedIndex, addedIndex]);
       }
     }
@@ -391,16 +494,25 @@ export class SchemaComparator {
       tableDifferences.renamedIndexes[removedIndexName] = addedIndex;
       delete tableDifferences.addedIndexes[addedIndexName];
       delete tableDifferences.removedIndexes[removedIndexName];
-      this.log(`renamed index detected in table ${tableDifferences.name}`, { old: removedIndexName, new: addedIndexName });
+      this.log(`renamed index detected in table ${tableDifferences.name}`, {
+        old: removedIndexName,
+        new: addedIndexName,
+      });
     }
   }
 
   diffForeignKey(key1: ForeignKey, key2: ForeignKey): boolean {
-    if (key1.columnNames.join('~').toLowerCase() !== key2.columnNames.join('~').toLowerCase()) {
+    if (
+      key1.columnNames.join("~").toLowerCase() !==
+      key2.columnNames.join("~").toLowerCase()
+    ) {
       return true;
     }
 
-    if (key1.referencedColumnNames.join('~').toLowerCase() !== key2.referencedColumnNames.join('~').toLowerCase()) {
+    if (
+      key1.referencedColumnNames.join("~").toLowerCase() !==
+      key2.referencedColumnNames.join("~").toLowerCase()
+    ) {
       return true;
     }
 
@@ -408,25 +520,42 @@ export class SchemaComparator {
       return true;
     }
 
-    const defaultRule = ['restrict', 'no action'];
-    const rule = (key: ForeignKey, method: 'updateRule' | 'deleteRule') => {
-      return (key[method] ?? defaultRule[0]).toLowerCase().replace(defaultRule[1], defaultRule[0]);
+    const defaultRule = ["restrict", "no action"];
+    const rule = (key: ForeignKey, method: "updateRule" | "deleteRule") => {
+      return (key[method] ?? defaultRule[0])
+        .toLowerCase()
+        .replace(defaultRule[1], defaultRule[0]);
     };
-    const compare = (method: 'updateRule' | 'deleteRule') => rule(key1, method) === rule(key2, method);
+    const compare = (method: "updateRule" | "deleteRule") =>
+      rule(key1, method) === rule(key2, method);
 
-    return !compare('updateRule') || !compare('deleteRule');
+    return !compare("updateRule") || !compare("deleteRule");
   }
 
   /**
    * Returns the difference between the columns
    * If there are differences this method returns field2, otherwise the boolean false.
    */
-  diffColumn(fromColumn: Column, toColumn: Column, tableName?: string): Set<string> {
+  diffColumn(
+    fromColumn: Column,
+    toColumn: Column,
+    tableName?: string,
+  ): Set<string> {
     const changedProperties = new Set<string>();
-    const fromProp = this.mapColumnToProperty({ ...fromColumn, autoincrement: false });
-    const toProp = this.mapColumnToProperty({ ...toColumn, autoincrement: false });
-    const fromColumnType = fromColumn.mappedType.getColumnType(fromProp, this.platform).toLowerCase();
-    const toColumnType = toColumn.mappedType.getColumnType(toProp, this.platform).toLowerCase();
+    const fromProp = this.mapColumnToProperty({
+      ...fromColumn,
+      autoincrement: false,
+    });
+    const toProp = this.mapColumnToProperty({
+      ...toColumn,
+      autoincrement: false,
+    });
+    const fromColumnType = fromColumn.mappedType
+      .getColumnType(fromProp, this.platform)
+      .toLowerCase();
+    const toColumnType = toColumn.mappedType
+      .getColumnType(toProp, this.platform)
+      .toLowerCase();
     const log = (msg: string, params: Dictionary) => {
       if (tableName) {
         const copy = Utils.copy(params);
@@ -438,42 +567,75 @@ export class SchemaComparator {
     if (
       fromColumnType !== toColumnType &&
       !(
-        fromColumn.ignoreSchemaChanges?.includes('type') ||
-        toColumn.ignoreSchemaChanges?.includes('type')
+        fromColumn.ignoreSchemaChanges?.includes("type") ||
+        toColumn.ignoreSchemaChanges?.includes("type")
       )
     ) {
-      log(`'type' changed for column ${tableName}.${fromColumn.name}`, { fromColumnType, toColumnType });
-      changedProperties.add('type');
+      log(`'type' changed for column ${tableName}.${fromColumn.name}`, {
+        fromColumnType,
+        toColumnType,
+      });
+      changedProperties.add("type");
     }
 
-    if (fromColumn.nullable !== toColumn.nullable && !fromColumn.generated && !toColumn.generated) {
-      log(`'nullable' changed for column ${tableName}.${fromColumn.name}`, { fromColumn, toColumn });
-      changedProperties.add('nullable');
+    if (
+      fromColumn.nullable !== toColumn.nullable &&
+      !fromColumn.generated &&
+      !toColumn.generated
+    ) {
+      log(`'nullable' changed for column ${tableName}.${fromColumn.name}`, {
+        fromColumn,
+        toColumn,
+      });
+      changedProperties.add("nullable");
     }
 
-    if (this.diffExpression(fromColumn.generated as string, toColumn.generated as string)) {
-      log(`'generated' changed for column ${tableName}.${fromColumn.name}`, { fromColumn, toColumn });
-      changedProperties.add('generated');
+    if (
+      this.diffExpression(
+        fromColumn.generated as string,
+        toColumn.generated as string,
+      )
+    ) {
+      log(`'generated' changed for column ${tableName}.${fromColumn.name}`, {
+        fromColumn,
+        toColumn,
+      });
+      changedProperties.add("generated");
     }
 
     if (!!fromColumn.autoincrement !== !!toColumn.autoincrement) {
-      log(`'autoincrement' changed for column ${tableName}.${fromColumn.name}`, { fromColumn, toColumn });
-      changedProperties.add('autoincrement');
+      log(
+        `'autoincrement' changed for column ${tableName}.${fromColumn.name}`,
+        { fromColumn, toColumn },
+      );
+      changedProperties.add("autoincrement");
     }
 
-    if (fromColumn.unsigned !== toColumn.unsigned && this.platform.supportsUnsigned()) {
-      log(`'unsigned' changed for column ${tableName}.${fromColumn.name}`, { fromColumn, toColumn });
-      changedProperties.add('unsigned');
+    if (
+      fromColumn.unsigned !== toColumn.unsigned &&
+      this.platform.supportsUnsigned()
+    ) {
+      log(`'unsigned' changed for column ${tableName}.${fromColumn.name}`, {
+        fromColumn,
+        toColumn,
+      });
+      changedProperties.add("unsigned");
     }
 
     if (!this.hasSameDefaultValue(fromColumn, toColumn)) {
-      log(`'default' changed for column ${tableName}.${fromColumn.name}`, { fromColumn, toColumn });
-      changedProperties.add('default');
+      log(`'default' changed for column ${tableName}.${fromColumn.name}`, {
+        fromColumn,
+        toColumn,
+      });
+      changedProperties.add("default");
     }
 
     if (this.diffComment(fromColumn.comment, toColumn.comment)) {
-      log(`'comment' changed for column ${tableName}.${fromColumn.name}`, { fromColumn, toColumn });
-      changedProperties.add('comment');
+      log(`'comment' changed for column ${tableName}.${fromColumn.name}`, {
+        fromColumn,
+        toColumn,
+      });
+      changedProperties.add("comment");
     }
 
     if (
@@ -481,32 +643,45 @@ export class SchemaComparator {
       !(toColumn.mappedType instanceof ArrayType) &&
       this.diffEnumItems(fromColumn.enumItems, toColumn.enumItems)
     ) {
-      log(`'enumItems' changed for column ${tableName}.${fromColumn.name}`, { fromColumn, toColumn });
-      changedProperties.add('enumItems');
+      log(`'enumItems' changed for column ${tableName}.${fromColumn.name}`, {
+        fromColumn,
+        toColumn,
+      });
+      changedProperties.add("enumItems");
     }
 
     if (
-      (fromColumn.extra || '').toLowerCase() !== (toColumn.extra || '').toLowerCase() &&
+      (fromColumn.extra || "").toLowerCase() !==
+        (toColumn.extra || "").toLowerCase() &&
       !(
-        fromColumn.ignoreSchemaChanges?.includes('extra') ||
-        toColumn.ignoreSchemaChanges?.includes('extra')
+        fromColumn.ignoreSchemaChanges?.includes("extra") ||
+        toColumn.ignoreSchemaChanges?.includes("extra")
       )
     ) {
-      log(`'extra' changed for column ${tableName}.${fromColumn.name}`, { fromColumn, toColumn });
-      changedProperties.add('extra');
+      log(`'extra' changed for column ${tableName}.${fromColumn.name}`, {
+        fromColumn,
+        toColumn,
+      });
+      changedProperties.add("extra");
     }
 
     return changedProperties;
   }
 
   diffEnumItems(items1: string[] = [], items2: string[] = []): boolean {
-    return items1.length !== items2.length || items1.some((v, i) => v !== items2[i]);
+    return (
+      items1.length !== items2.length || items1.some((v, i) => v !== items2[i])
+    );
   }
 
   diffComment(comment1?: string, comment2?: string): boolean {
     // A null value and an empty string are actually equal for a comment so they should not trigger a change.
     // eslint-disable-next-line eqeqeq
-    return comment1 != comment2 && !(comment1 == null && comment2 === '') && !(comment2 == null && comment1 === '');
+    return (
+      comment1 != comment2 &&
+      !(comment1 == null && comment2 === "") &&
+      !(comment2 == null && comment1 === "")
+    );
   }
 
   /**
@@ -515,11 +690,19 @@ export class SchemaComparator {
    */
   diffIndex(index1: IndexDef, index2: IndexDef): boolean {
     // if one of them is a custom expression or full text index, compare only by name
-    if (index1.expression || index2.expression || index1.type === 'fulltext' || index2.type === 'fulltext') {
+    if (
+      index1.expression ||
+      index2.expression ||
+      index1.type === "fulltext" ||
+      index2.type === "fulltext"
+    ) {
       return index1.keyName !== index2.keyName;
     }
 
-    return !this.isIndexFulfilledBy(index1, index2) || !this.isIndexFulfilledBy(index2, index1);
+    return (
+      !this.isIndexFulfilledBy(index1, index2) ||
+      !this.isIndexFulfilledBy(index2, index1)
+    );
   }
 
   /**
@@ -562,7 +745,11 @@ export class SchemaComparator {
   diffExpression(expr1: string, expr2: string): boolean {
     // expressions like check constraints might be normalized by the driver,
     // e.g. quotes might be added (https://github.com/mikro-orm/mikro-orm/issues/3827)
-    const simplify = (str?: string) => str?.replace(/_\w+\\'(.*?)\\'/g, '$1').replace(/['"`()]|::\w+| +/g, '').toLowerCase();
+    const simplify = (str?: string) =>
+      str
+        ?.replace(/_\w+\\'(.*?)\\'/g, "$1")
+        .replace(/['"`()]|::\w+| +/g, "")
+        .toLowerCase();
     return simplify(expr1) !== simplify(expr2);
   }
 
@@ -573,20 +760,28 @@ export class SchemaComparator {
     }
 
     const val = defaultValue
-      .replace(/^(_\w+\\)?'(.*?)\\?'$/, '$2')
-      .replace(/^\(?'(.*?)'\)?$/, '$1');
+      .replace(/^(_\w+\\)?'(.*?)\\?'$/, "$2")
+      .replace(/^\(?'(.*?)'\)?$/, "$1");
 
     return parseJsonSafe(val);
   }
 
   hasSameDefaultValue(from: Column, to: Column): boolean {
-    if (from.default == null || from.default.toString().toLowerCase() === 'null' || from.default.toString().startsWith('nextval(')) {
-      return to.default == null || to.default!.toLowerCase() === 'null';
+    if (
+      from.default == null ||
+      from.default.toString().toLowerCase() === "null" ||
+      from.default.toString().startsWith("nextval(")
+    ) {
+      return to.default == null || to.default!.toLowerCase() === "null";
     }
 
     if (to.mappedType instanceof BooleanType) {
-      const defaultValueFrom = !['0', 'false', 'f', 'n', 'no', 'off'].includes('' + from.default!);
-      const defaultValueTo = !['0', 'false', 'f', 'n', 'no', 'off'].includes('' + to.default!);
+      const defaultValueFrom = !["0", "false", "f", "n", "no", "off"].includes(
+        "" + from.default!,
+      );
+      const defaultValueTo = !["0", "false", "f", "n", "no", "off"].includes(
+        "" + to.default!,
+      );
 
       return defaultValueFrom === defaultValueTo;
     }
@@ -600,18 +795,32 @@ export class SchemaComparator {
 
     if (to.mappedType instanceof DateTimeType && from.default && to.default) {
       // normalize now/current_timestamp defaults, also remove `()` from the end of default expression
-      const defaultValueFrom = from.default.toLowerCase().replace('current_timestamp', 'now').replace(/\(\)$/, '');
-      const defaultValueTo = to.default.toLowerCase().replace('current_timestamp', 'now').replace(/\(\)$/, '');
+      const defaultValueFrom = from.default
+        .toLowerCase()
+        .replace("current_timestamp", "now")
+        .replace(/\(\)$/, "");
+      const defaultValueTo = to.default
+        .toLowerCase()
+        .replace("current_timestamp", "now")
+        .replace(/\(\)$/, "");
 
       return defaultValueFrom === defaultValueTo;
     }
 
     if (from.default && to.default) {
-      return from.default.toString().toLowerCase() === to.default.toString().toLowerCase();
+      return (
+        from.default.toString().toLowerCase() ===
+        to.default.toString().toLowerCase()
+      );
     }
 
-    if (['', this.helper.getDefaultEmptyString()].includes(to.default!) && from.default != null) {
-      return ['', this.helper.getDefaultEmptyString()].includes(from.default.toString());
+    if (
+      ["", this.helper.getDefaultEmptyString()].includes(to.default!) &&
+      from.default != null
+    ) {
+      return ["", this.helper.getDefaultEmptyString()].includes(
+        from.default.toString(),
+      );
     }
 
     // eslint-disable-next-line eqeqeq
@@ -626,7 +835,7 @@ export class SchemaComparator {
       fieldNames: [column.name],
       columnTypes: [column.type],
       items: column.enumItems,
-      ...column as Dictionary,
+      ...(column as Dictionary),
       length: length ? +length[1] : column.length,
       precision: match ? +match[1] : column.precision,
       scale: match ? +match[2] : column.scale,
@@ -635,10 +844,9 @@ export class SchemaComparator {
 
   private log(message: string, params?: Dictionary): void {
     if (params) {
-      message += ' ' + inspect(params);
+      message += " " + inspect(params);
     }
 
-    this.logger.log('schema', message);
+    this.logger.log("schema", message);
   }
-
 }

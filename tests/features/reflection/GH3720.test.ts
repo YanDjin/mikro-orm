@@ -1,16 +1,14 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/postgresql';
-import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/postgresql";
+import { TsMorphMetadataProvider } from "@yandjin-mikro-orm/reflection";
 
 @Entity()
 export class A {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   types!: string[];
-
 }
 
 let orm: MikroORM;
@@ -19,7 +17,7 @@ beforeAll(async () => {
   orm = await MikroORM.init({
     metadataCache: { enabled: false },
     entities: [A],
-    dbName: 'mikro_orm_test_3720',
+    dbName: "mikro_orm_test_3720",
     metadataProvider: TsMorphMetadataProvider,
   });
 
@@ -28,6 +26,6 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('GH3720', async () => {
+test("GH3720", async () => {
   await orm.em.findAndCount(A, {});
 });

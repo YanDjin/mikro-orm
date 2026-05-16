@@ -1,22 +1,22 @@
-import { MikroORM, wrap } from '@mikro-orm/postgresql';
-import { mockLogger } from '../helpers';
-import { initORMPostgreSql } from '../bootstrap';
-import { Author2, Book2 } from '../entities-sql';
+import { MikroORM, wrap } from "@yandjin-mikro-orm/postgresql";
+import { mockLogger } from "../helpers";
+import { initORMPostgreSql } from "../bootstrap";
+import { Author2, Book2 } from "../entities-sql";
 
 let orm: MikroORM;
 
-beforeAll(async () => orm = await initORMPostgreSql());
+beforeAll(async () => (orm = await initORMPostgreSql()));
 beforeEach(async () => orm.schema.clearDatabase());
 afterAll(async () => {
   await orm.schema.dropDatabase();
   await orm.close(true);
 });
 
-test('test nested find with repository', async () => {
-  const mock = mockLogger(orm, ['query', 'query-params']);
+test("test nested find with repository", async () => {
+  const mock = mockLogger(orm, ["query", "query-params"]);
 
-  const author = new Author2('Bartleby', 'bartelby@writer.org');
-  const book = new Book2('My Life on The Wall, part 1', author);
+  const author = new Author2("Bartleby", "bartelby@writer.org");
+  const book = new Book2("My Life on The Wall, part 1", author);
   await orm.em.persistAndFlush(book);
 
   orm.em.clear();
@@ -28,10 +28,10 @@ test('test nested find with repository', async () => {
     return b.title;
   }
 
-  const { titleA, titleB } = await reqEm.transactional(async em => {
+  const { titleA, titleB } = await reqEm.transactional(async (em) => {
     const b = await em.findOneOrFail(Book2, book.uuid);
     wrap(b).assign({
-      title: 'New title',
+      title: "New title",
     });
     await em.flush();
     const titleA = await requestCommonService();
@@ -42,11 +42,11 @@ test('test nested find with repository', async () => {
   expect(titleA).toEqual(titleB);
 });
 
-test('test nested find with EM 1', async () => {
-  const mock = mockLogger(orm, ['query', 'query-params']);
+test("test nested find with EM 1", async () => {
+  const mock = mockLogger(orm, ["query", "query-params"]);
 
-  const author = new Author2('Bartleby', 'bartelby@writer.org');
-  const book = new Book2('My Life on The Wall, part 1', author);
+  const author = new Author2("Bartleby", "bartelby@writer.org");
+  const book = new Book2("My Life on The Wall, part 1", author);
   await orm.em.persistAndFlush(book);
 
   orm.em.clear();
@@ -58,10 +58,10 @@ test('test nested find with EM 1', async () => {
     return b.title;
   }
 
-  const { titleA, titleB } = await reqEm.transactional(async em => {
+  const { titleA, titleB } = await reqEm.transactional(async (em) => {
     const b = await em.findOneOrFail(Book2, book.uuid);
     wrap(b).assign({
-      title: 'New title',
+      title: "New title",
     });
     await em.flush();
     const titleA = await requestCommonService();
@@ -72,11 +72,11 @@ test('test nested find with EM 1', async () => {
   expect(titleA).toEqual(titleB);
 });
 
-test('test nested find with EM 2', async () => {
-  const mock = mockLogger(orm, ['query', 'query-params']);
+test("test nested find with EM 2", async () => {
+  const mock = mockLogger(orm, ["query", "query-params"]);
 
-  const author = new Author2('Bartleby', 'bartelby@writer.org');
-  const book = new Book2('My Life on The Wall, part 1', author);
+  const author = new Author2("Bartleby", "bartelby@writer.org");
+  const book = new Book2("My Life on The Wall, part 1", author);
   await orm.em.fork().persistAndFlush(book);
 
   async function requestCommonService() {
@@ -87,7 +87,7 @@ test('test nested find with EM 2', async () => {
   const { titleA, titleB } = await orm.em.transactional(async () => {
     const b = await orm.em.findOneOrFail(Book2, book.uuid);
     wrap(b).assign({
-      title: 'New title',
+      title: "New title",
     });
     await orm.em.flush();
     const titleA = await requestCommonService();
@@ -98,11 +98,11 @@ test('test nested find with EM 2', async () => {
   expect(titleA).toEqual(titleB);
 });
 
-test('test nested find with EM 3', async () => {
-  const mock = mockLogger(orm, ['query', 'query-params']);
+test("test nested find with EM 3", async () => {
+  const mock = mockLogger(orm, ["query", "query-params"]);
 
-  const author = new Author2('Bartleby', 'bartelby@writer.org');
-  const book = new Book2('My Life on The Wall, part 1', author);
+  const author = new Author2("Bartleby", "bartelby@writer.org");
+  const book = new Book2("My Life on The Wall, part 1", author);
   await orm.em.fork().persistAndFlush(book);
 
   async function requestCommonService() {
@@ -113,7 +113,7 @@ test('test nested find with EM 3', async () => {
   const { titleA, titleB } = await orm.em.transactional(async () => {
     const b = await orm.em.findOneOrFail(Book2, book.uuid);
     wrap(b).assign({
-      title: 'New title',
+      title: "New title",
     });
     await orm.em.flush();
     const titleA = await requestCommonService();

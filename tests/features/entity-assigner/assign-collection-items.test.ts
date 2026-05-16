@@ -1,7 +1,16 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref, SimpleLogger } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { v4 } from 'uuid';
-import { mockLogger } from '../../helpers';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  Ref,
+  SimpleLogger,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { v4 } from "uuid";
+import { mockLogger } from "../../helpers";
 
 function generateProducts(amountOfProducts: number, amountOfVariants: number) {
   const products = [];
@@ -25,30 +34,26 @@ function generateProducts(amountOfProducts: number, amountOfVariants: number) {
 
 @Entity()
 class Store {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id: string = v4();
 
-  @Property({ type: 'text' })
+  @Property({ type: "text" })
   name!: string;
 
-  @OneToMany(() => Product, product => product.store, { orphanRemoval: true })
+  @OneToMany(() => Product, (product) => product.store, { orphanRemoval: true })
   products = new Collection<Product>(this);
-
 }
 
 @Entity()
 class Product {
-
-  @PrimaryKey({ type: 'uuid' })
+  @PrimaryKey({ type: "uuid" })
   id: string = v4();
 
-  @Property({ type: 'text' })
+  @Property({ type: "text" })
   name!: string;
 
-  @ManyToOne(() => Store, { ref: true, deleteRule: 'cascade' })
+  @ManyToOne(() => Store, { ref: true, deleteRule: "cascade" })
   store!: Ref<Store>;
-
 }
 
 let orm: MikroORM;
@@ -56,8 +61,8 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Store, Product],
-    dbName: ':memory:',
-    loggerFactory: options => new SimpleLogger(options),
+    dbName: ":memory:",
+    loggerFactory: (options) => new SimpleLogger(options),
   });
   await orm.schema.createSchema();
 });
@@ -66,9 +71,9 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('assigning collection items with updateByPrimaryKey: false', async () => {
+test("assigning collection items with updateByPrimaryKey: false", async () => {
   const data = {
-    name: 'store',
+    name: "store",
     products: generateProducts(1, 1),
   };
 
@@ -78,19 +83,21 @@ test('assigning collection items with updateByPrimaryKey: false', async () => {
   data.products = generateProducts(2, 1);
   orm.em.assign(store, data, { updateByPrimaryKey: false });
 
-  const mock = mockLogger(orm, ['query']);
+  const mock = mockLogger(orm, ["query"]);
   await orm.em.flush();
   expect(mock.mock.calls).toEqual([
-    ['[query] begin'],
-    ['[query] insert into `product` (`id`, `name`, `store_id`) values (?, ?, ?)'],
-    ['[query] update `product` set `name` = ? where `id` = ?'],
-    ['[query] commit'],
+    ["[query] begin"],
+    [
+      "[query] insert into `product` (`id`, `name`, `store_id`) values (?, ?, ?)",
+    ],
+    ["[query] update `product` set `name` = ? where `id` = ?"],
+    ["[query] commit"],
   ]);
 });
 
-test('assigning collection items with updateNestedEntities: false', async () => {
+test("assigning collection items with updateNestedEntities: false", async () => {
   const data = {
-    name: 'store',
+    name: "store",
     products: generateProducts(1, 1),
   };
 
@@ -100,12 +107,14 @@ test('assigning collection items with updateNestedEntities: false', async () => 
   data.products = generateProducts(2, 1);
   orm.em.assign(store, data, { updateNestedEntities: false });
 
-  const mock = mockLogger(orm, ['query']);
+  const mock = mockLogger(orm, ["query"]);
   await orm.em.flush();
   expect(mock.mock.calls).toEqual([
-    ['[query] begin'],
-    ['[query] insert into `product` (`id`, `name`, `store_id`) values (?, ?, ?), (?, ?, ?)'],
-    ['[query] delete from `product` where `id` in (?)'],
-    ['[query] commit'],
+    ["[query] begin"],
+    [
+      "[query] insert into `product` (`id`, `name`, `store_id`) values (?, ?, ?), (?, ?, ?)",
+    ],
+    ["[query] delete from `product` where `id` in (?)"],
+    ["[query] commit"],
   ]);
 });

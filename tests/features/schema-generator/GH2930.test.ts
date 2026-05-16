@@ -4,40 +4,45 @@ import {
   Property,
   MikroORM,
   UnderscoreNamingStrategy,
-} from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { MySqlDriver } from '@mikro-orm/mysql';
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
+import { MySqlDriver } from "@yandjin-mikro-orm/mysql";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   prop?: string;
-
 }
 
-describe('GH issue 2930', () => {
-
-  describe('postgresql (PK override)', () => {
+describe("GH issue 2930", () => {
+  describe("postgresql (PK override)", () => {
     let orm: MikroORM<PostgreSqlDriver>;
 
     beforeAll(async () => {
       orm = await MikroORM.init({
         entities: [A],
-        dbName: 'mikro_orm_test_gh2930',
+        dbName: "mikro_orm_test_gh2930",
         driver: PostgreSqlDriver,
         namingStrategy: class extends UnderscoreNamingStrategy {
-
-          override indexName(tableName: string, columns: string[], type: 'primary' | 'foreign' | 'unique' | 'index' | 'sequence' | 'check'): string {
-            if (type === 'primary') {
-              return `pk_${tableName}_${columns.join('_')}`;
+          override indexName(
+            tableName: string,
+            columns: string[],
+            type:
+              | "primary"
+              | "foreign"
+              | "unique"
+              | "index"
+              | "sequence"
+              | "check",
+          ): string {
+            if (type === "primary") {
+              return `pk_${tableName}_${columns.join("_")}`;
             }
             return super.indexName(tableName, columns, type);
           }
-
         },
       });
     });
@@ -50,20 +55,28 @@ describe('GH issue 2930', () => {
     });
   });
 
-  describe('postgresql (PK not override)', () => {
+  describe("postgresql (PK not override)", () => {
     let orm: MikroORM<PostgreSqlDriver>;
 
     beforeAll(async () => {
       orm = await MikroORM.init({
         entities: [A],
-        dbName: 'mikro_orm_test_gh2930',
+        dbName: "mikro_orm_test_gh2930",
         driver: PostgreSqlDriver,
         namingStrategy: class extends UnderscoreNamingStrategy {
-
-          override indexName(tableName: string, columns: string[], type: 'primary' | 'foreign' | 'unique' | 'index' | 'sequence' | 'check'): string {
+          override indexName(
+            tableName: string,
+            columns: string[],
+            type:
+              | "primary"
+              | "foreign"
+              | "unique"
+              | "index"
+              | "sequence"
+              | "check",
+          ): string {
             return super.indexName(tableName, columns, type);
           }
-
         },
       });
     });
@@ -76,24 +89,32 @@ describe('GH issue 2930', () => {
     });
   });
 
-  describe('mysql', () => {
+  describe("mysql", () => {
     let orm: MikroORM<MySqlDriver>;
 
     beforeAll(async () => {
       orm = await MikroORM.init({
         entities: [A],
-        dbName: 'mikro_orm_test_gh2930',
+        dbName: "mikro_orm_test_gh2930",
         driver: MySqlDriver,
         port: 3308,
         namingStrategy: class extends UnderscoreNamingStrategy {
-
-          override indexName(tableName: string, columns: string[], type: 'primary' | 'foreign' | 'unique' | 'index' | 'sequence' | 'check'): string {
-            if (type === 'primary') {
-              return `pk_${tableName}_${columns.join('_')}`;
+          override indexName(
+            tableName: string,
+            columns: string[],
+            type:
+              | "primary"
+              | "foreign"
+              | "unique"
+              | "index"
+              | "sequence"
+              | "check",
+          ): string {
+            if (type === "primary") {
+              return `pk_${tableName}_${columns.join("_")}`;
             }
             return super.indexName(tableName, columns, type);
           }
-
         },
       });
     });

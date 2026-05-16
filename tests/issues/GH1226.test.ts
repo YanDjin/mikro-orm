@@ -1,8 +1,7 @@
-import { Entity, MikroORM, PrimaryKey } from '@mikro-orm/sqlite';
+import { Entity, MikroORM, PrimaryKey } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Example {
-
   @PrimaryKey()
   id!: number;
 
@@ -15,29 +14,27 @@ export class Example {
   verify(isAwesome: boolean) {
     return this.#myPrivateProp === isAwesome;
   }
-
 }
 
-describe('GH issue 1226', () => {
-
+describe("GH issue 1226", () => {
   let orm1: MikroORM;
   let orm2: MikroORM;
   let orm3: MikroORM;
 
   beforeAll(async () => {
     orm1 = await MikroORM.init({
-      dbName: ':memory:',
+      dbName: ":memory:",
       forceEntityConstructor: true,
       entities: [Example],
     });
     orm2 = await MikroORM.init({
-      dbName: ':memory:',
+      dbName: ":memory:",
       forceEntityConstructor: [Example],
       entities: [Example],
     });
     orm3 = await MikroORM.init({
-      dbName: ':memory:',
-      forceEntityConstructor: ['Example'],
+      dbName: ":memory:",
+      forceEntityConstructor: ["Example"],
       entities: [Example],
     });
     await orm1.getSchemaGenerator().createSchema();
@@ -86,5 +83,4 @@ describe('GH issue 1226', () => {
     fetchedEntry.setup(false);
     expect(fetchedEntry.verify(false)).toBe(true);
   });
-
 });

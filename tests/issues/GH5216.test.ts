@@ -1,8 +1,14 @@
-import { Embeddable, Embedded, Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Embeddable()
 class Profile {
-
   @Property()
   username: string;
 
@@ -12,18 +18,15 @@ class Profile {
   constructor(username: string) {
     this.username = username;
   }
-
 }
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded(() => Profile, { object: true })
   profile1!: Profile;
-
 }
 
 let orm: MikroORM;
@@ -42,7 +45,7 @@ afterAll(async () => {
 
 async function createUser() {
   const user1 = new User();
-  user1.profile1 = new Profile('u2');
+  user1.profile1 = new Profile("u2");
 
   await orm.em.persistAndFlush(user1);
   orm.em.clear();
@@ -50,8 +53,8 @@ async function createUser() {
   return user1;
 }
 
-test('persist and load', async () => {
-  const  user = await createUser();
+test("persist and load", async () => {
+  const user = await createUser();
   const u = await orm.em.findOneOrFail(User, user.id);
   expect(u.profile1.createdAt).toEqual(user.profile1.createdAt);
 });

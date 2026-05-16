@@ -1,16 +1,25 @@
-import { FullTextType, MikroORM, Collection, Entity, Index, ManyToMany, PrimaryKey, Property, Unique } from '@mikro-orm/postgresql';
+import {
+  FullTextType,
+  MikroORM,
+  Collection,
+  Entity,
+  Index,
+  ManyToMany,
+  PrimaryKey,
+  Property,
+  Unique,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
-@Unique({ properties: ['name'] })
+@Unique({ properties: ["name"] })
 class Artist {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   name: string;
 
-  @Index({ type: 'fulltext' })
+  @Index({ type: "fulltext" })
   @Property({ type: FullTextType, onUpdate: (artist: Artist) => artist.name })
   searchableName!: string;
 
@@ -19,12 +28,10 @@ class Artist {
     this.name = artist.name;
     this.searchableName = artist.name;
   }
-
 }
 
 @Entity()
 class Song {
-
   @PrimaryKey()
   id!: number;
 
@@ -34,7 +41,7 @@ class Song {
   @ManyToMany(() => Artist)
   artists = new Collection<Artist>(this);
 
-  @Index({ type: 'fulltext' })
+  @Index({ type: "fulltext" })
   @Property({ type: FullTextType, onUpdate: (song: Song) => song.title })
   searchableTitle!: string;
 
@@ -43,7 +50,6 @@ class Song {
     this.title = song.title;
     this.searchableTitle = song.title;
   }
-
 }
 
 let orm: MikroORM;
@@ -51,7 +57,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Song],
-    dbName: 'mikro_orm_test_3696',
+    dbName: "mikro_orm_test_3696",
   });
   await orm.schema.refreshDatabase();
 });
@@ -60,30 +66,34 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('GH issue 3696', async () => {
+test("GH issue 3696", async () => {
   const artist = orm.em.create(Artist, {
-    name: 'Taylor Swift',
-    searchableName: 'Taylor Swift',
+    name: "Taylor Swift",
+    searchableName: "Taylor Swift",
   });
   const song = orm.em.create(Song, {
-    title: 'Anti-Hero',
-    searchableTitle: 'Anti--Hero',
+    title: "Anti-Hero",
+    searchableTitle: "Anti--Hero",
   });
   song.artists.add(artist);
   await orm.em.flush();
   orm.em.clear();
 
-  const results = await orm.em.find(Song, {
-    searchableTitle: { $fulltext: 'anti' },
-    artists: { searchableName: { $fulltext: 'taylor' } },
-  }, { populate: ['artists'] });
+  const results = await orm.em.find(
+    Song,
+    {
+      searchableTitle: { $fulltext: "anti" },
+      artists: { searchableName: { $fulltext: "taylor" } },
+    },
+    { populate: ["artists"] },
+  );
   expect(results).toHaveLength(1);
   expect(results[0]).toMatchObject({
-    title: 'Anti-Hero',
+    title: "Anti-Hero",
     searchableTitle: "'anti':1 'hero':2",
   });
   expect(results[0].artists[0]).toMatchObject({
-    name: 'Taylor Swift',
+    name: "Taylor Swift",
     searchableName: "'swift':2 'taylor':1",
   });
 });

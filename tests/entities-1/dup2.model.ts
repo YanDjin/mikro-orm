@@ -1,17 +1,20 @@
-import { ObjectId } from 'bson';
-import { Entity, OneToOne, PrimaryKey, SerializedPrimaryKey } from '@mikro-orm/core';
-import { Dup1 } from './dup1.model';
+import { ObjectId } from "bson";
+import {
+  Entity,
+  OneToOne,
+  PrimaryKey,
+  SerializedPrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import { Dup1 } from "./dup1.model";
 
 @Entity()
 export class Dup2 {
-
-  @PrimaryKey({ type: 'ObjectId' })
+  @PrimaryKey({ type: "ObjectId" })
   _id!: ObjectId;
 
-  @SerializedPrimaryKey({ type: 'string' })
+  @SerializedPrimaryKey({ type: "string" })
   id!: string;
 
-  @OneToOne({ type: 'Dup1', owner: true })
+  @OneToOne({ type: "Dup1", owner: true })
   dup11?: Dup1;
-
 }

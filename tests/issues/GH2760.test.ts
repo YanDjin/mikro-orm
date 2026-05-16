@@ -1,8 +1,12 @@
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -18,31 +22,28 @@ export class User {
   get upperName() {
     return this.name.toUpperCase();
   }
-
 }
 
-describe('GH issue 2760', () => {
-
+describe("GH issue 2760", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [User],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
 
   afterAll(() => orm.close(true));
 
-  test('virtual getter property that should get persisted', async () => {
+  test("virtual getter property that should get persisted", async () => {
     let user = new User();
-    user.name = 'Abc';
+    user.name = "Abc";
     await orm.em.persist(user).flush();
 
     user = await orm.em.fork().findOneOrFail(User, user);
-    expect(user.lowerName).toBe('abc');
-    expect(user.upperName).toBe('ABC');
+    expect(user.lowerName).toBe("abc");
+    expect(user.upperName).toBe("ABC");
   });
-
 });

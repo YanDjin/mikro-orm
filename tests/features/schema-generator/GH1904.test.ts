@@ -1,70 +1,65 @@
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/core';
-import { MySqlDriver } from '@mikro-orm/mysql';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MySqlDriver } from "@yandjin-mikro-orm/mysql";
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book1 {
-
   @PrimaryKey()
   id!: number;
 
-  @Property({ columnType: 'int' })
+  @Property({ columnType: "int" })
   changingField!: number;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book2 {
-
   @PrimaryKey()
   id!: number;
 
-  @Property({ columnType: 'timestamp', ignoreSchemaChanges: ['type'] })
+  @Property({ columnType: "timestamp", ignoreSchemaChanges: ["type"] })
   changingField!: Date;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book3 {
-
   @PrimaryKey()
   id!: number;
 
   @Property({
-    columnType: 'int',
-    extra: 'VIRTUAL GENERATED',
-    ignoreSchemaChanges: ['extra'],
+    columnType: "int",
+    extra: "VIRTUAL GENERATED",
+    ignoreSchemaChanges: ["extra"],
   })
   changingField!: number;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book4 {
-
   @PrimaryKey()
   id!: number;
 
   @Property({
-    columnType: 'timestamp',
-    extra: 'VIRTUAL GENERATED',
-    ignoreSchemaChanges: ['extra', 'type'],
+    columnType: "timestamp",
+    extra: "VIRTUAL GENERATED",
+    ignoreSchemaChanges: ["extra", "type"],
   })
   changingField!: Date;
-
 }
 
-@Entity({ tableName: 'book' })
+@Entity({ tableName: "book" })
 export class Book5 {
-
   @PrimaryKey()
   id!: number;
 
-  @Property({ columnType: 'timestamp' })
+  @Property({ columnType: "timestamp" })
   changingField!: Date;
-
 }
 
-describe('ignore specific schema changes (GH 1904)', () => {
+describe("ignore specific schema changes (GH 1904)", () => {
   let orm: MikroORM<MySqlDriver>;
 
   beforeEach(async () => {
@@ -79,36 +74,38 @@ describe('ignore specific schema changes (GH 1904)', () => {
 
   afterEach(() => orm.close(true));
 
-  test('schema generator respects ignoreSchemaChanges for `type`', async () => {
+  test("schema generator respects ignoreSchemaChanges for `type`", async () => {
     const diff0 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff0).toBe('');
-    orm.getMetadata().reset('Book1');
+    expect(diff0).toBe("");
+    orm.getMetadata().reset("Book1");
     await orm.discoverEntity(Book2);
     const diff1 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff1).toBe('');
+    expect(diff1).toBe("");
 
     // Once we remove ignoreSchemaChanges, we should see a diff again.
-    orm.getMetadata().reset('Book2');
+    orm.getMetadata().reset("Book2");
     await orm.discoverEntity(Book5);
     const diff2 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff2).toBe('alter table `book` modify `changing_field` timestamp not null;\n\n');
+    expect(diff2).toBe(
+      "alter table `book` modify `changing_field` timestamp not null;\n\n",
+    );
   });
 
-  test('schema generator respects ignoreSchemaChanges for `extra`', async () => {
+  test("schema generator respects ignoreSchemaChanges for `extra`", async () => {
     const diff0 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff0).toBe('');
-    orm.getMetadata().reset('Book1');
+    expect(diff0).toBe("");
+    orm.getMetadata().reset("Book1");
     await orm.discoverEntity(Book3);
     const diff1 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff1).toBe('');
+    expect(diff1).toBe("");
   });
 
-  test('schema generator respects ignoreSchemaChanges for `extra` and `type`', async () => {
+  test("schema generator respects ignoreSchemaChanges for `extra` and `type`", async () => {
     const diff0 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff0).toBe('');
-    orm.getMetadata().reset('Book1');
+    expect(diff0).toBe("");
+    orm.getMetadata().reset("Book1");
     await orm.discoverEntity(Book4);
     const diff1 = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(diff1).toBe('');
+    expect(diff1).toBe("");
   });
 });

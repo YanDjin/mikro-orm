@@ -1,8 +1,16 @@
-import { Collection, Entity, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property, wrap } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  wrap,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Category {
-
   @PrimaryKey()
   id!: bigint;
 
@@ -12,24 +20,22 @@ class Category {
   @ManyToOne({ entity: () => Category, nullable: true })
   parent?: Category;
 
-  @OneToMany({ entity: () => Category, mappedBy: c => c.parent })
+  @OneToMany({ entity: () => Category, mappedBy: (c) => c.parent })
   children = new Collection<Category>(this);
 
   constructor(name: string, parent?: Category) {
     this.name = name;
     this.parent = parent;
   }
-
 }
 
-describe('GH issue 2059', () => {
-
+describe("GH issue 2059", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Category],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
@@ -39,14 +45,14 @@ describe('GH issue 2059', () => {
   });
 
   test(`GH issue 2059`, async () => {
-    const a = new Category('A');
-    const a1 = new Category('A1', a);
-    const a11 = new Category('A11', a1);
-    const a111 = new Category('A111', a11);
-    const a2 = new Category('A2', a);
-    const b = new Category('B');
-    const b1 = new Category('B1', b);
-    const b2 = new Category('B2', b);
+    const a = new Category("A");
+    const a1 = new Category("A1", a);
+    const a11 = new Category("A11", a1);
+    const a111 = new Category("A111", a11);
+    const a2 = new Category("A2", a);
+    const b = new Category("B");
+    const b1 = new Category("B1", b);
+    const b2 = new Category("B2", b);
     await orm.em.fork().persistAndFlush([a, a1, a11, a111, a2, b, b1, b2]);
 
     /* Current tree structure is:
@@ -64,20 +70,18 @@ describe('GH issue 2059', () => {
     const categories = await orm.em.find(
       Category,
       { parent: null },
-      { populate: ['children.children'] },
+      { populate: ["children.children"] },
     );
 
-    expect(categories[0].children[0].children[0].name).toBe('A11');
+    expect(categories[0].children[0].children[0].name).toBe("A11");
     await categories[0].children[0].children[0].children.init();
-    expect(categories[0].children[0].children[0].children[0].name).toBe('A111');
-    expect(wrap(categories[0]).toObject().children[0].children[0].children).toEqual(['4']);
+    expect(categories[0].children[0].children[0].children[0].name).toBe("A111");
+    expect(
+      wrap(categories[0]).toObject().children[0].children[0].children,
+    ).toEqual(["4"]);
     expect(wrap(categories[0]).toObject()).toMatchObject({
-      name: 'A',
-      children: [
-        { name: 'A1', children: [{ name: 'A11' }] },
-        { name: 'A2' },
-      ],
+      name: "A",
+      children: [{ name: "A1", children: [{ name: "A11" }] }, { name: "A2" }],
     });
   });
-
 });

@@ -5,32 +5,28 @@ import {
   PrimaryKey,
   Property,
   UnderscoreNamingStrategy,
-} from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mongodb';
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mongodb";
 
 @Embeddable()
 class E {
-
   @Property()
-  camelCase: string = 'c';
+  camelCase: string = "c";
 
-  @Property({ fieldName: 'alias' })
-  someField: string = 'w';
-
+  @Property({ fieldName: "alias" })
+  someField: string = "w";
 }
 
 @Entity()
 class A {
-
   @PrimaryKey()
-  _id = '1';
+  _id = "1";
 
   @Property()
-  complexName = 'n';
+  complexName = "n";
 
   @Embedded({ entity: () => E, object: true })
   emBedded = new E();
-
 }
 
 let orm: MikroORM;
@@ -38,7 +34,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [A],
-    clientUrl: 'mongodb://localhost:27017/mikro-orm-4371',
+    clientUrl: "mongodb://localhost:27017/mikro-orm-4371",
     namingStrategy: UnderscoreNamingStrategy,
   });
   await orm.schema.clearDatabase();
@@ -51,21 +47,21 @@ afterAll(async () => {
   await orm.close();
 });
 
-test('Ensure that embedded entity has underscore naming and fieldName is applied', async () => {
-  const collection = orm.em.getCollection('a');
+test("Ensure that embedded entity has underscore naming and fieldName is applied", async () => {
+  const collection = orm.em.getCollection("a");
   expect(await collection.findOne({}, { projection: { _id: 0 } })).toEqual({
-    complex_name: 'n',
+    complex_name: "n",
     em_bedded: {
-      camel_case: 'c',
-      alias: 'w',
+      camel_case: "c",
+      alias: "w",
     },
   });
 });
 
-test('Read entity correctly', async () => {
+test("Read entity correctly", async () => {
   const entities = await orm.em.find(A, {});
   expect(entities[0].emBedded).toMatchObject({
-    camelCase: 'c',
-    someField: 'w',
+    camelCase: "c",
+    someField: "w",
   });
 });

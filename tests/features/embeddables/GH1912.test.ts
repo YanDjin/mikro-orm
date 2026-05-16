@@ -1,9 +1,15 @@
-import { Embeddable, Embedded, Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 @Embeddable()
 export class Metadata {
-
   @Property()
   id?: string;
 
@@ -15,12 +21,10 @@ export class Metadata {
 
   @Property()
   createdAt?: string;
-
 }
 
 @Entity()
 export class Example {
-
   @PrimaryKey()
   id!: number;
 
@@ -100,17 +104,15 @@ export class Example {
     object: true,
   })
   eleven: Metadata[] = [];
-
 }
 
-describe('GH issue 1912', () => {
-
+describe("GH issue 1912", () => {
   let orm: MikroORM<SqliteDriver>;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Example],
-      dbName: ':memory:',
+      dbName: ":memory:",
       driver: SqliteDriver,
     });
     await orm.schema.createSchema();
@@ -128,5 +130,4 @@ describe('GH issue 1912', () => {
     const e1 = await orm.em.findOne(Example, e);
     expect(e1).not.toBeNull();
   });
-
 });

@@ -1,21 +1,23 @@
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
   @Property({ default: -1 })
   foo!: number;
 
-  @Property({ default: 'baz' })
+  @Property({ default: "baz" })
   bar!: string;
-
 }
 
-describe('GH issue 380', () => {
-
+describe("GH issue 380", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -30,7 +32,6 @@ describe('GH issue 380', () => {
 
   test(`schema updates respect default values`, async () => {
     const dump = await orm.schema.getUpdateSchemaSQL({ wrap: false });
-    expect(dump).toBe('');
+    expect(dump).toBe("");
   });
-
 });

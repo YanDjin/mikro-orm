@@ -1,4 +1,4 @@
-import type { Knex } from 'knex';
+import type { Knex } from "knex";
 import type {
   CheckCallback,
   Dictionary,
@@ -11,9 +11,9 @@ import type {
   QueryFlag,
   AnyEntity,
   EntityName,
-} from '@mikro-orm/core';
-import type { JoinType, QueryType } from './query/enums';
-import type { DatabaseSchema, DatabaseTable } from './schema';
+} from "@yandjin-mikro-orm/core";
+import type { JoinType, QueryType } from "./query/enums";
+import type { DatabaseSchema, DatabaseTable } from "./schema";
 
 export interface Table {
   table_name: string;
@@ -21,13 +21,21 @@ export interface Table {
   table_comment?: string;
 }
 
-export type KnexStringRef = Knex.Ref<string, {
-  [alias: string]: string;
-}>;
+export type KnexStringRef = Knex.Ref<
+  string,
+  {
+    [alias: string]: string;
+  }
+>;
 
 type AnyString = string & {};
 
-export type Field<T> = AnyString | keyof T | RawQueryFragment | KnexStringRef | Knex.QueryBuilder;
+export type Field<T> =
+  | AnyString
+  | keyof T
+  | RawQueryFragment
+  | KnexStringRef
+  | Knex.QueryBuilder;
 
 export interface JoinOptions {
   table: string;
@@ -67,7 +75,7 @@ export interface Column {
   unique?: boolean;
   /** mysql only */
   extra?: string;
-  ignoreSchemaChanges?: ('type' | 'extra')[];
+  ignoreSchemaChanges?: ("type" | "extra")[];
 }
 
 export interface ForeignKey {
@@ -89,7 +97,13 @@ export interface IndexDef {
   composite?: boolean;
   expression?: string; // allows using custom sql expressions
   options?: Dictionary; // for driver specific options
-  type?: string | Readonly<{ indexType?: string; storageEngineIndexType?: 'hash' | 'btree'; predicate?: Knex.QueryBuilder }>; // for back compatibility mainly, to allow using knex's `index.type` option (e.g. gin index)
+  type?:
+    | string
+    | Readonly<{
+        indexType?: string;
+        storageEngineIndexType?: "hash" | "btree";
+        predicate?: Knex.QueryBuilder;
+      }>; // for back compatibility mainly, to allow using knex's `index.type` option (e.g. gin index)
 }
 
 export interface CheckDef<T = unknown> {
@@ -143,21 +157,44 @@ export interface IQueryBuilder<T> {
   _fields?: Field<T>[];
   select(fields: Field<T> | Field<T>[], distinct?: boolean): this;
   addSelect(fields: string | string[]): this;
-  from<T extends AnyEntity<T> = AnyEntity>(target: EntityName<T> | IQueryBuilder<T>, aliasName?: string): IQueryBuilder<T>;
+  from<T extends AnyEntity<T> = AnyEntity>(
+    target: EntityName<T> | IQueryBuilder<T>,
+    aliasName?: string,
+  ): IQueryBuilder<T>;
   insert(data: any): this;
   update(data: any): this;
   delete(cond?: QBFilterQuery): this;
   truncate(): this;
   count(field?: string | string[], distinct?: boolean): this;
-  join(field: string, alias: string, cond?: QBFilterQuery, type?: JoinType, path?: string): this;
+  join(
+    field: string,
+    alias: string,
+    cond?: QBFilterQuery,
+    type?: JoinType,
+    path?: string,
+  ): this;
   innerJoin(field: string, alias: string, cond?: QBFilterQuery): this;
   leftJoin(field: string, alias: string, cond?: QBFilterQuery): this;
   joinAndSelect(field: string, alias: string, cond?: QBFilterQuery): this;
-  leftJoinAndSelect(field: string, alias: string, cond?: QBFilterQuery, fields?: string[]): this;
-  innerJoinAndSelect(field: string, alias: string, cond?: QBFilterQuery, fields?: string[]): this;
+  leftJoinAndSelect(
+    field: string,
+    alias: string,
+    cond?: QBFilterQuery,
+    fields?: string[],
+  ): this;
+  innerJoinAndSelect(
+    field: string,
+    alias: string,
+    cond?: QBFilterQuery,
+    fields?: string[],
+  ): this;
   withSubQuery(subQuery: Knex.QueryBuilder, alias: string): this;
   where(cond: QBFilterQuery<T>, operator?: keyof typeof GroupOperator): this;
-  where(cond: string, params?: any[], operator?: keyof typeof GroupOperator): this;
+  where(
+    cond: string,
+    params?: any[],
+    operator?: keyof typeof GroupOperator,
+  ): this;
   andWhere(cond: QBFilterQuery<T>): this;
   andWhere(cond: string, params?: any[]): this;
   orWhere(cond: QBFilterQuery<T>): this;
@@ -165,8 +202,14 @@ export interface IQueryBuilder<T> {
   orderBy(orderBy: QueryOrderMap<T>): this;
   groupBy(fields: (string | keyof T) | (string | keyof T)[]): this;
   having(cond?: QBFilterQuery | string, params?: any[]): this;
-  getAliasForJoinPath(path: string, options?: ICriteriaNodeProcessOptions): string | undefined;
-  getJoinForPath(path?: string, options?: ICriteriaNodeProcessOptions): JoinOptions | undefined;
+  getAliasForJoinPath(
+    path: string,
+    options?: ICriteriaNodeProcessOptions,
+  ): string | undefined;
+  getJoinForPath(
+    path?: string,
+    options?: ICriteriaNodeProcessOptions,
+  ): JoinOptions | undefined;
   getNextAlias(entityName?: string): string;
   clone(reset?: boolean): IQueryBuilder<T>;
   setFlag(flag: QueryFlag): this;

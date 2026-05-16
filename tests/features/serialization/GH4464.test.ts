@@ -1,22 +1,26 @@
-import { Collection, Entity, ManyToMany, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
   @Property()
   test1!: string;
 
-  @ManyToMany({ entity: () => B, mappedBy: 'a' })
+  @ManyToMany({ entity: () => B, mappedBy: "a" })
   b = new Collection<B>(this);
-
 }
 
 @Entity()
 class B {
-
   @PrimaryKey()
   id!: number;
 
@@ -26,9 +30,8 @@ class B {
   @Property()
   test3!: string;
 
-  @ManyToMany({ entity: () => A, inversedBy: 'b' })
+  @ManyToMany({ entity: () => A, inversedBy: "b" })
   a = new Collection<A>(this);
-
 }
 
 let orm: MikroORM;
@@ -36,23 +39,24 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [A, B],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.refreshDatabase();
 });
 
 afterAll(() => orm.close());
 
-test('loadItems with fields (#4464)', async () => {
-  const a = orm.em.create(A, { test1: 'yxcv', b: [
-    { test2: 'qwer', test3: 'asdf' },
-  ] });
+test("loadItems with fields (#4464)", async () => {
+  const a = orm.em.create(A, {
+    test1: "yxcv",
+    b: [{ test2: "qwer", test3: "asdf" }],
+  });
 
   await orm.em.flush();
   orm.em.clear();
 
-  await orm.em.findOne(B, 1, { fields: ['test2'] });
+  await orm.em.findOne(B, 1, { fields: ["test2"] });
   const a2 = await orm.em.findOneOrFail(A, 1);
   const test3 = (await a2.b.loadItems())[0].test3;
-  expect(test3).toMatch('asdf');
+  expect(test3).toMatch("asdf");
 });

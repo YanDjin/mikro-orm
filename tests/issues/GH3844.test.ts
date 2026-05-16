@@ -1,9 +1,15 @@
-import { Entity, PrimaryKey, Property, OneToOne, Ref, ref } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  OneToOne,
+  Ref,
+  ref,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class GamePoolEntity {
-
   @PrimaryKey()
   contract_address!: string;
 
@@ -19,7 +25,7 @@ class GamePoolEntity {
   @Property()
   referral_campaign_id!: number;
 
-  @OneToOne(() => GamePoolScannerEntity, e => e.game_pool, {
+  @OneToOne(() => GamePoolScannerEntity, (e) => e.game_pool, {
     orphanRemoval: true,
     ref: true,
   })
@@ -32,16 +38,14 @@ class GamePoolEntity {
     onUpdate: () => new Date(),
   })
   updated_at: Date = new Date();
-
 }
 
 @Entity()
 class GamePoolScannerEntity {
-
-  @OneToOne(() => GamePoolEntity, e => e.scanner, {
+  @OneToOne(() => GamePoolEntity, (e) => e.scanner, {
     primary: true,
     owner: true,
-    fieldNames: ['contract_address', 'chain_id'],
+    fieldNames: ["contract_address", "chain_id"],
     ref: true,
   })
   game_pool!: Ref<GamePoolEntity>;
@@ -62,7 +66,6 @@ class GamePoolScannerEntity {
     onUpdate: () => new Date(),
   })
   updated_at: Date = new Date();
-
 }
 
 let orm: MikroORM;
@@ -79,13 +82,13 @@ beforeEach(async () => orm.schema.clearDatabase());
 
 afterAll(() => orm.close(true));
 
-test('GH3844', async () => {
+test("GH3844", async () => {
   let em = orm.em.fork();
 
   const gamePool = new GamePoolEntity();
-  gamePool.contract_address = '0x22';
+  gamePool.contract_address = "0x22";
   gamePool.chain_id = 5;
-  gamePool.rpc_url = 'https://aaa.com';
+  gamePool.rpc_url = "https://aaa.com";
   gamePool.referral_percents = [10_000];
   gamePool.referral_campaign_id = 10;
   gamePool.created_at = new Date();
@@ -107,28 +110,30 @@ test('GH3844', async () => {
   const loadedGamePool = await em.findOneOrFail(
     GamePoolEntity,
     {
-      contract_address: '0x22',
+      contract_address: "0x22",
       chain_id: 5,
     },
-    { populate: ['scanner'] },
+    { populate: ["scanner"] },
   );
-  expect(loadedGamePool).toBe(loadedGamePool.scanner.unwrap().game_pool.unwrap());
+  expect(loadedGamePool).toBe(
+    loadedGamePool.scanner.unwrap().game_pool.unwrap(),
+  );
 
   em = orm.em.fork();
 
   const loadGamePoolScanner = await em.findOneOrFail(GamePoolScannerEntity, {
     game_pool: {
-      contract_address: '0x22',
+      contract_address: "0x22",
       chain_id: 5,
     },
   });
 });
 
-test('GH3844 with QB', async () => {
+test("GH3844 with QB", async () => {
   const gamePool = new GamePoolEntity();
-  gamePool.contract_address = '0x22';
+  gamePool.contract_address = "0x22";
   gamePool.chain_id = 5;
-  gamePool.rpc_url = 'https://aaa.com';
+  gamePool.rpc_url = "https://aaa.com";
   gamePool.referral_percents = [10_000];
   gamePool.referral_campaign_id = 10;
   gamePool.created_at = new Date();
@@ -142,5 +147,7 @@ test('GH3844 with QB', async () => {
   gamePoolScanner.start_block = 1;
   gamePoolScanner.updated_at = new Date();
 
-  await orm.em.createQueryBuilder(GamePoolScannerEntity).insert(gamePoolScanner);
+  await orm.em
+    .createQueryBuilder(GamePoolScannerEntity)
+    .insert(gamePoolScanner);
 });

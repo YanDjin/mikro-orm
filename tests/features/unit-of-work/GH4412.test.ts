@@ -1,10 +1,9 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../../helpers';
+import { Entity, PrimaryKey, Property } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../../helpers";
 
 @Entity()
 export class A {
-
   @PrimaryKey()
   id!: number;
 
@@ -13,15 +12,14 @@ export class A {
 
   @Property()
   name!: string;
-
 }
 
-describe('GH issue 4412', () => {
+describe("GH issue 4412", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
-      dbName: ':memory:',
+      dbName: ":memory:",
       entities: [A],
       forceUndefined: true,
     });
@@ -31,14 +29,14 @@ describe('GH issue 4412', () => {
 
   afterAll(() => orm.close(true));
 
-  test('update triggered after findOne with forceUndefined true', async () => {
+  test("update triggered after findOne with forceUndefined true", async () => {
     orm.em.create(A, {
       id: 1,
-      name: 'a',
+      name: "a",
     });
     await orm.em.flush();
 
-    const a = await orm.em.findOne(A, { name: 'a' });
+    const a = await orm.em.findOne(A, { name: "a" });
 
     const mock = mockLogger(orm);
     await orm.em.flush();

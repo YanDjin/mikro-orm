@@ -1,7 +1,14 @@
-import { Entity, JsonType, PrimaryKey, Property, Utils, wrap } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/better-sqlite';
+import {
+  Entity,
+  JsonType,
+  PrimaryKey,
+  Property,
+  Utils,
+  wrap,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/better-sqlite";
 
-type UnitOfMeasure = 'pcs' | 'gram';
+type UnitOfMeasure = "pcs" | "gram";
 
 interface Ingredient {
   name: string;
@@ -12,15 +19,15 @@ interface Ingredient {
 }
 
 enum CookingDevice {
-  OVEN = 'Oven',
-  MICRO = 'Microwave'
+  OVEN = "Oven",
+  MICRO = "Microwave",
 }
 
 type CookingInstructions = {
   [device in CookingDevice]?: {
     degrees: number;
     time: number;
-  }
+  };
 };
 
 interface Instructions {
@@ -31,7 +38,6 @@ interface Instructions {
 
 @Entity()
 class Recipe {
-
   @PrimaryKey()
   id!: number;
 
@@ -40,7 +46,6 @@ class Recipe {
 
   @Property({ type: JsonType })
   instructions!: Instructions;
-
 }
 
 let orm: MikroORM;
@@ -48,7 +53,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Recipe],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
@@ -60,33 +65,33 @@ afterAll(async () => {
 test(`GH 4428: issue updating nested props`, async () => {
   const e = orm.em.create(Recipe, {
     id: 1,
-    name: 'Pizza',
+    name: "Pizza",
     instructions: {
       ingredients: [
         {
-          name: 'Tomato',
+          name: "Tomato",
           quantity: {
             units: 1,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
         {
-          name: 'Salami',
+          name: "Salami",
           quantity: {
             units: 2,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
         {
-          name: 'Cheese',
+          name: "Cheese",
           quantity: {
             units: 1,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
       ],
       cooking: {
-        Oven : {
+        Oven: {
           degrees: 200,
           time: 12,
         },
@@ -95,7 +100,7 @@ test(`GH 4428: issue updating nested props`, async () => {
           time: 15,
         },
       },
-      notes: 'do not cook it too long',
+      notes: "do not cook it too long",
     },
   });
   await orm.em.persistAndFlush(e);
@@ -103,33 +108,33 @@ test(`GH 4428: issue updating nested props`, async () => {
   const e1 = await orm.em.findOneOrFail(Recipe, 1);
   const updatedRecipe: Recipe = {
     id: 1,
-    name: 'Pizza',
+    name: "Pizza",
     instructions: {
       ingredients: [
         {
-          name: 'Tomato',
+          name: "Tomato",
           quantity: {
             units: 1,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
         {
-          name: 'Salami',
+          name: "Salami",
           quantity: {
             units: 2,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
         {
-          name: 'Cheese',
+          name: "Cheese",
           quantity: {
             units: 100,
-            uom: 'gram',
+            uom: "gram",
           },
         },
       ],
       cooking: {
-        Oven : {
+        Oven: {
           degrees: 200,
           time: 12,
         },
@@ -153,33 +158,33 @@ test(`GH 4428: issue updating nested props`, async () => {
 test(`GH 4428: issue updating nested props directly`, async () => {
   const e = orm.em.create(Recipe, {
     id: 1,
-    name: 'Pizza',
+    name: "Pizza",
     instructions: {
       ingredients: [
         {
-          name: 'Tomato',
+          name: "Tomato",
           quantity: {
             units: 1,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
         {
-          name: 'Salami',
+          name: "Salami",
           quantity: {
             units: 2,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
         {
-          name: 'Cheese',
+          name: "Cheese",
           quantity: {
             units: 1,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
       ],
       cooking: {
-        Oven : {
+        Oven: {
           degrees: 200,
           time: 12,
         },
@@ -188,7 +193,7 @@ test(`GH 4428: issue updating nested props directly`, async () => {
           time: 15,
         },
       },
-      notes: 'do not cook it too long',
+      notes: "do not cook it too long",
     },
   });
   await orm.em.persistAndFlush(e);
@@ -196,33 +201,33 @@ test(`GH 4428: issue updating nested props directly`, async () => {
   const e1 = await orm.em.findOneOrFail(Recipe, 1);
   const updatedRecipe: Recipe = {
     id: 1,
-    name: 'Pizza',
+    name: "Pizza",
     instructions: {
       ingredients: [
         {
-          name: 'Tomato',
+          name: "Tomato",
           quantity: {
             units: 1,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
         {
-          name: 'Salami',
+          name: "Salami",
           quantity: {
             units: 2,
-            uom: 'pcs',
+            uom: "pcs",
           },
         },
         {
-          name: 'Cheese',
+          name: "Cheese",
           quantity: {
             units: 100,
-            uom: 'gram',
+            uom: "gram",
           },
         },
       ],
       cooking: {
-        Oven : {
+        Oven: {
           degrees: 200,
           time: 12,
         },
@@ -231,7 +236,7 @@ test(`GH 4428: issue updating nested props directly`, async () => {
   };
   e1.instructions.ingredients[2].quantity = {
     units: 100,
-    uom: 'gram',
+    uom: "gram",
   };
   e1.instructions.notes = undefined;
 

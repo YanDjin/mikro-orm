@@ -6,29 +6,37 @@ import {
   type MikroORM,
   type SeederOptions,
   Utils,
-} from '@mikro-orm/core';
-import { ensureDir, writeFile } from 'fs-extra';
-import globby from 'globby';
-import type { Seeder } from './Seeder';
+} from "@yandjin-mikro-orm/core";
+import { ensureDir, writeFile } from "fs-extra";
+import globby from "globby";
+import type { Seeder } from "./Seeder";
 
 export class SeedManager implements ISeedManager {
-
   private readonly config: Configuration;
   private readonly options: SeederOptions;
   private readonly absolutePath: string;
 
   constructor(private readonly em: EntityManager) {
     this.config = this.em.config;
-    this.options = this.config.get('seeder');
+    this.options = this.config.get("seeder");
     this.em = this.em.fork();
-    this.config.set('persistOnCreate', true);
+    this.config.set("persistOnCreate", true);
     /* istanbul ignore next */
-    const key = (this.config.get('tsNode', Utils.detectTsNode()) && this.options.pathTs) ? 'pathTs' : 'path';
-    this.absolutePath = Utils.absolutePath(this.options[key]!, this.config.get('baseDir'));
+    const key =
+      this.config.get("tsNode", Utils.detectTsNode()) && this.options.pathTs
+        ? "pathTs"
+        : "path";
+    this.absolutePath = Utils.absolutePath(
+      this.options[key]!,
+      this.config.get("baseDir"),
+    );
   }
 
   static register(orm: MikroORM): void {
-    orm.config.registerExtension('@mikro-orm/seeder', () => new SeedManager(orm.em));
+    orm.config.registerExtension(
+      "@mikro-orm/seeder",
+      () => new SeedManager(orm.em),
+    );
   }
 
   async seed(...classNames: Constructor<Seeder>[]): Promise<void> {
@@ -60,7 +68,9 @@ export class SeedManager implements ISeedManager {
       const seederClass = classMap.get(className);
 
       if (!seederClass) {
-        throw new Error(`Seeder class ${className} not found in ${Utils.relativePath(path, process.cwd())}`);
+        throw new Error(
+          `Seeder class ${className} not found in ${Utils.relativePath(path, process.cwd())}`,
+        );
       }
 
       await this.seed(seederClass);
@@ -79,11 +89,11 @@ export class SeedManager implements ISeedManager {
   private async generate(className: string): Promise<string> {
     const fileName = `${this.options.fileName!(className)}.${this.options.emit}`;
     const filePath = `${this.absolutePath}/${fileName}`;
-    let ret = '';
+    let ret = "";
 
-    if (this.options.emit === 'ts') {
-      ret += `import type { EntityManager } from '@mikro-orm/core';\n`;
-      ret += `import { Seeder } from '@mikro-orm/seeder';\n\n`;
+    if (this.options.emit === "ts") {
+      ret += `import type { EntityManager } from '@yandjin-mikro-orm/core';\n`;
+      ret += `import { Seeder } from '@yandjin-mikro-orm/seeder';\n\n`;
       ret += `export class ${className} extends Seeder {\n\n`;
       ret += `  async run(em: EntityManager): Promise<void> {}\n\n`;
       ret += `}\n`;
@@ -101,5 +111,4 @@ export class SeedManager implements ISeedManager {
 
     return filePath;
   }
-
 }

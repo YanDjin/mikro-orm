@@ -1,9 +1,15 @@
-import { Entity, IDatabaseDriver, MikroORM, PrimaryKey, Property, Utils } from '@mikro-orm/core';
-import { PLATFORMS } from '../../bootstrap';
+import {
+  Entity,
+  IDatabaseDriver,
+  MikroORM,
+  PrimaryKey,
+  Property,
+  Utils,
+} from "@yandjin-mikro-orm/core";
+import { PLATFORMS } from "../../bootstrap";
 
 @Entity()
 class User {
-
   @PrimaryKey()
   foo!: number;
 
@@ -12,18 +18,17 @@ class User {
 
   @Property({ defaultRaw: `CURRENT_TIMESTAMP` })
   createdAt?: Date;
-
 }
 
 const options = {
-  'sqlite': { dbName: ':memory:' },
-  'better-sqlite': { dbName: ':memory:' },
-  'mysql': { dbName: 'mikro_orm_upsert_4923', port: 3308 },
-  'mariadb': { dbName: 'mikro_orm_upsert_4923', port: 3309 },
-  'postgresql': { dbName: 'mikro_orm_upsert_4923' },
+  sqlite: { dbName: ":memory:" },
+  "better-sqlite": { dbName: ":memory:" },
+  mysql: { dbName: "mikro_orm_upsert_4923", port: 3308 },
+  mariadb: { dbName: "mikro_orm_upsert_4923", port: 3309 },
+  postgresql: { dbName: "mikro_orm_upsert_4923" },
 };
 
-describe.each(Utils.keys(options))('GH #4923 [%s]',  type => {
+describe.each(Utils.keys(options))("GH #4923 [%s]", (type) => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -42,16 +47,13 @@ describe.each(Utils.keys(options))('GH #4923 [%s]',  type => {
 
   afterAll(() => orm.close());
 
-  test('GH #4923 em.upsert()', async () => {
+  test("GH #4923 em.upsert()", async () => {
     const result = await orm.em.upsert(User, { foo: 1, bar: 2 });
     expect(result).toBeInstanceOf(User);
   });
 
-  test('GH #4923 em.upsertMany()', async () => {
-    const result = await orm.em.upsertMany(User, [
-      { foo: 1, bar: 2 },
-    ]);
+  test("GH #4923 em.upsertMany()", async () => {
+    const result = await orm.em.upsertMany(User, [{ foo: 1, bar: 2 }]);
     expect(result).toHaveLength(1);
   });
-
 });

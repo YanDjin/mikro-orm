@@ -1,56 +1,63 @@
-import { Entity, MikroORM, OneToOne, PrimaryKey } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  MikroORM,
+  OneToOne,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class Position {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Leg, (leg: Leg) => leg.position, { owner: true, nullable: true })
+  @OneToOne(() => Leg, (leg: Leg) => leg.position, {
+    owner: true,
+    nullable: true,
+  })
   leg?: any;
-
 }
 
 @Entity()
 class Leg {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Position, (position: Position) => position.leg, { nullable: true })
+  @OneToOne(() => Position, (position: Position) => position.leg, {
+    nullable: true,
+  })
   position?: Position;
-
 }
 
 @Entity()
 class Position2 {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Leg2, (leg: Leg2) => leg.position, { owner: true, nullable: true, orphanRemoval: true })
+  @OneToOne(() => Leg2, (leg: Leg2) => leg.position, {
+    owner: true,
+    nullable: true,
+    orphanRemoval: true,
+  })
   leg?: any;
-
 }
 
 @Entity()
 class Leg2 {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne(() => Position2, (position: Position2) => position.leg, { nullable: true })
+  @OneToOne(() => Position2, (position: Position2) => position.leg, {
+    nullable: true,
+  })
   position?: Position2;
-
 }
 
-describe('GH issue 2815', () => {
-
+describe("GH issue 2815", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
-      dbName: ':memory:',
+      dbName: ":memory:",
       entities: [Position, Leg, Position2, Leg2],
     });
     await orm.schema.createSchema();
@@ -109,5 +116,4 @@ describe('GH issue 2815', () => {
     uow.computeChangeSets();
     expect(uow.getRemoveStack().size).toEqual(1);
   });
-
 });

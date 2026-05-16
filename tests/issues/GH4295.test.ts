@@ -1,27 +1,29 @@
-import { MikroORM } from '@mikro-orm/sqlite';
-import { Embeddable, Embedded, Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { mockLogger } from '../helpers';
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { mockLogger } from "../helpers";
 
 @Embeddable()
 class RunScheduleEntity {
-
   @Property()
   start_at!: Date;
 
   @Property({ nullable: true })
   end_at?: Date;
-
 }
 
 @Entity()
 class AEntity {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded({ entity: () => RunScheduleEntity, prefix: false })
   schedule!: RunScheduleEntity;
-
 }
 
 let orm: MikroORM;
@@ -29,14 +31,14 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [AEntity],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
 
 afterAll(() => orm.close(true));
 
-test('4295', async () => {
+test("4295", async () => {
   orm.em.create(AEntity, { schedule: { start_at: new Date() } });
   await orm.em.flush();
 

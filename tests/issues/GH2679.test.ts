@@ -1,24 +1,27 @@
-import { ArrayType, Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  ArrayType,
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id!: number;
 
   @Property({ type: ArrayType })
   groups!: readonly string[];
-
 }
 
-describe('GH issue 2679', () => {
-
+describe("GH issue 2679", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [User],
-      dbName: 'mikro_orm_test_gh_2679',
+      dbName: "mikro_orm_test_gh_2679",
     });
 
     await orm.schema.refreshDatabase();
@@ -31,81 +34,81 @@ describe('GH issue 2679', () => {
 
   afterAll(() => orm.close(true));
 
-  test('should be able to have an empty string alone', async () => {
+  test("should be able to have an empty string alone", async () => {
     const create = orm.em.create(User, {
-      groups: [''],
+      groups: [""],
     });
     await orm.em.persistAndFlush(create);
     orm.em.clear();
 
     const loaded = (await orm.em.find(User, {}))[0];
-    expect(loaded.groups).toEqual(['']);
+    expect(loaded.groups).toEqual([""]);
   });
 
-  test('should be able to have an empty string at the start', async () => {
+  test("should be able to have an empty string at the start", async () => {
     const create = orm.em.create(User, {
-      groups: ['', 'foo', 'bar'],
+      groups: ["", "foo", "bar"],
     });
     await orm.em.persistAndFlush(create);
     orm.em.clear();
 
     const loaded = (await orm.em.find(User, {}))[0];
-    expect(loaded.groups).toEqual(['', 'foo', 'bar']);
+    expect(loaded.groups).toEqual(["", "foo", "bar"]);
   });
 
-  test('should be able to have an empty string at the end', async () => {
+  test("should be able to have an empty string at the end", async () => {
     const create = orm.em.create(User, {
-      groups: ['foo', 'bar', ''],
+      groups: ["foo", "bar", ""],
     });
     await orm.em.persistAndFlush(create);
     orm.em.clear();
 
     const loaded = (await orm.em.find(User, {}))[0];
-    expect(loaded.groups).toEqual(['foo', 'bar', '']);
+    expect(loaded.groups).toEqual(["foo", "bar", ""]);
   });
 
-  test('should be able to have an empty string in the middle', async () => {
+  test("should be able to have an empty string in the middle", async () => {
     const create = orm.em.create(User, {
-      groups: ['foo', '', 'bar'],
+      groups: ["foo", "", "bar"],
     });
     await orm.em.persistAndFlush(create);
     orm.em.clear();
 
     const f2 = orm.em.fork();
     const loaded = (await f2.find(User, {}))[0];
-    expect(loaded.groups).toEqual(['foo', '', 'bar']);
+    expect(loaded.groups).toEqual(["foo", "", "bar"]);
   });
 
-  test('should be able to have multiple empty strings', async () => {
+  test("should be able to have multiple empty strings", async () => {
     const create = orm.em.create(User, {
-      groups: ['', 'foo', '', 'bar', ''],
+      groups: ["", "foo", "", "bar", ""],
     });
     await orm.em.persistAndFlush(create);
     orm.em.clear();
 
     const loaded = (await orm.em.find(User, {}))[0];
-    expect(loaded.groups).toEqual(['', 'foo', '', 'bar', '']);
+    expect(loaded.groups).toEqual(["", "foo", "", "bar", ""]);
   });
 
-  test('special chars in array items (#3037)', async () => {
+  test("special chars in array items (#3037)", async () => {
     const create = orm.em.create(User, {
-      groups: ['', 'f{o}o', '', '{bar}', ''],
+      groups: ["", "f{o}o", "", "{bar}", ""],
     });
     await orm.em.persistAndFlush(create);
     orm.em.clear();
 
     const loaded = (await orm.em.find(User, {}))[0];
-    expect(loaded.groups).toEqual(['', 'f{o}o', '', '{bar}', '']);
+    expect(loaded.groups).toEqual(["", "f{o}o", "", "{bar}", ""]);
   });
 
-  test('special chars in array items (#3037) - With double quotes', async () => {
+  test("special chars in array items (#3037) - With double quotes", async () => {
     const create = orm.em.create(User, {
-      groups: ['', 'f"o', '', '"bar"', ''],
+      groups: ["", 'f"o', "", '"bar"', ""],
     });
     await orm.em.persistAndFlush(create);
     orm.em.clear();
 
     const loaded = (await orm.em.find(User, {}))[0];
-    expect(loaded.groups).toEqual(['', 'f"o', '', '"bar"', '']);
+    expect(loaded.groups).toEqual(["", 'f"o', "", '"bar"', ""]);
   });
 });

@@ -1,9 +1,18 @@
-import { v4, parse, stringify } from 'uuid';
-import { Collection, Entity, ManyToMany, ManyToOne, PrimaryKey, Property, ref, Ref, Type } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
+import { v4, parse, stringify } from "uuid";
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+  ref,
+  Ref,
+  Type,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
 
 export class UuidBinaryType extends Type<string, Buffer> {
-
   override convertToDatabaseValue(value: string): Buffer {
     return Buffer.from(parse(value));
   }
@@ -13,15 +22,13 @@ export class UuidBinaryType extends Type<string, Buffer> {
   }
 
   override getColumnType(): string {
-    return 'binary(16)';
+    return "binary(16)";
   }
-
 }
 
 @Entity()
 class B {
-
-  @PrimaryKey({ type: UuidBinaryType, name: 'uuid' })
+  @PrimaryKey({ type: UuidBinaryType, name: "uuid" })
   id: string = v4();
 
   @Property()
@@ -30,13 +37,11 @@ class B {
   constructor(name: string) {
     this.name = name;
   }
-
 }
 
 @Entity()
 class A {
-
-  @PrimaryKey({ type: UuidBinaryType, name: 'uuid' })
+  @PrimaryKey({ type: UuidBinaryType, name: "uuid" })
   id: string = v4();
 
   @Property()
@@ -52,11 +57,9 @@ class A {
     this.name = name;
     this.b = ref(B, b);
   }
-
 }
 
-describe('GH issue 1930', () => {
-
+describe("GH issue 1930", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -77,15 +80,15 @@ describe('GH issue 1930', () => {
   });
 
   test(`M:N with custom type PKs`, async () => {
-    const b = orm.em.create(B, { name: 'b' });
-    const a = new A('a1', b.id);
-    a.fields.add(new B('b1'), new B('b2'), new B('b3'));
+    const b = orm.em.create(B, { name: "b" });
+    const a = new A("a1", b.id);
+    a.fields.add(new B("b1"), new B("b2"), new B("b3"));
     await orm.em.persistAndFlush([a, b]);
     orm.em.clear();
 
     const a1 = await orm.em.findOneOrFail(A, a.id, {
-      populate: ['fields'],
-      orderBy: { fields: { name: 'asc' } },
+      populate: ["fields"],
+      orderBy: { fields: { name: "asc" } },
     });
     expect(a1.id).toBe(a.id);
     expect(a1.fields.length).toBe(3);
@@ -93,5 +96,4 @@ describe('GH issue 1930', () => {
     expect(a1.fields[1].id).toBe(a.fields[1].id);
     expect(a1.fields[2].id).toBe(a.fields[2].id);
   });
-
 });

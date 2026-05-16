@@ -6,13 +6,12 @@ import {
   PrimaryKey,
   PrimaryKeyProp,
   Property,
-} from '@mikro-orm/core';
-import { Car2 } from './Car2';
-import { Sandwich } from './sandwich';
+} from "@yandjin-mikro-orm/core";
+import { Car2 } from "./Car2";
+import { Sandwich } from "./sandwich";
 
 @Entity()
 export class User2 {
-
   @PrimaryKey({ length: 100 })
   firstName: string;
 
@@ -31,11 +30,10 @@ export class User2 {
   @OneToOne({ entity: () => Car2, nullable: true })
   favouriteCar?: Car2;
 
-  [PrimaryKeyProp]?: ['firstName', 'lastName'];
+  [PrimaryKeyProp]?: ["firstName", "lastName"];
 
   constructor(firstName: string, lastName: string) {
     this.firstName = firstName;
     this.lastName = lastName;
   }
-
 }

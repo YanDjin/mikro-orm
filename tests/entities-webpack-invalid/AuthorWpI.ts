@@ -1,9 +1,14 @@
-import { Collection, Entity, OneToMany, Property, PrimaryKey } from '@mikro-orm/core';
-import type { BookWpI } from './index';
+import {
+  Collection,
+  Entity,
+  OneToMany,
+  Property,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import type { BookWpI } from "./index";
 
 @Entity()
 export class AuthorWpI {
-
   @PrimaryKey()
   id!: number;
 
@@ -16,7 +21,6 @@ export class AuthorWpI {
   @Property()
   age?: number;
 
-  @OneToMany({ mappedBy: 'author' })
+  @OneToMany({ mappedBy: "author" })
   books = new Collection<BookWpI>(this);
-
 }

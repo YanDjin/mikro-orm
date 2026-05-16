@@ -1,21 +1,28 @@
-import { Collection, Entity, LoadStrategy, ManyToOne, MikroORM, OneToMany, PrimaryKey, Property, Type } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  LoadStrategy,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  PrimaryKey,
+  Property,
+  Type,
+} from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Order {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToMany('OrderItem', 'order')
+  @OneToMany("OrderItem", "order")
   orderItems = new Collection<OrderItem>(this);
-
 }
 
-const prefix = 'foo';
+const prefix = "foo";
 
 class CustomType extends Type<string, string> {
-
   override convertToDatabaseValue(value: string): string {
     return prefix + value;
   }
@@ -25,27 +32,23 @@ class CustomType extends Type<string, string> {
   }
 
   override getColumnType(): string {
-    return 'text';
+    return "text";
   }
-
 }
 
 @Entity()
 export class OrderItem {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToOne(() => Order, { deleteRule: 'cascade' })
+  @ManyToOne(() => Order, { deleteRule: "cascade" })
   order!: Order;
 
   @Property({ type: CustomType })
   customType!: string;
-
 }
 
-describe('GH issue 1754', () => {
-
+describe("GH issue 1754", () => {
   let orm: MikroORM<SqliteDriver>;
 
   beforeAll(async () => {
@@ -69,22 +72,29 @@ describe('GH issue 1754', () => {
     const order = new Order();
     const item1 = new OrderItem();
     item1.order = order;
-    item1.customType = 'some thing';
+    item1.customType = "some thing";
     order.orderItems.add(item1);
     await orm.em.fork().persistAndFlush(order);
 
-    const ordersSelectIn = await orm.em.fork().find(Order, {}, {
-      populate: ['orderItems'],
-      strategy: LoadStrategy.SELECT_IN,
-    });
+    const ordersSelectIn = await orm.em.fork().find(
+      Order,
+      {},
+      {
+        populate: ["orderItems"],
+        strategy: LoadStrategy.SELECT_IN,
+      },
+    );
 
-    const ordersJoined = await orm.em.fork().find(Order, {}, {
-      populate: ['orderItems'],
-      strategy: LoadStrategy.JOINED,
-    });
+    const ordersJoined = await orm.em.fork().find(
+      Order,
+      {},
+      {
+        populate: ["orderItems"],
+        strategy: LoadStrategy.JOINED,
+      },
+    );
 
-    expect(ordersSelectIn[0].orderItems[0].customType).toBe('some thing');
-    expect(ordersJoined[0].orderItems[0].customType).toBe('some thing');
+    expect(ordersSelectIn[0].orderItems[0].customType).toBe("some thing");
+    expect(ordersJoined[0].orderItems[0].customType).toBe("some thing");
   });
-
 });

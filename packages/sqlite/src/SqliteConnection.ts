@@ -1,10 +1,13 @@
-import { ensureDir, readFile } from 'fs-extra';
-import { dirname } from 'path';
-import { AbstractSqlConnection, MonkeyPatchable, type Knex } from '@mikro-orm/knex';
-import { Utils, type Dictionary } from '@mikro-orm/core';
+import { ensureDir, readFile } from "fs-extra";
+import { dirname } from "path";
+import {
+  AbstractSqlConnection,
+  MonkeyPatchable,
+  type Knex,
+} from "@yandjin-mikro-orm/knex";
+import { Utils, type Dictionary } from "@yandjin-mikro-orm/core";
 
 export class SqliteConnection extends AbstractSqlConnection {
-
   override createKnex() {
     this.client = this.createKnexClient(this.getPatchedDialect());
     this.connected = true;
@@ -12,16 +15,16 @@ export class SqliteConnection extends AbstractSqlConnection {
 
   override async connect(): Promise<void> {
     this.createKnex();
-    await ensureDir(dirname(this.config.get('dbName')!));
-    await this.getKnex().raw('pragma foreign_keys = on');
+    await ensureDir(dirname(this.config.get("dbName")!));
+    await this.getKnex().raw("pragma foreign_keys = on");
   }
 
   getDefaultClientUrl(): string {
-    return '';
+    return "";
   }
 
   override getClientUrl(): string {
-    return '';
+    return "";
   }
 
   override async loadFile(path: string): Promise<void> {
@@ -31,22 +34,25 @@ export class SqliteConnection extends AbstractSqlConnection {
   }
 
   protected override getKnexOptions(type: string): Knex.Config {
-    return Utils.mergeConfig({
-      client: type,
-      connection: {
-        filename: this.config.get('dbName'),
+    return Utils.mergeConfig(
+      {
+        client: type,
+        connection: {
+          filename: this.config.get("dbName"),
+        },
+        pool: this.config.get("pool"),
+        useNullAsDefault: true,
       },
-      pool: this.config.get('pool'),
-      useNullAsDefault: true,
-    }, this.config.get('driverOptions'));
+      this.config.get("driverOptions"),
+    );
   }
 
-  protected transformRawResult<T>(res: any, method: 'all' | 'get' | 'run'): T {
-    if (method === 'get') {
+  protected transformRawResult<T>(res: any, method: "all" | "get" | "run"): T {
+    if (method === "get") {
       return res[0];
     }
 
-    if (method === 'all') {
+    if (method === "all") {
       return res;
     }
 
@@ -78,7 +84,7 @@ export class SqliteConnection extends AbstractSqlConnection {
     const processResponse = Sqlite3Dialect.prototype.processResponse;
     Sqlite3Dialect.prototype.__patched = true;
     Sqlite3Dialect.prototype.processResponse = (obj: any, runner: any) => {
-      if (obj.method === 'raw' && this.isRunQuery(obj.sql)) {
+      if (obj.method === "raw" && this.isRunQuery(obj.sql)) {
         return obj.response ?? obj.context;
       }
 
@@ -91,24 +97,33 @@ export class SqliteConnection extends AbstractSqlConnection {
       return new Promise((resolve: any, reject: any) => {
         /* istanbul ignore if */
         if (!connection?.[callMethod]) {
-          return reject(new Error(`Error calling ${callMethod} on connection.`));
+          return reject(
+            new Error(`Error calling ${callMethod} on connection.`),
+          );
         }
 
-        connection[callMethod](obj.sql, obj.bindings, function (this: any, err: any, response: any) {
-          if (err) {
-            return reject(err);
-          }
+        connection[callMethod](
+          obj.sql,
+          obj.bindings,
+          function (this: any, err: any, response: any) {
+            if (err) {
+              return reject(err);
+            }
 
-          obj.response = response;
-          obj.context = this;
+            obj.response = response;
+            obj.context = this;
 
-          return resolve(obj);
-        });
+            return resolve(obj);
+          },
+        );
       });
     };
 
     /* istanbul ignore next */
-    Sqlite3DialectTableCompiler.prototype.foreign = function (this: typeof Sqlite3DialectTableCompiler, foreignInfo: Dictionary) {
+    Sqlite3DialectTableCompiler.prototype.foreign = function (
+      this: typeof Sqlite3DialectTableCompiler,
+      foreignInfo: Dictionary,
+    ) {
       foreignInfo.column = Array.isArray(foreignInfo.column)
         ? foreignInfo.column
         : [foreignInfo.column];
@@ -131,12 +146,18 @@ export class SqliteConnection extends AbstractSqlConnection {
       const references = this.formatter.columnize(foreignInfo.references);
       const keyName = this.formatter.columnize(foreignInfo.keyName);
 
-      const addColumnQuery = this.sequence.find((query: { sql: string }) => query.sql.includes(`add column ${column[0]}`));
+      const addColumnQuery = this.sequence.find((query: { sql: string }) =>
+        query.sql.includes(`add column ${column[0]}`),
+      );
 
       // no need for temp tables if we just add a column
       if (addColumnQuery) {
-        const onUpdate = foreignInfo.onUpdate ? ` on update ${foreignInfo.onUpdate}` : '';
-        const onDelete = foreignInfo.onDelete ? ` on delete ${foreignInfo.onDelete}` : '';
+        const onUpdate = foreignInfo.onUpdate
+          ? ` on update ${foreignInfo.onUpdate}`
+          : "";
+        const onDelete = foreignInfo.onDelete
+          ? ` on delete ${foreignInfo.onDelete}`
+          : "";
         addColumnQuery.sql += ` constraint ${keyName} references ${inTable} (${references})${onUpdate}${onDelete}`;
         return;
       }
@@ -144,7 +165,7 @@ export class SqliteConnection extends AbstractSqlConnection {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const compiler = this;
 
-      if (this.method !== 'create' && this.method !== 'createIfNot') {
+      if (this.method !== "create" && this.method !== "createIfNot") {
         this.pushQuery({
           sql: `PRAGMA table_info(${this.tableName()})`,
           statementsProducer(pragma: any, connection: any) {
@@ -162,40 +183,47 @@ export class SqliteConnection extends AbstractSqlConnection {
   private isRunQuery(query: string): boolean {
     query = query.trim().toLowerCase();
 
-    if ((query.startsWith('insert into') || query.startsWith('update ')) && query.includes(' returning ')) {
+    if (
+      (query.startsWith("insert into") || query.startsWith("update ")) &&
+      query.includes(" returning ")
+    ) {
       return false;
     }
 
-    return query.startsWith('insert into') ||
-      query.startsWith('update') ||
-      query.startsWith('delete') ||
-      query.startsWith('truncate');
+    return (
+      query.startsWith("insert into") ||
+      query.startsWith("update") ||
+      query.startsWith("delete") ||
+      query.startsWith("truncate")
+    );
   }
 
   private getCallMethod(obj: any): string {
-    if (obj.method === 'raw') {
+    if (obj.method === "raw") {
       const query = obj.sql.trim().toLowerCase();
 
-      if ((query.startsWith('insert into') || query.startsWith('update ')) && query.includes(' returning ')) {
-        return 'all';
+      if (
+        (query.startsWith("insert into") || query.startsWith("update ")) &&
+        query.includes(" returning ")
+      ) {
+        return "all";
       }
 
       if (this.isRunQuery(query)) {
-        return 'run';
+        return "run";
       }
     }
 
     /* istanbul ignore next */
     switch (obj.method) {
-      case 'insert':
-      case 'update':
-        return obj.returning ? 'all' : 'run';
-      case 'counter':
-      case 'del':
-        return 'run';
+      case "insert":
+      case "update":
+        return obj.returning ? "all" : "run";
+      case "counter":
+      case "del":
+        return "run";
       default:
-        return 'all';
+        return "all";
     }
   }
-
 }

@@ -2,11 +2,8 @@
   "packages": [
     "packages/*"
   ],
-  "version": "6.1.4-rc-sti-bug.5",
+  "version": "6.1.4-rc-sti-changes-1",
   "command": {
-    "version": {
-      "registry": "http://localhost:4873/"
-    },
     "publish": {
       "assets": []
     }

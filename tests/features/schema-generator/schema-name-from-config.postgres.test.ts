@@ -1,38 +1,37 @@
-import 'reflect-metadata';
-import { Entity, MikroORM, PrimaryKey, ManyToMany, Collection } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-
+import "reflect-metadata";
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  ManyToMany,
+  Collection,
+} from "@yandjin-mikro-orm/core";
+import { PostgreSqlDriver } from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 class Profile {
-
   @PrimaryKey()
   id!: string;
-
 }
-
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: string;
 
   @ManyToMany(() => Profile)
   profile = new Collection<Profile>(this);
-
 }
 
-describe('adding FK column', () => {
-
+describe("adding FK column", () => {
   let orm: MikroORM<PostgreSqlDriver>;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [User, Profile],
       driver: PostgreSqlDriver,
-      dbName: 'fk-column-postgres-schema',
-      schema: 'test',
+      dbName: "fk-column-postgres-schema",
+      schema: "test",
     });
     await orm.schema.ensureDatabase();
     await orm.schema.dropSchema();
@@ -40,7 +39,7 @@ describe('adding FK column', () => {
 
   afterAll(() => orm.close(true));
 
-  test('schema: adding 1:1 relation', async () => {
+  test("schema: adding 1:1 relation", async () => {
     const diff1 = await orm.schema.getCreateSchemaSQL();
     expect(diff1).toMatchSnapshot();
     const diff2 = await orm.schema.getUpdateSchemaSQL();
@@ -53,9 +52,8 @@ describe('adding FK column', () => {
     await orm.schema.execute(diff2); // update from scratch
 
     const diff4 = await orm.schema.getUpdateSchemaSQL();
-    expect(diff4).toBe('');
+    expect(diff4).toBe("");
 
     await orm.schema.execute(diff3); // drop
   });
-
 });

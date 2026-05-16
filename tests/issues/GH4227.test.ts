@@ -1,40 +1,43 @@
-import { Entity, LoadStrategy, OneToMany, ManyToOne, Collection, PrimaryKey } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  LoadStrategy,
+  OneToMany,
+  ManyToOne,
+  Collection,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class BidEntity {
-
   @PrimaryKey()
   id!: bigint;
 
-  @ManyToOne('ItemEntity', {
-    serializer: value => value.id,
-    serializedName: 'itemId',
+  @ManyToOne("ItemEntity", {
+    serializer: (value) => value.id,
+    serializedName: "itemId",
   })
   item: any;
-
 }
 
 @Entity()
 class ItemEntity {
-
   @PrimaryKey()
   id!: bigint;
 
-  @OneToMany('BidEntity', 'item', {
+  @OneToMany("BidEntity", "item", {
     orphanRemoval: true,
     strategy: LoadStrategy.JOINED,
-    mappedBy: 'item',
+    mappedBy: "item",
   })
   bids = new Collection<BidEntity>(this);
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: ':memory:',
+    dbName: ":memory:",
     entities: [BidEntity, ItemEntity],
   });
   await orm.schema.refreshDatabase();
@@ -42,11 +45,11 @@ beforeAll(async () => {
 
 afterAll(() => orm.close(true));
 
-test('select big int', async () => {
+test("select big int", async () => {
   await orm.em
-    .createQueryBuilder(ItemEntity, 'item')
-    .select('*')
-    .leftJoinAndSelect('item.bids', 'bids')
+    .createQueryBuilder(ItemEntity, "item")
+    .select("*")
+    .leftJoinAndSelect("item.bids", "bids")
     .limit(10)
     .getResultAndCount();
 });

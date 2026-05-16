@@ -1,32 +1,34 @@
-import { Entity, ManyToOne, OneToMany, Collection, MikroORM, PrimaryKey } from '@mikro-orm/sqlite';
+import {
+  Entity,
+  ManyToOne,
+  OneToMany,
+  Collection,
+  MikroORM,
+  PrimaryKey,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 export class Provider {
-
   @PrimaryKey()
   id: number;
 
   constructor(id: number) {
     this.id = id;
   }
-
 }
 
 @Entity()
 export class User {
-
   @PrimaryKey()
   id: number;
 
   constructor(id: number) {
     this.id = id;
   }
-
 }
 
 @Entity()
 export class Member {
-
   @ManyToOne(() => Provider, { eager: true, primary: true })
   provider: Provider;
 
@@ -37,31 +39,27 @@ export class Member {
     this.provider = a;
     this.user = b;
   }
-
 }
 
 @Entity()
 export class Session {
-
   @PrimaryKey()
   id: number;
 
   @ManyToOne(() => Member, { eager: true })
   owner: Member;
 
-  @OneToMany('Participant', 'session')
+  @OneToMany("Participant", "session")
   participants = new Collection<Participant>(this);
 
   constructor(id: number, owner: Member) {
     this.id = id;
     this.owner = owner;
   }
-
 }
 
 @Entity()
 export class Participant {
-
   @ManyToOne(() => Session, { eager: true, primary: true })
   session: Session;
 
@@ -72,11 +70,9 @@ export class Participant {
     this.session = session;
     this.member = member;
   }
-
 }
 
-describe('GH #2886', () => {
-
+describe("GH #2886", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
@@ -91,7 +87,9 @@ describe('GH #2886', () => {
     await orm.close(true);
   });
 
-  function createEntities(pks: [providerId: number, userId: number, sessionId: number]) {
+  function createEntities(
+    pks: [providerId: number, userId: number, sessionId: number],
+  ) {
     const provider = new Provider(pks[0]);
     const user = new User(pks[1]);
     const member = new Member(provider, user);
@@ -100,7 +98,7 @@ describe('GH #2886', () => {
     orm.em.persist([provider, user, member, session, participant]);
   }
 
-  it('should be able to call init', async () => {
+  it("should be able to call init", async () => {
     const sessionId = 3;
     createEntities([1, 2, sessionId]);
     await orm.em.flush();
@@ -109,5 +107,4 @@ describe('GH #2886', () => {
     const session = await orm.em.findOneOrFail(Session, { id: sessionId });
     await session.participants.init();
   });
-
 });

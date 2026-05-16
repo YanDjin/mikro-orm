@@ -1,8 +1,11 @@
-import type { Connection } from 'mariadb';
-import { AbstractSqlConnection, MonkeyPatchable, type Knex } from '@mikro-orm/knex';
+import type { Connection } from "mariadb";
+import {
+  AbstractSqlConnection,
+  MonkeyPatchable,
+  type Knex,
+} from "@yandjin-mikro-orm/knex";
 
 export class MariaDbConnection extends AbstractSqlConnection {
-
   override createKnex(): void {
     this.client = this.createKnexClient(this.getPatchedDialect());
     this.connected = true;
@@ -10,30 +13,31 @@ export class MariaDbConnection extends AbstractSqlConnection {
 
   private getPatchedDialect() {
     const { MySqlDialect } = MonkeyPatchable;
-    MySqlDialect.prototype.driverName = 'mariadb';
-    MySqlDialect.prototype._driver = () => require('mariadb/callback');
-    MySqlDialect.prototype.validateConnection = (connection: Connection) => connection.isValid();
+    MySqlDialect.prototype.driverName = "mariadb";
+    MySqlDialect.prototype._driver = () => require("mariadb/callback");
+    MySqlDialect.prototype.validateConnection = (connection: Connection) =>
+      connection.isValid();
 
     return MySqlDialect;
   }
 
   getDefaultClientUrl(): string {
-    return 'mysql://root@127.0.0.1:3306';
+    return "mysql://root@127.0.0.1:3306";
   }
 
   override getConnectionOptions(): Knex.MySqlConnectionConfig {
     const ret = super.getConnectionOptions() as Knex.MySqlConnectionConfig;
 
-    if (this.config.get('multipleStatements')) {
-      ret.multipleStatements = this.config.get('multipleStatements');
+    if (this.config.get("multipleStatements")) {
+      ret.multipleStatements = this.config.get("multipleStatements");
     }
 
-    if (this.config.get('forceUtcTimezone')) {
-      ret.timezone = 'Z';
+    if (this.config.get("forceUtcTimezone")) {
+      ret.timezone = "Z";
     }
 
-    if (this.config.get('timezone')) {
-      ret.timezone = this.config.get('timezone');
+    if (this.config.get("timezone")) {
+      ret.timezone = this.config.get("timezone");
     }
 
     ret.bigNumberStrings = true;
@@ -45,8 +49,11 @@ export class MariaDbConnection extends AbstractSqlConnection {
     return ret;
   }
 
-  protected transformRawResult<T>(res: any, method: 'all' | 'get' | 'run'): T {
-    if (method === 'run' && ['OkPacket', 'ResultSetHeader'].includes(res[0].constructor.name)) {
+  protected transformRawResult<T>(res: any, method: "all" | "get" | "run"): T {
+    if (
+      method === "run" &&
+      ["OkPacket", "ResultSetHeader"].includes(res[0].constructor.name)
+    ) {
       return {
         insertId: res[0].insertId,
         affectedRows: res[0].affectedRows,
@@ -54,11 +61,10 @@ export class MariaDbConnection extends AbstractSqlConnection {
       } as unknown as T;
     }
 
-    if (method === 'get') {
+    if (method === "get") {
       return res[0][0];
     }
 
     return res[0];
   }
-
 }

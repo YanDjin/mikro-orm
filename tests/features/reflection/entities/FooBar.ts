@@ -1,10 +1,15 @@
-import { ObjectId } from 'bson';
-import { Entity, OneToOne, PrimaryKey, Property, SerializedPrimaryKey } from '@mikro-orm/core';
-import type { FooBaz } from './FooBaz';
+import { ObjectId } from "bson";
+import {
+  Entity,
+  OneToOne,
+  PrimaryKey,
+  Property,
+  SerializedPrimaryKey,
+} from "@yandjin-mikro-orm/core";
+import type { FooBaz } from "./FooBaz";
 
 @Entity()
 export default class FooBar {
-
   @PrimaryKey()
   _id!: ObjectId;
 
@@ -19,5 +24,4 @@ export default class FooBar {
 
   @OneToOne()
   fooBar!: FooBar;
-
 }

@@ -1,8 +1,12 @@
-import { Entity, MikroORM, PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  Entity,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/postgresql";
 
 @Entity()
 class Address {
-
   @PrimaryKey()
   id!: number;
 
@@ -15,7 +19,7 @@ class Address {
   @Property()
   createdBy: string;
 
-  @Property({ onUpdate: () => 'testNew' })
+  @Property({ onUpdate: () => "testNew" })
   updatedBy: string;
 
   @Property()
@@ -23,22 +27,20 @@ class Address {
 
   constructor(companyName: string) {
     this.companyName = companyName;
-    this.createdBy = 'test';
-    this.updatedBy = 'test';
+    this.createdBy = "test";
+    this.updatedBy = "test";
     this.createdAt = new Date();
     this.updatedAt = new Date();
   }
-
 }
 
-describe('GH issue 2784', () => {
-
+describe("GH issue 2784", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [Address],
-      dbName: 'mikro_orm_test_2784',
+      dbName: "mikro_orm_test_2784",
     });
     await orm.schema.refreshDatabase();
   });
@@ -48,14 +50,13 @@ describe('GH issue 2784', () => {
   });
 
   test(`GH issue 2784`, async () => {
-    const address = new Address('test1');
+    const address = new Address("test1");
     const { updatedAt, updatedBy } = address;
     await orm.em.persist(address).flush();
 
-    address.companyName = 'test3';
+    address.companyName = "test3";
     await orm.em.flush();
     expect(updatedAt).not.toEqual(address.updatedAt);
     expect(updatedBy).not.toEqual(address.updatedBy);
   });
-
 });

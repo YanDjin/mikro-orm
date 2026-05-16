@@ -1,24 +1,26 @@
-import { Embeddable, Embedded, Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
-import { mockLogger } from '../../helpers';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
+import { mockLogger } from "../../helpers";
 
 @Embeddable()
 class Animal {
-
   @Property()
   birthday!: Date;
-
 }
 
 @Entity()
 class Owner {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded(() => Animal, { array: true })
   pets!: Animal[];
-
 }
 
 let orm: MikroORM;
@@ -26,7 +28,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Owner],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
 
   await orm.schema.refreshDatabase();
@@ -36,12 +38,10 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('conversion of Date properties in object embeddables', async () => {
+test("conversion of Date properties in object embeddables", async () => {
   await orm.em.insert(Owner, {
     id: 1,
-    pets: [
-      { birthday: new Date() },
-    ],
+    pets: [{ birthday: new Date() }],
   });
   await orm.em.findOneOrFail(Owner, 1);
   const mock = mockLogger(orm);

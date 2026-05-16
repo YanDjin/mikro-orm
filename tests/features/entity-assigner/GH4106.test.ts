@@ -1,47 +1,48 @@
-import { Embeddable, Embedded, Entity, Ref, ManyToOne, PrimaryKey, Reference } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  Ref,
+  ManyToOne,
+  PrimaryKey,
+  Reference,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class C {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Embeddable()
 class B {
-
   @ManyToOne(() => C, { ref: true })
   c!: Ref<C>;
-
 }
 
 @Entity()
 class A {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded(() => B)
   b!: B;
-
 }
-
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [A, B, C],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.refreshDatabase();
 });
 
 afterAll(() => orm.close(true));
 
-test('orm.create.assign on embedded with reference', async () => {
+test("orm.create.assign on embedded with reference", async () => {
   orm.em.create(A, {
     id: 1,
     b: {

@@ -1,17 +1,25 @@
-import { Configuration, FileCacheAdapter } from '@mikro-orm/core';
-import { MySqlDriver } from '@mikro-orm/mysql';
-import { CLIHelper } from '@mikro-orm/cli';
+import { Configuration, FileCacheAdapter } from "@yandjin-mikro-orm/core";
+import { MySqlDriver } from "@yandjin-mikro-orm/mysql";
+import { CLIHelper } from "@yandjin-mikro-orm/cli";
 
 (global as any).console.log = jest.fn();
-const getConfigurationMock = jest.spyOn(CLIHelper, 'getConfiguration');
-getConfigurationMock.mockResolvedValue(new Configuration({ driver: MySqlDriver, metadataCache: { enabled: true }, getDriver: () => ({ getPlatform: jest.fn() }) } as any, false));
-const clearMock = jest.spyOn(FileCacheAdapter.prototype, 'clear');
+const getConfigurationMock = jest.spyOn(CLIHelper, "getConfiguration");
+getConfigurationMock.mockResolvedValue(
+  new Configuration(
+    {
+      driver: MySqlDriver,
+      metadataCache: { enabled: true },
+      getDriver: () => ({ getPlatform: jest.fn() }),
+    } as any,
+    false,
+  ),
+);
+const clearMock = jest.spyOn(FileCacheAdapter.prototype, "clear");
 
-import { ClearCacheCommand } from '../../../packages/cli/src/commands/ClearCacheCommand';
+import { ClearCacheCommand } from "../../../packages/cli/src/commands/ClearCacheCommand";
 
-describe('ClearCacheCommand', () => {
-
-  test('handler', async () => {
+describe("ClearCacheCommand", () => {
+  test("handler", async () => {
     const cmd = new ClearCacheCommand();
 
     expect(clearMock.mock.calls.length).toBe(0);
@@ -19,10 +27,19 @@ describe('ClearCacheCommand', () => {
     expect(clearMock.mock.calls.length).toBe(1);
   });
 
-  test('handler warns when cache is disabled', async () => {
+  test("handler warns when cache is disabled", async () => {
     clearMock.mockClear();
     getConfigurationMock.mockClear();
-    getConfigurationMock.mockResolvedValue(new Configuration({ driver: MySqlDriver, metadataCache: { enabled: false }, getDriver: () => ({ getPlatform: jest.fn() }) } as any, false));
+    getConfigurationMock.mockResolvedValue(
+      new Configuration(
+        {
+          driver: MySqlDriver,
+          metadataCache: { enabled: false },
+          getDriver: () => ({ getPlatform: jest.fn() }),
+        } as any,
+        false,
+      ),
+    );
 
     const cmd = new ClearCacheCommand();
 
@@ -30,5 +47,4 @@ describe('ClearCacheCommand', () => {
     await expect(cmd.handler({} as any)).resolves.toBeUndefined();
     expect(clearMock.mock.calls.length).toBe(0);
   });
-
 });

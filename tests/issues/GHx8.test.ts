@@ -8,23 +8,20 @@ import {
   PrimaryKeyProp,
   Property,
   Ref,
-} from '@mikro-orm/postgresql';
-import { v4 } from 'uuid';
+} from "@yandjin-mikro-orm/postgresql";
+import { v4 } from "uuid";
 
 @Entity()
 class Organization {
-
-  @PrimaryKey({ columnType: 'uuid' })
+  @PrimaryKey({ columnType: "uuid" })
   id!: string;
-
 }
 
 @Entity()
 class Project {
+  [PrimaryKeyProp]?: ["id", "organization"];
 
-  [PrimaryKeyProp]?: ['id', 'organization'];
-
-  @PrimaryKey({ columnType: 'uuid' })
+  @PrimaryKey({ columnType: "uuid" })
   id!: string;
 
   @ManyToOne({ entity: () => Organization, ref: true, primary: true })
@@ -36,25 +33,23 @@ class Project {
   @ManyToOne({
     ref: true,
     entity: () => ProjectUpdate,
-    joinColumns: ['project_id_1', 'organization_id'],
+    joinColumns: ["project_id_1", "organization_id"],
   })
   projectUpdate1!: Ref<ProjectUpdate>;
 
   @ManyToOne({
     ref: true,
     entity: () => ProjectUpdate,
-    joinColumns: ['project_id_2', 'organization_id'],
+    joinColumns: ["project_id_2", "organization_id"],
   })
   projectUpdate2!: Ref<ProjectUpdate>;
-
 }
 
 @Entity()
 class ProjectUpdate {
+  [PrimaryKeyProp]?: ["id", "organization"];
 
-  [PrimaryKeyProp]?: ['id', 'organization'];
-
-  @PrimaryKey({ columnType: 'uuid' })
+  @PrimaryKey({ columnType: "uuid" })
   id!: string;
 
   @ManyToOne({ entity: () => Organization, ref: true, primary: true })
@@ -66,25 +61,24 @@ class ProjectUpdate {
   // Mapping this side doesn't seem to help
   @OneToMany({
     entity: () => Project,
-    mappedBy: 'projectUpdate1',
-    joinColumns: ['id', 'organization_id'],
+    mappedBy: "projectUpdate1",
+    joinColumns: ["id", "organization_id"],
   })
   projects1 = new Collection<Project>(this);
 
   @OneToMany({
     entity: () => Project,
-    mappedBy: 'projectUpdate2',
-    joinColumns: ['id', 'organization_id'],
+    mappedBy: "projectUpdate2",
+    joinColumns: ["id", "organization_id"],
   })
   projects2 = new Collection<Project>(this);
-
 }
 
 let orm: MikroORM;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: 'ghx8',
+    dbName: "ghx8",
     entities: [ProjectUpdate],
   });
   await orm.schema.refreshDatabase();
@@ -94,7 +88,7 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('bulk update props with compound keys', async () => {
+test("bulk update props with compound keys", async () => {
   const globalEm = orm.em.fork();
   const projectId = v4();
   const projectId2 = v4();
@@ -109,7 +103,8 @@ test('bulk update props with compound keys', async () => {
   await initEm.persistAndFlush(org);
 
   const projectUpdate1 = new ProjectUpdate();
-  initEm.assign(projectUpdate1,
+  initEm.assign(
+    projectUpdate1,
     {
       id: updateId,
       organization: orgId,
@@ -118,7 +113,8 @@ test('bulk update props with compound keys', async () => {
   );
 
   const projectUpdate2 = new ProjectUpdate();
-  initEm.assign(projectUpdate2,
+  initEm.assign(
+    projectUpdate2,
     {
       id: updateId2,
       organization: orgId,
@@ -127,22 +123,24 @@ test('bulk update props with compound keys', async () => {
   );
 
   const project = new Project();
-  initEm.assign(project,
+  initEm.assign(
+    project,
     {
       id: projectId,
       organization: orgId,
-      name: 'init',
+      name: "init",
       projectUpdate1,
       projectUpdate2,
     },
     { em: initEm },
   );
   const project2 = new Project();
-  initEm.assign(project2,
+  initEm.assign(
+    project2,
     {
       id: projectId2,
       organization: orgId,
-      name: 'init2',
+      name: "init2",
       projectUpdate1,
       projectUpdate2,
     },
@@ -163,13 +161,13 @@ test('bulk update props with compound keys', async () => {
 
   // Switch project update ids to trigger updates
   em.assign(p1, {
-    name: 'update',
+    name: "update",
     projectUpdate1: [updateId2, orgId],
     projectUpdate2: [updateId, orgId],
   });
 
   em.assign(p2, {
-    name: 'update',
+    name: "update",
     projectUpdate1: [updateId2, orgId],
     projectUpdate2: [updateId, orgId],
   });

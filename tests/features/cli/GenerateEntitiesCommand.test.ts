@@ -1,45 +1,53 @@
-import { MikroORM } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
-import { EntityGenerator } from '@mikro-orm/entity-generator';
-import { CLIHelper } from '@mikro-orm/cli';
-import { GenerateEntitiesCommand } from '../../../packages/cli/src/commands/GenerateEntitiesCommand';
-import { initORMSqlite } from '../../bootstrap';
+import { MikroORM } from "@yandjin-mikro-orm/core";
+import { SqliteDriver } from "@yandjin-mikro-orm/sqlite";
+import { EntityGenerator } from "@yandjin-mikro-orm/entity-generator";
+import { CLIHelper } from "@yandjin-mikro-orm/cli";
+import { GenerateEntitiesCommand } from "../../../packages/cli/src/commands/GenerateEntitiesCommand";
+import { initORMSqlite } from "../../bootstrap";
 
-const closeSpy = jest.spyOn(MikroORM.prototype, 'close');
-const showHelpMock = jest.spyOn(CLIHelper, 'showHelp');
+const closeSpy = jest.spyOn(MikroORM.prototype, "close");
+const showHelpMock = jest.spyOn(CLIHelper, "showHelp");
 showHelpMock.mockImplementation(() => void 0);
-const generate = jest.spyOn(EntityGenerator.prototype, 'generate');
+const generate = jest.spyOn(EntityGenerator.prototype, "generate");
 generate.mockImplementation(async () => []);
-const dumpMock = jest.spyOn(CLIHelper, 'dump');
+const dumpMock = jest.spyOn(CLIHelper, "dump");
 dumpMock.mockImplementation(() => void 0);
 
-describe('GenerateEntitiesCommand', () => {
-
+describe("GenerateEntitiesCommand", () => {
   let orm: MikroORM<SqliteDriver>;
 
   beforeAll(async () => {
     orm = await initORMSqlite();
-    const getORMMock = jest.spyOn(CLIHelper, 'getORM');
+    const getORMMock = jest.spyOn(CLIHelper, "getORM");
     getORMMock.mockResolvedValue(orm);
   });
 
   afterAll(async () => await orm.close(true));
 
-  test('builder', async () => {
+  test("builder", async () => {
     const cmd = new GenerateEntitiesCommand();
 
     const args = { option: jest.fn() };
     cmd.builder(args as any);
     expect(args.option.mock.calls.length).toBe(4);
-    expect(args.option.mock.calls[0][0]).toBe('s');
-    expect(args.option.mock.calls[0][1]).toMatchObject({ alias: 'save', type: 'boolean' });
-    expect(args.option.mock.calls[1][0]).toBe('d');
-    expect(args.option.mock.calls[1][1]).toMatchObject({ alias: 'dump', type: 'boolean' });
-    expect(args.option.mock.calls[2][0]).toBe('p');
-    expect(args.option.mock.calls[2][1]).toMatchObject({ alias: 'path', type: 'string' });
+    expect(args.option.mock.calls[0][0]).toBe("s");
+    expect(args.option.mock.calls[0][1]).toMatchObject({
+      alias: "save",
+      type: "boolean",
+    });
+    expect(args.option.mock.calls[1][0]).toBe("d");
+    expect(args.option.mock.calls[1][1]).toMatchObject({
+      alias: "dump",
+      type: "boolean",
+    });
+    expect(args.option.mock.calls[2][0]).toBe("p");
+    expect(args.option.mock.calls[2][1]).toMatchObject({
+      alias: "path",
+      type: "string",
+    });
   });
 
-  test('handler', async () => {
+  test("handler", async () => {
     const cmd = new GenerateEntitiesCommand();
 
     expect(showHelpMock.mock.calls.length).toBe(0);
@@ -56,5 +64,4 @@ describe('GenerateEntitiesCommand', () => {
     expect(generate.mock.calls.length).toBe(2);
     expect(closeSpy).toHaveBeenCalledTimes(2);
   });
-
 });

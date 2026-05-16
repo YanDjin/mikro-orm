@@ -2,7 +2,7 @@
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=false customBaseEntityName= entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 
 @Entity()
@@ -18,7 +18,7 @@ export class Address2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 
 @Entity()
@@ -82,7 +82,7 @@ export class Author2 {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 {
@@ -124,7 +124,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BookTag2 {
@@ -137,7 +137,7 @@ export class BookTag2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { Publisher2 } from './Publisher2';
@@ -183,7 +183,7 @@ export class Book2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 
@@ -203,7 +203,7 @@ export class Book2Tags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 
 @Entity()
@@ -220,7 +220,7 @@ export class CarOwner2 {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Car2 {
@@ -240,7 +240,7 @@ export class Car2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Test2 } from './Test2';
 
 @Entity()
@@ -259,7 +259,7 @@ export class Configuration2 {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Dummy2 {
@@ -269,7 +269,7 @@ export class Dummy2 {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { FooBaz2 } from './FooBaz2';
 
 @Entity()
@@ -307,7 +307,7 @@ export class FooBar2 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class FooBaz2 {
@@ -323,7 +323,7 @@ export class FooBaz2 {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -346,7 +346,7 @@ export class FooParam2 {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Publisher2 {
@@ -400,7 +400,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
 
@@ -418,7 +418,7 @@ export class Publisher2Tests {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sandwich {
@@ -434,7 +434,7 @@ export class Sandwich {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
 
@@ -467,7 +467,7 @@ export class Test2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -501,7 +501,7 @@ export class User2 {
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=false customBaseEntityName= entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Address2 {
   [PrimaryKeyProp]?: 'author';
@@ -523,7 +523,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class Author2 {
   id!: number;
@@ -599,7 +599,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BaseUser2 {
   id!: number;
@@ -646,7 +646,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BookTag2 {
   id!: bigint;
@@ -661,7 +661,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BookTag2 } from './BookTag2';
 
 export class Book2 {
@@ -708,7 +708,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Book2Tags {
   [PrimaryKeyProp]?: 'order';
@@ -737,7 +737,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CarOwner2 {
   id!: number;
@@ -754,7 +754,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Car2 {
   [PrimaryKeyProp]?: ['name', 'year'];
@@ -772,7 +772,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Configuration2 {
   [PrimaryKeyProp]?: ['property', 'test'];
@@ -790,7 +790,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Dummy2 {
   id!: number;
@@ -803,7 +803,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class FooBar2 {
   id!: number;
@@ -846,7 +846,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class FooBaz2 {
   id!: number;
@@ -863,7 +863,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class FooParam2 {
   [PrimaryKeyProp]?: ['bar', 'baz'];
@@ -883,7 +883,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class Publisher2 {
   id!: number;
@@ -932,7 +932,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Publisher2Tests {
   id!: number;
@@ -960,7 +960,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Sandwich {
   id!: number;
@@ -977,7 +977,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 
 export class Test2 {
@@ -1023,7 +1023,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -1070,7 +1070,7 @@ export const User2Schema = new EntitySchema({
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=false customBaseEntityName=BaseEntity entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseEntity } from './BaseEntity';
 
@@ -1087,7 +1087,7 @@ export class Address2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 
@@ -1152,7 +1152,7 @@ export class Author2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -1195,7 +1195,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -1209,7 +1209,7 @@ export class BookTag2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseEntity } from './BaseEntity';
 import { BookTag2 } from './BookTag2';
@@ -1256,7 +1256,7 @@ export class Book2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
@@ -1277,7 +1277,7 @@ export class Book2Tags extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 
@@ -1295,7 +1295,7 @@ export class CarOwner2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -1316,7 +1316,7 @@ export class Car2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Test2 } from './Test2';
 
@@ -1336,7 +1336,7 @@ export class Configuration2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -1347,7 +1347,7 @@ export class Dummy2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBaz2 } from './FooBaz2';
 
@@ -1386,7 +1386,7 @@ export class FooBar2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -1403,7 +1403,7 @@ export class FooBaz2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -1427,7 +1427,7 @@ export class FooParam2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -1482,7 +1482,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -1501,7 +1501,7 @@ export class Publisher2Tests extends BaseEntity {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -1518,7 +1518,7 @@ export class Sandwich extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
@@ -1552,7 +1552,7 @@ export class Test2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -1582,7 +1582,7 @@ export class User2 extends BaseEntity {
 
 }
 ",
-  "import { Config, DefineConfig } from '@mikro-orm/core';
+  "import { Config, DefineConfig } from '@yandjin-mikro-orm/core';
 
 export abstract class BaseEntity {
 
@@ -1595,7 +1595,7 @@ export abstract class BaseEntity {
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=false customBaseEntityName=BaseEntity entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Address2 extends BaseEntity {
@@ -1618,7 +1618,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Author2 extends BaseEntity {
@@ -1695,7 +1695,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class BaseUser2 extends BaseEntity {
@@ -1743,7 +1743,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class BookTag2 extends BaseEntity {
@@ -1759,7 +1759,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { BookTag2 } from './BookTag2';
 
@@ -1807,7 +1807,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Book2Tags extends BaseEntity {
@@ -1837,7 +1837,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class CarOwner2 extends BaseEntity {
@@ -1855,7 +1855,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Car2 extends BaseEntity {
@@ -1874,7 +1874,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Configuration2 extends BaseEntity {
@@ -1893,7 +1893,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Dummy2 extends BaseEntity {
@@ -1907,7 +1907,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooBar2 extends BaseEntity {
@@ -1951,7 +1951,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooBaz2 extends BaseEntity {
@@ -1969,7 +1969,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooParam2 extends BaseEntity {
@@ -1990,7 +1990,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Publisher2 extends BaseEntity {
@@ -2040,7 +2040,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Publisher2Tests extends BaseEntity {
@@ -2069,7 +2069,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Sandwich extends BaseEntity {
@@ -2087,7 +2087,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBar2 } from './FooBar2';
 
@@ -2134,7 +2134,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -2177,7 +2177,7 @@ export const User2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export abstract class BaseEntity {
   [Config]?: DefineConfig<{ forceObject: false }>;
@@ -2194,7 +2194,7 @@ export const BaseEntitySchema = new EntitySchema({
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=false customBaseEntityName=BaseUser2 entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseUser2 } from './BaseUser2';
 
@@ -2211,7 +2211,7 @@ export class Address2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 
@@ -2276,7 +2276,7 @@ export class Author2 extends BaseUser2 {
 
 }
 ",
-  "import { Config, DefineConfig, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Config, DefineConfig, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 {
@@ -2321,7 +2321,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -2335,7 +2335,7 @@ export class BookTag2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseUser2 } from './BaseUser2';
 import { BookTag2 } from './BookTag2';
@@ -2382,7 +2382,7 @@ export class Book2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
@@ -2403,7 +2403,7 @@ export class Book2Tags extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 
@@ -2421,7 +2421,7 @@ export class CarOwner2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -2442,7 +2442,7 @@ export class Car2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Test2 } from './Test2';
 
@@ -2462,7 +2462,7 @@ export class Configuration2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -2473,7 +2473,7 @@ export class Dummy2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -2512,7 +2512,7 @@ export class FooBar2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -2529,7 +2529,7 @@ export class FooBaz2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -2553,7 +2553,7 @@ export class FooParam2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -2608,7 +2608,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -2627,7 +2627,7 @@ export class Publisher2Tests extends BaseUser2 {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -2644,7 +2644,7 @@ export class Sandwich extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
@@ -2678,7 +2678,7 @@ export class Test2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -2713,7 +2713,7 @@ export class User2 extends BaseUser2 {
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=false customBaseEntityName=BaseUser2 entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Address2 extends BaseUser2 {
@@ -2736,7 +2736,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Author2 extends BaseUser2 {
@@ -2813,7 +2813,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BaseUser2 {
   [Config]?: DefineConfig<{ forceObject: false }>;
@@ -2861,7 +2861,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class BookTag2 extends BaseUser2 {
@@ -2877,7 +2877,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { BookTag2 } from './BookTag2';
 
@@ -2925,7 +2925,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Book2Tags extends BaseUser2 {
@@ -2955,7 +2955,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class CarOwner2 extends BaseUser2 {
@@ -2973,7 +2973,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Car2 extends BaseUser2 {
@@ -2992,7 +2992,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Configuration2 extends BaseUser2 {
@@ -3011,7 +3011,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Dummy2 extends BaseUser2 {
@@ -3025,7 +3025,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooBar2 extends BaseUser2 {
@@ -3069,7 +3069,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooBaz2 extends BaseUser2 {
@@ -3087,7 +3087,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooParam2 extends BaseUser2 {
@@ -3108,7 +3108,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Publisher2 extends BaseUser2 {
@@ -3158,7 +3158,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Publisher2Tests extends BaseUser2 {
@@ -3187,7 +3187,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Sandwich extends BaseUser2 {
@@ -3205,7 +3205,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBar2 } from './FooBar2';
 
@@ -3252,7 +3252,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -3300,7 +3300,7 @@ export const User2Schema = new EntitySchema({
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=false customBaseEntityName=CustomBase entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { CustomBase } from './CustomBase';
 
@@ -3317,7 +3317,7 @@ export class Address2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { CustomBase } from './CustomBase';
 
@@ -3382,7 +3382,7 @@ export class Author2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -3425,7 +3425,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -3439,7 +3439,7 @@ export class BookTag2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
@@ -3486,7 +3486,7 @@ export class Book2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
@@ -3507,7 +3507,7 @@ export class Book2Tags extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 
@@ -3525,7 +3525,7 @@ export class CarOwner2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -3546,7 +3546,7 @@ export class Car2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { Test2 } from './Test2';
 
@@ -3566,7 +3566,7 @@ export class Configuration2 extends CustomBase {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -3577,7 +3577,7 @@ export class Dummy2 extends CustomBase {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBaz2 } from './FooBaz2';
 
@@ -3616,7 +3616,7 @@ export class FooBar2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -3633,7 +3633,7 @@ export class FooBaz2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -3657,7 +3657,7 @@ export class FooParam2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -3712,7 +3712,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -3731,7 +3731,7 @@ export class Publisher2Tests extends CustomBase {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -3748,7 +3748,7 @@ export class Sandwich extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
@@ -3782,7 +3782,7 @@ export class Test2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 import { Sandwich } from './Sandwich';
@@ -3812,7 +3812,7 @@ export class User2 extends CustomBase {
 
 }
 ",
-  "import { Config, DefineConfig } from '@mikro-orm/core';
+  "import { Config, DefineConfig } from '@yandjin-mikro-orm/core';
 
 export abstract class CustomBase {
 
@@ -3825,7 +3825,7 @@ export abstract class CustomBase {
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=false customBaseEntityName=CustomBase entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Address2 extends CustomBase {
@@ -3848,7 +3848,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Author2 extends CustomBase {
@@ -3925,7 +3925,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class BaseUser2 extends CustomBase {
@@ -3973,7 +3973,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class BookTag2 extends CustomBase {
@@ -3989,7 +3989,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
 
@@ -4037,7 +4037,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Book2Tags extends CustomBase {
@@ -4067,7 +4067,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class CarOwner2 extends CustomBase {
@@ -4085,7 +4085,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Car2 extends CustomBase {
@@ -4104,7 +4104,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Configuration2 extends CustomBase {
@@ -4123,7 +4123,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Dummy2 extends CustomBase {
@@ -4137,7 +4137,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooBar2 extends CustomBase {
@@ -4181,7 +4181,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooBaz2 extends CustomBase {
@@ -4199,7 +4199,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooParam2 extends CustomBase {
@@ -4220,7 +4220,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Publisher2 extends CustomBase {
@@ -4270,7 +4270,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Publisher2Tests extends CustomBase {
@@ -4299,7 +4299,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Sandwich extends CustomBase {
@@ -4317,7 +4317,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
 
@@ -4364,7 +4364,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 import { Sandwich } from './Sandwich';
@@ -4407,7 +4407,7 @@ export const User2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export abstract class CustomBase {
   [Config]?: DefineConfig<{ forceObject: false }>;
@@ -4424,7 +4424,7 @@ export const CustomBaseSchema = new EntitySchema({
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=true customBaseEntityName= entitySchema=false: dump 1`] = `
 [
-  "import { BaseEntity, Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 
 @Entity()
@@ -4440,7 +4440,7 @@ export class Address2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 
 @Entity()
@@ -4504,7 +4504,7 @@ export class Author2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 extends BaseEntity {
@@ -4546,7 +4546,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { BaseEntity, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BookTag2 extends BaseEntity {
@@ -4559,7 +4559,7 @@ export class BookTag2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { Publisher2 } from './Publisher2';
@@ -4605,7 +4605,7 @@ export class Book2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 
@@ -4625,7 +4625,7 @@ export class Book2Tags extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 
 @Entity()
@@ -4642,7 +4642,7 @@ export class CarOwner2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Car2 extends BaseEntity {
@@ -4662,7 +4662,7 @@ export class Car2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Test2 } from './Test2';
 
 @Entity()
@@ -4681,7 +4681,7 @@ export class Configuration2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Dummy2 extends BaseEntity {
@@ -4691,7 +4691,7 @@ export class Dummy2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { FooBaz2 } from './FooBaz2';
 
 @Entity()
@@ -4729,7 +4729,7 @@ export class FooBar2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class FooBaz2 extends BaseEntity {
@@ -4745,7 +4745,7 @@ export class FooBaz2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -4768,7 +4768,7 @@ export class FooParam2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Publisher2 extends BaseEntity {
@@ -4822,7 +4822,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
 
@@ -4840,7 +4840,7 @@ export class Publisher2Tests extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sandwich extends BaseEntity {
@@ -4856,7 +4856,7 @@ export class Sandwich extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
 
@@ -4889,7 +4889,7 @@ export class Test2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -4923,7 +4923,7 @@ export class User2 extends BaseEntity {
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=true customBaseEntityName= entitySchema=true: dump 1`] = `
 [
-  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Address2 extends BaseEntity {
   [PrimaryKeyProp]?: 'author';
@@ -4945,7 +4945,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class Author2 extends BaseEntity {
   id!: number;
@@ -5021,7 +5021,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BaseUser2 extends BaseEntity {
   id!: number;
@@ -5068,7 +5068,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BookTag2 extends BaseEntity {
   id!: bigint;
@@ -5083,7 +5083,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BookTag2 } from './BookTag2';
 
 export class Book2 extends BaseEntity {
@@ -5130,7 +5130,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Book2Tags extends BaseEntity {
   [PrimaryKeyProp]?: 'order';
@@ -5159,7 +5159,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CarOwner2 extends BaseEntity {
   id!: number;
@@ -5176,7 +5176,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Car2 extends BaseEntity {
   [PrimaryKeyProp]?: ['name', 'year'];
@@ -5194,7 +5194,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Configuration2 extends BaseEntity {
   [PrimaryKeyProp]?: ['property', 'test'];
@@ -5212,7 +5212,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Dummy2 extends BaseEntity {
   id!: number;
@@ -5225,7 +5225,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class FooBar2 extends BaseEntity {
   id!: number;
@@ -5268,7 +5268,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class FooBaz2 extends BaseEntity {
   id!: number;
@@ -5285,7 +5285,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class FooParam2 extends BaseEntity {
   [PrimaryKeyProp]?: ['bar', 'baz'];
@@ -5305,7 +5305,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class Publisher2 extends BaseEntity {
   id!: number;
@@ -5354,7 +5354,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Publisher2Tests extends BaseEntity {
   id!: number;
@@ -5382,7 +5382,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Sandwich extends BaseEntity {
   id!: number;
@@ -5399,7 +5399,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 
 export class Test2 extends BaseEntity {
@@ -5445,7 +5445,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -5492,7 +5492,7 @@ export const User2Schema = new EntitySchema({
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=true customBaseEntityName=BaseEntity entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseEntity } from './BaseEntity';
 
@@ -5509,7 +5509,7 @@ export class Address2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 
@@ -5574,7 +5574,7 @@ export class Author2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -5617,7 +5617,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -5631,7 +5631,7 @@ export class BookTag2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseEntity } from './BaseEntity';
 import { BookTag2 } from './BookTag2';
@@ -5678,7 +5678,7 @@ export class Book2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
@@ -5699,7 +5699,7 @@ export class Book2Tags extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 
@@ -5717,7 +5717,7 @@ export class CarOwner2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -5738,7 +5738,7 @@ export class Car2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Test2 } from './Test2';
 
@@ -5758,7 +5758,7 @@ export class Configuration2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -5769,7 +5769,7 @@ export class Dummy2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBaz2 } from './FooBaz2';
 
@@ -5808,7 +5808,7 @@ export class FooBar2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -5825,7 +5825,7 @@ export class FooBaz2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -5849,7 +5849,7 @@ export class FooParam2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -5904,7 +5904,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -5923,7 +5923,7 @@ export class Publisher2Tests extends BaseEntity {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -5940,7 +5940,7 @@ export class Sandwich extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
@@ -5974,7 +5974,7 @@ export class Test2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -6004,7 +6004,7 @@ export class User2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity as MikroBaseEntity, Config, DefineConfig } from '@mikro-orm/core';
+  "import { BaseEntity as MikroBaseEntity, Config, DefineConfig } from '@yandjin-mikro-orm/core';
 
 export abstract class BaseEntity extends MikroBaseEntity {
 
@@ -6017,7 +6017,7 @@ export abstract class BaseEntity extends MikroBaseEntity {
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=true customBaseEntityName=BaseEntity entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Address2 extends BaseEntity {
@@ -6040,7 +6040,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Author2 extends BaseEntity {
@@ -6117,7 +6117,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class BaseUser2 extends BaseEntity {
@@ -6165,7 +6165,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class BookTag2 extends BaseEntity {
@@ -6181,7 +6181,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { BookTag2 } from './BookTag2';
 
@@ -6229,7 +6229,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Book2Tags extends BaseEntity {
@@ -6259,7 +6259,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class CarOwner2 extends BaseEntity {
@@ -6277,7 +6277,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Car2 extends BaseEntity {
@@ -6296,7 +6296,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Configuration2 extends BaseEntity {
@@ -6315,7 +6315,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Dummy2 extends BaseEntity {
@@ -6329,7 +6329,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooBar2 extends BaseEntity {
@@ -6373,7 +6373,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooBaz2 extends BaseEntity {
@@ -6391,7 +6391,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooParam2 extends BaseEntity {
@@ -6412,7 +6412,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Publisher2 extends BaseEntity {
@@ -6462,7 +6462,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Publisher2Tests extends BaseEntity {
@@ -6491,7 +6491,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Sandwich extends BaseEntity {
@@ -6509,7 +6509,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBar2 } from './FooBar2';
 
@@ -6556,7 +6556,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -6599,7 +6599,7 @@ export const User2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity as MikroBaseEntity, Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity as MikroBaseEntity, Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export abstract class BaseEntity extends MikroBaseEntity {
   [Config]?: DefineConfig<{ forceObject: false }>;
@@ -6616,7 +6616,7 @@ export const BaseEntitySchema = new EntitySchema({
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=true customBaseEntityName=BaseUser2 entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseUser2 } from './BaseUser2';
 
@@ -6633,7 +6633,7 @@ export class Address2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 
@@ -6698,7 +6698,7 @@ export class Author2 extends BaseUser2 {
 
 }
 ",
-  "import { BaseEntity, Config, DefineConfig, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { BaseEntity, Config, DefineConfig, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 extends BaseEntity {
@@ -6743,7 +6743,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -6757,7 +6757,7 @@ export class BookTag2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseUser2 } from './BaseUser2';
 import { BookTag2 } from './BookTag2';
@@ -6804,7 +6804,7 @@ export class Book2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
@@ -6825,7 +6825,7 @@ export class Book2Tags extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 
@@ -6843,7 +6843,7 @@ export class CarOwner2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -6864,7 +6864,7 @@ export class Car2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Test2 } from './Test2';
 
@@ -6884,7 +6884,7 @@ export class Configuration2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -6895,7 +6895,7 @@ export class Dummy2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -6934,7 +6934,7 @@ export class FooBar2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -6951,7 +6951,7 @@ export class FooBaz2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -6975,7 +6975,7 @@ export class FooParam2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -7030,7 +7030,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -7049,7 +7049,7 @@ export class Publisher2Tests extends BaseUser2 {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -7066,7 +7066,7 @@ export class Sandwich extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
@@ -7100,7 +7100,7 @@ export class Test2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -7135,7 +7135,7 @@ export class User2 extends BaseUser2 {
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=true customBaseEntityName=BaseUser2 entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Address2 extends BaseUser2 {
@@ -7158,7 +7158,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Author2 extends BaseUser2 {
@@ -7235,7 +7235,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BaseUser2 extends BaseEntity {
   [Config]?: DefineConfig<{ forceObject: false }>;
@@ -7283,7 +7283,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class BookTag2 extends BaseUser2 {
@@ -7299,7 +7299,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { BookTag2 } from './BookTag2';
 
@@ -7347,7 +7347,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Book2Tags extends BaseUser2 {
@@ -7377,7 +7377,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class CarOwner2 extends BaseUser2 {
@@ -7395,7 +7395,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Car2 extends BaseUser2 {
@@ -7414,7 +7414,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Configuration2 extends BaseUser2 {
@@ -7433,7 +7433,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Dummy2 extends BaseUser2 {
@@ -7447,7 +7447,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooBar2 extends BaseUser2 {
@@ -7491,7 +7491,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooBaz2 extends BaseUser2 {
@@ -7509,7 +7509,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooParam2 extends BaseUser2 {
@@ -7530,7 +7530,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Publisher2 extends BaseUser2 {
@@ -7580,7 +7580,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Publisher2Tests extends BaseUser2 {
@@ -7609,7 +7609,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Sandwich extends BaseUser2 {
@@ -7627,7 +7627,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBar2 } from './FooBar2';
 
@@ -7674,7 +7674,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -7722,7 +7722,7 @@ export const User2Schema = new EntitySchema({
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=true customBaseEntityName=CustomBase entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { CustomBase } from './CustomBase';
 
@@ -7739,7 +7739,7 @@ export class Address2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { CustomBase } from './CustomBase';
 
@@ -7804,7 +7804,7 @@ export class Author2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -7847,7 +7847,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -7861,7 +7861,7 @@ export class BookTag2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
@@ -7908,7 +7908,7 @@ export class Book2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
@@ -7929,7 +7929,7 @@ export class Book2Tags extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 
@@ -7947,7 +7947,7 @@ export class CarOwner2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -7968,7 +7968,7 @@ export class Car2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { Test2 } from './Test2';
 
@@ -7988,7 +7988,7 @@ export class Configuration2 extends CustomBase {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -7999,7 +7999,7 @@ export class Dummy2 extends CustomBase {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBaz2 } from './FooBaz2';
 
@@ -8038,7 +8038,7 @@ export class FooBar2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -8055,7 +8055,7 @@ export class FooBaz2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -8079,7 +8079,7 @@ export class FooParam2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -8134,7 +8134,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -8153,7 +8153,7 @@ export class Publisher2Tests extends CustomBase {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -8170,7 +8170,7 @@ export class Sandwich extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
@@ -8204,7 +8204,7 @@ export class Test2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 import { Sandwich } from './Sandwich';
@@ -8234,7 +8234,7 @@ export class User2 extends CustomBase {
 
 }
 ",
-  "import { BaseEntity, Config, DefineConfig } from '@mikro-orm/core';
+  "import { BaseEntity, Config, DefineConfig } from '@yandjin-mikro-orm/core';
 
 export abstract class CustomBase extends BaseEntity {
 
@@ -8247,7 +8247,7 @@ export abstract class CustomBase extends BaseEntity {
 
 exports[`CustomBase forceObject=false useCoreBaseEntity=true customBaseEntityName=CustomBase entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Address2 extends CustomBase {
@@ -8270,7 +8270,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Author2 extends CustomBase {
@@ -8347,7 +8347,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class BaseUser2 extends CustomBase {
@@ -8395,7 +8395,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class BookTag2 extends CustomBase {
@@ -8411,7 +8411,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
 
@@ -8459,7 +8459,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Book2Tags extends CustomBase {
@@ -8489,7 +8489,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class CarOwner2 extends CustomBase {
@@ -8507,7 +8507,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Car2 extends CustomBase {
@@ -8526,7 +8526,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Configuration2 extends CustomBase {
@@ -8545,7 +8545,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Dummy2 extends CustomBase {
@@ -8559,7 +8559,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooBar2 extends CustomBase {
@@ -8603,7 +8603,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooBaz2 extends CustomBase {
@@ -8621,7 +8621,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooParam2 extends CustomBase {
@@ -8642,7 +8642,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Publisher2 extends CustomBase {
@@ -8692,7 +8692,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Publisher2Tests extends CustomBase {
@@ -8721,7 +8721,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Sandwich extends CustomBase {
@@ -8739,7 +8739,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
 
@@ -8786,7 +8786,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 import { Sandwich } from './Sandwich';
@@ -8829,7 +8829,7 @@ export const User2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export abstract class CustomBase extends BaseEntity {
   [Config]?: DefineConfig<{ forceObject: false }>;
@@ -8846,7 +8846,7 @@ export const CustomBaseSchema = new EntitySchema({
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=false customBaseEntityName= entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 
 @Entity()
@@ -8862,7 +8862,7 @@ export class Address2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 
 @Entity()
@@ -8926,7 +8926,7 @@ export class Author2 {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 {
@@ -8968,7 +8968,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BookTag2 {
@@ -8981,7 +8981,7 @@ export class BookTag2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { Publisher2 } from './Publisher2';
@@ -9027,7 +9027,7 @@ export class Book2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 
@@ -9047,7 +9047,7 @@ export class Book2Tags {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 
 @Entity()
@@ -9064,7 +9064,7 @@ export class CarOwner2 {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Car2 {
@@ -9084,7 +9084,7 @@ export class Car2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Test2 } from './Test2';
 
 @Entity()
@@ -9103,7 +9103,7 @@ export class Configuration2 {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Dummy2 {
@@ -9113,7 +9113,7 @@ export class Dummy2 {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { FooBaz2 } from './FooBaz2';
 
 @Entity()
@@ -9151,7 +9151,7 @@ export class FooBar2 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class FooBaz2 {
@@ -9167,7 +9167,7 @@ export class FooBaz2 {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -9190,7 +9190,7 @@ export class FooParam2 {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Publisher2 {
@@ -9244,7 +9244,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
 
@@ -9262,7 +9262,7 @@ export class Publisher2Tests {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sandwich {
@@ -9278,7 +9278,7 @@ export class Sandwich {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
 
@@ -9311,7 +9311,7 @@ export class Test2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -9345,7 +9345,7 @@ export class User2 {
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=false customBaseEntityName= entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Address2 {
   [PrimaryKeyProp]?: 'author';
@@ -9367,7 +9367,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class Author2 {
   id!: number;
@@ -9443,7 +9443,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BaseUser2 {
   id!: number;
@@ -9490,7 +9490,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BookTag2 {
   id!: bigint;
@@ -9505,7 +9505,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BookTag2 } from './BookTag2';
 
 export class Book2 {
@@ -9552,7 +9552,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Book2Tags {
   [PrimaryKeyProp]?: 'order';
@@ -9581,7 +9581,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CarOwner2 {
   id!: number;
@@ -9598,7 +9598,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Car2 {
   [PrimaryKeyProp]?: ['name', 'year'];
@@ -9616,7 +9616,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Configuration2 {
   [PrimaryKeyProp]?: ['property', 'test'];
@@ -9634,7 +9634,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Dummy2 {
   id!: number;
@@ -9647,7 +9647,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class FooBar2 {
   id!: number;
@@ -9690,7 +9690,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class FooBaz2 {
   id!: number;
@@ -9707,7 +9707,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class FooParam2 {
   [PrimaryKeyProp]?: ['bar', 'baz'];
@@ -9727,7 +9727,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class Publisher2 {
   id!: number;
@@ -9776,7 +9776,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Publisher2Tests {
   id!: number;
@@ -9804,7 +9804,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Sandwich {
   id!: number;
@@ -9821,7 +9821,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 
 export class Test2 {
@@ -9867,7 +9867,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -9914,7 +9914,7 @@ export const User2Schema = new EntitySchema({
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=false customBaseEntityName=BaseEntity entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseEntity } from './BaseEntity';
 
@@ -9931,7 +9931,7 @@ export class Address2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 
@@ -9996,7 +9996,7 @@ export class Author2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -10039,7 +10039,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -10053,7 +10053,7 @@ export class BookTag2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseEntity } from './BaseEntity';
 import { BookTag2 } from './BookTag2';
@@ -10100,7 +10100,7 @@ export class Book2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
@@ -10121,7 +10121,7 @@ export class Book2Tags extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 
@@ -10139,7 +10139,7 @@ export class CarOwner2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -10160,7 +10160,7 @@ export class Car2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Test2 } from './Test2';
 
@@ -10180,7 +10180,7 @@ export class Configuration2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -10191,7 +10191,7 @@ export class Dummy2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBaz2 } from './FooBaz2';
 
@@ -10230,7 +10230,7 @@ export class FooBar2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -10247,7 +10247,7 @@ export class FooBaz2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -10271,7 +10271,7 @@ export class FooParam2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -10326,7 +10326,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -10345,7 +10345,7 @@ export class Publisher2Tests extends BaseEntity {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -10362,7 +10362,7 @@ export class Sandwich extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
@@ -10396,7 +10396,7 @@ export class Test2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -10426,7 +10426,7 @@ export class User2 extends BaseEntity {
 
 }
 ",
-  "import { Config, DefineConfig } from '@mikro-orm/core';
+  "import { Config, DefineConfig } from '@yandjin-mikro-orm/core';
 
 export abstract class BaseEntity {
 
@@ -10439,7 +10439,7 @@ export abstract class BaseEntity {
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=false customBaseEntityName=BaseEntity entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Address2 extends BaseEntity {
@@ -10462,7 +10462,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Author2 extends BaseEntity {
@@ -10539,7 +10539,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class BaseUser2 extends BaseEntity {
@@ -10587,7 +10587,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class BookTag2 extends BaseEntity {
@@ -10603,7 +10603,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { BookTag2 } from './BookTag2';
 
@@ -10651,7 +10651,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Book2Tags extends BaseEntity {
@@ -10681,7 +10681,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class CarOwner2 extends BaseEntity {
@@ -10699,7 +10699,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Car2 extends BaseEntity {
@@ -10718,7 +10718,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Configuration2 extends BaseEntity {
@@ -10737,7 +10737,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Dummy2 extends BaseEntity {
@@ -10751,7 +10751,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooBar2 extends BaseEntity {
@@ -10795,7 +10795,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooBaz2 extends BaseEntity {
@@ -10813,7 +10813,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooParam2 extends BaseEntity {
@@ -10834,7 +10834,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Publisher2 extends BaseEntity {
@@ -10884,7 +10884,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Publisher2Tests extends BaseEntity {
@@ -10913,7 +10913,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Sandwich extends BaseEntity {
@@ -10931,7 +10931,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBar2 } from './FooBar2';
 
@@ -10978,7 +10978,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -11021,7 +11021,7 @@ export const User2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export abstract class BaseEntity {
   [Config]?: DefineConfig<{ forceObject: true }>;
@@ -11038,7 +11038,7 @@ export const BaseEntitySchema = new EntitySchema({
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=false customBaseEntityName=BaseUser2 entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseUser2 } from './BaseUser2';
 
@@ -11055,7 +11055,7 @@ export class Address2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 
@@ -11120,7 +11120,7 @@ export class Author2 extends BaseUser2 {
 
 }
 ",
-  "import { Config, DefineConfig, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Config, DefineConfig, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 {
@@ -11165,7 +11165,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -11179,7 +11179,7 @@ export class BookTag2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseUser2 } from './BaseUser2';
 import { BookTag2 } from './BookTag2';
@@ -11226,7 +11226,7 @@ export class Book2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
@@ -11247,7 +11247,7 @@ export class Book2Tags extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 
@@ -11265,7 +11265,7 @@ export class CarOwner2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -11286,7 +11286,7 @@ export class Car2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Test2 } from './Test2';
 
@@ -11306,7 +11306,7 @@ export class Configuration2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -11317,7 +11317,7 @@ export class Dummy2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -11356,7 +11356,7 @@ export class FooBar2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -11373,7 +11373,7 @@ export class FooBaz2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -11397,7 +11397,7 @@ export class FooParam2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -11452,7 +11452,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -11471,7 +11471,7 @@ export class Publisher2Tests extends BaseUser2 {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -11488,7 +11488,7 @@ export class Sandwich extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
@@ -11522,7 +11522,7 @@ export class Test2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -11557,7 +11557,7 @@ export class User2 extends BaseUser2 {
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=false customBaseEntityName=BaseUser2 entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Address2 extends BaseUser2 {
@@ -11580,7 +11580,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Author2 extends BaseUser2 {
@@ -11657,7 +11657,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BaseUser2 {
   [Config]?: DefineConfig<{ forceObject: true }>;
@@ -11705,7 +11705,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class BookTag2 extends BaseUser2 {
@@ -11721,7 +11721,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { BookTag2 } from './BookTag2';
 
@@ -11769,7 +11769,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Book2Tags extends BaseUser2 {
@@ -11799,7 +11799,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class CarOwner2 extends BaseUser2 {
@@ -11817,7 +11817,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Car2 extends BaseUser2 {
@@ -11836,7 +11836,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Configuration2 extends BaseUser2 {
@@ -11855,7 +11855,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Dummy2 extends BaseUser2 {
@@ -11869,7 +11869,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooBar2 extends BaseUser2 {
@@ -11913,7 +11913,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooBaz2 extends BaseUser2 {
@@ -11931,7 +11931,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooParam2 extends BaseUser2 {
@@ -11952,7 +11952,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Publisher2 extends BaseUser2 {
@@ -12002,7 +12002,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Publisher2Tests extends BaseUser2 {
@@ -12031,7 +12031,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Sandwich extends BaseUser2 {
@@ -12049,7 +12049,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBar2 } from './FooBar2';
 
@@ -12096,7 +12096,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -12144,7 +12144,7 @@ export const User2Schema = new EntitySchema({
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=false customBaseEntityName=CustomBase entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { CustomBase } from './CustomBase';
 
@@ -12161,7 +12161,7 @@ export class Address2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { CustomBase } from './CustomBase';
 
@@ -12226,7 +12226,7 @@ export class Author2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -12269,7 +12269,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -12283,7 +12283,7 @@ export class BookTag2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
@@ -12330,7 +12330,7 @@ export class Book2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
@@ -12351,7 +12351,7 @@ export class Book2Tags extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 
@@ -12369,7 +12369,7 @@ export class CarOwner2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -12390,7 +12390,7 @@ export class Car2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { Test2 } from './Test2';
 
@@ -12410,7 +12410,7 @@ export class Configuration2 extends CustomBase {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -12421,7 +12421,7 @@ export class Dummy2 extends CustomBase {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBaz2 } from './FooBaz2';
 
@@ -12460,7 +12460,7 @@ export class FooBar2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -12477,7 +12477,7 @@ export class FooBaz2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -12501,7 +12501,7 @@ export class FooParam2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -12556,7 +12556,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -12575,7 +12575,7 @@ export class Publisher2Tests extends CustomBase {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -12592,7 +12592,7 @@ export class Sandwich extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
@@ -12626,7 +12626,7 @@ export class Test2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 import { Sandwich } from './Sandwich';
@@ -12656,7 +12656,7 @@ export class User2 extends CustomBase {
 
 }
 ",
-  "import { Config, DefineConfig } from '@mikro-orm/core';
+  "import { Config, DefineConfig } from '@yandjin-mikro-orm/core';
 
 export abstract class CustomBase {
 
@@ -12669,7 +12669,7 @@ export abstract class CustomBase {
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=false customBaseEntityName=CustomBase entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Address2 extends CustomBase {
@@ -12692,7 +12692,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Author2 extends CustomBase {
@@ -12769,7 +12769,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class BaseUser2 extends CustomBase {
@@ -12817,7 +12817,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class BookTag2 extends CustomBase {
@@ -12833,7 +12833,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
 
@@ -12881,7 +12881,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Book2Tags extends CustomBase {
@@ -12911,7 +12911,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class CarOwner2 extends CustomBase {
@@ -12929,7 +12929,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Car2 extends CustomBase {
@@ -12948,7 +12948,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Configuration2 extends CustomBase {
@@ -12967,7 +12967,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Dummy2 extends CustomBase {
@@ -12981,7 +12981,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooBar2 extends CustomBase {
@@ -13025,7 +13025,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooBaz2 extends CustomBase {
@@ -13043,7 +13043,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooParam2 extends CustomBase {
@@ -13064,7 +13064,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Publisher2 extends CustomBase {
@@ -13114,7 +13114,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Publisher2Tests extends CustomBase {
@@ -13143,7 +13143,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Sandwich extends CustomBase {
@@ -13161,7 +13161,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
 
@@ -13208,7 +13208,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 import { Sandwich } from './Sandwich';
@@ -13251,7 +13251,7 @@ export const User2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export abstract class CustomBase {
   [Config]?: DefineConfig<{ forceObject: true }>;
@@ -13268,7 +13268,7 @@ export const CustomBaseSchema = new EntitySchema({
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=true customBaseEntityName= entitySchema=false: dump 1`] = `
 [
-  "import { BaseEntity, Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 
 @Entity()
@@ -13284,7 +13284,7 @@ export class Address2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 
 @Entity()
@@ -13348,7 +13348,7 @@ export class Author2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 extends BaseEntity {
@@ -13390,7 +13390,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { BaseEntity, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BookTag2 extends BaseEntity {
@@ -13403,7 +13403,7 @@ export class BookTag2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { Publisher2 } from './Publisher2';
@@ -13449,7 +13449,7 @@ export class Book2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 
@@ -13469,7 +13469,7 @@ export class Book2Tags extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 
 @Entity()
@@ -13486,7 +13486,7 @@ export class CarOwner2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Car2 extends BaseEntity {
@@ -13506,7 +13506,7 @@ export class Car2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Test2 } from './Test2';
 
 @Entity()
@@ -13525,7 +13525,7 @@ export class Configuration2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Dummy2 extends BaseEntity {
@@ -13535,7 +13535,7 @@ export class Dummy2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { FooBaz2 } from './FooBaz2';
 
 @Entity()
@@ -13573,7 +13573,7 @@ export class FooBar2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class FooBaz2 extends BaseEntity {
@@ -13589,7 +13589,7 @@ export class FooBaz2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -13612,7 +13612,7 @@ export class FooParam2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Publisher2 extends BaseEntity {
@@ -13666,7 +13666,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { BaseEntity, Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
 
@@ -13684,7 +13684,7 @@ export class Publisher2Tests extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class Sandwich extends BaseEntity {
@@ -13700,7 +13700,7 @@ export class Sandwich extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
 
@@ -13733,7 +13733,7 @@ export class Test2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity, Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -13767,7 +13767,7 @@ export class User2 extends BaseEntity {
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=true customBaseEntityName= entitySchema=true: dump 1`] = `
 [
-  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Address2 extends BaseEntity {
   [PrimaryKeyProp]?: 'author';
@@ -13789,7 +13789,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class Author2 extends BaseEntity {
   id!: number;
@@ -13865,7 +13865,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BaseUser2 extends BaseEntity {
   id!: number;
@@ -13912,7 +13912,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BookTag2 extends BaseEntity {
   id!: bigint;
@@ -13927,7 +13927,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BookTag2 } from './BookTag2';
 
 export class Book2 extends BaseEntity {
@@ -13974,7 +13974,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Book2Tags extends BaseEntity {
   [PrimaryKeyProp]?: 'order';
@@ -14003,7 +14003,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class CarOwner2 extends BaseEntity {
   id!: number;
@@ -14020,7 +14020,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Car2 extends BaseEntity {
   [PrimaryKeyProp]?: ['name', 'year'];
@@ -14038,7 +14038,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class Configuration2 extends BaseEntity {
   [PrimaryKeyProp]?: ['property', 'test'];
@@ -14056,7 +14056,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Dummy2 extends BaseEntity {
   id!: number;
@@ -14069,7 +14069,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class FooBar2 extends BaseEntity {
   id!: number;
@@ -14112,7 +14112,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class FooBaz2 extends BaseEntity {
   id!: number;
@@ -14129,7 +14129,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 
 export class FooParam2 extends BaseEntity {
   [PrimaryKeyProp]?: ['bar', 'baz'];
@@ -14149,7 +14149,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 
 export class Publisher2 extends BaseEntity {
   id!: number;
@@ -14198,7 +14198,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Publisher2Tests extends BaseEntity {
   id!: number;
@@ -14226,7 +14226,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class Sandwich extends BaseEntity {
   id!: number;
@@ -14243,7 +14243,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { FooBar2 } from './FooBar2';
 
 export class Test2 extends BaseEntity {
@@ -14289,7 +14289,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { BaseEntity, Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
 
@@ -14336,7 +14336,7 @@ export const User2Schema = new EntitySchema({
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=true customBaseEntityName=BaseEntity entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseEntity } from './BaseEntity';
 
@@ -14353,7 +14353,7 @@ export class Address2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 
@@ -14418,7 +14418,7 @@ export class Author2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -14461,7 +14461,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -14475,7 +14475,7 @@ export class BookTag2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseEntity } from './BaseEntity';
 import { BookTag2 } from './BookTag2';
@@ -14522,7 +14522,7 @@ export class Book2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
@@ -14543,7 +14543,7 @@ export class Book2Tags extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 
@@ -14561,7 +14561,7 @@ export class CarOwner2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -14582,7 +14582,7 @@ export class Car2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Test2 } from './Test2';
 
@@ -14602,7 +14602,7 @@ export class Configuration2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -14613,7 +14613,7 @@ export class Dummy2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBaz2 } from './FooBaz2';
 
@@ -14652,7 +14652,7 @@ export class FooBar2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -14669,7 +14669,7 @@ export class FooBaz2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -14693,7 +14693,7 @@ export class FooParam2 extends BaseEntity {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -14748,7 +14748,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -14767,7 +14767,7 @@ export class Publisher2Tests extends BaseEntity {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
@@ -14784,7 +14784,7 @@ export class Sandwich extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
@@ -14818,7 +14818,7 @@ export class Test2 extends BaseEntity {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -14848,7 +14848,7 @@ export class User2 extends BaseEntity {
 
 }
 ",
-  "import { BaseEntity as MikroBaseEntity, Config, DefineConfig } from '@mikro-orm/core';
+  "import { BaseEntity as MikroBaseEntity, Config, DefineConfig } from '@yandjin-mikro-orm/core';
 
 export abstract class BaseEntity extends MikroBaseEntity {
 
@@ -14861,7 +14861,7 @@ export abstract class BaseEntity extends MikroBaseEntity {
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=true customBaseEntityName=BaseEntity entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Address2 extends BaseEntity {
@@ -14884,7 +14884,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Author2 extends BaseEntity {
@@ -14961,7 +14961,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class BaseUser2 extends BaseEntity {
@@ -15009,7 +15009,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class BookTag2 extends BaseEntity {
@@ -15025,7 +15025,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { BookTag2 } from './BookTag2';
 
@@ -15073,7 +15073,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Book2Tags extends BaseEntity {
@@ -15103,7 +15103,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class CarOwner2 extends BaseEntity {
@@ -15121,7 +15121,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Car2 extends BaseEntity {
@@ -15140,7 +15140,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Configuration2 extends BaseEntity {
@@ -15159,7 +15159,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Dummy2 extends BaseEntity {
@@ -15173,7 +15173,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooBar2 extends BaseEntity {
@@ -15217,7 +15217,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooBaz2 extends BaseEntity {
@@ -15235,7 +15235,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class FooParam2 extends BaseEntity {
@@ -15256,7 +15256,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Publisher2 extends BaseEntity {
@@ -15306,7 +15306,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Publisher2Tests extends BaseEntity {
@@ -15335,7 +15335,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 
 export class Sandwich extends BaseEntity {
@@ -15353,7 +15353,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { FooBar2 } from './FooBar2';
 
@@ -15400,7 +15400,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseEntity } from './BaseEntity';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -15443,7 +15443,7 @@ export const User2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity as MikroBaseEntity, Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity as MikroBaseEntity, Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export abstract class BaseEntity extends MikroBaseEntity {
   [Config]?: DefineConfig<{ forceObject: true }>;
@@ -15460,7 +15460,7 @@ export const BaseEntitySchema = new EntitySchema({
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=true customBaseEntityName=BaseUser2 entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseUser2 } from './BaseUser2';
 
@@ -15477,7 +15477,7 @@ export class Address2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 
@@ -15542,7 +15542,7 @@ export class Author2 extends BaseUser2 {
 
 }
 ",
-  "import { BaseEntity, Config, DefineConfig, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { BaseEntity, Config, DefineConfig, Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 
 @Entity()
 export class BaseUser2 extends BaseEntity {
@@ -15587,7 +15587,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -15601,7 +15601,7 @@ export class BookTag2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BaseUser2 } from './BaseUser2';
 import { BookTag2 } from './BookTag2';
@@ -15648,7 +15648,7 @@ export class Book2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
@@ -15669,7 +15669,7 @@ export class Book2Tags extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 
@@ -15687,7 +15687,7 @@ export class CarOwner2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -15708,7 +15708,7 @@ export class Car2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Test2 } from './Test2';
 
@@ -15728,7 +15728,7 @@ export class Configuration2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -15739,7 +15739,7 @@ export class Dummy2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBaz2 } from './FooBaz2';
 
@@ -15778,7 +15778,7 @@ export class FooBar2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -15795,7 +15795,7 @@ export class FooBaz2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -15819,7 +15819,7 @@ export class FooParam2 extends BaseUser2 {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -15874,7 +15874,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -15893,7 +15893,7 @@ export class Publisher2Tests extends BaseUser2 {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 @Entity()
@@ -15910,7 +15910,7 @@ export class Sandwich extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Book2 } from './Book2';
 import { FooBar2 } from './FooBar2';
@@ -15944,7 +15944,7 @@ export class Test2 extends BaseUser2 {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -15979,7 +15979,7 @@ export class User2 extends BaseUser2 {
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=true customBaseEntityName=BaseUser2 entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Address2 extends BaseUser2 {
@@ -16002,7 +16002,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Author2 extends BaseUser2 {
@@ -16079,7 +16079,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export class BaseUser2 extends BaseEntity {
   [Config]?: DefineConfig<{ forceObject: true }>;
@@ -16127,7 +16127,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class BookTag2 extends BaseUser2 {
@@ -16143,7 +16143,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { BookTag2 } from './BookTag2';
 
@@ -16191,7 +16191,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Book2Tags extends BaseUser2 {
@@ -16221,7 +16221,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class CarOwner2 extends BaseUser2 {
@@ -16239,7 +16239,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Car2 extends BaseUser2 {
@@ -16258,7 +16258,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Configuration2 extends BaseUser2 {
@@ -16277,7 +16277,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Dummy2 extends BaseUser2 {
@@ -16291,7 +16291,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooBar2 extends BaseUser2 {
@@ -16335,7 +16335,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooBaz2 extends BaseUser2 {
@@ -16353,7 +16353,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class FooParam2 extends BaseUser2 {
@@ -16374,7 +16374,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Publisher2 extends BaseUser2 {
@@ -16424,7 +16424,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Publisher2Tests extends BaseUser2 {
@@ -16453,7 +16453,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 
 export class Sandwich extends BaseUser2 {
@@ -16471,7 +16471,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { FooBar2 } from './FooBar2';
 
@@ -16518,7 +16518,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BaseUser2 } from './BaseUser2';
 import { Car2 } from './Car2';
 import { Sandwich } from './Sandwich';
@@ -16566,7 +16566,7 @@ export const User2Schema = new EntitySchema({
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=true customBaseEntityName=CustomBase entitySchema=false: dump 1`] = `
 [
-  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { CustomBase } from './CustomBase';
 
@@ -16583,7 +16583,7 @@ export class Address2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { CustomBase } from './CustomBase';
 
@@ -16648,7 +16648,7 @@ export class Author2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+  "import { Entity, Enum, Index, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -16691,7 +16691,7 @@ export enum BaseUser2Type {
   OWNER = 'owner',
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -16705,7 +16705,7 @@ export class BookTag2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, Index, ManyToMany, ManyToOne, Opt, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Author2 } from './Author2';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
@@ -16752,7 +16752,7 @@ export class Book2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
@@ -16773,7 +16773,7 @@ export class Book2Tags extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 
@@ -16791,7 +16791,7 @@ export class CarOwner2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, Index, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -16812,7 +16812,7 @@ export class Car2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { Test2 } from './Test2';
 
@@ -16832,7 +16832,7 @@ export class Configuration2 extends CustomBase {
 
 }
 ",
-  "import { Entity, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -16843,7 +16843,7 @@ export class Dummy2 extends CustomBase {
 
 }
 ",
-  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBaz2 } from './FooBaz2';
 
@@ -16882,7 +16882,7 @@ export class FooBar2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -16899,7 +16899,7 @@ export class FooBaz2 extends CustomBase {
 
 }
 ",
-  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, Opt, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
 import { FooBaz2 } from './FooBaz2';
@@ -16923,7 +16923,7 @@ export class FooParam2 extends CustomBase {
 
 }
 ",
-  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, Enum, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -16978,7 +16978,7 @@ export enum Publisher2Enum5 {
   A = 'a',
 }
 ",
-  "import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+  "import { Entity, ManyToOne, PrimaryKey } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { Publisher2 } from './Publisher2';
 import { Test2 } from './Test2';
@@ -16997,7 +16997,7 @@ export class Publisher2Tests extends CustomBase {
 
 }
 ",
-  "import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Entity, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 @Entity()
@@ -17014,7 +17014,7 @@ export class Sandwich extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, ManyToOne, OneToOne, Opt, PrimaryKey, Property } from '@yandjin-mikro-orm/core';
 import { Book2 } from './Book2';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
@@ -17048,7 +17048,7 @@ export class Test2 extends CustomBase {
 
 }
 ",
-  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@mikro-orm/core';
+  "import { Collection, Entity, ManyToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 import { Sandwich } from './Sandwich';
@@ -17078,7 +17078,7 @@ export class User2 extends CustomBase {
 
 }
 ",
-  "import { BaseEntity, Config, DefineConfig } from '@mikro-orm/core';
+  "import { BaseEntity, Config, DefineConfig } from '@yandjin-mikro-orm/core';
 
 export abstract class CustomBase extends BaseEntity {
 
@@ -17091,7 +17091,7 @@ export abstract class CustomBase extends BaseEntity {
 
 exports[`CustomBase forceObject=true useCoreBaseEntity=true customBaseEntityName=CustomBase entitySchema=true: dump 1`] = `
 [
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Address2 extends CustomBase {
@@ -17114,7 +17114,7 @@ export const Address2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Author2 extends CustomBase {
@@ -17191,7 +17191,7 @@ export const Author2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class BaseUser2 extends CustomBase {
@@ -17239,7 +17239,7 @@ export const BaseUser2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class BookTag2 extends CustomBase {
@@ -17255,7 +17255,7 @@ export const BookTag2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { BookTag2 } from './BookTag2';
 import { CustomBase } from './CustomBase';
 
@@ -17303,7 +17303,7 @@ export const Book2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Book2Tags extends CustomBase {
@@ -17333,7 +17333,7 @@ export const Book2TagsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class CarOwner2 extends CustomBase {
@@ -17351,7 +17351,7 @@ export const CarOwner2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Car2 extends CustomBase {
@@ -17370,7 +17370,7 @@ export const Car2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Configuration2 extends CustomBase {
@@ -17389,7 +17389,7 @@ export const Configuration2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Dummy2 extends CustomBase {
@@ -17403,7 +17403,7 @@ export const Dummy2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooBar2 extends CustomBase {
@@ -17447,7 +17447,7 @@ export const FooBar2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooBaz2 extends CustomBase {
@@ -17465,7 +17465,7 @@ export const FooBaz2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { EntitySchema, Opt, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class FooParam2 extends CustomBase {
@@ -17486,7 +17486,7 @@ export const FooParam2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema, Opt } from '@mikro-orm/core';
+  "import { EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Publisher2 extends CustomBase {
@@ -17536,7 +17536,7 @@ export const Publisher2Schema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Publisher2Tests extends CustomBase {
@@ -17565,7 +17565,7 @@ export const Publisher2TestsSchema = new EntitySchema({
   },
 });
 ",
-  "import { EntitySchema } from '@mikro-orm/core';
+  "import { EntitySchema } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 
 export class Sandwich extends CustomBase {
@@ -17583,7 +17583,7 @@ export const SandwichSchema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, Opt } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, Opt } from '@yandjin-mikro-orm/core';
 import { CustomBase } from './CustomBase';
 import { FooBar2 } from './FooBar2';
 
@@ -17630,7 +17630,7 @@ export const Test2Schema = new EntitySchema({
   },
 });
 ",
-  "import { Collection, EntitySchema, PrimaryKeyProp } from '@mikro-orm/core';
+  "import { Collection, EntitySchema, PrimaryKeyProp } from '@yandjin-mikro-orm/core';
 import { Car2 } from './Car2';
 import { CustomBase } from './CustomBase';
 import { Sandwich } from './Sandwich';
@@ -17673,7 +17673,7 @@ export const User2Schema = new EntitySchema({
   },
 });
 ",
-  "import { BaseEntity, Config, DefineConfig, EntitySchema } from '@mikro-orm/core';
+  "import { BaseEntity, Config, DefineConfig, EntitySchema } from '@yandjin-mikro-orm/core';
 
 export abstract class CustomBase extends BaseEntity {
   [Config]?: DefineConfig<{ forceObject: true }>;

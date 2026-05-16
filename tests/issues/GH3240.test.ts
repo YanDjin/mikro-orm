@@ -1,10 +1,16 @@
-import { Collection, Entity, ManyToMany, MikroORM, PrimaryKey, Property } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  MikroORM,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/sqlite";
 
-type SquadType = 'GROUND' | 'AIR';
+type SquadType = "GROUND" | "AIR";
 
 @Entity()
 class Soldier {
-
   @PrimaryKey()
   id!: number;
 
@@ -14,14 +20,12 @@ class Soldier {
   @Property()
   lastName!: string;
 
-  @ManyToMany({ entity: 'Squad' })
+  @ManyToMany({ entity: "Squad" })
   squads = new Collection<Squad>(this);
-
 }
 
 @Entity()
 class Squad {
-
   @PrimaryKey()
   id!: number;
 
@@ -34,9 +38,8 @@ class Squad {
   @Property({ nullable: true })
   disbandedAt?: Date;
 
-  @ManyToMany({ entity: 'Soldier', mappedBy: 'squads' })
+  @ManyToMany({ entity: "Soldier", mappedBy: "squads" })
   soldiers = new Collection<Soldier>(this);
-
 }
 
 let orm: MikroORM;
@@ -44,7 +47,7 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [Soldier, Squad],
-    dbName: ':memory:',
+    dbName: ":memory:",
   });
   await orm.schema.createSchema();
 });
@@ -55,13 +58,13 @@ afterAll(async () => {
 
 test(`GH issue 3240`, async () => {
   const luke = orm.em.create(Soldier, {
-    firstName: 'Luke',
-    lastName: 'Skywalker',
+    firstName: "Luke",
+    lastName: "Skywalker",
   });
 
   const leia = orm.em.create(Soldier, {
-    firstName: 'Leia',
-    lastName: 'Organa',
+    firstName: "Leia",
+    lastName: "Organa",
   });
 
   await orm.em.persistAndFlush([luke, leia]);
@@ -70,7 +73,7 @@ test(`GH issue 3240`, async () => {
   const soldiers = await orm.em.find(Soldier, {});
 
   const squad = orm.em.create(Squad, {
-    type: 'AIR',
+    type: "AIR",
     formedAt: new Date(),
     soldiers,
   });
@@ -80,8 +83,8 @@ test(`GH issue 3240`, async () => {
 
   const fetchedSquad = await orm.em.findOneOrFail(
     Squad,
-    { type: 'AIR' },
-    { populate: ['soldiers'] },
+    { type: "AIR" },
+    { populate: ["soldiers"] },
   );
   expect(fetchedSquad.soldiers).toHaveLength(2);
 

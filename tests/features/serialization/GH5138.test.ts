@@ -1,16 +1,21 @@
-import { Collection, Entity, ManyToMany, ManyToOne, MikroORM, PrimaryKey, wrap } from '@mikro-orm/sqlite';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  MikroORM,
+  PrimaryKey,
+  wrap,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Entity()
 class School {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Entity()
 class User {
-
   @PrimaryKey()
   id!: number;
 
@@ -22,29 +27,24 @@ class User {
 
   @ManyToOne(() => School, { nullable: true })
   school?: School;
-
 }
 
 @Entity()
 class Role {
-
   @PrimaryKey()
   id!: number;
 
-  @ManyToMany(() => User, u => u.roles)
+  @ManyToMany(() => User, (u) => u.roles)
   users = new Collection<User>(this);
-
 }
 
 @Entity()
 class UserRole {
-
-  @ManyToOne(() => User, { primary: true, deleteRule: 'cascade' })
+  @ManyToOne(() => User, { primary: true, deleteRule: "cascade" })
   user!: User;
 
-  @ManyToOne(() => Role, { primary: true, deleteRule: 'cascade' })
+  @ManyToOne(() => Role, { primary: true, deleteRule: "cascade" })
   role!: Role;
-
 }
 
 let orm: MikroORM;
@@ -52,14 +52,14 @@ let orm: MikroORM;
 beforeAll(async () => {
   orm = await MikroORM.init({
     entities: [User],
-    dbName: ':memory:',
+    dbName: ":memory:",
     ensureDatabase: { create: true },
   });
 });
 
 afterAll(() => orm.close());
 
-test('lazy em.populate on m:n', async () => {
+test("lazy em.populate on m:n", async () => {
   const a = orm.em.create(User, {
     id: 1,
     roles: [{}, {}],
@@ -69,8 +69,12 @@ test('lazy em.populate on m:n', async () => {
   await orm.em.flush();
   orm.em.clear();
 
-  const user = await orm.em.findOneOrFail(User, { id: 1 }, { populate: ['school'] });
-  await orm.em.populate(user, ['roles']);
+  const user = await orm.em.findOneOrFail(
+    User,
+    { id: 1 },
+    { populate: ["school"] },
+  );
+  await orm.em.populate(user, ["roles"]);
   const dto = wrap(user).toObject();
   expect(dto).toEqual({
     id: 1,

@@ -1,18 +1,15 @@
-import { Entity, ManyToOne, PrimaryKey, wrap } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
-import { mockLogger } from '../../helpers';
+import { Entity, ManyToOne, PrimaryKey, wrap } from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
+import { mockLogger } from "../../helpers";
 
 @Entity()
 class Author {
-
   @PrimaryKey()
   id!: bigint;
-
 }
 
 @Entity()
 class Post {
-
   @PrimaryKey()
   id!: number;
 
@@ -22,7 +19,6 @@ class Post {
   constructor(author: Author) {
     this.author = author;
   }
-
 }
 
 let orm: MikroORM;
@@ -30,7 +26,7 @@ let postId: number;
 
 beforeAll(async () => {
   orm = await MikroORM.init({
-    dbName: 'mikro_orm_4249',
+    dbName: "mikro_orm_4249",
     port: 3308,
     entities: [Author, Post],
   });
@@ -48,7 +44,7 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('4249', async () => {
+test("4249", async () => {
   const em = orm.em.fork();
   const post = await em.findOneOrFail(Post, postId);
   await wrap(post.author).init();

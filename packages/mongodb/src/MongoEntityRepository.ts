@@ -1,11 +1,14 @@
-import { EntityRepository, type EntityName } from '@mikro-orm/core';
-import type { Collection } from 'mongodb';
-import type { MongoEntityManager } from './MongoEntityManager';
+import { EntityRepository, type EntityName } from "@yandjin-mikro-orm/core";
+import type { Collection } from "mongodb";
+import type { MongoEntityManager } from "./MongoEntityManager";
 
-export class MongoEntityRepository<T extends object> extends EntityRepository<T> {
-
-  constructor(protected override readonly em: MongoEntityManager,
-              entityName: EntityName<T>) {
+export class MongoEntityRepository<
+  T extends object,
+> extends EntityRepository<T> {
+  constructor(
+    protected override readonly em: MongoEntityManager,
+    entityName: EntityName<T>,
+  ) {
     super(em, entityName);
   }
 
@@ -26,5 +29,4 @@ export class MongoEntityRepository<T extends object> extends EntityRepository<T>
   override getEntityManager(): MongoEntityManager {
     return this.em;
   }
-
 }

@@ -1,9 +1,14 @@
-import { ObjectId } from 'bson';
-import { MikroORM, Entity, PrimaryKey, Property, Dictionary } from '@mikro-orm/mongodb';
+import { ObjectId } from "bson";
+import {
+  MikroORM,
+  Entity,
+  PrimaryKey,
+  Property,
+  Dictionary,
+} from "@yandjin-mikro-orm/mongodb";
 
 @Entity()
 class Entity401 {
-
   @PrimaryKey()
   _id!: ObjectId;
 
@@ -16,25 +21,23 @@ class Entity401 {
   constructor(data = {}) {
     this.data = data;
   }
-
 }
 
-describe('GH issue 401', () => {
-
+describe("GH issue 401", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = MikroORM.initSync({
       entities: [Entity401],
-      clientUrl: 'mongodb://localhost:27017/mikro-orm-test',
+      clientUrl: "mongodb://localhost:27017/mikro-orm-test",
     });
     await orm.em.nativeDelete(Entity401, {});
   });
 
   afterAll(() => orm.close(true));
 
-  test('do not automatically convert string to ObjectId in the all cases', async () => {
-    const id = '0000007b5c9c61c332380f78';
+  test("do not automatically convert string to ObjectId in the all cases", async () => {
+    const id = "0000007b5c9c61c332380f78";
     const a = new Entity401({ foo: id });
     a.bar = id;
     expect(a.data.foo).toBe(id);
@@ -53,5 +56,4 @@ describe('GH issue 401', () => {
     expect(getA2!.data.foo).not.toBeInstanceOf(ObjectId);
     expect(getA2!.bar).not.toBeInstanceOf(ObjectId);
   });
-
 });

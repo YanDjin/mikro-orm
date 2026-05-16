@@ -6,32 +6,45 @@ import {
   type EntityMetadata,
   type EntityProperty,
   type MikroORM,
-} from '@mikro-orm/core';
-import type { MongoDriver } from './MongoDriver';
+} from "@yandjin-mikro-orm/core";
+import type { MongoDriver } from "./MongoDriver";
 
 export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
-
   static register(orm: MikroORM): void {
-    orm.config.registerExtension('@mikro-orm/schema-generator', () => new MongoSchemaGenerator(orm.em));
+    orm.config.registerExtension(
+      "@mikro-orm/schema-generator",
+      () => new MongoSchemaGenerator(orm.em),
+    );
   }
 
-  override async createSchema(options: MongoCreateSchemaOptions = {}): Promise<void> {
+  override async createSchema(
+    options: MongoCreateSchemaOptions = {},
+  ): Promise<void> {
     options.ensureIndexes ??= true;
     const existing = await this.connection.listCollections();
     const metadata = this.getOrderedMetadata();
-    metadata.push({ collection: this.config.get('migrations').tableName } as any);
+    metadata.push({
+      collection: this.config.get("migrations").tableName,
+    } as any);
 
     /* istanbul ignore next */
     const promises = metadata
-      .filter(meta => !existing.includes(meta.collection))
-      .map(meta => this.connection.createCollection(meta.collection).catch(err => {
-        const existsErrorMessage = `Collection ${this.config.get('dbName')}.${meta.collection} already exists.`;
+      .filter((meta) => !existing.includes(meta.collection))
+      .map((meta) =>
+        this.connection.createCollection(meta.collection).catch((err) => {
+          const existsErrorMessage = `Collection ${this.config.get("dbName")}.${meta.collection} already exists.`;
 
-        // ignore errors about the collection already existing
-        if (!(err.name === 'MongoServerError' && err.message.includes(existsErrorMessage))) {
-          throw err;
-        }
-      }));
+          // ignore errors about the collection already existing
+          if (
+            !(
+              err.name === "MongoServerError" &&
+              err.message.includes(existsErrorMessage)
+            )
+          ) {
+            throw err;
+          }
+        }),
+      );
 
     if (options.ensureIndexes) {
       await this.ensureIndexes({ ensureCollections: false });
@@ -40,24 +53,30 @@ export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
     await Promise.all(promises);
   }
 
-  override async dropSchema(options: { dropMigrationsTable?: boolean } = {}): Promise<void> {
+  override async dropSchema(
+    options: { dropMigrationsTable?: boolean } = {},
+  ): Promise<void> {
     const db = this.connection.getDb();
     const collections = await db.listCollections().toArray();
-    const existing = collections.map(c => c.name);
+    const existing = collections.map((c) => c.name);
     const metadata = this.getOrderedMetadata();
 
     if (options.dropMigrationsTable) {
-      metadata.push({ collection: this.config.get('migrations').tableName } as any);
+      metadata.push({
+        collection: this.config.get("migrations").tableName,
+      } as any);
     }
 
     const promises = metadata
-      .filter(meta => existing.includes(meta.collection))
-      .map(meta => this.connection.dropCollection(meta.collection));
+      .filter((meta) => existing.includes(meta.collection))
+      .map((meta) => this.connection.dropCollection(meta.collection));
 
     await Promise.all(promises);
   }
 
-  override async updateSchema(options: MongoCreateSchemaOptions = {}): Promise<void> {
+  override async updateSchema(
+    options: MongoCreateSchemaOptions = {},
+  ): Promise<void> {
     await this.createSchema(options);
   }
 
@@ -65,29 +84,48 @@ export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
     return false;
   }
 
-  override async refreshDatabase(options: MongoCreateSchemaOptions = {}): Promise<void> {
+  override async refreshDatabase(
+    options: MongoCreateSchemaOptions = {},
+  ): Promise<void> {
     await this.ensureDatabase();
     await this.dropSchema();
     await this.createSchema(options);
   }
 
-  async dropIndexes(options?: { skipIndexes?: { collection: string; indexName: string }[]; collectionsWithFailedIndexes?: string[] }): Promise<void> {
+  async dropIndexes(options?: {
+    skipIndexes?: { collection: string; indexName: string }[];
+    collectionsWithFailedIndexes?: string[];
+  }): Promise<void> {
     const db = this.connection.getDb();
     const collections = await db.listCollections().toArray();
     const promises: Promise<unknown>[] = [];
 
     for (const collection of collections) {
-      if (options?.collectionsWithFailedIndexes && !options.collectionsWithFailedIndexes.includes(collection.name)) {
+      if (
+        options?.collectionsWithFailedIndexes &&
+        !options.collectionsWithFailedIndexes.includes(collection.name)
+      ) {
         continue;
       }
 
-      const indexes = await db.collection(collection.name).listIndexes().toArray();
+      const indexes = await db
+        .collection(collection.name)
+        .listIndexes()
+        .toArray();
 
       for (const index of indexes) {
-        const isIdIndex = index.key._id === 1 && Utils.getObjectKeysSize(index.key) === 1;
+        const isIdIndex =
+          index.key._id === 1 && Utils.getObjectKeysSize(index.key) === 1;
 
         /* istanbul ignore next */
-        if (!isIdIndex && !options?.skipIndexes?.find(idx => idx.collection === collection.name && idx.indexName === index.name)) {
+        if (
+          !isIdIndex &&
+          !options?.skipIndexes?.find(
+            (idx) =>
+              idx.collection === collection.name &&
+              idx.indexName === index.name,
+          )
+        ) {
           promises.push(db.collection(collection.name).dropIndex(index.name));
         }
       }
@@ -96,7 +134,9 @@ export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
     await Promise.all(promises);
   }
 
-  override async ensureIndexes(options: EnsureIndexesOptions = {}): Promise<void> {
+  override async ensureIndexes(
+    options: EnsureIndexesOptions = {},
+  ): Promise<void> {
     options.ensureCollections ??= true;
     options.retryLimit ??= 3;
 
@@ -107,7 +147,10 @@ export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
     const promises: [string, Promise<string>][] = [];
 
     for (const meta of this.getOrderedMetadata()) {
-      if (Array.isArray(options?.retry) && !options.retry.includes(meta.collection)) {
+      if (
+        Array.isArray(options?.retry) &&
+        !options.retry.includes(meta.collection)
+      ) {
         continue;
       }
 
@@ -115,20 +158,20 @@ export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
       promises.push(...this.createUniqueIndexes(meta));
 
       for (const prop of meta.props) {
-        promises.push(...this.createPropertyIndexes(meta, prop, 'index'));
-        promises.push(...this.createPropertyIndexes(meta, prop, 'unique'));
+        promises.push(...this.createPropertyIndexes(meta, prop, "index"));
+        promises.push(...this.createPropertyIndexes(meta, prop, "unique"));
       }
     }
 
-    const res = await Promise.allSettled(promises.map(p => p[1]));
+    const res = await Promise.allSettled(promises.map((p) => p[1]));
 
-    if (res.some(r => r.status === 'rejected') && options.retry !== false) {
+    if (res.some((r) => r.status === "rejected") && options.retry !== false) {
       const skipIndexes = [];
       const collectionsWithFailedIndexes = [];
 
       for (let i = 0; i < res.length; i++) {
         const r: Dictionary = res[i];
-        if (r.status === 'rejected') {
+        if (r.status === "rejected") {
           collectionsWithFailedIndexes.push(promises[i][0]);
         } else {
           skipIndexes.push({ collection: promises[i][0], indexName: r.value });
@@ -138,7 +181,9 @@ export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
       await this.dropIndexes({ skipIndexes, collectionsWithFailedIndexes });
 
       if (options.retryLimit === 0) {
-        throw new Error(`Failed to create indexes: ${collectionsWithFailedIndexes.join(', ')}`);
+        throw new Error(
+          `Failed to create indexes: ${collectionsWithFailedIndexes.join(", ")}`,
+        );
       }
 
       await this.ensureIndexes({
@@ -150,38 +195,58 @@ export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
 
   private createIndexes(meta: EntityMetadata): [string, Promise<string>][] {
     const res: [string, Promise<string>][] = [];
-    meta.indexes.forEach(index => {
+    meta.indexes.forEach((index) => {
       let fieldOrSpec: string | Dictionary;
-      const properties = Utils.flatten(Utils.asArray(index.properties).map(prop => meta.properties[prop].fieldNames));
+      const properties = Utils.flatten(
+        Utils.asArray(index.properties).map(
+          (prop) => meta.properties[prop].fieldNames,
+        ),
+      );
       const collection = this.connection.getCollection(meta.className);
 
-      if (Array.isArray(index.options) && index.options.length === 2 && properties.length === 0) {
-        res.push([collection.collectionName, collection.createIndex(index.options[0], index.options[1])]);
+      if (
+        Array.isArray(index.options) &&
+        index.options.length === 2 &&
+        properties.length === 0
+      ) {
+        res.push([
+          collection.collectionName,
+          collection.createIndex(index.options[0], index.options[1]),
+        ]);
         return;
       }
 
       if (index.options && properties.length === 0) {
-        res.push([collection.collectionName, collection.createIndex(index.options)]);
+        res.push([
+          collection.collectionName,
+          collection.createIndex(index.options),
+        ]);
         return;
       }
 
       if (index.type) {
-        if (index.type === 'fulltext') {
-          index.type = 'text';
+        if (index.type === "fulltext") {
+          index.type = "text";
         }
 
         const spec: Dictionary<string> = {};
-        properties.forEach(prop => spec[prop] = index.type!);
+        properties.forEach((prop) => (spec[prop] = index.type!));
         fieldOrSpec = spec;
       } else {
-        fieldOrSpec = properties.reduce((o, i) => { o[i] = 1; return o; }, {} as Dictionary);
+        fieldOrSpec = properties.reduce((o, i) => {
+          o[i] = 1;
+          return o;
+        }, {} as Dictionary);
       }
 
-      res.push([collection.collectionName, collection.createIndex(fieldOrSpec, {
-        name: index.name,
-        unique: false,
-        ...(index.options || {}),
-      })]);
+      res.push([
+        collection.collectionName,
+        collection.createIndex(fieldOrSpec, {
+          name: index.name,
+          unique: false,
+          ...(index.options || {}),
+        }),
+      ]);
     });
 
     return res;
@@ -189,37 +254,58 @@ export class MongoSchemaGenerator extends AbstractSchemaGenerator<MongoDriver> {
 
   private createUniqueIndexes(meta: EntityMetadata) {
     const res: [string, Promise<string>][] = [];
-    meta.uniques.forEach(index => {
-      const properties = Utils.flatten(Utils.asArray(index.properties).map(prop => meta.properties[prop].fieldNames));
-      const fieldOrSpec = properties.reduce((o, i) => { o[i] = 1; return o; }, {} as Dictionary);
+    meta.uniques.forEach((index) => {
+      const properties = Utils.flatten(
+        Utils.asArray(index.properties).map(
+          (prop) => meta.properties[prop].fieldNames,
+        ),
+      );
+      const fieldOrSpec = properties.reduce((o, i) => {
+        o[i] = 1;
+        return o;
+      }, {} as Dictionary);
       const collection = this.connection.getCollection(meta.className);
-      res.push([collection.collectionName, collection.createIndex(fieldOrSpec, {
-        name: index.name,
-        unique: true,
-        ...(index.options || {}),
-      })]);
+      res.push([
+        collection.collectionName,
+        collection.createIndex(fieldOrSpec, {
+          name: index.name,
+          unique: true,
+          ...(index.options || {}),
+        }),
+      ]);
     });
 
     return res;
   }
 
-  private createPropertyIndexes(meta: EntityMetadata, prop: EntityProperty, type: 'index' | 'unique') {
+  private createPropertyIndexes(
+    meta: EntityMetadata,
+    prop: EntityProperty,
+    type: "index" | "unique",
+  ) {
     if (!prop[type] || !meta.collection) {
       return [];
     }
 
     const collection = this.connection.getCollection(meta.className);
     const fieldOrSpec = prop.embeddedPath
-      ? prop.embeddedPath.join('.')
-      : prop.fieldNames.reduce((o, i) => { o[i] = 1; return o; }, {} as Dictionary);
+      ? prop.embeddedPath.join(".")
+      : prop.fieldNames.reduce((o, i) => {
+          o[i] = 1;
+          return o;
+        }, {} as Dictionary);
 
-    return [[collection.collectionName, collection.createIndex(fieldOrSpec, {
-      name: (Utils.isString(prop[type]) ? prop[type] : undefined) as string,
-      unique: type === 'unique',
-      sparse: prop.nullable === true,
-    })]] as unknown as [string, Promise<string>][];
+    return [
+      [
+        collection.collectionName,
+        collection.createIndex(fieldOrSpec, {
+          name: (Utils.isString(prop[type]) ? prop[type] : undefined) as string,
+          unique: type === "unique",
+          sparse: prop.nullable === true,
+        }),
+      ],
+    ] as unknown as [string, Promise<string>][];
   }
-
 }
 
 export interface MongoCreateSchemaOptions extends CreateSchemaOptions {

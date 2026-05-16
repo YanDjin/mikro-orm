@@ -1,5 +1,8 @@
-import { MikroORM, UnderscoreNamingStrategy } from '@mikro-orm/postgresql';
-import { EntityGenerator } from '@mikro-orm/entity-generator';
+import {
+  MikroORM,
+  UnderscoreNamingStrategy,
+} from "@yandjin-mikro-orm/postgresql";
+import { EntityGenerator } from "@yandjin-mikro-orm/entity-generator";
 
 const schema = `
   create schema if not exists "schema1";
@@ -30,24 +33,22 @@ const schema = `
   alter table "public"."test" add constraint "test_test_id_foreign" foreign key ("test_id") references "public"."test" ("id") on update cascade on delete set null;
 `;
 
-test('multiple schemas with same table name 1', async () => {
+test("multiple schemas with same table name 1", async () => {
   const orm = await MikroORM.init({
-    dbName: '5084',
+    dbName: "5084",
     discovery: {
       warnWhenNoEntities: false,
     },
     ensureDatabase: false,
     extensions: [EntityGenerator],
     namingStrategy: class extends UnderscoreNamingStrategy {
-
       getEntityName(tableName: string, schemaName?: string): string {
-        if (schemaName !== 'public') {
-          return super.getClassName(`${schemaName}_${tableName}`, '_');
+        if (schemaName !== "public") {
+          return super.getClassName(`${schemaName}_${tableName}`, "_");
         }
 
-        return super.getClassName(tableName, '_');
+        return super.getClassName(tableName, "_");
       }
-
     },
   });
 
@@ -60,9 +61,9 @@ test('multiple schemas with same table name 1', async () => {
   await orm.close(true);
 });
 
-test('multiple schemas with same table name 2', async () => {
+test("multiple schemas with same table name 2", async () => {
   const orm = await MikroORM.init({
-    dbName: '5084',
+    dbName: "5084",
     discovery: {
       warnWhenNoEntities: false,
     },

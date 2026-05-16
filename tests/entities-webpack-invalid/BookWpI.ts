@@ -1,16 +1,19 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { AuthorWpI } from './index';
+import {
+  Entity,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { AuthorWpI } from "./index";
 
 @Entity()
 export class BookWpI {
-
-  @PrimaryKey({ type: 'number' })
+  @PrimaryKey({ type: "number" })
   id!: number;
 
-  @Property({ type: 'string' })
+  @Property({ type: "string" })
   title!: string;
 
-  @ManyToOne({ entity: () => AuthorWpI, inversedBy: a => a.books })
+  @ManyToOne({ entity: () => AuthorWpI, inversedBy: (a) => a.books })
   author!: AuthorWpI;
-
 }

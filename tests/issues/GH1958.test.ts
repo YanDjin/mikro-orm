@@ -1,60 +1,64 @@
-import { Embeddable, Embedded, Entity, MikroORM, OneToOne, PrimaryKey, Property, Rel } from '@mikro-orm/sqlite';
+import {
+  Embeddable,
+  Embedded,
+  Entity,
+  MikroORM,
+  OneToOne,
+  PrimaryKey,
+  Property,
+  Rel,
+} from "@yandjin-mikro-orm/sqlite";
 
 @Embeddable()
 class LoopOptions {
+  @Property()
+  "enabled-prop": boolean = false;
 
   @Property()
-  'enabled-prop': boolean = false;
-
-  @Property()
-  'type-prop': string = 'a';
-
+  "type-prop": string = "a";
 }
 
 @Embeddable()
 class Options {
-
   @Embedded(() => LoopOptions, { object: true })
-  'loop-prop' = new LoopOptions();
-
+  "loop-prop" = new LoopOptions();
 }
 
 @Entity()
 class PlayerEntity {
-
   @PrimaryKey()
   id!: number;
 
   @Embedded(() => Options, { object: true })
-  'options-prop' = new Options();
+  "options-prop" = new Options();
 
-  @Property({ name: 'name-with-hyphens' })
-  test: string = 'abc';
+  @Property({ name: "name-with-hyphens" })
+  test: string = "abc";
 
   @OneToOne({ entity: () => ParentEntity, nullable: true })
-  'parent-case-property'?: Rel<ParentEntity>;
-
+  "parent-case-property"?: Rel<ParentEntity>;
 }
 
 @Entity()
 class ParentEntity {
-
   @PrimaryKey()
   id!: number;
 
-  @OneToOne({ entity: () => PlayerEntity, nullable: true, mappedBy: 'parent-case-property' })
-  'kebab-case-property': PlayerEntity;
-
+  @OneToOne({
+    entity: () => PlayerEntity,
+    nullable: true,
+    mappedBy: "parent-case-property",
+  })
+  "kebab-case-property": PlayerEntity;
 }
 
-describe('GH issue 1958', () => {
-
+describe("GH issue 1958", () => {
   let orm: MikroORM;
 
   beforeAll(async () => {
     orm = await MikroORM.init({
       entities: [PlayerEntity, Options, LoopOptions],
-      dbName: ':memory:',
+      dbName: ":memory:",
     });
     await orm.schema.createSchema();
   });
@@ -65,20 +69,19 @@ describe('GH issue 1958', () => {
 
   test(`GH issue 1958`, async () => {
     const e = new PlayerEntity();
-    e['parent-case-property'] = new ParentEntity();
-    expect(e['options-prop']).toBeInstanceOf(Options);
-    expect(e['options-prop']['loop-prop']).toBeInstanceOf(LoopOptions);
-    expect(e['options-prop']['loop-prop']['enabled-prop']).toBe(false);
-    expect(e['options-prop']['loop-prop']['type-prop']).toBe('a');
+    e["parent-case-property"] = new ParentEntity();
+    expect(e["options-prop"]).toBeInstanceOf(Options);
+    expect(e["options-prop"]["loop-prop"]).toBeInstanceOf(LoopOptions);
+    expect(e["options-prop"]["loop-prop"]["enabled-prop"]).toBe(false);
+    expect(e["options-prop"]["loop-prop"]["type-prop"]).toBe("a");
     await orm.em.persistAndFlush(e);
     orm.em.clear();
 
     const e1 = await orm.em.findOneOrFail(PlayerEntity, e);
-    expect(e1['options-prop']).toBeInstanceOf(Options);
-    expect(e1['options-prop']['loop-prop']).toBeInstanceOf(LoopOptions);
-    expect(e1['options-prop']['loop-prop']['enabled-prop']).toBe(false);
-    expect(e1['options-prop']['loop-prop']['type-prop']).toBe('a');
-    expect(e1['parent-case-property']).toBeInstanceOf(ParentEntity);
+    expect(e1["options-prop"]).toBeInstanceOf(Options);
+    expect(e1["options-prop"]["loop-prop"]).toBeInstanceOf(LoopOptions);
+    expect(e1["options-prop"]["loop-prop"]["enabled-prop"]).toBe(false);
+    expect(e1["options-prop"]["loop-prop"]["type-prop"]).toBe("a");
+    expect(e1["parent-case-property"]).toBeInstanceOf(ParentEntity);
   });
-
 });

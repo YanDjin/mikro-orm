@@ -1,21 +1,26 @@
-import type { Configuration, Transaction } from '@mikro-orm/core';
-import type { AbstractSqlDriver, Knex, EntityManager } from '@mikro-orm/knex';
+import type { Configuration, Transaction } from "@yandjin-mikro-orm/core";
+import type {
+  AbstractSqlDriver,
+  Knex,
+  EntityManager,
+} from "@yandjin-mikro-orm/knex";
 
 export type Query = string | Knex.QueryBuilder | Knex.Raw;
 
 export abstract class Migration {
-
   private readonly queries: Query[] = [];
   protected ctx?: Transaction<Knex.Transaction>;
   private em?: EntityManager;
 
-  constructor(protected readonly driver: AbstractSqlDriver,
-              protected readonly config: Configuration) { }
+  constructor(
+    protected readonly driver: AbstractSqlDriver,
+    protected readonly config: Configuration,
+  ) {}
 
   abstract up(): Promise<void>;
 
   async down(): Promise<void> {
-    throw new Error('This migration cannot be reverted');
+    throw new Error("This migration cannot be reverted");
   }
 
   isTransactional(): boolean {
@@ -40,11 +45,11 @@ export abstract class Migration {
    * The `params` parameter is respected only if you use string SQL in the first parameter.
    */
   async execute(sql: Query, params?: unknown[]) {
-    return this.driver.execute(sql, params, 'all', this.ctx);
+    return this.driver.execute(sql, params, "all", this.ctx);
   }
 
   getKnex() {
-    return this.driver.getConnection('write').getKnex();
+    return this.driver.getConnection("write").getKnex();
   }
 
   /**
@@ -63,5 +68,4 @@ export abstract class Migration {
   getQueries(): Query[] {
     return this.queries;
   }
-
 }

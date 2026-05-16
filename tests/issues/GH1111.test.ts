@@ -1,32 +1,45 @@
-import { Collection, Entity, Ref, ManyToOne, MikroORM, OneToMany, OneToOne, PrimaryKey, PrimaryKeyProp, Property, Reference } from '@mikro-orm/postgresql';
-import { mockLogger } from '../helpers';
+import {
+  Collection,
+  Entity,
+  Ref,
+  ManyToOne,
+  MikroORM,
+  OneToMany,
+  OneToOne,
+  PrimaryKey,
+  PrimaryKeyProp,
+  Property,
+  Reference,
+} from "@yandjin-mikro-orm/postgresql";
+import { mockLogger } from "../helpers";
 
 @Entity()
 class Node {
-
   @PrimaryKey()
   id!: number;
-
 }
 
 @Entity()
 class A {
-
-  [PrimaryKeyProp]?: 'node';
-  @OneToOne({ entity: () => Node, ref: true, primary: true, deleteRule: 'cascade', updateRule: 'cascade' })
+  [PrimaryKeyProp]?: "node";
+  @OneToOne({
+    entity: () => Node,
+    ref: true,
+    primary: true,
+    deleteRule: "cascade",
+    updateRule: "cascade",
+  })
   node!: Ref<Node>;
 
-  @OneToMany('B', 'a', { eager: true, orphanRemoval: true })
+  @OneToMany("B", "a", { eager: true, orphanRemoval: true })
   bs = new Collection<B>(this);
 
   @Property()
   name!: string;
-
 }
 
 @Entity()
 class B {
-
   @PrimaryKey()
   id!: number;
 
@@ -35,12 +48,9 @@ class B {
 
   @Property()
   type!: number;
-
 }
 
-
-describe('GH issue 1111', () => {
-
+describe("GH issue 1111", () => {
   let orm: MikroORM;
   const log = jest.fn();
 
@@ -50,7 +60,7 @@ describe('GH issue 1111', () => {
       dbName: `mikro_orm_test_gh_1111`,
       metadataCache: { enabled: false },
     });
-    mockLogger(orm, ['query', 'query-params'], log);
+    mockLogger(orm, ["query", "query-params"], log);
     await orm.schema.ensureDatabase();
   });
 
@@ -61,9 +71,9 @@ describe('GH issue 1111', () => {
 
   afterAll(() => orm.close(true));
 
-  test('FK as PK with Ref - single insert', async () => {
+  test("FK as PK with Ref - single insert", async () => {
     const a1 = new A();
-    a1.name = 'test';
+    a1.name = "test";
     a1.node = Reference.create(new Node());
     await orm.em.persistAndFlush(a1);
 
@@ -77,13 +87,17 @@ describe('GH issue 1111', () => {
     await orm.em.flush();
     orm.em.clear();
 
-    const a2 = await orm.em.findOneOrFail(A, { name: 'test' }, { populate: ['bs'] });
+    const a2 = await orm.em.findOneOrFail(
+      A,
+      { name: "test" },
+      { populate: ["bs"] },
+    );
     expect(a2.bs.count()).toBe(1);
   });
 
-  test('FK as PK with Ref - multiple inserts', async () => {
+  test("FK as PK with Ref - multiple inserts", async () => {
     const a1 = new A();
-    a1.name = 'test';
+    a1.name = "test";
     a1.node = Reference.create(new Node());
     await orm.em.persistAndFlush(a1);
 
@@ -100,8 +114,11 @@ describe('GH issue 1111', () => {
     await orm.em.flush();
     orm.em.clear();
 
-    const a2 = await orm.em.findOneOrFail(A, { name: 'test' }, { populate: ['bs'] });
+    const a2 = await orm.em.findOneOrFail(
+      A,
+      { name: "test" },
+      { populate: ["bs"] },
+    );
     expect(a2.bs.count()).toBe(2);
   });
-
 });

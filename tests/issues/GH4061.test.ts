@@ -1,9 +1,17 @@
-import { Cascade, Collection, Entity, LoadStrategy, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import { MikroORM } from '@mikro-orm/mysql';
+import {
+  Cascade,
+  Collection,
+  Entity,
+  LoadStrategy,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from "@yandjin-mikro-orm/core";
+import { MikroORM } from "@yandjin-mikro-orm/mysql";
 
 @Entity()
 class Category {
-
   @PrimaryKey()
   id!: number;
 
@@ -15,13 +23,12 @@ class Category {
 
   @OneToMany({
     entity: () => Category,
-    mappedBy: category => category.parent,
+    mappedBy: (category) => category.parent,
     cascade: [Cascade.ALL],
     orphanRemoval: true,
     eager: true,
   })
   children = new Collection<Category>(this);
-
 }
 
 let orm: MikroORM;
@@ -41,15 +48,15 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test('4061', async () => {
+test("4061", async () => {
   const firstCategory1 = new Category();
-  firstCategory1.name = 'TEST1';
+  firstCategory1.name = "TEST1";
   firstCategory1.parent = null;
   const secondCategory = new Category();
-  secondCategory.name = 'TEST2';
+  secondCategory.name = "TEST2";
   secondCategory.parent = firstCategory1;
   const thirdCategory = new Category();
-  thirdCategory.name = 'TEST3';
+  thirdCategory.name = "TEST3";
   thirdCategory.parent = secondCategory;
   await orm.em.persistAndFlush([firstCategory1, secondCategory, thirdCategory]);
   orm.em.clear();
@@ -57,5 +64,7 @@ test('4061', async () => {
   const firstCategory = await orm.em.findOneOrFail(Category, { parent: null });
   expect(firstCategory.children.isInitialized()).toBe(true);
   expect(firstCategory.children[0].children.isInitialized()).toBe(true);
-  expect(firstCategory.children[0].children[0].children.isInitialized()).toBe(true);
+  expect(firstCategory.children[0].children[0].children.isInitialized()).toBe(
+    true,
+  );
 });
